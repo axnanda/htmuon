@@ -1,0 +1,336 @@
+{
+ "file": "/home/user/htmuon/suspicious_alignment/SuspiciousAlignment/OneStep.lean",
+ "compiles": true,
+ "sorryFree": true,
+ "theorems": [
+  {
+   "name": "SuspiciousAlignment.Spec.cNext_eq",
+   "paperItem": "A.2 coordinate update (tex 913-917)",
+   "informal": "c_{i,t+1} = c_i - eta*(lam_i*c_i + zeta_i), i.e. the first form of the update equals the definition cNext.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNext_eq_sum_div_sum",
+   "paperItem": "eq. (10), first equality (tex 919-921)",
+   "informal": "theta(cNext) = sum_D lam^2((1-eta lam)c - eta zeta)^2 / sum_all lam^2((1-eta lam)c - eta zeta)^2.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNext_eq_one_div",
+   "paperItem": "eq. (10), second equality (tex 922)",
+   "informal": "If s^D_{t+1} != 0 then theta_{t+1} = 1/(1 + s^B_{t+1}/s^D_{t+1}) (general-state version: OneStep.theta_eq_one_div; necessity of the hypothesis: OneStep.theta_eq_zero_and_one_div_eq_one).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.sD_cNext_eq_zero_iff",
+   "paperItem": "Remark in A.2, exceptional set V (tex 928-934)",
+   "informal": "s^D_{t+1} = 0 iff eta*zeta_i = (1-eta lam_i) c_i for all i in D (block version: Spec.mom_cNext_eq_zero_iff). Measure-zero claim itself is left to the probability layer.",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNext_sub_theta",
+   "paperItem": "A.2 (implicit behind eq. (12))",
+   "informal": "theta_{t+1} - theta_t = fCompare/(s_t * s_{t+1}) when s_t != 0 and s_{t+1} != 0 (two arbitrary states: OneStep.theta_sub_theta).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_lt_theta_cNext_iff",
+   "paperItem": "A.2, theta_{t+1} > theta_t <-> f_t > 0 (tex 941-944)",
+   "informal": "For s(c) > 0 and s(c') > 0: theta(c) < theta(c') <-> 0 < fCompare eta c zeta.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNext_lt_theta_iff",
+   "paperItem": "A.2, theta_{t+1} < theta_t <-> f_t < 0 (tex 941-944)",
+   "informal": "For s(c) > 0 and s(c') > 0: theta(c') < theta(c) <-> fCompare eta c zeta < 0.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNext_eq_theta_iff",
+   "paperItem": "A.2 (equality case, not in paper)",
+   "informal": "For s(c) > 0 and s(c') > 0: theta(c') = theta(c) <-> fCompare = 0.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_lt_theta_cNext_of_fCompare_pos",
+   "paperItem": "A.2 (tex 941-944), one direction",
+   "informal": "fCompare > 0 implies theta_{t+1} > theta_t with no positivity hypothesis (companion: Spec.theta_cNext_lt_theta_of_fCompare_neg).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.exists_theta_lt_theta_cNext_and_fCompare_eq_zero",
+   "paperItem": "A.2 equivalences as literally stated (no hypotheses)",
+   "informal": "For every spectrum there are eta, c (= 0), zeta with theta_{t+1} > theta_t but f_t = 0: the hypothesis s_t > 0 cannot be dropped.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.exists_theta_cNext_lt_theta_and_fCompare_eq_zero",
+   "paperItem": "A.2 equivalences as literally stated (no hypotheses)",
+   "informal": "For every spectrum there are eta (=1/lam_1), c (=u_1), zeta (=0) with theta_{t+1} < theta_t but f_t = 0: the hypothesis s_{t+1} > 0 cannot be dropped.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.lam_sq_mul_cNext_sq",
+   "paperItem": "Lemma 'Elementwise expectation', proof expansion (tex 1076-1081)",
+   "informal": "lam_i^2 c_{i,t+1}^2 = lam_i^2(1-eta lam_i)^2 c_i^2 - 2 eta lam_i^2 (1-eta lam_i) c_i zeta_i + eta^2 lam_i^2 zeta_i^2 (pathwise).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.EsNext_singleton",
+   "paperItem": "Lemma 'Elementwise expectation', per-coordinate identity (tex 1062-1066)",
+   "informal": "EsNext N {i} eta c = (1-eta lam_i)^2 lam_i^2 c_i^2 + eta^2 lam_i^2 kap2_i; EsNext of a block is the sum of these (Spec.EsNext_eq_sum_singleton); regrouping in powers of eta: Spec.EsNext_term_eq.",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.EsNext_eq",
+   "paperItem": "Lemma 'Elementwise expectation', block form (tex 1090-1093)",
+   "informal": "For every block S: EsNext N S eta c = mom S 2 c - 2 eta mom S 3 c + eta^2 (mom S 4 c + sum_{i in S} lam_i^2 kap2_i).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.EsNext_D",
+   "paperItem": "eq. (Eat) (tex 1069)",
+   "informal": "EsNext N D eta c = sD c - 2 eta tauD c + eta^2 (mom D 4 c + eD N).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.EsNext_B",
+   "paperItem": "eq. (Ebt) (tex 1070)",
+   "informal": "EsNext N B eta c = sB c - 2 eta tauB c + eta^2 (mom B 4 c + eB N).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.mom_two_cNext",
+   "paperItem": "decomposition s^S_{t+1} = chi + g^T z + z^T D z (tex 1011-1021)",
+   "informal": "mom S 2 (cNext) = sum_S lam^2(1-eta lam)^2 c^2 - 2 eta sum_S lam^2(1-eta lam) c zeta + eta^2 sum_S lam^2 zeta^2.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.mom_two_cNext_sub_EsNext",
+   "paperItem": "Lemma 'Elementwise expectation' (centred pathwise form)",
+   "informal": "s^S_{t+1} - EsNext = -2 eta sum_S lam^2(1-eta lam) c zeta + eta^2 sum_S lam^2 (zeta^2 - kap2): the bridge for the probability layer.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expect_mom_two_cNext",
+   "paperItem": "Lemma 'Elementwise expectation' (abstract expectation)",
+   "informal": "For any linear functional E on Omega -> R with E 1 = 1, E zeta_i = 0, E zeta_i^2 = kap2_i: E[mom S 2 (cNext eta c (zeta .))] = EsNext N S eta c.",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.EsNext_nonneg",
+   "paperItem": "(e) positivity of E[s^S_{t+1}|x_t]",
+   "informal": "0 <= EsNext N S eta c for every block; also Spec.EsNext_zero: EsNext at eta = 0 equals mom S 2 c.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.EsNext_eq_zero_iff",
+   "paperItem": "(e) positivity of E[s^S_{t+1}|x_t]",
+   "informal": "EsNext N S eta c = 0 iff for all i in S: (1-eta lam_i) c_i = 0 and eta*kap2_i = 0; Spec.EsNext_pos_iff is the positive form; sufficient conditions Spec.EsNext_pos_of_kap2_pos, Spec.EsNext_pos_of_smin_pos, Spec.EsNext_pos_of_state.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.EsNext_D_add_EsNext_B_pos_iff",
+   "paperItem": "(e) positivity of E[s_{t+1}|x_t]",
+   "informal": "EsNext D + EsNext B > 0 iff some i has (1-eta lam_i) c_i != 0 or eta*kap2_i != 0 (Spec.EsNext_D_add_EsNext_B: the sum is EsNext univ; Spec.EsNext_D_add_EsNext_B_pos_of_smin_pos: holds if eta != 0 and smin > 0).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expF",
+   "paperItem": "Lemma 'Quadratic form', E[f_t(eta)|x_t] (first line of proof, tex 1113)",
+   "informal": "def expF P N eta c := sB c * EsNext N D eta c - EsNext N B eta c * sD c.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expF_eq",
+   "paperItem": "Lemma 'Quadratic form', eq. (quad-form) (tex 1098-1102)",
+   "informal": "expF N eta c = pCoef N c * eta^2 + qCoef c * eta (factored form Spec.expF_eq_mul; Spec.expF_zero: value 0 at eta = 0).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expect_fCompare",
+   "paperItem": "Lemma 'Quadratic form' (abstract expectation)",
+   "informal": "For any normalised linear functional E with E zeta_i = 0, E zeta_i^2 = kap2_i: E[fCompare eta c (zeta .)] = expF N eta c (pathwise bridge: Spec.fCompare_sub_expF).",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.qCoef_le",
+   "paperItem": "eq. (q-sign), first inequality (tex 1105)",
+   "informal": "qCoef c <= 2 * sB c * sD c * (lamk1 - lamk); uses OneStep.tauB_le and OneStep.le_tauD (tex 1123).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.qCoef_nonpos",
+   "paperItem": "eq. (q-sign)",
+   "informal": "qCoef c <= 0 for every state.",
+   "status": "weakened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.qCoef_neg",
+   "paperItem": "eq. (q-sign), strict inequality q_t < 0 (tex 1105, 1123)",
+   "informal": "If sD c > 0 and sB c > 0 then qCoef c < 0.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.qCoef_neg_iff",
+   "paperItem": "eq. (q-sign), exact strictness condition",
+   "informal": "qCoef c < 0 iff sD c > 0 and sB c > 0; Spec.qCoef_neg_iff_theta: iff 0 < theta c < 1; Spec.qCoef_eq_zero_iff / _iff_theta: qCoef c = 0 iff theta c in {0,1}.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.exists_theta_eq_one_qCoef_eq_zero",
+   "paperItem": "eq. (q-sign), unconditional claim q_t < 0",
+   "informal": "For every spectrum there is c != 0 with theta c = 1 and qCoef c = 0 (c = u_1).",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.exists_theta_eq_zero_qCoef_eq_zero",
+   "paperItem": "eq. (q-sign), unconditional claim q_t < 0",
+   "informal": "For every spectrum there is c != 0 with theta c = 0 and qCoef c = 0 (c = u_{k+1}).",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.pCoef_of_sD_eq_zero",
+   "paperItem": "eq. (p-def), degenerate cases",
+   "informal": "If sD c = 0 then pCoef N c = sB c * eD N; Spec.pCoef_of_sB_eq_zero: if sB c = 0 then pCoef N c = -(sD c * eB N).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaStar_eq",
+   "paperItem": "main text eq. (2) (tex 388-395)",
+   "informal": "etaStar N c = 2(sB tauD - sD tauB) / (sB (mom D 4 + eD) - sD (mom B 4 + eB)).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expF_eq_zero_iff",
+   "paperItem": "Lemma 'Quadratic form': eta* is the non-zero root when p_t != 0 (tex 1108)",
+   "informal": "For pCoef != 0: expF N eta c = 0 iff eta = 0 or eta = etaStar N c (Spec.expF_etaStar: etaStar is a root; Spec.etaStar_eq_zero_iff: etaStar = 0 iff qCoef = 0, so 'non-zero' needs 0 < theta < 1).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaStar_pos",
+   "paperItem": "Remark, case p_t > 0: eta* > 0 (tex 1145)",
+   "informal": "If pCoef > 0 and qCoef < 0 then etaStar > 0; Spec.etaStar_pos_iff: for pCoef > 0, etaStar > 0 iff sD > 0 and sB > 0; Spec.etaStar_nonneg: etaStar >= 0 when pCoef > 0.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.exists_pCoef_pos_and_etaStar_eq_zero",
+   "paperItem": "Remark, case p_t > 0: 'since q_t < 0 there exists a positive critical step size'",
+   "informal": "If eD N > 0 there is c != 0 with pCoef > 0, etaStar = 0 and expF > 0 for every eta != 0 (c = u_{k+1}, theta = 0).",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expF_neg_iff_lt_etaStar",
+   "paperItem": "Remark, case p_t > 0, small step (tex 1145)",
+   "informal": "For pCoef > 0 and eta > 0: expF < 0 iff eta < etaStar.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expF_eq_zero_iff_eq_etaStar",
+   "paperItem": "Remark, case p_t > 0, critical step",
+   "informal": "For pCoef > 0 and eta > 0: expF = 0 iff eta = etaStar.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expF_pos_iff_etaStar_lt",
+   "paperItem": "Remark, case p_t > 0, large step (tex 1145)",
+   "informal": "For pCoef > 0 and eta > 0: expF > 0 iff etaStar < eta.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expF_neg_of_pCoef_nonpos",
+   "paperItem": "Remark, case p_t <= 0 (paper: p_t < 0, tex 1147)",
+   "informal": "If pCoef <= 0, qCoef < 0 and eta > 0 then expF < 0 (covers the paper's omitted case p_t = 0).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expF_neg_of_pCoef_neg",
+   "paperItem": "Remark, case p_t < 0 (tex 1147)",
+   "informal": "If pCoef < 0 and eta > 0 then expF < 0 (only q_t <= 0 is used); Spec.expF_nonpos_of_pCoef_nonpos: pCoef <= 0, eta >= 0 gives expF <= 0.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expF_pos_iff",
+   "paperItem": "Remark (complete sign description)",
+   "informal": "For eta > 0: expF > 0 iff pCoef > 0 and etaStar < eta. Spec.expF_neg_iff: expF < 0 iff (pCoef > 0 and eta < etaStar) or (pCoef <= 0 and (pCoef < 0 or qCoef < 0)). Division-free: Spec.expF_neg_iff_linear / Spec.expF_pos_iff_linear (sign of pCoef*eta + qCoef).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaBarNext_sub_theta",
+   "paperItem": "bridge display (tex 1038-1048), deterministic equivalent",
+   "informal": "If s c != 0 and EsNext D + EsNext B != 0: thetaBarNext N eta c - theta c = expF N eta c / (s c * (EsNext D + EsNext B)).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaBarNext_lt_theta_iff",
+   "paperItem": "bridge display (tex 1038-1048)",
+   "informal": "For s c > 0 and EsNext D + EsNext B > 0: thetaBarNext < theta iff expF < 0; also Spec.theta_lt_thetaBarNext_iff (> iff expF > 0) and Spec.thetaBarNext_eq_theta_iff (= iff expF = 0).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaBarNext_lt_theta_of_expF_neg",
+   "paperItem": "bridge display, direction used by the theorems",
+   "informal": "expF < 0 implies thetaBarNext < theta with no positivity hypothesis; Spec.theta_lt_thetaBarNext_of_expF_pos: expF > 0 implies theta < thetaBarNext.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_zero_lt_thetaBarNext_and_expF_eq_zero",
+   "paperItem": "bridge display: necessity of x_t != 0",
+   "informal": "At c = 0 with eta != 0 and eD N > 0: theta 0 < thetaBarNext N eta 0 although expF N eta 0 = 0.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.exists_thetaBarNext_lt_theta_and_expF_eq_zero",
+   "paperItem": "bridge display: necessity of E[s_{t+1}] > 0",
+   "informal": "With zero noise there are eta, c with thetaBarNext < theta although expF = 0 (EsNext D + EsNext B = 0).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaBarNext_eq_one_div",
+   "paperItem": "eq. (ratio-asymp) form of the deterministic equivalent",
+   "informal": "If EsNext D != 0: thetaBarNext = 1/(1 + EsNext B / EsNext D); also Spec.thetaBarNext_nonneg, Spec.thetaBarNext_le_one, Spec.thetaBarNext_zero (eta = 0 gives theta).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaBarNext_lt_theta_of_lt_etaStar",
+   "paperItem": "finite-d deterministic-equivalent core of Theorem 2 (decrease)",
+   "informal": "If pCoef > 0 and 0 < eta < etaStar then thetaBarNext N eta c < theta c.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_lt_thetaBarNext_of_etaStar_lt",
+   "paperItem": "finite-d deterministic-equivalent core of the increase condition",
+   "informal": "If pCoef > 0 and etaStar < eta then theta c < thetaBarNext N eta c.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaBarNext_lt_theta_of_pCoef_nonpos",
+   "paperItem": "finite-d deterministic-equivalent core of the case p_t <= 0",
+   "informal": "If pCoef <= 0, sD > 0, sB > 0 and eta > 0 then thetaBarNext N eta c < theta c.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.OneStep.mom_add_le",
+   "paperItem": "moment bounds (tex 1123 and analogues)",
+   "informal": "If lam_i <= b on S then mom S (p+j) c <= b^j * mom S p c; OneStep.le_mom_add is the lower bound; specialisations OneStep.tauB_le, le_tauB, tauD_le, le_tauD, mom_four_B_le, le_mom_four_B, mom_four_D_le, le_mom_four_D.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.OneStep.theta_mem_Ioo_iff",
+   "paperItem": "helper facts on theta of an arbitrary state",
+   "informal": "0 < theta c < 1 iff sD c > 0 and sB c > 0; also OneStep.theta_pos_iff, theta_eq_zero_iff, theta_eq_one_iff, theta_eq_zero_or_eq_one_iff, mom_eq_zero_iff, mom_pos_iff, and two-state comparison lemmas theta_lt_theta_iff / theta_gt_theta_iff / theta_eq_theta_iff / theta_lt_theta_of_pos / theta_gt_theta_of_neg.",
+   "status": "extra"
+  }
+ ],
+ "paperIssues": [
+  "G1 (eq. (q-sign), tex 1105/1123): the claim q_t < 0 is not unconditional. q_t <= 2 s^B s^D (lam_{k+1} - lam_k) is correct, but strictness needs s^B s^D > 0. Exact statement proved: q_t <= 0 always, q_t < 0 iff 0 < theta_t < 1, q_t = 0 iff theta_t in {0,1} (including x_t = 0). Formal counterexamples for every spectrum: x_t = u_1 (theta = 1, q = 0) and x_t = u_{k+1} (theta = 0, q = 0): Spec.exists_theta_eq_one_qCoef_eq_zero, Spec.exists_theta_eq_zero_qCoef_eq_zero.",
+  "G2 (Remark, tex 1145, and 'the non-zero root', tex 1108): 'since q_t < 0 there exists a positive critical step size eta* > 0' fails at theta_t = 0: there p_t = s^B e_D > 0 (if e_D > 0), q_t = 0, eta* = 0 and E[f_t(eta)|x_t] = p_t eta^2 > 0 for every eta != 0 (Spec.exists_pCoef_pos_and_etaStar_eq_zero). The decrease condition 0 < eta < eta* is then vacuous. Correct: for p_t > 0, eta* > 0 iff 0 < theta_t < 1 (Spec.etaStar_pos_iff). The p_t < 0 half of the Remark is correct as it only needs q_t <= 0.",
+  "G3 (Remark, tex 1126-1147): the case p_t = 0 is omitted. Then E f = q_t eta, negative for eta > 0 iff q_t < 0, and identically 0 if also q_t = 0 (e.g. theta_t = 1 and e_B = 0). So 'the behaviour for eta > 0 is entirely determined by the sign of p_t' is slightly too strong; exact description in Spec.expF_neg_iff.",
+  "G4 (A.2, tex 941-944): the equivalences theta_{t+1} >< theta_t <-> f_t >< 0 need x_t != 0 and x_{t+1} != 0 (s_t > 0, s_{t+1} > 0). Counterexamples: x_t = 0 (f = 0 but theta increases), and x_t = u_1, eta = 1/lam_1, xi = 0 (x_{t+1} = 0, f = 0 but theta drops from 1 to 0). The directions f > 0 => increase and f < 0 => decrease hold unconditionally.",
+  "G4b (Remark in A.2, tex 928-934): the measure-zero argument for {s^D_{t+1} = 0} cites Sard's theorem and calls the set a hyperplane; it is the affine set {zeta_i = (1-eta lam_i)c_i/eta for i in D} of dimension d-k, Lebesgue-null, but it is a null set for xi ~ N(0,Sigma) only if the D-marginal does not charge the point. The standing assumption (Tr Sigma in (0,inf)) does not ensure this: if kap_i^2 = 0 and (1-eta lam_i)c_i = 0 for all i in D (e.g. bulk-only noise and theta_t = 0) then s^D_{t+1} = 0 surely. The correct hypothesis is exactly E[s^D_{t+1}|x_t] > 0 (Spec.EsNext_pos_iff), implied by eta != 0 and s_min > 0. Not formalized here (probability layer).",
+  "G5 (bridge display, tex 1040-1048): typo theta_t = 1/(1 - (1/rho)...) should have '+'; only the implication 'decrease => E f < 0' is stated while the theorems use the converse; the equivalence requires x_t != 0 and E[s_{t+1}] > 0 (both can fail; formal witnesses Spec.theta_zero_lt_thetaBarNext_and_expF_eq_zero, Spec.exists_thetaBarNext_lt_theta_and_expF_eq_zero). At finite d the exact identity thetaBarNext - theta = expF/(s_t E[s_{t+1}]) holds and the needed direction is unconditional.",
+  "G6 (remark, no error): the two lemmas of A.5 use only E zeta_i = 0 and E zeta_i^2 = kap_i^2; neither Gaussianity nor diagonality of Sigma in the eigenbasis is needed, and they hold for every real eta, every state and every finite d."
+ ],
+ "unproven": [],
+ "notes": "Files written: /home/user/htmuon/suspicious_alignment/SuspiciousAlignment/OneStep.lean (1326 lines, 131 declarations + 4 non-vacuity examples) and /home/user/htmuon/suspicious_alignment/notes/fidelity/OneStep.md. `lake env lean` gives no errors and no warnings from this file; `lake build SuspiciousAlignment.OneStep` succeeded (olean present, module importable). No sorry/admit/axiom/native_decide; a temporary `#print axioms` on every declaration showed only propext / Classical.choice / Quot.sound (lines removed afterwards). Imports: Mathlib and SuspiciousAlignment.Defs only; Defs.lean untouched.\n\nNew shared definition (requested by the task): `def Spec.expF (P : Spec \u03b9) (N : Noise \u03b9) (\u03b7 : \u211d) (c : \u03b9 \u2192 \u211d) : \u211d := P.sB c * P.EsNext N P.D \u03b7 c - P.EsNext N P.B \u03b7 c * P.sD c`.\n\nNamespaces: one-step results are in `SuspiciousAlignment.Spec` (dot notation P.\u2026); generic helpers (facts about mom/theta of an arbitrary state, real-variable quadratic lemmas, the concrete example exSpec/exNoise/exNoiseB/boolE) are in `SuspiciousAlignment.OneStep` and take P as explicit first argument (e.g. `OneStep.theta_pos_iff P c`, `OneStep.tauB_le P c`). I checked the sibling files currently on disk (CSGD/Moments, Projected/LossThreshold, StepSize/ThetaStarRate, Prob/Concentration): no fully-qualified name clashes.\n\nHypotheses and satisfiability: all positivity hypotheses (s_t > 0, s_{t+1} > 0, E[s_{t+1}] > 0, s^D_{t+1} != 0, p_t != 0 or > 0) are explicit; none of the equivalences/identities uses x/0 = 0, and for each positivity hypothesis a formal lemma shows it cannot be dropped. Non-vacuity: concrete Fin 2 instance lam = (2,1), D = {0}, x_t = (1,1): with kap^2 = (1,1), q = -8, p = 12, eta* = 2/3 (examples for eta = 1/2 decrease and eta = 1 increase); with kap^2 = (0,10), p = -28 (example for p <= 0). The abstract-expectation hypotheses are realised for every P, N by a Rademacher two-point noise (example). A numpy Monte-Carlo check (d = 7, full non-diagonal Sigma) of E[f] = p eta^2 + q eta, of the pathwise equivalences and of the bridge identity agrees.\n\nNot formalized here by design (other layers): the measure-zero statement of the A.2 Remark and the genuine conditional expectation; the pathwise identities `Spec.mom_two_cNext_sub_EsNext` and `Spec.fCompare_sub_expF` reduce both to linearity of the integral given E zeta_i = 0, E zeta_i^2 = kap_i^2.\n\nSuggestions for downstream files: (1) Theorems 2-4, 15 should reduce to the sign of `P.expF N \u03b7 c` via `Spec.expF_neg_iff_lt_etaStar`, `Spec.expF_pos_iff_etaStar_lt` or the division-free `Spec.expF_neg_iff_linear` / `Spec.expF_pos_iff_linear`, then conclude with `Spec.thetaBarNext_lt_theta_of_expF_neg` / `Spec.theta_lt_thetaBarNext_of_expF_pos`, which need no positivity side conditions; ready-made cores are `Spec.thetaBarNext_lt_theta_of_lt_etaStar`, `Spec.theta_lt_thetaBarNext_of_etaStar_lt`, `Spec.thetaBarNext_lt_theta_of_pCoef_nonpos`. (2) Any statement that invokes q_t < 0 or eta* > 0 must carry 0 < theta_t < 1 (equivalently 0 < P.sD c \u2227 0 < P.sB c). (3) For bounds on p_t use `OneStep.mom_four_D_le`, `OneStep.le_mom_four_D`, `OneStep.mom_four_B_le`, `OneStep.le_mom_four_B`, `OneStep.tau*`. (4) The probability layer should assume E[s^D_{t+1}|x_t] > 0 (e.g. eta != 0 and s_min > 0) wherever the paper says 's^D_{t+1} != 0 almost surely'."
+}

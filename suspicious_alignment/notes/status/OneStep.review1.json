@@ -1,0 +1,203 @@
+{
+ "compiles": true,
+ "sorryFree": true,
+ "axiomsClean": true,
+ "coverage": [
+  {
+   "paperItem": "A.2 coordinate update c_{i,t+1} = c_i - eta(lam_i c_i + zeta_i) = (1-eta lam_i)c_i - eta zeta_i (tex 913-917)",
+   "leanDecl": "Spec.cNext (Defs), Spec.cNext_eq",
+   "status": "exact",
+   "comment": "Only the last (coordinate-level) equality. The matrix-level step <x_{t+1},u_i> = ... is not in this file; the note marks the row 'exact' without saying so (minor)."
+  },
+  {
+   "paperItem": "Definition of s^S_{t+1} (tex 918, 925-927) and its chi + g^T z + z^T D z decomposition (tex 1011-1021)",
+   "leanDecl": "P.mom S 2 (P.cNext eta c zeta); Spec.mom_two_cNext; Spec.mom_two_cNext_sub_EsNext",
+   "status": "exact",
+   "comment": "Checked term by term against chi_S, g_S, D_S."
+  },
+  {
+   "paperItem": "eq. (10), first equality: theta_{t+1} as a ratio of sums (tex 919-921)",
+   "leanDecl": "Spec.theta_cNext_eq_sum_div_sum",
+   "status": "exact",
+   "comment": "No hypothesis; both sides are 0/0 = 0 when x_{t+1} = 0, consistent with the paper's convention theta(0) = 0 (tex 340, 861)."
+  },
+  {
+   "paperItem": "eq. (10), second equality theta_{t+1} = 1/(1 + s^B_{t+1}/s^D_{t+1}) (tex 922)",
+   "leanDecl": "Spec.theta_cNext_eq_one_div; OneStep.theta_eq_one_div; OneStep.theta_eq_zero_and_one_div_eq_one",
+   "status": "hypotheses-added",
+   "comment": "Hypothesis s^D_{t+1} != 0 is the paper's own (Remark, tex 928) and is necessary in Lean (LHS 0, RHS 1 otherwise)."
+  },
+  {
+   "paperItem": "Remark in A.2: exceptional sets {s_{t+1}=0}, {s^D_{t+1}=0}, affine set V, Sard, integrability (tex 928-934)",
+   "leanDecl": "Spec.sD_cNext_eq_zero_iff, Spec.mom_cNext_eq_zero_iff",
+   "status": "equivalent-reformulation",
+   "comment": "Algebraic description of V only; measure-zero and integrability are declared not-formalized (probability layer). No direct lemma for {s_{t+1}=0}. Note's G4 analysis (V has codimension k, Gaussian atom iff zero D-block covariance) checked and correct."
+  },
+  {
+   "paperItem": "eq. (12) comparison functional f_t (tex 936-939)",
+   "leanDecl": "Spec.fCompare (Defs)",
+   "status": "exact",
+   "comment": "Definition matches."
+  },
+  {
+   "paperItem": "theta_{t+1} > theta_t <-> f_t > 0 (tex 941-944)",
+   "leanDecl": "Spec.theta_lt_theta_cNext_iff; Spec.theta_lt_theta_cNext_of_fCompare_pos; Spec.exists_theta_lt_theta_cNext_and_fCompare_eq_zero",
+   "status": "hypotheses-added",
+   "comment": "True and non-vacuous, but hypothesis hs' (s_{t+1} > 0) is superfluous: only s_t > 0 is needed (proved in scratch Sharper.lean). The x_t = 0 counterexample to the paper's literal claim is valid."
+  },
+  {
+   "paperItem": "theta_{t+1} < theta_t <-> f_t < 0 (tex 941-944)",
+   "leanDecl": "Spec.theta_cNext_lt_theta_iff; Spec.theta_cNext_lt_theta_of_fCompare_neg; Spec.exists_theta_cNext_lt_theta_and_fCompare_eq_zero",
+   "status": "hypotheses-added",
+   "comment": "Hypothesis hs (s_t > 0) is superfluous: only s_{t+1} > 0 is needed, and that is the paper's own assumption (tex 928). So this equivalence is exact in the paper, not a gap."
+  },
+  {
+   "paperItem": "theta_{t+1} = theta_t <-> f_t = 0 (not in paper; task item a)",
+   "leanDecl": "Spec.theta_cNext_eq_theta_iff; Spec.theta_cNext_sub_theta; OneStep.theta_sub_theta",
+   "status": "strengthened",
+   "comment": "Extra result. Both positivity hypotheses are genuinely needed here."
+  },
+  {
+   "paperItem": "Lemma 'Elementwise expectation', per-coordinate identity (tex 1062-1066) and proof expansion (tex 1074-1089)",
+   "leanDecl": "Spec.EsNext_singleton, Spec.EsNext_eq_sum_singleton, Spec.lam_sq_mul_cNext_sq, Spec.EsNext_term_eq, Spec.expect_mom_two_cNext",
+   "status": "equivalent-reformulation",
+   "comment": "EsNext_singleton is definitional; the content is expect_mom_two_cNext (any normalised linear functional with E zeta_i = 0, E zeta_i^2 = kap2_i), which is satisfiable (boolE example). Checked numerically with a full non-diagonal Sigma."
+  },
+  {
+   "paperItem": "Block form of the lemma, last display of the proof (tex 1090-1093)",
+   "leanDecl": "Spec.EsNext_eq",
+   "status": "exact",
+   "comment": "For every block S."
+  },
+  {
+   "paperItem": "eq. (Eat) (tex 1069)",
+   "leanDecl": "Spec.EsNext_D",
+   "status": "exact",
+   "comment": ""
+  },
+  {
+   "paperItem": "eq. (Ebt) (tex 1070)",
+   "leanDecl": "Spec.EsNext_B",
+   "status": "exact",
+   "comment": ""
+  },
+  {
+   "paperItem": "Lemma 'Quadratic form', eq. (quad-form) E[f_t | x_t] = p_t eta^2 + q_t eta (tex 1098-1102, proof 1110-1122)",
+   "leanDecl": "Spec.expF, Spec.expF_eq, Spec.expF_eq_mul, Spec.fCompare_sub_expF, Spec.expect_fCompare",
+   "status": "exact",
+   "comment": "expF is defined exactly as the task prescribes; pCoef and qCoef match (p-def) and (q-sign). Numerically verified."
+  },
+  {
+   "paperItem": "eq. (q-sign), bound q_t <= 2 s^B s^D (lam_{k+1} - lam_k) (tex 1105, 1123)",
+   "leanDecl": "Spec.qCoef_le, OneStep.tauB_le, OneStep.le_tauD",
+   "status": "exact",
+   "comment": ""
+  },
+  {
+   "paperItem": "eq. (q-sign), strict q_t < 0 (tex 1105, 1123)",
+   "leanDecl": "Spec.qCoef_neg, Spec.qCoef_neg_iff, Spec.qCoef_neg_iff_theta, Spec.qCoef_eq_zero_iff, Spec.qCoef_eq_zero_iff_theta, Spec.qCoef_nonpos, Spec.exists_theta_eq_one_qCoef_eq_zero, Spec.exists_theta_eq_zero_qCoef_eq_zero",
+   "status": "paper-claim-false",
+   "comment": "Verified: q_t < 0 iff 0 < theta_t < 1, and q_t = 0 iff theta_t in {0,1}. Counterexamples hold for every spectrum."
+  },
+  {
+   "paperItem": "eq. (p-def) (tex 1106)",
+   "leanDecl": "Spec.pCoef (Defs); Spec.pCoef_of_sD_eq_zero, Spec.pCoef_of_sB_eq_zero",
+   "status": "exact",
+   "comment": ""
+  },
+  {
+   "paperItem": "eta*_t = -q_t/p_t as 'the non-zero root' (tex 1108); main-text eq. (2) (tex 388-395)",
+   "leanDecl": "Spec.etaStar (Defs), Spec.etaStar_eq, Spec.expF_etaStar, Spec.expF_eq_zero_iff, Spec.etaStar_eq_zero_iff",
+   "status": "hypotheses-added",
+   "comment": "etaStar_eq matches eq. (2) (numerator is -q_t). 'Non-zero' holds iff q_t != 0. Unconditional '0 < eta* <-> p > 0 and q < 0' is missing (minor)."
+  },
+  {
+   "paperItem": "Remark: parabola through the origin (tex 1126)",
+   "leanDecl": "Spec.expF_zero",
+   "status": "exact",
+   "comment": ""
+  },
+  {
+   "paperItem": "Remark, p_t > 0: eta*_t > 0 (tex 1145)",
+   "leanDecl": "Spec.etaStar_pos, Spec.etaStar_pos_iff, Spec.etaStar_nonneg, Spec.exists_pCoef_pos_and_etaStar_eq_zero",
+   "status": "hypotheses-added",
+   "comment": "Needs q_t < 0. Counterexample at theta_t = 0 with e_D > 0 is correct."
+  },
+  {
+   "paperItem": "Remark, p_t > 0: E f < 0 for 0 < eta < eta*, E f > 0 for eta > eta* (tex 1145)",
+   "leanDecl": "Spec.expF_neg_iff_lt_etaStar, Spec.expF_eq_zero_iff_eq_etaStar, Spec.expF_pos_iff_etaStar_lt, Spec.expF_pos_iff, Spec.expF_neg_iff, Spec.expF_neg_iff_linear, Spec.expF_pos_iff_linear",
+   "status": "strengthened",
+   "comment": "Equivalences for eta > 0. The hypothesis eta > 0 is genuinely needed."
+  },
+  {
+   "paperItem": "Remark, p_t < 0 (and the omitted p_t = 0): E f < 0 for all eta > 0 (tex 1147)",
+   "leanDecl": "Spec.expF_neg_of_pCoef_neg, Spec.expF_neg_of_pCoef_nonpos, Spec.expF_nonpos_of_pCoef_nonpos",
+   "status": "strengthened",
+   "comment": "p < 0 needs only q <= 0; p <= 0 needs q < 0."
+  },
+  {
+   "paperItem": "Remark: '... implying the expected alignment E[theta_{t+1}] decreases / increases' (tex 1145-1147)",
+   "leanDecl": "Spec.thetaBarNext_lt_theta_of_lt_etaStar, Spec.theta_lt_thetaBarNext_of_etaStar_lt, Spec.thetaBarNext_lt_theta_of_pCoef_nonpos",
+   "status": "weakened",
+   "comment": "Only for the ratio of expectations thetaBarNext; declared 'not-formalized (other layers)'. The literal finite-d claim is false (Monte Carlo counterexample at d = 2, see issues) and the note does not say so."
+  },
+  {
+   "paperItem": "Bridge display, deterministic equivalent (tex 1038-1058; task item e)",
+   "leanDecl": "Spec.thetaBarNext_sub_theta, Spec.thetaBarNext_lt_theta_iff, Spec.theta_lt_thetaBarNext_iff, Spec.thetaBarNext_eq_theta_iff, Spec.thetaBarNext_lt_theta_of_expF_neg, Spec.theta_lt_thetaBarNext_of_expF_pos, Spec.thetaBarNext_eq_one_div, Spec.thetaBarNext_nonneg, Spec.thetaBarNext_le_one, Spec.thetaBarNext_zero",
+   "status": "strengthened",
+   "comment": "Identity verified by hand and numerically. Each strict equivalence carries one superfluous hypothesis (hs in the decrease one, hE in the increase one). The sign typo at tex 1043 is correctly reported."
+  },
+  {
+   "paperItem": "Positivity of E[s^S_{t+1} | x_t] and of E[s_{t+1} | x_t] (task item e)",
+   "leanDecl": "Spec.EsNext_nonneg, Spec.EsNext_eq_zero_iff, Spec.EsNext_pos_iff, Spec.EsNext_pos_of_kap2_pos, Spec.EsNext_pos_of_smin_pos, Spec.EsNext_pos_of_state, Spec.EsNext_D_add_EsNext_B, Spec.EsNext_D_add_EsNext_B_pos_iff, Spec.EsNext_D_add_EsNext_B_pos_of_smin_pos, Spec.EsNext_zero",
+   "status": "strengthened",
+   "comment": "Exact characterisations; correct."
+  },
+  {
+   "paperItem": "Figure and caption (tex 1128-1143)",
+   "leanDecl": "none",
+   "status": "missing",
+   "comment": "No mathematical content beyond the Remark."
+  }
+ ],
+ "issues": [
+  {
+   "severity": "major",
+   "where": "Spec.theta_lt_theta_cNext_iff, Spec.theta_cNext_lt_theta_iff, Spec.theta_lt_thetaBarNext_iff, Spec.thetaBarNext_lt_theta_iff, OneStep.theta_lt_theta_iff, OneStep.theta_gt_theta_iff; module docstring lines 35-41; fidelity note rows for tex 941-944, G4, G5(iii)",
+   "description": "The task asked for the equivalences 'under exactly the positivity hypotheses needed'. Each strict equivalence carries one superfluous hypothesis, and the docs assert it is necessary. (1) theta_t < theta_{t+1} <-> 0 < f_t needs only s_t > 0: if s_{t+1} = 0 both sides are false. (2) theta_{t+1} < theta_t <-> f_t < 0 needs only s_{t+1} > 0: if s_t = 0 both sides are false. (3) theta_t < thetaBarNext <-> 0 < expF needs only s_t > 0. (4) thetaBarNext < theta_t <-> expF < 0 needs only E s_{t+1} > 0. All four sharper statements compile with standard axioms in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_OneStep/Sharper.lean. The module docstring's claim 'for each positivity hypothesis a companion lemma shows that it cannot be dropped' is therefore false for hs' in (1), hs in (2), hE in (3), hs in (4); the companion lemmas each refute only one hypothesis of one equivalence. The note repeats the over-claim ('Needs s_t > 0 and s_{t+1} > 0' in both rows for tex 941-944; G4 'need x_t != 0 and x_{t+1} != 0'; G5(iii) 'requires x_t != 0 and E[s_{t+1}] > 0'). This mis-states the paper's gap: the paper assumes s_{t+1} != 0 at tex 928 (almost sure when Tr Sigma > 0 and eta != 0), so its '<' equivalence is exactly correct, including at x_t = 0. The only real gap in tex 941-944 is x_t != 0 for the '>' equivalence. Both hypotheses are needed only for the equality versions.",
+   "suggestedFix": "Drop hs' from Spec.theta_lt_theta_cNext_iff and OneStep.theta_lt_theta_iff, hs from Spec.theta_cNext_lt_theta_iff and OneStep.theta_gt_theta_iff, hE from Spec.theta_lt_thetaBarNext_iff, hs from Spec.thetaBarNext_lt_theta_iff (proofs in Sharper.lean: R_theta_lt_theta_iff, R_theta_gt_theta_iff, R_theta_lt_thetaBarNext_iff, R_thetaBarNext_lt_theta_iff). Keep both hypotheses on the '=' versions. Rewrite docstring lines 35-41 and the note: '>' row is hypotheses-added (x_t != 0 only); '<' row is exact under the paper's own assumption s_{t+1} != 0; same correction in G4 and G5(iii). Optionally add the corollary: for eta != 0 and s_min > 0, thetaBarNext < theta_t <-> expF < 0 with no hypothesis on the state."
+  },
+  {
+   "severity": "minor",
+   "where": "Fidelity note, last table row and G5 (tex 1145-1147)",
+   "description": "The Remark's 'E[f_t] < 0, implying the expected alignment E[theta_{t+1}] decreases' (and the increase analogue) is listed as 'not-formalized (other layers)' without saying it is false at finite d. Counterexample with Gaussian noise: lam = (2,1), D = {first}, x_t = (-1.1593, 0.8333), kap2 = (4.4638, 0.2543), eta = 0.6629. Then p_t = 22.23 > 0, eta*_t = 0.336 < eta, E f_t = +4.82 > 0, thetaBarNext = 0.978 > theta_t = 0.8856, but E[theta_{t+1}] = 0.8664 +- 0.0001 < theta_t (4e6 Monte Carlo samples, mc.py in the review scratch folder; a random search found over 2000 such sign mismatches).",
+   "suggestedFix": "Add a gap item: at finite d the sign of E[f_t] decides the sign of thetaBarNext - theta_t only, not of E[theta_{t+1}] - theta_t; the Remark's 'implying' is valid only asymptotically. Cite the numerical counterexample."
+  },
+  {
+   "severity": "minor",
+   "where": "Spec.thetaBarNext_lt_theta_of_lt_etaStar; Spec.etaStar_pos_iff",
+   "description": "The finite-d core of Theorem 2 carries hp : 0 < pCoef, which the paper's Theorem 2 (tex 399-403) does not have. It is superfluous: since q_t <= 0 and x/0 = 0, 0 < eta < etaStar already forces p_t > 0 and q_t < 0. The unconditional '0 < etaStar <-> 0 < pCoef and qCoef < 0' is missing; etaStar_pos_iff assumes p > 0.",
+   "suggestedFix": "Add the unconditional etaStar_pos_iff and a version of thetaBarNext_lt_theta_of_lt_etaStar with only (h_eta : 0 < eta) (h : eta < P.etaStar N c). Both are proved in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_OneStep/Probe2.lean (R_etaStar_pos_iff, R_thetaBarNext_lt_theta_of_lt_etaStar)."
+  },
+  {
+   "severity": "minor",
+   "where": "Section 'Pathwise facts'; Remark of A.2 (tex 928)",
+   "description": "The Remark names two exceptional sets, {s_{t+1} = 0} and {s^D_{t+1} = 0}. Only the second has a direct lemma. The first is exactly the hypothesis the '<' equivalence needs, and unlike the D-set it is null under the paper's assumptions (Tr Sigma > 0, eta != 0); the note's G4 does not make this distinction.",
+   "suggestedFix": "Add Spec.s_cNext_eq_zero_iff : P.s (P.cNext eta c zeta) = 0 <-> forall i, eta * zeta i = (1 - eta * P.lam i) * c i (proof R_s_cNext_eq_zero_iff in Probe2.lean). In G4, separate the two sets: {s_{t+1}=0} is a single point, atomless whenever Sigma != 0; only {s^D_{t+1}=0} needs the extra non-degeneracy."
+  },
+  {
+   "severity": "minor",
+   "where": "Fidelity note table; module docstring lines 39-41",
+   "description": "(a) The table uses statuses outside the prescribed vocabulary ('extra', 'exact / extra', 'exact / strengthened'). (b) The first row is 'exact' although the matrix-level equality <x_{t+1},u_i> = c_i - eta(lam_i c_i + zeta_i) is not formalized here; Defs points to a MatrixBridge.lean that did not exist at review time. (c) The docstring's list of 'the only statements that also cover a vanishing denominator' omits theta_cNext_eq_sum_div_sum and the totalised theta lemmas (theta_pos_iff, theta_eq_zero_iff, qCoef_neg_iff_theta, qCoef_eq_zero_iff_theta), which hold at x = 0 via theta(0) = 0. (d) The typo at tex 934 ('The case of {s^D_{t+1}=0} is analogous' should read s_{t+1}) is not recorded.",
+   "suggestedFix": "Use only the prescribed statuses (e.g. 'strengthened' for additions); mark the matrix-level step not-formalized here; correct the docstring sentence; add the typo to the gap list."
+  },
+  {
+   "severity": "minor",
+   "where": "namespace OneStep (generic lemmas); Spec.expect_mom_two_cNext, Spec.expect_fCompare",
+   "description": "Downstream ergonomics. Generic facts about theta and mom (theta_pos_iff, theta_eq_one_iff, mom_eq_zero_iff, tauB_le, ...) sit in OneStep with P explicit, while Defs uses dot notation (P.theta_nonneg), so downstream files must mix both styles. The abstract-expectation lemmas quantify over a linear functional on all of Omega -> R, which the Bochner integral is not; the probability layer cannot instantiate them and must go through mom_two_cNext_sub_EsNext and fCompare_sub_expF, as the note says.",
+   "suggestedFix": "Optionally move or alias the generic lemmas into namespace Spec. Optionally restate the abstract-expectation lemmas for a functional on a submodule containing 1, zeta_i, zeta_i^2. No correctness impact."
+  }
+ ],
+ "verdict": "revise",
+ "summary": "Verdict: revise. The file is sound and covers the passage, but four strict equivalences carry a superfluous positivity hypothesis that the module docstring and fidelity note wrongly call necessary.\n\n**Soundness.** `lake env lean SuspiciousAlignment/OneStep.lean` gives no errors or warnings (16 s), and `lake build SuspiciousAlignment.OneStep` succeeds. There is no sorry, admit, axiom, native_decide, unsafe or implemented_by. `#print axioms` on all 131 declarations reports only propext, Classical.choice, Quot.sound.\n\n**Fidelity.** Every statement was checked against tex 910-947, 1061-1148 and 386-397. `expF`, `pCoef`, `qCoef`, `etaStar_eq`, (Eat)/(Ebt), the q-bound, the parabola sign analysis and the bridge identity all match the paper. No statement is vacuous or leans on x/0 = 0 without saying so; the concrete instance (lam = (2,1), x = (1,1), p = 12 or -28, q = -8, eta* = 2/3) was recomputed by hand. An independent numerical check agrees: exact discrete expectations with a full non-diagonal Sigma, d = 6, 60 instances including theta in {0,1}.\n\n**Fidelity note.** The paper-error claims G1, G2, G3, G5(i)-(ii) and G6 are correct, as is the G4 analysis of the exceptional set V. The necessity claims in G4 and G5(iii) are over-stated, as described next.\n\n**Major issue.** The task asked for exactly the hypotheses needed. In `Spec.theta_lt_theta_cNext_iff`, `Spec.theta_cNext_lt_theta_iff`, `Spec.theta_lt_thetaBarNext_iff` and `Spec.thetaBarNext_lt_theta_iff` (and the two generic `OneStep` versions), one of the two hypotheses can be dropped:\n- the '>' forms need only s_t > 0;\n- the '<' forms need only s_{t+1} > 0, respectively E s_{t+1} > 0.\n\nThe note thereby attributes to the paper a gap that does not exist: the paper already assumes s_{t+1} != 0 (tex 928), so its '<' equivalence is exact, and the only real gap in tex 941-944 is x_t != 0 for '>'. The sharper statements are proved, with standard axioms, in `/tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_OneStep/Sharper.lean`.\n\n**Minor issues.**\n- The note does not say that the Remark's \"E f < 0 implies E[theta_{t+1}] decreases\" is false at finite d; a d = 2 Gaussian counterexample is in the issues list.\n- `thetaBarNext_lt_theta_of_lt_etaStar` has a superfluous `p_t > 0` hypothesis, and the unconditional \"0 < eta* iff p > 0 and q < 0\" is missing (proofs in `/tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_OneStep/Probe2.lean`).\n- There is no direct lemma for the exceptional set {s_{t+1} = 0}.\n- The note uses statuses outside the prescribed vocabulary and has a few small documentation inaccuracies.\n- Generic lemmas use explicit `P` rather than dot notation.\n\nFiles reviewed: `/home/user/htmuon/suspicious_alignment/SuspiciousAlignment/OneStep.lean` and `/home/user/htmuon/suspicious_alignment/notes/fidelity/OneStep.md`; neither was edited."
+}

@@ -1,0 +1,144 @@
+{
+ "file": "/home/user/htmuon/suspicious_alignment/SuspiciousAlignment/Prob/GaussianForms.lean",
+ "compiles": true,
+ "sorryFree": true,
+ "theorems": [
+  {
+   "name": "SuspiciousAlignment.IsCenteredGaussian (def)",
+   "paperItem": "Lemma 'Variance of Gaussian Forms' (lem:gauss-var, tex 951): hypothesis z ~ N(0,C)",
+   "informal": "z : \u03a9 \u2192 \u03b9 \u2192 \u211d is centered Gaussian with covariance C under \u03bc: HasLaw (\u03c9 \u21a6 toLp 2 (z \u03c9)) (ProbabilityTheory.multivariateGaussian 0 C) \u03bc (Mathlib's multivariate Gaussian).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.variance_gaussian_forms",
+   "paperItem": "Lemma 'Variance of Gaussian Forms' (lem:gauss-var, tex 950-959), full statement",
+   "informal": "For z ~ N(0,C), C PSD, any g and diagonal D=diag(d): Var(g^T z) = g^T C g <= ||C||_2 * sum g_i^2 and Var(z^T D z) = 2 tr((C D)^2) <= 2 ||C||_2^2 tr(D^2).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.IsCenteredGaussian.variance_linear / .integral_linear / .variance_linear_le / .linear_form",
+   "paperItem": "lem:gauss-var first display (tex 954); task item (ii)",
+   "informal": "g^T z is in L2, E[g^T z] = 0, Var(g^T z) = g^T C g <= ||C||_2 ||g||_2^2.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.IsCenteredGaussian.variance_quadratic / .variance_quadratic_le / .quadratic_form",
+   "paperItem": "lem:gauss-var second display (tex 957); task item (iv)",
+   "informal": "For every symmetric D (in particular diagonal): z^T D z is in L2 and Var(z^T D z) = 2 tr((C D)^2) <= 2 ||C||_2^2 tr(D^2).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.IsCenteredGaussian.integral_quadratic / .integral_diagonal_quadratic",
+   "paperItem": "implicit in lem:gauss-var / Lemma 'Elementwise expectation' (lem:blk-exp-t-app) for Gaussian noise; task item (iii)",
+   "informal": "E[z^T D z] = tr(C D) for symmetric D; coordinate form E[sum d_i z_i^2] = sum C_ii d_i.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.IsCenteredGaussian.variance_diagonal_quadratic",
+   "paperItem": "lem:gauss-var second identity, coordinate form",
+   "informal": "Var(sum_i d_i z_i^2) = 2 sum_{i,j} d_i d_j C_ij^2.",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.IsCenteredGaussian.covariance_linear_quadratic",
+   "paperItem": "used silently at tex 1022 ('variance of the sum of the linear and quadratic forms'); task item (v)",
+   "informal": "Cov(g^T z, z^T D z) = 0 for z ~ N(0,C), D symmetric.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.IsCenteredGaussian.affine_quadratic_form / .memLp_form / .integral_form / .variance_form / .variance_form_le",
+   "paperItem": "tex 1011-1022 (variance of s^S_{t+1} = chi + g^T z + z^T D z); task item (v)",
+   "informal": "chi + g^T z + z^T D z is in L2, has mean chi + tr(C D) and variance g^T C g + 2 tr((C D)^2) <= ||C||_2 sum g_i^2 + 2 ||C||_2^2 tr(D^2).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.GaussianForms.dotProduct_mulVec_le / dotProduct_mulVec_le_sum_sq",
+   "paperItem": "lem:gauss-var, inequality g^T C g <= ||C||_2 ||g||_2^2; task item (i)",
+   "informal": "For every real square matrix C (no symmetry or positivity needed) and vector g: g^T C g <= ||C||_2 * (g . g), spectral norm.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.GaussianForms.trace_mul_sq_le_of_isSymm / trace_mul_mul_self_le",
+   "paperItem": "lem:gauss-var, inequality tr((CD)^2) <= ||C||_2^2 tr(D^2); task item (i)",
+   "informal": "For every real C and symmetric D: tr((C D)^2) <= ||C||_2^2 tr(D^2); for arbitrary D: tr((C D)^2) <= ||C||_2^2 tr(D^T D).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.GaussianForms.not_trace_mul_sq_le_of_not_isSymm",
+   "paperItem": "lem:gauss-var, necessity of symmetric (diagonal) D",
+   "informal": "Formal counterexample: C = diag(1,0) PSD, D = quarter-turn rotation: tr((CD)^2) = 0 > ||C||^2 tr(D^2) = -2||C||^2, so symmetry of D cannot be dropped.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.isCenteredGaussian_of_iIndepFun / variance_form_of_iIndepFun",
+   "paperItem": "model of z ~ N(0,C) (tex 951)",
+   "informal": "If w_k are independent standard normal reals (iIndepFun, law gaussianReal 0 1) and M is a deterministic matrix then z = M w is IsCenteredGaussian with covariance M M^T; the variance formula stated directly for this model.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.GaussianForms.gaussianImage_map_toLp / sqrt_mul_sqrt_transpose / multivariateGaussian_map_ofLp",
+   "paperItem": "model of z ~ N(0,C)",
+   "informal": "The law of M w equals Mathlib's multivariateGaussian 0 (M M^T) (proved by characteristic functions); every PSD C equals C^{1/2} (C^{1/2})^T; N(0,C) is the law of C^{1/2} w.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.IsCenteredGaussian.covariance_apply / .mulVec",
+   "paperItem": "paper section 3.2: C = U^T Sigma U, noise in the eigenbasis",
+   "informal": "Cov(z_i, z_j) = C_ij; and z ~ N(0,C) implies A z ~ N(0, A C A^T) (so zeta = U^T xi ~ N(0, U^T Sigma U)).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.isCenteredGaussian_ofLp / iIndepFun_eval_stdNormalPi (+ two examples)",
+   "paperItem": "non-vacuity of hypotheses",
+   "informal": "For every C the canonical space (R^iota, N(0,C)) realises IsCenteredGaussian; on (R^kappa, N(0,1)^kappa) the coordinates are independent standard normals.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.mom_cNext_eq_gaussian_form (with GaussianForms.chi, gVec, dVec)",
+   "paperItem": "proof of Lemma 'Asymptotic ratio of expectations', decomposition at tex 1011-1021",
+   "informal": "s^S_{t+1} = sum_{i in S} lam_i^2 ((1-eta lam_i) c_i - eta zeta_i)^2 = chi_S + g_S^T zeta + zeta^T D_S zeta with the paper's chi, g, D (pure algebra, any zeta).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.integral_sNext_of_isCenteredGaussian / memLp_sNext_of_isCenteredGaussian",
+   "paperItem": "Lemma 'Elementwise expectation' (lem:blk-exp-t-app) for Gaussian noise",
+   "informal": "If zeta ~ N(0,C) and kap2 i = C_ii then s^S_{t+1} is in L2 and E[s^S_{t+1}] = Spec.EsNext N S eta c.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.variance_sNext_of_isCenteredGaussian",
+   "paperItem": "tex 1022: variance of s^S_{t+1}",
+   "informal": "Var(s^S_{t+1}) = g_S^T C g_S + 2 tr((C D_S)^2) exactly.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.variance_sNext_le_of_isCenteredGaussian / variance_sNext_le_trace_of_isCenteredGaussian / variance_sNext_le_lam1_of_isCenteredGaussian",
+   "paperItem": "tex 1022: 'By Lemma gauss-var and Assumption 1, Var(s^S_{t+1}) = O(|S|)'",
+   "informal": "Finite-d bounds: Var <= 4 eta^2 ||C|| sum_S lam^4 (1-eta lam)^2 c^2 + 2 eta^4 ||C||^2 sum_S lam^4; same with tr C in place of ||C||; and Var <= 4 eta^2 ||C|| lam_1^4 (1+|eta| lam_1)^2 sum_S c_i^2 + 2 eta^4 ||C||^2 lam_1^4 |S|, which is O(|S|) only with an extra bound on lam_1.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.GaussianForms.l2_opNorm_le_trace_of_posSemidef / l2_opNorm_sq_le_trace",
+   "paperItem": "Assumption 1 'Noise spectral bounds' (Tr Sigma bounded) vs ||C||_2 in lem:gauss-var",
+   "informal": "For PSD C: ||C||_2 <= tr C; for any real A: ||A||_2^2 <= tr(A^T A).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.GaussianForms.integral_pow_four_stdNormal / integral_cube_stdNormal / integral_sq_stdNormal / variance_linear_add_sq_stdNormal / stdNormalPi_map_orthonormalBasis / form_stdNormalPi / form_gaussianImage",
+   "paperItem": "ingredients of the proof of lem:gauss-var (the paper gives no proof, Remark tex 990)",
+   "informal": "E x^2 = 1, E x^3 = 0, E x^4 = 3 for N(0,1); Var(a x + b x^2) = a^2 + 2 b^2; rotation invariance of the standard normal vector; mean/variance of c0 + a^T x + x^T Q x for standard normal x (Q symmetric) and for z = M x.",
+   "status": "extra"
+  }
+ ],
+ "paperIssues": [
+  "The lemma 'Variance of Gaussian Forms' itself is correct as stated; the paper gives no proof ('standard results'), a complete proof is formalised. The hypothesis ||C||_2 < infinity is vacuous for a finite matrix; positivity of C is not needed for either inequality.",
+  "Diagonal D is more restrictive than necessary (symmetric suffices), but symmetry cannot be dropped: for non-symmetric D the correct formula is Var(z^T D z) = 2 tr((C (D+D^T)/2)^2), not 2 tr((CD)^2) (numerically 107.7 vs 54.1 on a random instance), and the inequality tr((CD)^2) <= ||C||_2^2 tr(D^2) is false (C = diag(1,0), D = [[0,1],[-1,0]] gives 0 <= -2); formal counterexample GaussianForms.not_trace_mul_sq_le_of_not_isSymm.",
+  "Gap at tex l.1022: the proof says the variance of s^S_{t+1} 'is the variance of the sum of the linear and quadratic forms' and cites the lemma, but the lemma only gives the two variances separately; the cross term 2 Cov(g^T z, z^T D z) is not addressed. It is in fact 0 (proved: IsCenteredGaussian.covariance_linear_quadratic), so Var(s^S_{t+1}) = g^T C g + 2 tr((CD)^2) exactly.",
+  "The claim 'By Lemma gauss-var and Assumption 1, Var(s^S_{t+1}) = O(|S|)' does not follow from Assumption 1 as stated. The quadratic part 2||C||^2 tr(D_S^2) = 2 eta^4 ||C||^2 sum_S lam_i^4 is O(|S|) (block moment p=4, given ||C||_2 and eta bounded). The linear part ||C|| ||g_S||^2 = 4 eta^2 ||C|| sum_S lam_i^4 (1-eta lam_i)^2 c_i^2 is a weighted energy that Assumption 1 does not control, because sup_i lam_i is not assumed bounded. Counterexample satisfying all four items of Assumption 1: d = 2k, lam_1 = k^(1/8), other dominant lam_i = 1, bulk lam_i = 1/2, c_1^2 = d, other c_i = 0, C = diag(1/2,0,...,0): Var(s^D_{t+1}) ~ 2 eta^2 k^(1/2) (1 - eta k^(1/8))^2 d, of order d^(7/4), and E[s^D_{t+1}]/k diverges, so l'_D is not finite either. With an additional uniform bound on lam_1 the O(|S|) bound holds (Spec.variance_sNext_le_lam1_of_isCenteredGaussian). Under Assumption 1 alone one still gets Var = O(d^(7/4)) = o(|S|^2), which suffices for the Chebyshev step but not for Lemma wlln-blocks as stated (this last asymptotic statement is argued in the fidelity note, not formalised).",
+  "The trace assumption 'Tr(Sigma) in (0, infinity)' is ambiguous. What the variance bound needs is ||C||_2 = s_max bounded uniformly in d. If the trace is only finite for each d (e.g. Sigma = d I) no O(|S|) bound holds. If it is bounded uniformly in d, then ||C||_2 <= tr C (proved) but the noise becomes asymptotically invisible: e_S <= max_S lam_i^2 * Tr Sigma = o(|S|), so the limits l'_S = lim E[s^S_{t+1}]/|S| do not depend on the noise; isotropic noise Sigma = sigma^2 I is excluded by a uniform trace bound although it has bounded s_max.",
+  "Relative to (E s_{t+1})^2: the transfer E[theta_{t+1}] - thetaBarNext -> 0 needs Var(s^S_{t+1})/(E s_{t+1})^2 -> 0. This holds (rate 1/d with bounded lam_1, d^(-1/4) under Assumption 1 alone) only if E[s_{t+1}]/d has a positive limit; positivity of the limits (the paper's y_0 in (0, infinity)) is asserted without proof, and Assumption 1 even allows lam_{B,p} = 0.",
+  "eta_t = O(1) is used implicitly in the O(|S|) claim but is not part of Assumption 1."
+ ],
+ "unproven": [],
+ "notes": "Files written: /home/user/htmuon/suspicious_alignment/SuspiciousAlignment/Prob/GaussianForms.lean (1119 lines) and /home/user/htmuon/suspicious_alignment/notes/fidelity/GaussianForms.md. Imports only Mathlib and SuspiciousAlignment.Defs; Defs.lean was not modified.\n\nVerification: `lake env lean` on the file gives no errors and no warnings; `lake build SuspiciousAlignment.Prob.GaussianForms` succeeds (only the lake notice about `import Mathlib` and the module system, same as for Defs); no sorry/admit/axiom/native_decide; `#print axioms` on all main theorems (run from a scratch file importing the built module, not left in the source) shows only propext, Classical.choice, Quot.sound. Task items (i)-(v) are all proved; nothing is left unproven.\n\nModel choice: `IsCenteredGaussian z C mu := HasLaw (fun w => toLp 2 (z w)) (multivariateGaussian 0 C) mu`, i.e. Mathlib's multivariate Gaussian, for z : Omega -> iota -> R. The concrete model z = M w with independent standard normals is shown to be an instance (covariance M M^T), and every PSD C is of that form with M = C^{1/2}. All main theorems take `hz : IsCenteredGaussian z C mu` and `hC : C.PosSemidef`; both are jointly satisfiable for every PSD C (isCenteredGaussian_ofLp, plus two `example`s).\n\nProof route: reduce to a standard normal vector w via z = C^{1/2} w; diagonalise Q = C^{1/2} D C^{1/2}; use rotation invariance (Mathlib's stdGaussian_eq_map_pi_orthonormalBasis) to get a sum of independent terms a_i y_i + lam_i y_i^2; use E y^3 = 0, E y^4 = 3 (derived from iteratedDeriv_mgf_zero, since Mathlib has no third/fourth Gaussian moments) and variance_sum_pi. Mean, variance and Cov = 0 all come out of one master statement (IsCenteredGaussian.affine_quadratic_form). Numerical checks with numpy were run before formalising.\n\nDefinitions introduced in this file (not in Defs.lean): SuspiciousAlignment.IsCenteredGaussian; GaussianForms.stdNormalPi, gaussianImage, mgfDeriv; GaussianForms.chi, gVec, dVec (the paper's chi_{S,t}, g_{S,t}, D_{S,t}). An anonymous instance IsProbabilityMeasure (gaussianImage M) is declared.\n\nBeyond the stated task I added the application to Defs (decomposition of s^S_{t+1}, its mean = Spec.EsNext, exact variance and three finite-d variance bounds), `IsCenteredGaussian.mulVec`, and `||C||_2 <= tr C`. These are marked extra / hypotheses-added in the theorem list.\n\nFor downstream files: Spec.memLp_sNext_of_isCenteredGaussian, Spec.integral_sNext_of_isCenteredGaussian (needs `hN : forall i, N.kap2 i = C i i`) and the Spec.variance_sNext_* lemmas have the shape of the hypotheses (MemLp 2, integral = EsNext, variance) taken by Prob/Concentration.lean. They are stated with `P.mom S 2 (P.cNext eta c (zeta w))`; the P.sD / P.sB forms follow by `exact` (see the `example` at the end of `namespace Spec`). I read Concentration.lean to match shapes but did not import it. All norms are the scoped `Matrix.Norms.L2Operator` instance, so consumers must `open scoped Matrix.Norms.L2Operator` or use the tr C versions. To pass from xi ~ N(0, Sigma) to eigen-coordinates use IsCenteredGaussian.mulVec with A = U^T. No name clashes with the other project files present at the time of the build (checked by grep)."
+}

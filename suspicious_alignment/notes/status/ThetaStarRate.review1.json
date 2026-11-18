@@ -1,0 +1,149 @@
+{
+ "compiles": true,
+ "sorryFree": true,
+ "axiomsClean": true,
+ "coverage": [
+  {
+   "paperItem": "Thm 4 (tex 425-441): theta* = r0/(1+r0), r0 the positive root of a r^2+(a-m-h) r-h, theta* in (0,1)",
+   "leanDecl": "ThetaStarRate.auxQuad_r0, r0_pos, eq_r0_of_auxQuad_eq_zero, one_sub_thetaStar, thetaStar_mem_Ioo (Spec.r0/thetaStar from Defs.lean)",
+   "status": "hypotheses-added",
+   "comment": "Local helpers; only added hypothesis is 0 < s_min (needed for a genuine quadratic; documented). Uniqueness of the positive root is proved, so Spec.r0 really is the paper's r0."
+  },
+  {
+   "paperItem": "Thm 4 (tex 440): as psi_D/psi_B -> infinity, theta* -> 1",
+   "leanDecl": "Spec.thetaStar_rate_aux_sandwich (3rd conjunct: 1 - theta* <= a/(a+h))",
+   "status": "equivalent-reformulation",
+   "comment": "Quantitative form only; the limit statement belongs to the Theorem 4 file. Fine for this file."
+  },
+  {
+   "paperItem": "Thm 5 literal statement (tex 443-451, 1260-1268): exist alpha, beta > 0 with 1 - beta/m^2 <= theta* <= 1 - alpha/m^2",
+   "leanDecl": "Spec.thetaStar_rate_exists",
+   "status": "hypotheses-added",
+   "comment": "Pointwise existence (trivial content, as the note says). 0 < s_min added, Assumption 1 dropped; both documented."
+  },
+  {
+   "paperItem": "Thm 5 with explicit constants",
+   "leanDecl": "Spec.thetaStar_rate, Spec.thetaStar_rate_one_sub, Spec.thetaStarRateAlpha, Spec.thetaStarRateBeta (+ _pos, _le_one)",
+   "status": "strengthened",
+   "comment": "Correct; I re-derived it by hand and checked it on 40000 random instances (0 violations). beta = s_min/(rho s_max) is state-independent and asymptotically sharp; alpha_t depends on s_t, d-k, lam_1/lam_k, lam_{k+1}/lam_d. Relative to the paper's intended 'fixed scalar alpha' this is a weakening, which the note covers in separate rows."
+  },
+  {
+   "paperItem": "Thm 5 'theta* = 1 - Theta(1/m^2)' (tex 452-455, 1269-1272, 1349)",
+   "leanDecl": "thetaStar_rate_isTheta, Spec.thetaStar_rate_uniform",
+   "status": "hypotheses-added",
+   "comment": "Correct and non-vacuous (e.g. gapSpec mu with c = 0 satisfies all bounds with R1 = R2 = 1/2, Omega = 0, KD = KB = 1 while m -> infinity). Bounds are required for all j rather than eventually along l (minor)."
+  },
+  {
+   "paperItem": "Thm 5 Theta-claim read uniformly in m",
+   "leanDecl": "thetaStar_rate_not_isTheta, thetaStar_rate_fails_fixed_state, Spec.thetaStar_rate_quartic",
+   "status": "paper-claim-false",
+   "comment": "Mathematically correct (1 - theta* in [2/(mu^4+2), 2/mu^4) for diag(mu,1,1), x = u_1). But the family has d = 3, k = 1 fixed and lam_k -> infinity, so it is outside the regime of Assumption 1, the stated hypothesis of Theorem 5. The note does not say so. See major issue."
+  },
+  {
+   "paperItem": "Thm 5 under Assumption 1 as actually stated (d, k -> infinity, Tr Sigma bounded, ||x||^2/d bounded, rho fixed, block spectral moments convergent)",
+   "leanDecl": "Spec.thetaStar_rate_trace_bound, Spec.thetaStar_rate_of_bounded_state (inequalities only)",
+   "status": "missing",
+   "comment": "The in-regime failure (theta* -> 1 at fixed m as d -> infinity) is supported only by an inequality plus a numeric table; there is no formal family satisfying Assumption 1 on which the claim fails. I proved one in a scratch file in about 80 lines, so it is provable."
+  },
+  {
+   "paperItem": "Interpretation (tex 456): theta* -> 1 as lam_k/lam_{k+1} -> infinity",
+   "leanDecl": "thetaStar_tendsto_one_of_gap",
+   "status": "hypotheses-added",
+   "comment": "Correct. The added hypothesis R1 <= rho s_max/s_min holds automatically with R1 = rho under Assumption 1's fixed block proportion, because s_max >= s_min; the note should say this."
+  },
+  {
+   "paperItem": "Proof (tex 1284-1301): a, h, m^aux nonnegative; quadratic formula for r0",
+   "leanDecl": "ThetaStarRate.aAux_pos, hAux_pos, mAux_nonneg, quad_formula_root, quad_formula_root_pos; Spec.r0",
+   "status": "exact",
+   "comment": "a, h > 0 under s_min > 0."
+  },
+  {
+   "paperItem": "Proof (tex 1302-1321): eigenvalue bounds on D and B; l_B <= psi_B <= u_B; rho l_B <= psi_D <= rho u_B",
+   "leanDecl": "ThetaStarRate.psiB_le, le_psiB, psiD_le, le_psiD (the correct bounds)",
+   "status": "paper-claim-false",
+   "comment": "The note's audit (section 4, steps 1-2) is right; I reproduced its numeric counterexample lam = (3,2,1,0.5): psi_D = 13 > 8, psi_B = 1.25 < 2. No Lean counterexample for these proof steps (optional)."
+  },
+  {
+   "paperItem": "Proof (tex 1322-1333): beta := rho s_max/s_min, r0 >= beta/m^2 - 1, theta* >= 1 - m^2/beta",
+   "leanDecl": "ThetaStarRate.hAux_div_aAux_le_r0, le_aux_ratio (the stronger r0 >= h/a >= beta' m^2)",
+   "status": "strengthened",
+   "comment": "The paper's two bounds are true but useless. They are in fact validly derived from the TRUE halves of the previous step (h >= s_max rho l_B, a <= s_min u_B), so the note's summary 'wrong at every step' is inaccurate (minor)."
+  },
+  {
+   "paperItem": "Proof (tex 1344-1348): conclusion 1 - beta/m^2 <= theta* with the paper's beta",
+   "leanDecl": "thetaStar_rate_paper_beta_fails",
+   "status": "paper-claim-false",
+   "comment": "Verified: diag(2,1,1), Sigma = I, x = 0 gives theta* = 2/3 < 7/8. The note's d = 11 example (2/7 vs 0.975) also reproduced."
+  },
+  {
+   "paperItem": "Proof (tex 1334-1337): 'there exists a fixed scalar alpha with r0 <= alpha m^2'",
+   "leanDecl": "ThetaStarRate.r0_le, aux_ratio_le; Spec.thetaStar_rate_energy_bound, thetaStar_rate_gt_of_energy_large, thetaStar_rate_alpha_not_uniform_in_state, thetaStar_rate_cond_bound",
+   "status": "paper-claim-false",
+   "comment": "Correct. The refutation uses arbitrarily large states at fixed d; for a bounded trajectory at fixed d a state-independent alpha_C does exist (Spec.thetaStar_rate_of_bounded_state). The note's 'alpha cannot be state/time independent' needs that qualifier (minor)."
+  },
+  {
+   "paperItem": "Proof (tex 1338-1349): theta* <= 1 - 1/(1+alpha m^2), final two-sided bound",
+   "leanDecl": "Spec.thetaStar_rate, Spec.thetaStar_rate_sharp, Spec.thetaStar_rate_aux_sandwich",
+   "status": "strengthened",
+   "comment": "Sandwich a/(M+h+a) <= 1 - theta* < a/(M+h) checked by hand: Q((M+h)/a) = M, Q((M+h)/a - 1) = -h, Q(h/a) = -M h/a."
+  }
+ ],
+ "issues": [
+  {
+   "severity": "major",
+   "where": "thetaStar_rate_not_isTheta, thetaStar_rate_fails_fixed_state, Spec.thetaStar_rate_alpha_not_uniform_in_state; fidelity note sections 1, 2 (rows 'paper-claim-false') and 5",
+   "description": "Theorem 5 is stated 'Under Assumption 1' (tex 444, 1261), i.e. for d, k(d) -> infinity with (i) ||x_t||^2/d bounded, (ii) rho fixed, (iii) block spectral moments (1/k) sum_D lam_i^p and (1/(d-k)) sum_B lam_i^p convergent to finite limits for p in {2,3,4,6,8}, (iv) Tr Sigma bounded (tex 367-384). Every formal 'paper-claim-false' theorem refuting the rate lies outside that regime: gapSpec/gapSpecNat has d = 3, k = 1 fixed and lam_k = mu -> infinity (item (iii) forces lam_k^2 <= psi_D/k = O(1), so along d -> infinity the gap can only grow through lam_{k+1} -> 0 and the m^-4 mechanism M ~ m^4 cannot occur); thetaStar_rate_alpha_not_uniform_in_state uses arbitrarily large states at fixed d. So no Lean theorem refutes the claim on a family satisfying its stated hypothesis. The failure inside the regime (s_min <= Tr Sigma/d, hence s_t/(s_min(d-k)) >= (1+rho) s_t/Tr Sigma -> infinity when s_t grows with d) is supported only by the inequality Spec.thetaStar_rate_trace_bound and a numeric table. The note's section 5 analyses three of the four items of Assumption 1 and never mentions 'Block spectral moments', nor that the formal counterexamples violate it. Such a formal counterexample is provable: I proved one in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_ThetaStarRate/Asp1Family.lean (compiles, axioms clean, about 80 lines, uses only Spec.thetaStar_rate_trace_bound).",
+   "suggestedFix": "Add a family with d -> infinity satisfying all four items, e.g. on Fin (n+1) \u2295 Fin (n+1): lam = 2 on inl (= D), 1 on inr, kap2 = smin = smax = 1/(2(n+1)), c = 1. Prove mRatio = 2, rho = 1, sum kap2 = 1, normSq c = card, s c >= 2(n+1), then 1 - thetaStar < 1/(12(n+1)) via thetaStar_rate_trace_bound, and conclude: for all alpha > 0 there is n0 such that for all n >= n0, 1 - alpha/mRatio^2 < thetaStar (my scratch file can be adapted directly). Optionally add the m -> infinity variant (lam_B = 1/(n+2)) giving a not-IsTheta statement inside Assumption 1. In the note: add the 'Block spectral moments' item to section 5 (it bounds lam_k and psi_D/k, psi_B/(d-k), so m -> infinity forces lam_{k+1} -> 0); state explicitly that gapSpecNat and the m^-4 regime are outside Assumption 1 and refute only the fixed-d 'uniform in m' reading; point the 'paper-claim-false' row for the Theta claim at the new in-regime theorem."
+  },
+  {
+   "severity": "minor",
+   "where": "fidelity note section 1, bullet 'Lower bound'",
+   "description": "'the paper's proof of it is wrong at every step' is inaccurate and contradicts the note's own section 4. Steps tex 1322-1333 (r0 >= beta/m^2 - 1, theta* >= 1 - m^2/beta) are valid: they use only h >= s_max rho l_B and a <= s_min u_B, which are the TRUE halves of tex 1315-1320 (psi_D >= k lam_{k+1}^2, psi_B <= (d-k) lam_k^2). The only invalid step in the lower-bound chain is the final non sequitur at tex 1344-1348; the false inequalities of tex 1302-1320 are not used for the lower bound.",
+   "suggestedFix": "Reword: 'the paper's derivation yields only theta* >= 1 - m^2/beta (valid but useless); the final step to 1 - beta/m^2 <= theta* is a non sequitur, and with the paper's beta the conclusion is false'."
+  },
+  {
+   "severity": "minor",
+   "where": "fidelity note table, row 'fixed scalar alpha'; docstring of Spec.thetaStar_rate_alpha_not_uniform_in_state",
+   "description": "'alpha cannot be state/time independent' is stated without qualification, but for a fixed problem and a trajectory with ||x_t||^2 <= C d the file itself gives a state- and time-independent alpha_C (Spec.thetaStar_rate_of_bounded_state). The refutation needs unbounded states at fixed d, or d -> infinity with Tr Sigma bounded.",
+   "suggestedFix": "Add the qualifier: independent of the state only over bounded sets of states, with alpha_C depending on C lam_1^2/s_min; under Assumption 1 lam_1^2/s_min >= lam_1^2 d/Tr Sigma -> infinity, which is the real obstruction."
+  },
+  {
+   "severity": "minor",
+   "where": "thetaStar_rate_isTheta, thetaStar_tendsto_one_of_gap",
+   "description": "All side conditions (hs, hR1', hR2, hOmega, hKD, hKB) are required for every j although the conclusions are statements along the filter l. This is unnecessarily strong for asymptotic use: a family that satisfies the bounds only for large d cannot be fed in directly.",
+   "suggestedFix": "State the hypotheses as 'eventually along l' (\u2200\u1da0 j in l, ...) and use IsBigO.of_bound with the eventual bound, or tendsto_of_tendsto_of_tendsto_of_le_of_le' for the limit."
+  },
+  {
+   "severity": "minor",
+   "where": "thetaStar_tendsto_one_of_gap; fidelity note row 'Interpretation (tex 456)'",
+   "description": "Labelled 'hypotheses-added' with the remark that the paper leaves the lower bound on rho s_max/s_min implicit. Under Assumption 1's 'block proportion' item (rho a fixed constant) the hypothesis holds automatically with R1 = rho, since s_max >= s_min. The note does not say this, so the paper's interpretation looks more deficient than it is.",
+   "suggestedFix": "Say so in the note and optionally add the corollary with hypothesis '\u2200 j, R1 \u2264 (P j).rho'."
+  },
+  {
+   "severity": "minor",
+   "where": "docstring of thetaStar_rate_isTheta ('The boundedness hypotheses are exactly what the paper's constants hide'); note section 3 table column 'removable?'",
+   "description": "'exactly' overclaims. Necessity is proved for the bound on s_t/(s_min(d-k)) (thetaStar_rate_energy_bound) and partially for lam_1/lam_k (thetaStar_rate_cond_bound, which carries a factor d-k and so is vacuous when (lam_1/lam_k)^2 <= d-k). Necessity of the upper bound R2 follows from the beta bound but is not stated. Nothing shows the bound on lam_{k+1}/lam_d is needed.",
+   "suggestedFix": "Replace 'exactly' by 'sufficient; the bound on s_t/(s_min(d-k)) is necessary', or add a small example showing (1 - theta*) m^2 -> 0 as lam_d -> 0 with everything else fixed (e.g. bulk (1, eps, ..., eps), where psi_B/((d-k) lam_{k+1}^2) -> 1/(d-k))."
+  },
+  {
+   "severity": "minor",
+   "where": "Non-vacuity of thetaStar_rate_isTheta",
+   "description": "There is no example showing the hypotheses are jointly satisfiable on a family with m -> infinity. The only instantiation is the le_rfl one inside thetaStar_rate_of_bounded_state, for a single instance. They are satisfiable (gapSpecNat n, unitNoise, c = 0 with R1 = R2 = 1/2, Omega = 0, KD = KB = 1), but the file does not show it.",
+   "suggestedFix": "Add an example or theorem instantiating thetaStar_rate_isTheta on (gapSpecNat n, unitNoise, 0) along atTop; this gives a positive instance of Theta(1/m^2) next to the negative one."
+  },
+  {
+   "severity": "minor",
+   "where": "fidelity note table, row for Spec.thetaStar_rate (status 'strengthened')",
+   "description": "Relative to the paper's intended claim (a fixed scalar alpha) the Lean alpha_t is state-dependent, which is a weakening; 'strengthened' is accurate only against the literal pointwise existential.",
+   "suggestedFix": "Label it 'strengthened (explicit constants) for beta; alpha is state-dependent, i.e. weakened relative to the intended fixed alpha, see the paper-claim-false rows'."
+  },
+  {
+   "severity": "minor",
+   "where": "fidelity note section 4, steps 1-2 (tex 1302-1321)",
+   "description": "The false intermediate inequalities of the paper's proof are refuted only numerically (lam = (3,2,1,0.5)); there is no Lean counterexample. They are proof steps rather than theorem claims, so this is optional.",
+   "suggestedFix": "Optionally add a Fin 4 example showing psi_B < (d-k) lam_{k+1}^2 and psi_D > k lam_k^2."
+  }
+ ],
+ "verdict": "revise",
+ "summary": "The file is sound and its mathematics is correct, but I am returning it for revision on one major point: nothing in Lean refutes Theorem 5 on a family that satisfies Assumption 1, the theorem's stated hypothesis.\n\n**Soundness.** `lake env lean` on the file gives no errors and no warnings (43 s), and the module build is up to date. There is no sorry, admit, axiom, native_decide, unsafe or implemented_by. `#print axioms` on 31 declarations (all main theorems, the helpers and the example family) shows only propext, Classical.choice and Quot.sound.\n\n**Mathematics.** I re-derived the core sandwich a/(M+h+a) \u2264 1 \u2212 \u03b8* < a/(M+h) and the spectral bounds by hand. I also checked every inequality in the file on 40000 random instances with no violations, and reproduced all four numeric tables and both code snippets in the note. The explicit constants are right: \u03b2 = s_min/(\u03c1 s_max) is state-independent and asymptotically sharp, and \u03b1_t is necessarily state-dependent. The paper's named \u03b2 does fail (\u03b8* = 2/3 < 7/8). All main theorems need only 0 < s_min, and nothing relies on division by zero.\n\n**Major issue.** The formal \"paper-claim-false\" theorems (`thetaStar_rate_not_isTheta`, `thetaStar_rate_fails_fixed_state`, `Spec.thetaStar_rate_alpha_not_uniform_in_state`) all sit outside the regime of Assumption 1:\n- The counterexample family has d = 3 and k = 1 fixed with \u03bb_k \u2192 \u221e. The \"block spectral moments\" item of Assumption 1 excludes this along d \u2192 \u221e, because it bounds \u03bb_k.\n- The state-dependence result uses arbitrarily large states at fixed d.\n- The failure inside the regime (Tr \u03a3 bounded forces s_min \u2264 Tr \u03a3/d, so \u03b8* \u2192 1 at fixed m when s_t grows with d) is backed only by the inequality `Spec.thetaStar_rate_trace_bound` and a numeric table.\n- The fidelity note analyses three of the four items of Assumption 1, never mentions the block-spectral-moments item, and does not say the formal counterexamples violate it.\n\nThe missing result is provable. In a scratch file I proved a family with d = 2(n+1) \u2192 \u221e, \u03c1 = 1, \u2016x\u2016\u00b2/d = 1, constant block moments, Tr \u03a3 = 1 and m = 2, on which 1 \u2212 \u03b8* < 1/(12(n+1)). So for every \u03b1 > 0 the bound \u03b8* \u2264 1 \u2212 \u03b1/m\u00b2 fails for large n. It compiles with clean axioms in about 80 lines using only the prover's own trace bound.\n\n**Minor issues.**\n- The note says the paper's lower-bound proof is \"wrong at every step\", but two of its steps are valid.\n- \"\u03b1 cannot be state/time independent\" needs a qualifier, since the file itself gives a fixed \u03b1 for bounded trajectories.\n- The filter theorems require their bounds for all j rather than eventually.\n- The hypothesis added to the \"\u03b8* \u2192 1\" interpretation holds automatically under Assumption 1; the note should say so.\n- \"Exactly what the constants hide\" overclaims necessity.\n- There is no example showing the \u0398 theorem's hypotheses are satisfiable with m \u2192 \u221e.\n- The \"strengthened\" label on the main theorem hides that \u03b1 became state-dependent.\n\nFiles are in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_ThetaStarRate:\n- Axioms.lean\n- check.py\n- Asp1Family.lean"
+}

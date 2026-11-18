@@ -1,0 +1,149 @@
+{
+ "file": "/home/user/htmuon/suspicious_alignment/SuspiciousAlignment/StepSize/ThetaStarRate.lean",
+ "compiles": true,
+ "sorryFree": true,
+ "theorems": [
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate",
+   "paperItem": "Theorem 5 (tex 443-457; proof 1260-1350)",
+   "informal": "If s_min > 0 then 1 - beta/m^2 < thetaStar <= 1 - alpha_t/m^2 with explicit beta = s_min/(rho s_max) (Spec.thetaStarRateBeta) and alpha_t = 1/(1 + (rho s_max/s_min + s_t/(s_min (d-k))) (lam_1/lam_k)^2 (lam_{k+1}/lam_d)^2) (Spec.thetaStarRateAlpha); both constants positive.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_one_sub",
+   "paperItem": "Theorem 5",
+   "informal": "Same bound written as alpha_t/m^2 <= 1 - thetaStar < beta/m^2.",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_exists",
+   "paperItem": "Theorem 5, literal statement",
+   "informal": "If s_min > 0 there exist alpha, beta > 0 with 1 - beta/m^2 <= thetaStar <= 1 - alpha/m^2 (for one fixed problem and state).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_uniform",
+   "paperItem": "Theorem 5, 'thetaStar = 1 - Theta(1/m^2)'",
+   "informal": "If R1 <= rho s_max/s_min <= R2 (R1 > 0), s_t/(s_min(d-k)) <= Omega, lam_1/lam_k <= K_D, lam_{k+1}/lam_d <= K_B then (1/(1+(R2+Omega) K_D^2 K_B^2))/m^2 <= 1 - thetaStar < (1/R1)/m^2.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_isTheta",
+   "paperItem": "Theorem 5, 'thetaStar = 1 - Theta(1/m^2)'",
+   "informal": "For any family of problems/states and any filter along which those five quantities are bounded as above, (1 - thetaStar) =Theta (1/m^2) in Mathlib's Asymptotics.IsTheta sense.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_not_isTheta",
+   "paperItem": "Theorem 5, 'thetaStar = 1 - Theta(1/m^2)' read uniformly in m",
+   "informal": "Along A_n = diag(n+2,1,1), D={1}, Sigma = I, x = u_1 (everything but m fixed), 1 - thetaStar is NOT Theta(1/m^2); it is O(1/m^4).",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_fails_fixed_state",
+   "paperItem": "Theorem 5, upper bound thetaStar <= 1 - alpha/m^2 with a fixed alpha",
+   "informal": "In the family diag(mu,1,1), Sigma = I, x = u_1: for every alpha > 0 there is mu0 such that thetaStar > 1 - alpha/m^2 for all mu >= mu0 (since 1 - thetaStar < 2/(m^2(m^2-1))).",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_alpha_not_uniform_in_state",
+   "paperItem": "Theorem 5 proof, 'there exists a fixed scalar alpha' (tex 1334-1337)",
+   "informal": "For a fixed problem (A, Sigma) with s_min > 0 and every alpha > 0 there is a state with thetaStar > 1 - alpha/m^2: alpha cannot be independent of s_t.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_paper_beta_fails",
+   "paperItem": "Theorem 5 proof, constant beta := rho s_max/s_min and conclusion 1 - beta/m^2 <= thetaStar (tex 1322, 1346)",
+   "informal": "For A = diag(2,1,1), D={1}, Sigma = I, x = 0: thetaStar = 2/3 < 7/8 = 1 - (rho s_max/s_min)/m^2; the paper's named beta is the reciprocal of the correct one.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_aux_sandwich",
+   "paperItem": "Theorem 5 (core estimate replacing tex 1302-1337)",
+   "informal": "With a = s_min psi_B, h = s_max psi_D, M = s_t(lam_1^2 - lam_d^2): a/(M+h+a) <= 1 - thetaStar < a/(M+h) and 1 - thetaStar <= a/(a+h).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_sharp",
+   "paperItem": "Theorem 5 (sharp spectral form)",
+   "informal": "1/(1 + (rho s_max/s_min + s_t/(s_min(d-k))) (lam_1/lam_d)^2) <= 1 - thetaStar < 1/(rho s_max/s_min m^2 + s_t/(s_min(d-k)) (m^2 - 1)).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_energy_bound",
+   "paperItem": "Theorem 5 (dependence on s_t)",
+   "informal": "If s_t > 0 then 1 - thetaStar < s_min (d-k)/(s_t (m^2 - 1)).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_gt_of_energy_large",
+   "paperItem": "Theorem 5 (dependence on s_t)",
+   "informal": "For alpha > 0, every state with s_t >= s_min (d-k) m^2/(alpha (m^2-1)) has thetaStar > 1 - alpha/m^2.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_quartic",
+   "paperItem": "Theorem 5 (m^-4 regime)",
+   "informal": "If the dominant component of the state is non-zero, 1 - thetaStar < (s_min (d-k)/(lam_{k+1}^2 ||P^D x||^2))/(m^2 (m^2-1)); the constant is free of lam_k.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_cond_bound",
+   "paperItem": "Theorem 5 (dependence on lam_1/lam_k)",
+   "informal": "1 - thetaStar <= ((d-k) s_min/s_max)/((lam_1/lam_k)^2 m^2) for every state, so alpha must shrink with the dominant-block condition number.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_trace_bound",
+   "paperItem": "Theorem 5 under Assumption 1 (Tr Sigma bounded, d -> infinity)",
+   "informal": "If s_t > 0 then 1 - thetaStar < (sum_i kappa_i^2)/((1+rho) s_t (m^2-1)); with bounded trace and s_t growing with d, thetaStar -> 1 at fixed m.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_of_bounded_state",
+   "paperItem": "Theorem 5 under Assumption 1 (trajectory boundedness)",
+   "informal": "If ||x_t||^2 <= C d then (1/(1 + (rho s_max/s_min + (1+rho) C lam_1^2/s_min)(lam_1/lam_k)^2 (lam_{k+1}/lam_d)^2))/m^2 <= 1 - thetaStar.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_tendsto_one_of_gap",
+   "paperItem": "Interpretation after Theorem 5 (tex 456): thetaStar -> 1 as lam_k/lam_{k+1} -> infinity",
+   "informal": "For any family with s_min > 0, rho s_max/s_min >= R1 > 0 and m -> infinity along a filter, thetaStar -> 1 (no condition on the states).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.ThetaStarRate.eq_r0_of_auxQuad_eq_zero",
+   "paperItem": "Theorem 4 (r_{0,t} is the positive root) - local helper",
+   "informal": "If s_min > 0, Spec.r0 is a root of auxQuad (auxQuad_r0), is positive (r0_pos), and is the unique positive root.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.ThetaStarRate.thetaStar_mem_Ioo",
+   "paperItem": "Theorem 4 (thetaStar in (0,1)) - local helper",
+   "informal": "If s_min > 0 then 0 < thetaStar < 1; also 1 - thetaStar = 1/(1 + r0) (one_sub_thetaStar).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.ThetaStarRate.one_sub_thetaStar_of_s_eq_zero",
+   "paperItem": "Theorem 4/5 - local helper",
+   "informal": "At s_t = 0 (x_t = 0): r0 = h/a and 1 - thetaStar = s_min psi_B/(s_min psi_B + s_max psi_D) exactly.",
+   "status": "extra"
+  }
+ ],
+ "paperIssues": [
+  "Proof of Thm 5 (tex 1302-1309): the eigenvalue bounds are reversed. The paper writes lam_{k+1}^2 <= lam_i^2 <= lam_k^2 on D and lam_{k+1}^2 <= lam_i^2 on B; the truth is lam_k^2 <= lam_i^2 <= lam_1^2 on D and lam_d^2 <= lam_i^2 <= lam_{k+1}^2 on B.",
+  "Proof (tex 1310-1321): of the claimed bounds ell_B <= psi_B <= u_B and rho ell_B <= psi_D <= rho u_B (ell_B = (d-k) lam_{k+1}^2, u_B = (d-k) lam_k^2), the parts ell_B <= psi_B and psi_D <= rho u_B are false unless the blocks are flat. Numeric counterexample: lam = (3,2,1,0.5), k = 2 gives psi_D = 13 > 8 = rho u_B and psi_B = 1.25 < 2 = ell_B. Correct: k lam_k^2 <= psi_D <= k lam_1^2 and (d-k) lam_d^2 <= psi_B <= (d-k) lam_{k+1}^2.",
+  "Proof (tex 1322-1333): the lower bound r0 >= beta/m^2 - 1 with beta := rho s_max/s_min is true but vacuous (the correct bound is r0 >= h/a >= beta m^2). It yields theta* >= 1 - m^2/beta, which worsens as m grows.",
+  "Proof (tex 1344-1348): the conclusion 1 - beta/m^2 <= theta* does not follow from 1 - m^2/beta, and is false with the paper's beta. Formal counterexample thetaStar_rate_paper_beta_fails: diag(2,1,1), Sigma = I, x = 0 gives theta* = 2/3 < 7/8. Numeric: d = 11, k = 1, lam = (2,1,...,1) gives theta* = 2/7 against a claimed 0.975. The correct constant is the reciprocal, beta = s_min/(rho s_max).",
+  "Proof (tex 1334-1337): 'there exists a fixed scalar alpha with r0 <= alpha m^2' is asserted without computing alpha, and uses the false bounds above. The correct bound is r0 <= (rho s_max/s_min + s_t/(s_min(d-k))) (lam_1/lam_k)^2 (lam_{k+1}/lam_d)^2 m^2. So alpha depends on the state through s_t, on d-k, on s_min, and on both within-block condition numbers; it is not fixed.",
+  "The upper bound theta* <= 1 - alpha/m^2 cannot hold with alpha independent of s_t: 1 - theta* < s_min(d-k)/(s_t(m^2-1)), so for a fixed problem and any alpha > 0 some state violates it (thetaStar_rate_alpha_not_uniform_in_state).",
+  "The rate claim theta* = 1 - Theta(1/m^2) is false as a uniform statement in m. With the state fixed and lam_{k+1} = Theta(1), the rate is m^-4, because s_t >= lam_k^2 ||P^D x||^2 makes m^aux grow like m^4. Formal: thetaStar_rate_not_isTheta and thetaStar_rate_fails_fixed_state on diag(mu,1,1), Sigma = I, x = u_1; numerically (1 - theta*) m^4 -> 2 for mu = 2..32. The m^-2 rate is right only when s_t/(s_min(d-k)) and the within-block condition numbers stay bounded, e.g. lam_1 = O(1) with the bulk shrinking.",
+  "Assumption 1 is not used in the proof and does not give the needed bounds. Bounded Tr Sigma with d -> infinity forces s_min <= Tr Sigma/d -> 0, and 1 - theta* < Tr Sigma/((1+rho) s_t (m^2-1)). So if s_t grows with d (e.g. ||x_t||^2 of order d, which trajectory boundedness allows), theta*_t -> 1 at fixed m and the decrease region (theta*_t, 1) of Theorem 4 is asymptotically empty. Numeric: Sigma = I/d, c_i = 1, lam = (2..2,1..1) gives theta* = 0.9707, 0.99671, 0.999667, 0.9999667 for d = 2, 20, 200, 2000.",
+  "Trajectory boundedness only gives s_t/(d-k) <= (1+rho) C lam_1^2, which is bounded only if lam_1 is; alpha then still involves lam_1^2/s_min (thetaStar_rate_of_bounded_state).",
+  "The hypothesis s_min > 0 is needed and never stated: otherwise a^aux = 0 and r_{0,t} is not the root of a quadratic. Likewise the remark 'theta* -> 1 as lam_k/lam_{k+1} -> infinity' needs rho s_max/s_min bounded below.",
+  "Minor (tex 1338-1348): from r0 <= alpha m^2 one gets theta* <= 1 - 1/(1 + alpha m^2), which gives theta* <= 1 - alpha'/m^2 only with a different constant alpha' = 1/(1+alpha), using m >= 1.",
+  "theta*_t is not scale-invariant in A (s_t and m^aux scale) whereas m is, so a correct statement needs a normalisation; the right one is omega_t = s_t/(s_min(d-k)). The natural variable is psi_D/psi_B, which m^2 only brackets: rho m^2 <= psi_D/psi_B <= rho (lam_1/lam_k)^2 (lam_{k+1}/lam_d)^2 m^2."
+ ],
+ "unproven": [],
+ "notes": "Theorem 5 is formalized with explicit constants and everything stated is proved. The module builds with `lake build SuspiciousAlignment.StepSize.ThetaStarRate`, has no `sorry`/`admit`/`axiom`/`native_decide`, and `#print axioms` on the main theorems showed only propext, Classical.choice and Quot.sound (the temporary lines are removed). It imports only Mathlib and SuspiciousAlignment.Defs; Defs.lean was not edited.\n\nFiles:\n- /home/user/htmuon/suspicious_alignment/SuspiciousAlignment/StepSize/ThetaStarRate.lean\n- /home/user/htmuon/suspicious_alignment/notes/fidelity/ThetaStarRate.md\n\n**What is true.** The lower bound on theta* holds uniformly with beta = s_min/(rho s_max). The upper bound holds only with a state-dependent alpha_t = 1/(1 + (rho s_max/s_min + s_t/(s_min(d-k))) (lam_1/lam_k)^2 (lam_{k+1}/lam_d)^2). The underlying estimate is a/(M+h+a) <= 1 - theta* < a/(M+h), obtained by evaluating the quadratic at (M+h)/a, (M+h)/a - 1 and h/a.\n\n**What is false in the paper.** The uniform Theta(1/m^2) claim fails, the \"fixed scalar alpha\" does not exist, and the beta named in the proof is the reciprocal of the correct one. Each has a formal counterexample; the step-by-step audit of the proof is in `paperIssues` and in the fidelity note.\n\n**Hypotheses.** The only added hypothesis is `0 < N.smin`. Three extra bounds also need `0 < P.s c` or `0 < P.normSqD c`. Assumption 1 is not used. Non-vacuity is shown by a concrete `example` (diag(2,1,1), Sigma = I, x = u_1); no statement relies on x/0 = 0.\n\n**Numerics.** All inequalities were checked in python3 on 2*10^4 random instances with no violation. The counterexample tables and a short reproduction snippet are in the fidelity note; the full check scripts were in the scratchpad and are not kept.\n\n**For downstream files.**\n- New definitions are `Spec.thetaStarRateAlpha` and `Spec.thetaStarRateBeta`.\n- Facts about `r0` and `thetaStar` (root, positivity, uniqueness, 1 - theta* = 1/(1+r0), theta* in (0,1)) are proved locally in `namespace SuspiciousAlignment.ThetaStarRate`, so they will not clash with the Theorem 4 file but do duplicate it.\n- The example family (`gapSpec`, `gapSpecNat`, `unitNoise`, `e1`) lives in the same namespace, with `@[simp]` evaluation lemmas.\n- The third conjunct of `Spec.thetaStar_rate_aux_sandwich` gives a quantitative form of Theorem 4's remark: 1 - theta* <= 1/(1 + (s_max/s_min) psi_D/psi_B).\n- `Spec.normSq` in Defs.lean does not take `P`, so it must be written `Spec.normSq c`."
+}

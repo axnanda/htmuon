@@ -21,23 +21,36 @@ of its theory to spectrally-filtered optimizers (Muon / HTMuon / Echelon).
 
 ## Toolchain
 ```
-export PATH=$HOME/.elan/bin:$PATH
 cd /home/user/htmuon/suspicious_alignment
-lake env lean SuspiciousAlignment/<Your/File>.lean      # type-check one file (10–90 s)
+scripts/leancheck SuspiciousAlignment/<Your/File>.lean        # type-check one file (10 s – several min)
+scripts/leancheck --build SuspiciousAlignment.<Your.Module>   # build ONE module so later files can import it
 ```
+* ALWAYS go through `scripts/leancheck` (it sets PATH and serialises Lean runs: at most 3 Lean
+  processes at once on this 4-core / 15 GB machine; your call may wait a little for a free slot).
+  Never call `lake`/`lean` directly, never run `lake update`, `lake exe cache …`, `lake clean` or a
+  bare `lake build`; never touch `.lake/`. Run one check at a time, no background jobs.
 * Lean `v4.35.0`, Mathlib `v4.35.0` (prebuilt, shared). Mathlib sources for grepping lemma names:
   `/home/user/htmuon/suspicious_alignment/.lake/packages/mathlib/Mathlib/`.
 * A worked example of this style of Lean/Mathlib (matrix + analysis) project that compiles on this
   toolchain: `/home/user/echelon-lean/` (read-only reference).
-* NEVER run `lake update`, `lake exe cache …`, `lake clean`, or a bare `lake build`; never touch
-  `.lake/`. Only type-check with `lake env lean <file>`. If your file must import another project
-  file that is listed for you as "built", just `import` it — its `.olean` exists. Do not import
-  project files that are not on your "built" list.
-* The machine has 4 cores shared by several agents: run one Lean check at a time, no background jobs,
-  no `-j`. If a check takes more than ~5 minutes, your proof is too heavy: split lemmas, replace big
-  `nlinarith`/`simp` calls by explicit steps.
+* Only import project modules that are on your "built" list (their `.olean` exists). If an import
+  fails with "object file ... does not exist", run `scripts/leancheck --build <that module>` once.
+* If a check takes more than ~5 minutes, your proof is too heavy: split lemmas, replace big
+  `nlinarith`/`simp` calls by explicit steps. Keep files moderate in size (prefer < 1500 lines; split
+  into `Foo/Part1.lean`-style files only if you are told you may).
 * Start every file with `import Mathlib` (plus project imports), and work inside
   `namespace SuspiciousAlignment`. `autoImplicit` is off.
+
+## Interruptions (IMPORTANT)
+The machine may be restarted at any time, killing your session; only files on disk survive.
+* SAVE OFTEN: write your Lean file to disk early and after every proved lemma (never keep large
+  unsaved work in your head); keep the file compiling at each save if possible (comment out, do not
+  `sorry`, unfinished parts — and list them in a `-- TODO(unfinished): …` comment at the top).
+* RESUME: a previous agent may have been interrupted while doing exactly your task. If your target
+  file (or note, script, result) already exists, do NOT start over: read it, check what compiles,
+  keep what is good, and complete or repair the rest.
+* When you finish a stage, also write your final structured report as JSON to
+  `notes/status/<key>.<stage>.json` (the task tells you the name).
 
 ## Hard rules
 1. **No `sorry`, no `admit`, no new `axiom`, no `native_decide`, no `unsafe`**, no `implemented_by`.

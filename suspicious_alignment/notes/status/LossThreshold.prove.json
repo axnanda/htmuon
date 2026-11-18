@@ -1,0 +1,236 @@
+{
+ "file": "/home/user/htmuon/suspicious_alignment/SuspiciousAlignment/Projected/LossThreshold.lean",
+ "compiles": true,
+ "sorryFree": true,
+ "theorems": [
+  {
+   "name": "SuspiciousAlignment.Spec.loss_cNextProj_sub_loss",
+   "paperItem": "Proof of Theorem 10, first display (tex 1492-1495)",
+   "informal": "Pathwise, for every noise realisation: L(x+) - L(x) = -eta * sum_{i in S} g_i lam_i c_i + (eta^2/2) * sum_{i in S} lam_i g_i^2 with g_i = lam_i c_i + zeta_i, i.e. Delta L = -eta g^T A x + (eta^2/2) g^T A g for the S-projected update.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.loss_cNextProj_sub_loss_eq_sum",
+   "paperItem": "Proof of Theorem 10 (coordinatewise form)",
+   "informal": "L(cNextProj S eta c zeta) - L(c) = sum_{i in S} (lam_i/2) (((1 - eta lam_i) c_i - eta zeta_i)^2 - c_i^2).",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expLossChange_eq_sum",
+   "paperItem": "Theorem 10 / proof (tex 1496-1498)",
+   "informal": "expLossChange = -eta s^S + (eta^2/2)(tau^S + n^loss_S) equals sum_{i in S} (lam_i/2) ((1 - eta lam_i)^2 c_i^2 + eta^2 kap2_i - c_i^2), the sum of per-coordinate expected loss changes.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.loss_cNextProj_sub_loss_eq_expLossChange_add",
+   "paperItem": "Proof of Theorem 10 (tex 1496-1498)",
+   "informal": "Pathwise decomposition Delta L = expLossChange - eta sum_S lam_i (1 - eta lam_i) c_i zeta_i + (eta^2/2) sum_S lam_i (zeta_i^2 - kap2_i); the last two terms are mean-zero when E zeta_i = 0, E zeta_i^2 = kap2_i.",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.weighted_sum_loss_change",
+   "paperItem": "Theorem 10 (expectation, finitely supported noise)",
+   "informal": "For finitely supported noise with weights summing to 1, mean 0 and second moments kap2_i on S, the weighted average of L(x+) - L(x) equals expLossChange.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expLossChange_neg_iff",
+   "paperItem": "Theorem 10 (tex 554-565)",
+   "informal": "If tau^S + n^loss_S > 0 then for every real eta: expLossChange N S eta c < 0 <-> 0 < eta and eta < etaLoss N S c. (eta > 0 is part of the iff; s^S > 0 is not needed.)",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.proj_loss_step_size_condition",
+   "paperItem": "Theorem 10 as displayed (D and B)",
+   "informal": "With both denominators positive: E Delta L_D < 0 <-> 0 < eta < etaLossD, and E Delta L_B < 0 <-> 0 < eta < etaLossB.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expLossChange_neg_iff_of_pos",
+   "paperItem": "Theorem 10 (for eta > 0)",
+   "informal": "If tau^S + n^loss_S > 0 and eta > 0: expLossChange < 0 <-> eta < etaLoss.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expLossChange_pos_iff",
+   "paperItem": "Theorem 10 (loss-increasing side)",
+   "informal": "If tau^S + n^loss_S > 0: 0 < expLossChange <-> eta < 0 or etaLoss < eta.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expLossChange_pos_iff_of_pos",
+   "paperItem": "Theorem 10 / Summary (tex 619-626)",
+   "informal": "If tau^S + n^loss_S > 0 and eta > 0: 0 < expLossChange <-> etaLoss < eta.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expLossChange_eq_zero_iff",
+   "paperItem": "Theorem 10 (zero set)",
+   "informal": "If tau^S + n^loss_S > 0: expLossChange = 0 <-> eta = 0 or eta = etaLoss; also expLossChange_eq_factor: expLossChange = ((tau^S+n^loss_S)/2) eta (eta - etaLoss).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expLossChange_eq_zero_of_lossDen_eq_zero",
+   "paperItem": "Theorem 10 (degenerate case tau^S + n^loss_S = 0)",
+   "informal": "If tau^S + n^loss_S = 0 then expLossChange = 0 for all eta (threshold is 0/0 in the paper); companion: expLossChange_nonneg_of_mom_eq_zero (s^S = 0 implies E Delta L >= 0).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.alphaT_pos",
+   "paperItem": "Lemma crossover-quadratic-properties, item 1 (tex 1518, 1530-1550)",
+   "informal": "If s^D > 0 and s^B > 0 then alpha_t > 0; quantitatively gap_mul_s_le_alphaT: s_t (lam_k - lam_{k+1}) <= alpha_t, and alphaT_le: alpha_t <= s_t (lam_1 - lam_d).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.alphaT_zero",
+   "paperItem": "Lemma crossover-quadratic-properties, item 1 ('for all x_t, alpha_t > 0')",
+   "informal": "alpha_t = 0 at the state x_t = 0: formal counterexample to the literal 'for all x_t'.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.gammaT_neg",
+   "paperItem": "Lemma crossover-quadratic-properties, item 2 (tex 1519, 1552-1556)",
+   "informal": "If n^loss_D > 0 then gamma_t < 0 (gammaT_neg_iff: gamma_t < 0 <-> n^loss_D > 0; gammaT_nonpos unconditionally).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.hQuad_one",
+   "paperItem": "Lemma crossover-quadratic-properties (tex 1558-1564)",
+   "informal": "h(1) = alpha_t + beta_t + gamma_t = n^loss_B and h(0) = gamma_t (hQuad_zero, hQuad_one_eq_sum).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.crossover_quadratic_properties",
+   "paperItem": "Lemma crossover-quadratic-properties (tex 1514-1522)",
+   "informal": "Under s^D, s^B, n^loss_D, n^loss_B > 0: alpha_t > 0, gamma_t < 0, h(0) = gamma_t < 0, h(1) = alpha+beta+gamma > 0.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.crossover_critical_root",
+   "paperItem": "Lemma crossover-quadratic-critical-root (tex 1570-1581)",
+   "informal": "Under s^D, s^B, n^loss_D, n^loss_B > 0: thetaCrit = (-beta + sqrt(beta^2 - 4 alpha gamma))/(2 alpha) lies in (0,1), h < 0 on (0, thetaCrit), h > 0 on (thetaCrit, 1), h(thetaCrit) = 0, and it is the only root of h in (0,1).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.hQuad_neg_iff",
+   "paperItem": "Lemma crossover-quadratic-critical-root (sign of h)",
+   "informal": "If alpha_t > 0 then for every theta > 0: h(theta) < 0 <-> theta < thetaCrit; likewise hQuad_pos_iff (h > 0 <-> theta > thetaCrit) and hQuad_eq_zero_iff (h = 0 <-> theta = thetaCrit); hQuad_thetaCrit: h(thetaCrit) = 0.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.existsUnique_hQuad_root",
+   "paperItem": "Theorem 11 / Lemma critical-root (unique root in (0,1))",
+   "informal": "If alpha_t > 0, n^loss_D > 0, n^loss_B > 0 then there is a unique theta in (0,1) with h(theta) = 0 (namely thetaCrit; thetaCrit_mem_Ioo).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaCrit_lt_one_iff",
+   "paperItem": "Lemma critical-root (location of the root; sharpness of noise hypotheses)",
+   "informal": "For alpha_t > 0: thetaCrit < 1 <-> n^loss_B > 0; thetaCrit_pos_iff: thetaCrit > 0 <-> n^loss_D > 0 or n^loss_B < alpha_t; always 0 <= thetaCrit <= 1; thetaCrit_eq_one / thetaCrit_eq_zero in the degenerate noise cases.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.lossGap_eq_s_mul_hQuad",
+   "paperItem": "Proof of Theorem 11, numerator identity (tex 1699-1711)",
+   "informal": "If s^D, s^B > 0: s^D (tau^B + n^loss_B) - s^B (tau^D + n^loss_D) = s_t * h(theta_t).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaLossD_sub_etaLossB",
+   "paperItem": "Proof of Theorem 11, sign identity (tex 1689-1696, 1724-1726)",
+   "informal": "If s^D, s^B > 0: etaLossD - etaLossB = 2 s_t h(theta_t) / ((tau^D + n^loss_D)(tau^B + n^loss_B)); hence sign(etaLossD - etaLossB) = sign h(theta_t) (etaLossD_lt_etaLossB_iff_hQuad_neg, etaLossB_lt_etaLossD_iff_hQuad_pos, etaLossD_eq_etaLossB_iff_hQuad_eq_zero).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_lt_thetaCrit_iff",
+   "paperItem": "Theorem 11, low-alignment regime (tex 577-582)",
+   "informal": "If s^D > 0 and s^B > 0 (i.e. 0 < theta_t < 1): theta_t < thetaCrit <-> etaLossD < etaLossB. No noise hypothesis needed.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaCrit_lt_theta_iff",
+   "paperItem": "Theorem 11, high-alignment regime (tex 577-582)",
+   "informal": "If s^D > 0 and s^B > 0: thetaCrit < theta_t <-> etaLossB < etaLossD.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_eq_thetaCrit_iff",
+   "paperItem": "Theorem 11, equality case",
+   "informal": "If s^D > 0 and s^B > 0: theta_t = thetaCrit <-> etaLossD = etaLossB.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.loss_crossover",
+   "paperItem": "Theorem 11 (tex 568-583), bundled",
+   "informal": "If 0 < theta_t < 1, n^loss_D > 0, n^loss_B > 0: thetaCrit is in (0,1), is a root of h and the only root of h in (0,1); theta_t < thetaCrit <-> etaLossD < etaLossB; theta_t > thetaCrit <-> etaLossD > etaLossB; theta_t = thetaCrit <-> etaLossD = etaLossB.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.expLossChange_D_pos_B_neg",
+   "paperItem": "Summary of Section 5, displayed consequence (tex 619-626)",
+   "informal": "If both denominators tau^S + n^loss_S are positive and etaLossD < eta < etaLossB then E Delta L_D > 0 and E Delta L_B < 0 (mirror: expLossChange_B_pos_D_neg).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.low_alignment_descent",
+   "paperItem": "Theorem 11 + Summary consequence (explanation of Song et al.)",
+   "informal": "If s^D, s^B > 0 and theta_t < thetaCrit then etaLossD < etaLossB and for every eta in (etaLossD, etaLossB): E Delta L_D > 0 and E Delta L_B < 0 (mirror: high_alignment_descent).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.exists_D_pos_B_neg_iff",
+   "paperItem": "Summary of Section 5 (converse)",
+   "informal": "For s^D, s^B > 0: a positive step size with E Delta L_D > 0 and E Delta L_B < 0 exists iff theta_t < thetaCrit.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaLossD_lt_etaLossB_smul_iff",
+   "paperItem": "Theorem 11 (state dependence of thetaCrit)",
+   "informal": "For s^D, s^B > 0 and t != 0: etaLossD(t c) < etaLossB(t c) <-> n^loss_B theta - n^loss_D (1 - theta) < t^2 alpha theta (1 - theta); with theta_smul (theta scale-invariant), alphaT_smul (alpha scales as t^2), thetaCrit_congr, and etaLossD_lt_etaLossB_iff (square-root-free criterion).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.nLossD_div_lt_thetaCrit",
+   "paperItem": "Theorem 11 (state-independent bound on the state-dependent threshold)",
+   "informal": "If alpha_t > 0, n^loss_D > 0, n^loss_B > 0 then n^loss_D/(n^loss_D + n^loss_B) < thetaCrit (< 1).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.one_sub_thetaCrit_mul",
+   "paperItem": "toolkit for Theorems 12-13",
+   "informal": "For alpha_t > 0: (1 - thetaCrit)(alpha thetaCrit + n^loss_B + n^loss_D) = n^loss_B; hence one_sub_thetaCrit_mul_alphaT_le: (1 - thetaCrit) alpha <= n^loss_B, and nLossB_le_one_sub_thetaCrit_mul: n^loss_B <= (1 - thetaCrit)(alpha + n^loss_B + n^loss_D).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.LossThreshold.state_dependence_example",
+   "paperItem": "Theorem 11 (thetaCrit is state-dependent)",
+   "informal": "lam=(2,1), kap2=(1,1): states (1,1) and (1/2,1/2) both have theta = 4/5, but etaLossD < etaLossB for the first and etaLossB < etaLossD for the second; so thetaCrit(c') < 4/5 < thetaCrit(c).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.LossThreshold.thetaCrit_eq_zero_example",
+   "paperItem": "Lemma crossover-quadratic-properties item 2 / Theorem 11 ('gamma_t < 0 for all x_t', 'thetaCrit in (0,1)')",
+   "informal": "lam=(2,1), c=(1,1), kap2=(0,5) (Sigma PSD, trace 5 > 0): gamma_t = 0 and thetaCrit = 0, not in (0,1). Companion thetaCrit_eq_one_example: kap2=(1,0) gives thetaCrit = 1.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.LossThreshold.loss_crossover_nonvacuous",
+   "paperItem": "non-vacuity of Theorems 10-11 and the Summary consequence",
+   "informal": "lam=(2,1), kap2=(1,1), c=(1,1) satisfies 0 < theta < 1, n^loss_D > 0, n^loss_B > 0; suspicious_window_example: etaLossD = 4/5 < 9/10 < 1 = etaLossB and at eta = 9/10, E Delta L_D > 0 > E Delta L_B.",
+   "status": "extra"
+  }
+ ],
+ "paperIssues": [
+  "Theorem 10: the threshold eta^loss_S = 2 s^S/(tau^S + n^loss_S) is 0/0 when the state and the noise both vanish on S; then E[Delta L] == 0 (Spec.expLossChange_eq_zero_of_lossDen_eq_zero). The iff needs tau^S + n^loss_S > 0 (added as hypothesis). It does NOT need s^S > 0 (if s^S = 0 < n^loss_S both sides are false, eta^loss = 0), and eta > 0 is part of the equivalence for arbitrary real eta. The paper's proof only argues the 'if' direction ('holds for 0 < eta < ...'); the restated theorem at tex 1477 carries the wrong title.",
+  "Lemma crossover-quadratic-properties item 1 claims alpha_t > 0 for ALL x_t (proof: 'for any x_t, s_t > 0'). False at x_t = 0 (alpha = 0, Spec.alphaT_zero) and undefined (mu^S(3,2) = 0/0) when s^D = 0 or s^B = 0, i.e. theta_t in {0,1}. Correct hypothesis: s^D > 0 and s^B > 0 (0 < theta_t < 1); then even alpha_t >= s_t (lam_k - lam_{k+1}). Typo at tex 1544: lam_j * (lam_j^3 c_j^2) should be lam_j * (lam_j^2 c_j^2).",
+  "Lemma item 2 claims gamma_t = -n^loss_D < 0 and h(1) = n^loss_B > 0 for every noise. These are extra assumptions, not implied by the paper's Sigma PSD, Tr Sigma > 0. Formal counterexamples (lam=(2,1), c=(1,1)): kap2=(0,5) gives gamma_t = 0 and thetaCrit = 0; kap2=(1,0) gives h(1) = 0 and thetaCrit = 1. Precisely (alpha_t > 0): thetaCrit < 1 <-> n^loss_B > 0; thetaCrit > 0 <-> n^loss_D > 0 or n^loss_B < alpha_t. Hence 'thetaCrit in (0,1)' in Theorem 11 and the second lemma needs n^loss_D > 0 and n^loss_B > 0 (true if Sigma is positive definite).",
+  "Theorem 11: the two equivalences are correct for a fixed state with 0 < theta_t < 1 (and need no noise hypothesis), but the paper states them 'for a given x_t' without excluding theta_t in {0,1} (coefficients 0/0) or x_t = 0 (where, with theta(0)=0 and alpha=0, h has root n_D/(n_D+n_B) in (0,1) yet eta^loss_D = eta^loss_B = 0, so the first iff fails). The second lemma's 'critical function thetaCrit: R^d -> (0,1)' is only defined on {0 < theta(x) < 1}; the Summary's regime '[0, thetaCrit)' should be '(0, thetaCrit)'.",
+  "Theorem 11: thetaCrit_t is state-dependent (through alpha_t = s_t(mu^D(3,2) - mu^B(3,2))), not a universal threshold on the alignment. theta is scale-invariant while alpha scales like t^2 and n^loss does not scale: eta^loss_D(tx) < eta^loss_B(tx) <-> n_B theta - n_D(1-theta) < t^2 alpha theta (1-theta). Formal instance: lam=(2,1), kap2=(1,1), c=(1,1) and c'=(1/2,1/2) both have theta=4/5 but opposite threshold orderings. Only n_D/(n_D+n_B) < thetaCrit < 1 holds uniformly.",
+  "Proof of Theorem 11, typos: tex 1690 'u_t^B' should be tau_t^B; tex 1694 the sign identity reads s^D(u^B+n_B) - s^D(u^D+n_D) and should be s^D(tau^B+n_B) - s^B(tau^D+n_D); tex 1709 the coefficient of theta_t is printed as s_t(mu^D-mu^B)+n_B+n_D but must be -s_t(mu^D-mu^B)+n_B+n_D (= beta_t). The final alpha, beta, gamma and the identity numerator = s_t h(theta_t) are correct (verified).",
+  "Summary consequence (tex 619-626): 'for eta in (eta^loss_D, eta^loss_B): E Delta L_D > 0' needs tau^D + n^loss_D > 0; if s^D = 0 and n^loss_D = 0 then E Delta L_D == 0. Both denominators are automatically positive when 0 < theta_t < 1.",
+  "'Additional Notion' says alpha, beta, gamma all depend on x_t; gamma_t = -n^loss_D does not.",
+  "Heads-up outside this file's scope (Theorem 13, not formalized here, checked numerically only): the lower bound n_B/(s_t lam_{k+1}(m-1) + n_B + n_D) <= 1 - thetaCrit appears false in general, since alpha_t >= s_t lam_{k+1}(m-1) with strict inequality possible. Example: lam=(10,2,1), D={1,2}, c=(1,0,1), kap2=(1,1,1): alpha=909, s lam_{k+1}(m-1)=101, 1-thetaCrit ~ 0.001086 < 1/114 ~ 0.00877. The correct bounds proved here are n_B/(alpha+n_B+n_D) <= 1 - thetaCrit <= n_B/alpha (so the paper's upper bound holds)."
+ ],
+ "unproven": [],
+ "notes": "Files written: /home/user/htmuon/suspicious_alignment/SuspiciousAlignment/Projected/LossThreshold.lean (1382 lines, 140 declarations) and /home/user/htmuon/suspicious_alignment/notes/fidelity/LossThreshold.md.\n\nVerification: `lake env lean` gives no errors and no warnings; `lake build SuspiciousAlignment.Projected.LossThreshold` succeeded (olean present, only the generic 'imports Mathlib ... module system' notice that Defs also triggers). A temporary `#print axioms` on all 140 declarations showed only propext / Classical.choice / Quot.sound; the temporary file was deleted and no #print remains. No sorry/admit/axiom/native_decide. Imports only Mathlib and SuspiciousAlignment.Defs; Defs.lean was not modified and no shared definition was redefined.\n\nLayer: exact finite-d algebra only. The genuine conditional expectation is not integrated here; instead the pathwise decomposition `Spec.loss_cNextProj_sub_loss_eq_expLossChange_add` reduces it to E zeta_i = 0, E zeta_i^2 = kap2_i on S (plus a finitely-supported-noise instance `Spec.weighted_sum_loss_change`).\n\nHypotheses actually needed (all jointly satisfiable, witnessed by `LossThreshold.loss_crossover_nonvacuous` and `LossThreshold.suspicious_window_example` on lam=(2,1), kap2=(1,1), c=(1,1)):\n- Theorem 10: only `0 < P.mom S 3 c + P.nLoss N S`; eta is an arbitrary real.\n- alpha_t > 0: `0 < P.sD c` and `0 < P.sB c` (equivalent to 0 < theta < 1, `LossThreshold.theta_mem_Ioo_iff`).\n- Theorem 11 equivalences: only s^D, s^B > 0. thetaCrit in (0,1): additionally `0 < P.nLossD N`, `0 < P.nLossB N` (both follow from `0 < N.smin` via `LossThreshold.nLossD_pos_of_smin_pos` / `nLossB_pos_of_smin_pos`).\nNo theorem relies on x/0 = 0; the one lemma about the convention (`Spec.etaLoss_eq_zero_of_lossDen_eq_zero`) is labelled as bookkeeping and unused. I deliberately did not state an unconditional Theorem 10 (it would hold in the degenerate case only via 0/0 = 0).\n\nNaming / clash safety: main results live in `SuspiciousAlignment.Spec` (dot notation, all about Section-5 objects: expLossChange, etaLoss, alphaT, gammaT, hQuad, thetaCrit). Generic helpers (moments, nLoss, theta, mu bounds, abstract quadratic `LossThreshold.root`, the Fin 2 instances `spec2`, `noise2`, `noise11`) live in `SuspiciousAlignment.LossThreshold` with `P` explicit, e.g. `LossThreshold.theta_pos P hD`. This matters: OneStep.lean, CSGD/Moments.lean and Filter/Coordinate.lean already define same short names (`mom_pos_iff`, `theta_mem_Ioo_iff`, `quad_neg_iff`, `Spec.nLoss_nonneg`, `mom_smul`) in their own namespaces; a fully-qualified name comparison against all 8 other project files currently found no clash. Downstream files that `open LossThreshold` together with `open OneStep` will get ambiguous short names and should qualify them.\n\nSuggestions for the Theorems 12-13 file: import this module and use `Spec.gap_mul_s_le_alphaT` (alpha_t >= s_t * gap1 = s_t lam_{k+1}(m-1)), `Spec.alphaT_le`, `Spec.one_sub_thetaCrit_mul`, `Spec.one_sub_thetaCrit_mul_alphaT_le`, `Spec.nLossB_le_one_sub_thetaCrit_mul`, `Spec.thetaCrit_mem_Ioo`, `Spec.thetaCrit_le_one`. Theorem 13's upper bound follows directly; its lower bound as printed looks false (numerical counterexample in paperIssues and in the fidelity note, not formalized by me) and should be checked before attempting a proof."
+}

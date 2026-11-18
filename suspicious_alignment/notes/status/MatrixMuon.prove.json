@@ -1,0 +1,235 @@
+{
+ "file": "/home/user/htmuon/suspicious_alignment/SuspiciousAlignment/Filter/MatrixMuon.lean",
+ "compiles": true,
+ "sorryFree": true,
+ "theorems": [
+  {
+   "name": "SuspiciousAlignment.matrixMuon_equipartition",
+   "paperItem": "filter_spec 5.1",
+   "informal": "If O O\u1d40 = 1 then tr((E O)\u1d40 (E O)) = tr(E\u1d40 E) for every matrix E (any number of rows); frob form: matrixMuon_frob_mul_orth.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_energy_proj",
+   "paperItem": "filter_spec 5.1",
+   "informal": "For an orthogonal projector E and O O\u1d40 = 1: \u2016E O\u2016_F\u00b2 = tr E.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_energy_proj_rank",
+   "paperItem": "filter_spec 5.1",
+   "informal": "Same with tr E replaced by rank E (uses MatrixMuon.IsOrthProj.trace_eq_rank: trace of an idempotent real matrix is its rank).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_energy_total",
+   "paperItem": "filter_spec 5.1",
+   "informal": "\u2016O\u2016_F\u00b2 = d = |\u03b9| when O O\u1d40 = 1.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_energy_fraction",
+   "paperItem": "filter_spec 5.1",
+   "informal": "Fraction of the Muon update energy in the range of an orthogonal projector is tr E / d, irrespective of the gradient (d > 0 assumed); coordinate-block version matrixMuon_energy_fraction_coordProj gives |T|/d.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_sgd_energy_fraction",
+   "paperItem": "filter_spec 5.1 (remark 'for SGD that fraction equals \u03b8')",
+   "informal": "In the coordinate model A = diag(P.lam), W = diag(c) Q: \u2016\u03a0_D G\u2016_F\u00b2/\u2016G\u2016_F\u00b2 = P.theta c for the clean gradient G = A W (via matrixMuon_grad_energy_coordProj = P.mom T 2 c and matrixMuon_grad_energy = P.s c).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_muon_energy_fraction",
+   "paperItem": "filter_spec 5.1",
+   "informal": "For P : Spec \u03b9 and any O with O O\u1d40 = 1: \u2016\u03a0_D O\u2016_F\u00b2/\u2016O\u2016_F\u00b2 = P.kR / d.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_loss_step",
+   "paperItem": "filter_spec 5.2 (lemma)",
+   "informal": "For symmetric A: L(W \u2212 \u03b7D) = L(W) \u2212 \u03b7\u27eaAW, D\u27eb + (\u03b7\u00b2/2) tr(D\u1d40 A D) for every direction D.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_loss_projected_step",
+   "paperItem": "filter_spec 5.2",
+   "informal": "A symmetric, E orthogonal projector, any O with O O\u1d40 = 1: L(W \u2212 \u03b7EO) \u2212 L(W) = \u2212\u03b7\u27eaEAW, O\u27eb + (\u03b7\u00b2/2) tr(EA). No commutation of E with A and no PSD of A needed.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_loss_projected_step_noisy",
+   "paperItem": "filter_spec 5.2 (noisy gradient)",
+   "informal": "Same identity when O is the polar factor of an arbitrary (noisy) gradient G.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_loss_full_step",
+   "paperItem": "filter_spec 5.2 (E = 1)",
+   "informal": "L(W \u2212 \u03b7O) \u2212 L(W) = \u2212\u03b7\u27eaAW, O\u27eb + (\u03b7\u00b2/2) tr A.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_loss_projected_step_needs_symm",
+   "paperItem": "filter_spec 5.2 (necessity of A\u1d40 = A)",
+   "informal": "Formal counterexample (d = n = 2): for non-symmetric A the 5.2 identity fails (0 \u2260 \u22121).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_proj_grad_of_commute",
+   "paperItem": "filter_spec 5.2 (remark)",
+   "informal": "If E A = A E then E A W = A (E W).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_frob_proj_grad",
+   "paperItem": "filter_spec 5.3",
+   "informal": "If (S, O) is a left polar pair of A W then \u27eaE A W, O\u27eb = tr(E S) for every square E (general form matrixMuon_frob_mul_mul_orth needs only O O\u1d40 = 1).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_frob_grad_polar",
+   "paperItem": "filter_spec 5.3",
+   "informal": "For a left polar pair of G: \u27eaG, O\u27eb = tr S.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_frob_grad_polar_eq_nuclear",
+   "paperItem": "filter_spec 5.3 ('the nuclear norm of G')",
+   "informal": "\u27eaG, O\u27eb = \u03a3_i \u221a(eigenvalue_i(G G\u1d40)), the sum of singular values (Mathlib has no nuclear norm); also matrixMuon_frob_grad_polar_pos: \u27eaG, O\u27eb > 0 if G \u2260 0.",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_loss_projected_step_noiseFree",
+   "paperItem": "filter_spec 5.3",
+   "informal": "Noise-free: L(W \u2212 \u03b7EO) \u2212 L(W) = \u2212\u03b7 tr(ES) + (\u03b7\u00b2/2) tr(EA).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_loss_decrease_iff",
+   "paperItem": "filter_spec 5.3",
+   "informal": "A symmetric, E orthogonal projector, (S,O) left polar pair of A W, tr(EA) > 0: loss decreases iff 0 < \u03b7 < 2 tr(ES)/tr(EA), for all real \u03b7 (spec's tr(ES) > 0 not needed).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_loss_increase_iff",
+   "paperItem": "filter_spec 5.3",
+   "informal": "Same hypotheses: loss increases iff \u03b7 < 0 or \u03b7 > 2 tr(ES)/tr(EA); matrixMuon_loss_eq_iff: unchanged iff \u03b7 = 0 or \u03b7 = threshold; matrixMuon_threshold_pos: threshold > 0 when both traces are.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_traces_pos",
+   "paperItem": "filter_spec 5.3 (satisfiability of hypotheses)",
+   "informal": "If A and (AW)(AW)\u1d40 are positive definite, then tr(EA) > 0 and tr(ES) > 0 for every nonzero orthogonal projector E.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_isLeftPolar_sqrt",
+   "paperItem": "filter_spec 5.4 (existence, explicit)",
+   "informal": "If G G\u1d40 is positive definite then (CFC.sqrt (G G\u1d40), (CFC.sqrt (G G\u1d40))\u207b\u00b9 G) is a left polar pair of G; matrixMuon_exists_leftPolar is the \u2203 form.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_leftPolar_unique",
+   "paperItem": "filter_spec 5.4 (uniqueness)",
+   "informal": "If G G\u1d40 is positive definite, two left polar pairs of G coincide; matrixMuon_existsUnique_leftPolar (\u2203!) and matrixMuon_isLeftPolar_iff (characterisation S = \u221a(GG\u1d40), O = S\u207b\u00b9G).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.MatrixMuon.IsLeftPolar.eq_sqrt",
+   "paperItem": "filter_spec \u00a75 preamble",
+   "informal": "In any left polar pair S = (G G\u1d40)^{1/2} (no rank assumption); IsLeftPolar.mul_self: S\u00b2 = G G\u1d40.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.MatrixMuon.IsLeftPolar.card_le",
+   "paperItem": "filter_spec \u00a75 preamble ('forces d \u2264 n')",
+   "informal": "A left polar pair forces |\u03b9| \u2264 |\u03ba|; matrixMuon_card_le_of_posDef and matrixMuon_posDef_iff_isUnit_det (G G\u1d40 PD iff invertible).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_leftPolar_not_unique",
+   "paperItem": "filter_spec 5.4 (necessity of definiteness)",
+   "informal": "G = 0 (d = n = 1) has the two left polar pairs (0, 1) and (0, \u22121).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_isLeftPolar_diagonal",
+   "paperItem": "filter_spec 5.5",
+   "informal": "\u03c3_i \u2265 0, Q Q\u1d40 = 1 \u21d2 (diag \u03c3, Q) is a left polar pair of diag(\u03c3) Q; matrixMuon_leftPolar_diagonal_unique: for \u03c3_i > 0 it is the only one.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_trace_ratio_coordProj",
+   "paperItem": "filter_spec 5.5",
+   "informal": "tr(\u03a0_T diag \u03c3)/tr(\u03a0_T diag \u03bb) = \u03a3_{i\u2208T} \u03c3_i / \u03a3_{i\u2208T} \u03bb_i for the coordinate projector on a finset T.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_step_row",
+   "paperItem": "filter_spec 5.5 / task (row rule)",
+   "informal": "G = diag(\u03c3) Q, \u03c3_i > 0, any left polar pair (S,O): row i of diag(r) Q \u2212 \u03b7O is (r_i \u2212 \u03b7)\u00b7Q_i.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_coordinate_step",
+   "paperItem": "filter_spec 5.5 / (1.0) for Muon",
+   "informal": "A = diag(\u03bb), \u03bb_i > 0, W = diag(c) Q, c_i \u2260 0: for every left polar pair of A W, W \u2212 \u03b7O = diag(c_i \u2212 \u03b7 sign c_i) Q (row form matrixMuon_coordinate_step_row; explicit polar pair matrixMuon_isLeftPolar_coordinate).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixMuon_coordinate_loss_decrease_iff",
+   "paperItem": "filter_spec 5.3 + 5.5 \u21d2 2.4 (Muon threshold)",
+   "informal": "P : Spec \u03b9, W = diag(c) Q, c_i \u2260 0, T nonempty: projected Muon step decreases the matrix loss iff 0 < \u03b7 < 2 \u03a3_T \u03bb_i|c_i| / \u03a3_T \u03bb_i; with matrixMuon_loss_eq_specLoss (matrix loss = P.loss c) and matrixMuon_coordinate_projected_step.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixFilter_id / matrixFilter_one",
+   "paperItem": "filter_spec header (SGD f = id, Muon f = 1)",
+   "informal": "With filterDir f S O := cfc f S * O: f = id gives G, f \u2261 1 gives O.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixFilter_svd",
+   "paperItem": "filter_spec header F(G) = U f(\u03a3) V\u1d40",
+   "informal": "For a thin SVD G = U diag(\u03c3) V (U orthogonal, \u03c3 \u2265 0, V V\u1d40 = 1): (U diag \u03c3 U\u1d40, U V) is a left polar pair and f(S) O = U diag(f \u03c3) V; matrixFilter_svd_unique: for \u03c3 > 0 this holds for every left polar pair.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixFilter_diagonal",
+   "paperItem": "task 5.5 (general filter, characterisation of F)",
+   "informal": "G = diag(\u03c3) Q, \u03c3_i > 0: for every left polar pair, f(S) O = diag(f \u03c3_i) Q (uses MatrixMuon.cfc_diagonal, proved here).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixFilter_step_row",
+   "paperItem": "task 5.5 (general filter, row rule)",
+   "informal": "A = diag(\u03bb), W = diag(r) Q, \u03bb_i, r_i > 0: row i of W \u2212 \u03b7 f(S) O is (r_i \u2212 \u03b7 f(\u03bb_i r_i))\u00b7Q_i.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.matrixFilter_coordinate_step",
+   "paperItem": "filter_spec (1.0)",
+   "informal": "Signed commuting state: W \u2212 \u03b7 f(S) O = diag(c_i \u2212 \u03b7 sign(\u03bb_i c_i) f(|\u03bb_i c_i|)) Q; Spec version matrixFilter_spec_step; basis-free version matrixFilter_coordinate_step_basis (A = U diag(\u03bb) U\u1d40, W = U diag(c) Q) with matrixMuon_loss_conj.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.MatrixMuon.Example.ex_loss_decrease_iff",
+   "paperItem": "non-vacuity (5.1, 5.3, 5.4)",
+   "informal": "d = 2, n = 3, A = diag(3,1), S = [[2,1],[1,2]] not commuting with A, explicit O, W: left polar pair (ex_isLeftPolar), G G\u1d40 PD and pair unique (ex_posDef, ex_unique), loss decreases iff 0 < \u03b7 < 4/3, energy fraction 1/2.",
+   "status": "extra"
+  }
+ ],
+ "paperIssues": [
+  "Spec 5.2: the hypothesis '\u03a0 commutes with A' is superfluous. tr((\u03a0O)\u1d40A(\u03a0O)) = tr(\u03a0A\u03a0) = tr(\u03a0\u00b2A) = tr(\u03a0A) by cyclicity of the trace, and the first-order term only uses \u03a0\u1d40 = \u03a0. Proved without it (matrixMuon_loss_projected_step); confirmed numerically with random non-commuting projectors. Commutation only matters for the interpretation \u03a0AW = A(\u03a0W) (matrixMuon_proj_grad_of_commute).",
+  "Spec 5.2: positive semidefiniteness of A is not needed; symmetry of A is needed. Formal counterexample for non-symmetric A: A = [[0,1],[0,0]], W = [[0,-1],[1,0]], \u03a0 = O = 1, \u03b7 = 1 gives left side 0, right side -1 (matrixMuon_loss_projected_step_needs_symm).",
+  "Spec 5.3: \u27ea\u03a0AW, O\u27eb = tr(\u03a0S) holds for arbitrary square \u03a0 and S once AW = SO and OO\u1d40 = 1 (no projector/symmetry/PSD needed).",
+  "Spec 5.3: the hypothesis tr(\u03a0S) > 0 is not needed for the iff. With tr(\u03a0A) > 0 alone, loss decreases iff 0 < \u03b7 < 2tr(\u03a0S)/tr(\u03a0A) for all real \u03b7, because tr(\u03a0S) \u2265 0 is automatic for an orthogonal projector and PSD S; tr(\u03a0S) > 0 only makes the interval nonempty.",
+  "Spec 5.4: uniqueness of S never needs definiteness (S = (GG\u1d40)^{1/2} always); only uniqueness of O does, and it genuinely fails otherwise: G = 0 with d = n = 1 has polar pairs (0,1) and (0,-1) (matrixMuon_leftPolar_not_unique).",
+  "Spec 5.5: (diag \u03c3, Q) is a left polar pair already for \u03c3_i \u2265 0; \u03c3_i > 0 is what makes it the unique one.",
+  "Spec 5.1/5.3 wording: 'rank k' and 'nuclear norm' are identified with tr \u03a0 and tr S without proof; both identifications are proved here (trace of an idempotent = rank; tr S = \u03a3 \u221aeigenvalues(GG\u1d40)). Mathlib has no nuclear norm, so it is expressed through eigenvalues of GG\u1d40.",
+  "Lean technicality: \u03a0 is a reserved token, so the projector is named E throughout. No claim of spec \u00a75 was found to be false."
+ ],
+ "unproven": [],
+ "notes": "Files written: /home/user/htmuon/suspicious_alignment/SuspiciousAlignment/Filter/MatrixMuon.lean (1193 lines, 120 declarations) and /home/user/htmuon/suspicious_alignment/notes/fidelity/MatrixMuon.md.\n\nChecks: `lake build SuspiciousAlignment.Filter.MatrixMuon` succeeds (only this module was built); `lake env lean` on the file gives 0 errors and 0 warnings; no sorry/admit/axiom/native_decide; a temporary `#print axioms` over all 120 declarations (run from a scratch file, not left in the source) shows only propext, Classical.choice, Quot.sound. Imports: Mathlib and SuspiciousAlignment.Defs only. The file sets `set_option autoImplicit false` itself because `lake env lean` does not apply the lakefile's leanOptions.\n\nNumerics: every statement of 5.1-5.5 and every extra (non-commuting projector version of 5.2, polar filter = SVD filter, basis-free coordinate step, nuclear norm, trace = rank, increase/equality iffs) was tested with numpy on 300 random instances (exact polar factor via SVD) before proving; max errors ~1e-13. Scripts are in the scratchpad (/tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/mm/check.py and /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/mm/check2.py), not in the project.\n\nDesign: definitions live in namespace SuspiciousAlignment.MatrixMuon (frob, loss, IsOrthProj, IsLeftPolar, coordProj, filterDir, plus helper lemmas); main theorems are SuspiciousAlignment.matrixMuon_* / matrixFilter_*. Row type \u03b9 (Fintype, DecidableEq), column type \u03ba (Fintype). 5.4 was done fully through Mathlib's CFC.sqrt on matrices (open scoped MatrixOrder); the 'given square root' fallback was not needed but is available as MatrixMuon.isLeftPolar_of_mul_self. For general filters, F := cfc f S * O; the needed fact cfc f (U diag \u03c3 U\u1d40) = U diag(f\u2218\u03c3) U\u1d40 is not in Mathlib and is proved here by an elementary intertwining argument (MatrixMuon.cfc_eq_of_eq_conj_diagonal, MatrixMuon.cfc_diagonal), valid for arbitrary f (no continuity).\n\nShared definitions used from Defs.lean: Spec.lam, Spec.lam_pos, Spec.D, Spec.kR, Spec.loss, Spec.mom, Spec.s, Spec.s_eq_sum, Spec.theta. Nothing in Defs.lean was changed or re-defined.\n\nNot formalized (not claimed by spec \u00a75): existence of an SVD; existence of a left polar pair for rank-deficient G.\n\nSuggestions for downstream files: (1) matrixFilter_spec_step has its right-hand side written as c i - \u03b7 * (Real.sign (P.lam i * c i) * f |P.lam i * c i|), which is P.cNextF f \u03b7 c i of Filter/Coordinate.lean after unfolding Spec.cNextF and Spec.oddExt, so a bridge `W - \u03b7 f(S) O = diagonal (P.cNextF f \u03b7 c) * Q` should be `rfl`/`simp only` once both modules are imported (I could not import Coordinate, so this bridge is not stated; I read that file only to match the form). (2) matrixMuon_coordinate_loss_decrease_iff gives the Muon etaLossF threshold of spec 2.4 at matrix level; matrixMuon_loss_eq_specLoss identifies the matrix loss with P.loss c. (3) Users opening MatrixMuon should note the helper names realSign_mul_self, abs_mul_realSign, realSign_pos_mul were chosen to avoid clashing with root-level abs_mul_sign."
+}
