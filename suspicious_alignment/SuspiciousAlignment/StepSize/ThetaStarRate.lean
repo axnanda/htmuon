@@ -695,9 +695,15 @@ theorem thetaStar_rate_gt_of_energy_large (hs : 0 < N.smin) {α : ℝ} (hα : 0 
     nlinarith
   linarith
 
-/-- **The constant `α` of Theorem 5 cannot be chosen independently of the state.**  For a fixed
-problem `(A, Σ)` and every `α > 0` there is a state `x_t` whose threshold violates the paper's
-upper bound: `θ*_t > 1 - α / m²`. -/
+/-- **The constant `α` of Theorem 5 cannot be chosen independently of the state over all
+states.**  For a fixed problem `(A, Σ)` and every `α > 0` there is a state `x_t` whose threshold
+violates the paper's upper bound: `θ*_t > 1 - α / m²`.
+
+Qualifier: the witness is a *large* state (`s_t ≥ s_min (d-k) m²/(α (m²-1))`) at fixed `d`.  Over a
+bounded set of states `‖x_t‖² ≤ C d` of one fixed problem a state-independent constant does exist
+(`Spec.thetaStar_rate_of_bounded_state`), but it involves `C λ_1² / s_min`; under Assumption 1
+`s_min ≤ Tr Σ / d → 0`, which is what makes it degenerate as `d → ∞`
+(`thetaStar_rate_fails_under_assumption1`). -/
 theorem thetaStar_rate_alpha_not_uniform_in_state (hs : 0 < N.smin) {α : ℝ} (hα : 0 < α) :
     ∃ c : ι → ℝ, 1 - α / P.mRatio ^ 2 < P.thetaStar N c := by
   have hm := P.one_lt_mRatio
@@ -780,10 +786,37 @@ theorem thetaStar_rate_cond_bound (hs : 0 < N.smin) (c : ι → ℝ) :
     field_simp
   linarith
 
+/-- **Dependence on the block mean squares only.**  For every state and every noise with
+`s_min > 0`, `1 - θ*_t ≤ s_min ψ_ℬ / (s_max ψ_𝒟) ≤ ψ_ℬ / ψ_𝒟`.  Hence any `α` with
+`θ*_t ≤ 1 - α/m²` satisfies
+`α ≤ m² ψ_ℬ/ψ_𝒟 = (1/ρ) · (ψ_ℬ / ((d-k) λ_{k+1}²)) / (ψ_𝒟 / (k λ_k²))`:
+it degrades when the bulk mean square `ψ_ℬ/(d-k)` is small compared with `λ_{k+1}²` (a bulk with
+few large and many tiny eigenvalues), whatever the state and the noise
+(`thetaStar_rate_fails_under_assumption1_all_states`). -/
+theorem thetaStar_rate_psi_bound (hs : 0 < N.smin) (c : ι → ℝ) :
+    1 - P.thetaStar N c ≤ N.smin * P.psiB / (N.smax * P.psiD) ∧
+      1 - P.thetaStar N c ≤ P.psiB / P.psiD := by
+  have ha := aAux_pos P N hs
+  have hh := hAux_pos P N hs
+  have hsmax := smax_pos P N hs
+  have hD := P.psiD_pos
+  have hB := P.psiB_pos
+  obtain ⟨-, -, hmid⟩ := P.thetaStar_rate_aux_sandwich N hs c
+  have e1 : P.aAux N / (P.aAux N + P.hAux N) ≤ P.aAux N / P.hAux N :=
+    div_le_div_of_nonneg_left ha.le hh (by linarith)
+  have e2 : P.aAux N / P.hAux N = N.smin * P.psiB / (N.smax * P.psiD) := rfl
+  have hle : N.smin ≤ N.smax := le_trans (N.smin_le P.i1) (N.le_smax P.i1)
+  have e3 : N.smin * P.psiB / (N.smax * P.psiD) ≤ P.psiB / P.psiD := by
+    rw [div_le_div_iff₀ (by positivity) hD]
+    nlinarith [mul_le_mul_of_nonneg_right hle (mul_pos hB hD).le]
+  constructor <;> linarith
+
 /-- **`θ*_t → 1` in the paper's own high-dimensional regime.**
 `1 - θ*_t < Tr Σ / ((1 + ρ) s_t (m² - 1))`, where `Tr Σ = ∑_i κ_i²`.  Under Assumption 1 the
 trace of `Σ` stays bounded, so whenever the gradient energy `s_t` grows with `d` (e.g.
-`‖x_t‖² ≍ d`), `θ*_t → 1` at *fixed* gap ratio `m`; no `d`-independent `α` exists. -/
+`‖x_t‖² ≍ d`), `θ*_t → 1` at *fixed* gap ratio `m`; no `d`-independent `α` exists
+(family-level forms: `thetaStar_rate_isLittleO_of_trace_bounded`,
+`thetaStar_rate_fails_under_assumption1`). -/
 theorem thetaStar_rate_trace_bound (hs : 0 < N.smin) (c : ι → ℝ) (hc : 0 < P.s c) :
     1 - P.thetaStar N c < (∑ i, N.kap2 i) / ((1 + P.rho) * P.s c * (P.mRatio ^ 2 - 1)) := by
   have hm := P.one_lt_mRatio

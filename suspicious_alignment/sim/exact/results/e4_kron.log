@@ -47,3 +47,14 @@ ech40_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50_a0.5_K1000: eta=0.02114 div=False loss
 one-step done for {'mu_alpha': 0.5, 'Kdom': 1000, 'm': 100}
 sgd_m100_s0.5_iso_gauss1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.003 div=False loss_late=72.81 theta0=0.986 min=0.053@287 late=0.2723 updD=0.051 cpu=1.8s
 muon_m100_s0.5_iso_gauss1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.02051 div=False loss_late=78.53 theta0=0.986 min=0.075@690 late=0.2316 updD=0.051 cpu=3.7s
+ht0.125_m100_s0.5_iso_gauss1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.01632 div=False loss_late=77.01 theta0=0.986 min=0.064@580 late=0.2420 updD=0.051 cpu=3.8s
+ht0.5_m100_s0.5_iso_gauss1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.008048 div=False loss_late=74.26 theta0=0.986 min=0.055@410 late=0.2613 updD=0.051 cpu=3.8s
+ech1_m100_s0.5_iso_gauss1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.03028 div=False loss_late=78.77 theta0=0.986 min=0.053@580 late=0.2394 updD=0.051 cpu=3.9s
+ech20_m100_s0.5_iso_gauss1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.02406 div=False loss_late=76.13 theta0=0.986 min=0.071@620 late=0.2485 updD=0.051 cpu=3.9s
+ech40_m100_s0.5_iso_gauss1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.02114 div=False loss_late=77.83 theta0=0.986 min=0.074@690 late=0.2359 updD=0.051 cpu=3.8s
+sgd_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.003 div=False loss_late=0.5344 theta0=0.000 min=0.000@0 late=0.8376 updD=0.051 cpu=1.6s
+muon_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.02051 div=False loss_late=0.5148 theta0=0.000 min=0.000@0 late=0.8384 updD=0.051 cpu=3.0s
+ht0.125_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.01632 div=False loss_late=0.519 theta0=0.000 min=0.000@0 late=0.8384 updD=0.051 cpu=3.0s
+ht0.5_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.008048 div=False loss_late=0.5287 theta0=0.000 min=0.000@0 late=0.8381 updD=0.051 cpu=2.9s
+ech1_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.03028 div=False loss_late=0.5334 theta0=0.000 min=0.000@0 late=0.8376 updD=0.051 cpu=3.3s
+ech20_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.02406 div=False loss_late=0.529 theta0=0.000 min=0.000@0 late=0.8379 updD=0.051 cpu=3.2s

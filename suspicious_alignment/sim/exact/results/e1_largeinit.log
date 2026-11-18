@@ -6,3 +6,6 @@ ht0.125_m20_s0.5_iso_gauss3.0_k1.0_b0.0_n50: eta=0.01632 div=False loss_late=1.9
 ht0.5_m20_s0.5_iso_gauss3.0_k1.0_b0.0_n50: eta=0.008048 div=False loss_late=1.898 theta0=0.993 min=0.000@201 late=0.8336 updD=0.111 cpu=4.5s
 ech20_m20_s0.5_iso_gauss3.0_k1.0_b0.0_n50: eta=0.02406 div=False loss_late=2.16 theta0=0.993 min=0.000@1640 late=0.8272 updD=0.111 cpu=4.5s
 muon_m20_s0.5_iso_gauss10.0_k1.0_b0.0_n50: eta=0.02051 div=False loss_late=124.9 theta0=0.993 min=0.000@6410 late=0.4804 updD=0.108 cpu=12.0s
+muon_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_large9k: eta=0.003575 div=False loss_late=1.807 theta0=0.993 min=0.002@3440 late=0.7842 updD=0.090 cpu=7.9s
+ech20_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_large9k: eta=0.004192 div=False loss_late=1.819 theta0=0.993 min=0.001@2960 late=0.7834 updD=0.088 cpu=8.2s
+[cpu] {'name': 'e1_largeinit', 'cpu_s': 52.9, 'wall_s': 97.2, 'n_runs': 8, 'n_svd': 52770}

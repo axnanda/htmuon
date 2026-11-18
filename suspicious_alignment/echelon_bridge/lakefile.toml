@@ -1,0 +1,21 @@
+name = "EchelonBridge"
+version = "0.1.0"
+defaultTargets = ["EchelonBridge"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+
+# The Echelon library (Lean proofs for the Echelon technical report), Apache-2.0.
+[[require]]
+name = "FastMuon"
+git = "https://github.com/evolving-machines-lab/echelon-lean"
+rev = "d069ee1662bfcc60516abb70da674b03aea6e986"
+
+# The formalization of Deng et al. in the parent directory.
+[[require]]
+name = "SuspiciousAlignment"
+path = ".."
+
+[[lean_lib]]
+name = "EchelonBridge"

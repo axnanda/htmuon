@@ -1,0 +1,17 @@
+/home/user/htmuon/suspicious_alignment/sim/exact/specfilt.py:486: RuntimeWarning: Mean of empty slice
+  res[key] = np.nanmean(out[key][:, sel], axis=1)
+/home/user/htmuon/suspicious_alignment/sim/exact/specfilt.py:488: RuntimeWarning: Mean of empty slice
+  res[key] = np.nanmean(out[key][:, sel], axis=1)
+m=5 n=20 muon: theta_late=1.00000 pred(top-n, q=2.00)=1.00000 ratio_q(all d)=0.90439 energy[D, k..n, >=n]=[1. 0. 0.] updD=1.000
+m=5 n=20 ht0.125: theta_late=1.00000 pred(top-n, q=2.29)=1.00000 ratio_q(all d)=0.94466 energy[D, k..n, >=n]=[1. 0. 0.] updD=1.000
+m=5 n=20 ht0.5: theta_late=1.00000 pred(top-n, q=4.00)=1.00000 ratio_q(all d)=0.99811 energy[D, k..n, >=n]=[1. 0. 0.] updD=1.000
+m=5 n=50 muon: theta_late=0.96293 pred(top-n, q=2.00)=0.96213 ratio_q(all d)=0.90439 energy[D, k..n, >=n]=[0.962 0.038 0.   ] updD=0.400
+m=5 n=50 ht0.125: theta_late=0.97716 pred(top-n, q=2.29)=0.97716 ratio_q(all d)=0.94466 energy[D, k..n, >=n]=[0.97716 0.02284 0.     ] updD=0.528
+m=5 n=50 ht0.5: theta_late=0.99898 pred(top-n, q=4.00)=0.99898 ratio_q(all d)=0.99811 energy[D, k..n, >=n]=[0.99898 0.00102 0.     ] updD=0.962
+m=5 n=100 muon: theta_late=0.92474 pred(top-n, q=2.00)=0.92506 ratio_q(all d)=0.90439 energy[D, k..n, >=n]=[0.92368 0.07632 0.     ] updD=0.200
+m=5 n=100 ht0.125: theta_late=0.95546 pred(top-n, q=2.29)=0.95546 ratio_q(all d)=0.94466 energy[D, k..n, >=n]=[0.95546 0.04454 0.     ] updD=0.305
+m=5 n=100 ht0.5: theta_late=0.99828 pred(top-n, q=4.00)=0.99828 ratio_q(all d)=0.99811 energy[D, k..n, >=n]=[0.99828 0.00172 0.     ] updD=0.925
+m=20 n=20 muon: theta_late=1.00000 pred(top-n, q=2.00)=1.00000 ratio_q(all d)=0.99324 energy[D, k..n, >=n]=[1. 0. 0.] updD=1.000
+m=20 n=20 ht0.125: theta_late=1.00000 pred(top-n, q=2.29)=1.00000 ratio_q(all d)=0.99746 energy[D, k..n, >=n]=[1. 0. 0.] updD=1.000
+m=20 n=20 ht0.5: theta_late=1.00000 pred(top-n, q=4.00)=1.00000 ratio_q(all d)=0.99999 energy[D, k..n, >=n]=[1. 0. 0.] updD=1.000
+m=20 n=50 muon: theta_late=0.99683 pred(top-n, q=2.00)=0.99747 ratio_q(all d)=0.99324 energy[D, k..n, >=n]=[0.99681 0.00319 0.     ] updD=0.400

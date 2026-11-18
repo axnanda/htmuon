@@ -280,6 +280,19 @@ Large init (W0 std 10, sigma=0.5, kappa=1, 1 seed, T=6000 — NOT long enough fo
 | Muon | 20 | 10.0 | 6000 | 0.993 | 0.001 @ 6000 | 0.2488 | 1.973e+05 | 0.8338 |
 | HT p=.125 | 20 | 10.0 | 6000 | 0.993 | 0.000 @ 3040 | 0.0008 | 1.571e+04 | 0.8341 |
 
+### T1h. E1 larger initialisation (m=20, sigma=0.5, kappa=1, 1 seed) and long Nesterov runs
+
+| filter | W0 std | beta | T | eta | theta_0 | theta_min @ t | theta final 200 steps | late loss (last 20%) | stationary SGD reference at eta_eff (Thm 16, or SGD+Nesterov if beta>0) | two-phase |
+|---|---|---|---|---|---|---|---|---|---|---|
+| SGD | 3.0 | 0.0 | 5000 | 0.003 | 0.993 | 0.0001 @ 35 | 0.8375 | 1.908 | 0.8352 | yes |
+| Muon | 3.0 | 0.0 | 5000 | 0.02051 | 0.993 | 0.0004 @ 1870 | 0.8288 | 3.765 | 0.8338 | yes |
+| HT p=.125 | 3.0 | 0.0 | 5000 | 0.01632 | 0.993 | 0.0002 @ 1010 | 0.8347 | 1.95 | 0.8341 | yes |
+| HT p=.5 | 3.0 | 0.0 | 5000 | 0.008048 | 0.993 | 0.0001 @ 201 | 0.8362 | 1.898 | 0.8348 | yes |
+| Ech r=20 | 3.0 | 0.0 | 5000 | 0.02406 | 0.993 | 0.0002 @ 1640 | 0.8352 | 2.16 | 0.8349 | yes |
+| Muon | 10.0 | 0.0 | 14000 | 0.02051 | 0.993 | 0.0000 @ 6410 | 0.8313 | 124.9 | 0.8338 | yes |
+| Muon | 1.0 | 0.95 | 9000 | 0.003575 | 0.993 | 0.0019 @ 3440 | 0.7836 | 1.807 | 0.7856 | yes |
+| Ech r=20 | 1.0 | 0.95 | 9000 | 0.004192 | 0.993 | 0.0006 @ 2960 | 0.7814 | 1.819 | 0.7842 | yes |
+
 ### T1f. E1 with Nesterov momentum beta=0.95 (M <- beta M + (1-beta) G, X = (1-beta) G + beta M, as in muon.py; sigma=0.5 unless stated; 2 seeds)
 
 Reference columns: exact stationary / finite-T alignment of SGD WITH the same Nesterov momentum at the drift-equivalent step eta_eff (2x2 Lyapunov recursion per eigen-direction, `Problem.sgd_nesterov_theta`), and Theorem 16 (no momentum) at the same eta_eff.
@@ -623,6 +636,53 @@ Entries: regime and RAW critical step (↓↑ x: decrease below x, increase abov
 | D x 10 | 0.999587 | 0.999986 | 1.5 | 0.0213 | ↓↑ 0.0213 | ↓↑ 0.374 | ↓↑ 0.262 | ↓↑ 0.184 | ↓↑ 0.0902 | ↓↑ 0.465 | ↓↑ 0.375 | ↓↑ 0.361 | ↓↑ 0.372 |
 | D x 100 | 0.999996 | 1.000000 | 150 | 0.0228 | ↓↑ 0.0228 | ↓ all | ↓ all | ↓ all | ↓↑ 0.624 | ↓↑ 4.53 | ↓↑ 3.51 | ↓ all | ↓ all |
 
+### T2g. (D3) Deng's eta*_t against the paper's bounds, vector model d=500, k=50, sigma=0.5, SGD eta=0.003 (closed form along one trajectory per seed)
+
+| m | t | theta_t | |Ax|^2/E|xi|^2 | eta*_t | Thm 7 lower bound | Thm 8 upper bound | 2/lam_1 | noise-free sandwich [2/(lam_1+lam_k+1), 2/(lam_k+lam_d)] | Thm 8 hypothesis theta >= e_B/(e_B+e_D) | Cor. 9 (eta* <= 2/lam_1) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 5 | 0 | 0.9267 | 5.06e+03 | 0.01916 | 0.0128 | 0.01227 | 0.02 | [0.0173, 0.0243] | yes | U8 violated |
+| 5 | 5 | 0.4243 | 447 | 0.01945 | 0.0127 | 0.01227 | 0.02 | [0.0173, 0.0243] | yes | U8 violated |
+| 5 | 20 | 0.0003 | 91.3 | 0.004667 | 0.000344 | 0.01227 | 0.02 | [0.0173, 0.0243] | no | ok |
+| 5 | 100 | 0.0078 | 1.82 | 0.002628 | 0.000595 | 0.01227 | 0.02 | [0.0173, 0.0243] | no | ok |
+| 5 | 1000 | 0.5179 | 0.0278 | 0.002743 | 8.69e-05 | 0.01227 | 0.02 | [0.0173, 0.0243] | yes | ok |
+| 5 | 10000 | 0.5689 | 0.0279 | 0.002982 | 8.95e-05 | 0.01227 | 0.02 | [0.0173, 0.0243] | yes | ok |
+| 5 | 30000 | 0.5715 | 0.027 | 0.003037 | 8.97e-05 | 0.01227 | 0.02 | [0.0173, 0.0243] | yes | ok |
+| 20 | 0 | 0.9909 | 2.53e+03 | 0.02137 | 0.0143 | 0.01243 | 0.02 | [0.0192, 0.0248] | yes | VIOLATED |
+| 20 | 5 | 0.8387 | 131 | 0.02171 | 0.014 | 0.01243 | 0.02 | [0.0192, 0.0248] | yes | VIOLATED |
+| 20 | 20 | 0.0016 | 16.1 | 0.004303 | 0.000257 | 0.01243 | 0.02 | [0.0192, 0.0248] | no | ok |
+| 20 | 100 | 0.0037 | 4.22 | 0.002892 | 0.000239 | 0.01243 | 0.02 | [0.0192, 0.0248] | no | ok |
+| 20 | 1000 | 0.7553 | 0.0261 | 0.003642 | 0.000288 | 0.01243 | 0.02 | [0.0192, 0.0248] | yes | ok |
+| 20 | 10000 | 0.8204 | 0.0171 | 0.00273 | 3.67e-05 | 0.01243 | 0.02 | [0.0192, 0.0248] | yes | ok |
+| 20 | 30000 | 0.8121 | 0.0185 | 0.002924 | 4.11e-05 | 0.01243 | 0.02 | [0.0192, 0.0248] | yes | ok |
+| 100 | 0 | 0.9997 | 3.12e+03 | 0.02179 | 0.0062 | 0.01249 | 0.02 | [0.0198, 0.0250] | yes | VIOLATED |
+| 100 | 5 | 0.9940 | 138 | 0.02236 | 0.00577 | 0.01249 | 0.02 | [0.0198, 0.0250] | yes | VIOLATED |
+| 100 | 20 | 0.0357 | 0.819 | 0.004843 | 0.000305 | 0.01249 | 0.02 | [0.0198, 0.0250] | yes | ok |
+| 100 | 100 | 0.0286 | 0.616 | 0.003248 | 0.000201 | 0.01249 | 0.02 | [0.0198, 0.0250] | yes | ok |
+| 100 | 1000 | 0.3292 | 0.0631 | 0.003817 | 0.000377 | 0.01249 | 0.02 | [0.0198, 0.0250] | yes | ok |
+| 100 | 10000 | 0.9563 | 0.0156 | 0.00289 | 8.85e-06 | 0.01249 | 0.02 | [0.0198, 0.0250] | yes | ok |
+| 100 | 30000 | 0.9559 | 0.0136 | 0.002616 | 9.86e-06 | 0.01249 | 0.02 | [0.0198, 0.0250] | yes | ok |
+| 500 | 0 | 1.0000 | 3.77e+03 | 0.02182 | 0.000399 | 0.0125 | 0.02 | [0.0200, 0.0250] | yes | VIOLATED |
+| 500 | 5 | 0.9998 | 158 | 0.02213 | 0.000355 | 0.0125 | 0.02 | [0.0200, 0.0250] | yes | VIOLATED |
+| 500 | 20 | 0.4684 | 0.0662 | 0.0052 | 0.000166 | 0.0125 | 0.02 | [0.0200, 0.0250] | yes | ok |
+| 500 | 100 | 0.3335 | 0.0498 | 0.00314 | 0.000114 | 0.0125 | 0.02 | [0.0200, 0.0250] | yes | ok |
+| 500 | 1000 | 0.4748 | 0.0335 | 0.003033 | 0.000101 | 0.0125 | 0.02 | [0.0200, 0.0250] | yes | ok |
+| 500 | 10000 | 0.9731 | 0.012 | 0.002303 | 1.22e-05 | 0.0125 | 0.02 | [0.0200, 0.0250] | yes | ok |
+| 500 | 30000 | 0.9936 | 0.0193 | 0.003616 | 2.14e-06 | 0.0125 | 0.02 | [0.0200, 0.0250] | yes | ok |
+
+Over both seeds: 12 of 56 states violate eta* <= 2/lam_1 although the hypothesis of Theorem 8 holds; 16 of 56 violate the Theorem-8 bound itself; all states satisfy the Theorem-7 lower bound: True.
+
+Monte-Carlo check at t=0 (m=20, seed 42, 20000 noise draws): closed-form eta* = 0.02137, 2/lam_1 = 0.02.
+
+| eta | E[theta_1] − theta_0 (mean of the ratio) | s.e. | ratio of expectations |
+|---|---|---|---|
+| 0.01900 | -6.316e-03 | 7.6e-09 | -6.316e-03 |
+| 0.02000 | -3.045e-03 | 5.3e-09 | -3.045e-03 |
+| 0.02050 | -1.778e-03 | 4.5e-09 | -1.778e-03 |
+| 0.02100 | -6.951e-04 | 3.9e-09 | -6.949e-04 |
+| 0.02137 | -1.241e-07 | 3.5e-09 | +2.591e-09 |
+| 0.02200 | +1.047e-03 | 3.0e-09 | +1.047e-03 |
+| 0.02300 | +2.373e-03 | 2.3e-09 | +2.373e-03 |
+
 ### T3a. E3: loss thresholds of the projected updates on each filter's OWN trajectory
 
 Entry: eta_D^loss/eta_run , eta_B^loss/eta_run  (ratio eta_D^loss/eta_B^loss).  A value below 1 in the first slot means the D-projected update at the running step raises the expected loss; **bold** = window (D raises, B lowers) contains the running step.
@@ -883,6 +943,8 @@ One-step statistics on each filter's own large-init trajectory: alignment-respon
 | e1_momentum | 183.5 | 237.6 | 42 | 183190 |
 | e2e3_onestep_highalign | 6.1 | 6.8 |  |  |
 | e4_aniso | 86.9 | 157.2 | 28 | 91220 |
+| e2_etastar_bounds | 3.1 | 6.0 |  |  |
+| e1_largeinit | 52.9 | 97.2 | 8 | 52770 |
 
-Total CPU: 1557 s = 26.0 min
+Total CPU: 1613 s = 26.9 min
 

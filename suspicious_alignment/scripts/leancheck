@@ -3,7 +3,7 @@
 #   scripts/leancheck SuspiciousAlignment/Foo.lean      type-check one file
 #   scripts/leancheck --build SuspiciousAlignment.Foo   build one module (makes it importable)
 export PATH=$HOME/.elan/bin:$PATH
-cd /home/user/htmuon/suspicious_alignment || exit 2
+cd "${LEANCHECK_DIR:-/home/user/htmuon/suspicious_alignment}" || exit 2
 LOCKDIR=/tmp/leanlocks; mkdir -p "$LOCKDIR"
 while true; do
   for i in 1 2 3; do

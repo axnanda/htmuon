@@ -11,3 +11,5 @@ done m=100 sigma=0.3 seed=2 in 98.8s
 done m=500 sigma=0.0 seed=0 in 91.6s
 done m=500 sigma=0.0 seed=1 in 94.3s
 done m=500 sigma=0.0 seed=2 in 99.9s
+done m=500 sigma=0.02 seed=0 in 126.9s
+done m=500 sigma=0.02 seed=1 in 127.2s

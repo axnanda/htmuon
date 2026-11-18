@@ -1067,12 +1067,56 @@ theorem etaStar_pos_iff (c : ι → ℝ) (hp : 0 < P.pCoef N c) :
   unfold etaStar
   rw [div_pos_iff_of_pos_right hp, neg_pos]
 
+/-- `η*_t ≤ 0` when `p_t ≤ 0`: for `p_t < 0` because `q_t ≤ 0`, and for `p_t = 0` because the
+totalised `η*_t = -q_t / 0` is `0` in Lean (the paper leaves `η*_t` undefined there). -/
+theorem etaStar_nonpos_of_pCoef_nonpos (c : ι → ℝ) (hp : P.pCoef N c ≤ 0) :
+    P.etaStar N c ≤ 0 :=
+  div_nonpos_of_nonneg_of_nonpos (neg_nonneg.mpr (P.qCoef_nonpos c)) hp
+
+/-- **Unconditional characterisation of a positive critical step size**:
+`η*_t > 0 ↔ p_t > 0 ∧ q_t < 0`. -/
+theorem etaStar_pos_iff_pCoef_pos_and_qCoef_neg (c : ι → ℝ) :
+    0 < P.etaStar N c ↔ 0 < P.pCoef N c ∧ P.qCoef c < 0 := by
+  constructor
+  · intro h
+    have hp : 0 < P.pCoef N c := by
+      by_contra hp
+      exact absurd h (not_lt.mpr (P.etaStar_nonpos_of_pCoef_nonpos N c (not_lt.mp hp)))
+    refine ⟨hp, ?_⟩
+    unfold etaStar at h
+    rwa [div_pos_iff_of_pos_right hp, neg_pos] at h
+  · rintro ⟨hp, hq⟩
+    exact P.etaStar_pos N c hp hq
+
+/-- `η*_t > 0 ↔ p_t > 0 ∧ 0 < θ_t < 1` (unconditional). -/
+theorem etaStar_pos_iff_pCoef_pos_and_theta (c : ι → ℝ) :
+    0 < P.etaStar N c ↔ 0 < P.pCoef N c ∧ 0 < P.theta c ∧ P.theta c < 1 := by
+  rw [P.etaStar_pos_iff_pCoef_pos_and_qCoef_neg, P.qCoef_neg_iff_theta]
+
 /-- **Remark, case `p_t > 0`, small steps**: for `η > 0`,
 `𝔼[f_t(η) | x_t] < 0 ↔ η < η*_t`. -/
 theorem expF_neg_iff_lt_etaStar (η : ℝ) (c : ι → ℝ) (hp : 0 < P.pCoef N c) (hη : 0 < η) :
     P.expF N η c < 0 ↔ η < P.etaStar N c := by
   rw [P.expF_eq]
   exact quad_neg_iff hp hη
+
+/-- For `η > 0`: `η < η*_t ↔ p_t > 0 ∧ 𝔼[f_t(η) | x_t] < 0` (no assumption on `p_t`: a step size
+`0 < η < η*_t` exists only when `p_t > 0`). -/
+theorem lt_etaStar_iff (η : ℝ) (c : ι → ℝ) (hη : 0 < η) :
+    η < P.etaStar N c ↔ 0 < P.pCoef N c ∧ P.expF N η c < 0 := by
+  constructor
+  · intro h
+    have hp := ((P.etaStar_pos_iff_pCoef_pos_and_qCoef_neg N c).mp (hη.trans h)).1
+    exact ⟨hp, (P.expF_neg_iff_lt_etaStar N η c hp hη).mpr h⟩
+  · rintro ⟨hp, h⟩
+    exact (P.expF_neg_iff_lt_etaStar N η c hp hη).mp h
+
+/-- **Remark, small steps, with the hypotheses of Theorem 2 only**: if `0 < η < η*_t` then
+`𝔼[f_t(η) | x_t] < 0`. No assumption on `p_t` is needed: `0 < η*_t` forces `p_t > 0` and
+`q_t < 0` (`etaStar_pos_iff_pCoef_pos_and_qCoef_neg`). -/
+theorem expF_neg_of_lt_etaStar (η : ℝ) (c : ι → ℝ) (hη : 0 < η) (h : η < P.etaStar N c) :
+    P.expF N η c < 0 :=
+  ((P.lt_etaStar_iff N η c hη).mp h).2
 
 /-- **Remark, case `p_t > 0`, critical step**: for `η > 0`,
 `𝔼[f_t(η) | x_t] = 0 ↔ η = η*_t`. -/
@@ -1333,8 +1377,8 @@ theorem theta_zero_lt_thetaBarNext_and_expF_eq_zero {η : ℝ} (hη : η ≠ 0) 
     positivity
   · simp [expF, sB, sD, mom]
 
-/-- The hypothesis `𝔼[s_{t+1} | x_t] > 0` in `thetaBarNext_lt_theta_iff` cannot be dropped: with
-no noise (`κ_i² = 0`), the step `η = 1/λ_1` from the unit vector along `u_1` gives
+/-- The hypothesis `𝔼[s_{t+1} | x_t] > 0` in `thetaBarNext_lt_theta_iff` (and in
+`thetaBarNext_eq_theta_iff`) cannot be dropped: with no noise (`κ_i² = 0`), the step `η = 1/λ_1` from the unit vector along `u_1` gives
 `𝔼[s_{t+1} | x_t] = 0`, so `thetaBarNext = 0 < 1 = θ_t` (Lean's `0 / 0 = 0`) although
 `𝔼[f_t(η) | x_t] = 0`. -/
 theorem exists_thetaBarNext_lt_theta_and_expF_eq_zero (hN : ∀ i, N.kap2 i = 0) :
@@ -1358,11 +1402,14 @@ theorem exists_thetaBarNext_lt_theta_and_expF_eq_zero (hN : ∀ i, N.kap2 i = 0)
     rw [hE, hE]
     ring
 
-/-- **Finite-`d` core of the decrease condition (Theorem 2, deterministic equivalent)**:
-if `p_t > 0` and `0 < η < η*_t` then `thetaBarNext < θ_t`. -/
-theorem thetaBarNext_lt_theta_of_lt_etaStar (η : ℝ) (c : ι → ℝ) (hp : 0 < P.pCoef N c)
-    (hη : 0 < η) (h : η < P.etaStar N c) : P.thetaBarNext N η c < P.theta c :=
-  P.thetaBarNext_lt_theta_of_expF_neg N η c ((P.expF_neg_iff_lt_etaStar N η c hp hη).mpr h)
+/-- **Finite-`d` core of the decrease condition (Theorem 2, deterministic equivalent)**, with
+exactly the hypothesis of the paper's Theorem 2: if `0 < η < η*_t` then `thetaBarNext < θ_t`.
+(The hypothesis forces `p_t > 0` and `0 < θ_t < 1`, see `lt_etaStar_iff` and
+`etaStar_pos_iff_pCoef_pos_and_theta`; for `p_t ≤ 0` Lean's `η*_t` is `≤ 0`, the hypothesis is
+empty, and the decrease is given by `thetaBarNext_lt_theta_of_pCoef_nonpos` instead.) -/
+theorem thetaBarNext_lt_theta_of_lt_etaStar (η : ℝ) (c : ι → ℝ) (hη : 0 < η)
+    (h : η < P.etaStar N c) : P.thetaBarNext N η c < P.theta c :=
+  P.thetaBarNext_lt_theta_of_expF_neg N η c (P.expF_neg_of_lt_etaStar N η c hη h)
 
 /-- **Finite-`d` core of the increase condition (deterministic equivalent)**:
 if `p_t > 0` and `η > η*_t` then `θ_t < thetaBarNext`. -/
@@ -1530,8 +1577,8 @@ theorem exSpec_etaStar : exSpec.etaStar exNoise ![1, 1] = 2 / 3 := by
 /-- Decrease regime (`p_t > 0`, `0 < η = 1/2 < η*_t = 2/3`): the hypotheses of
 `Spec.thetaBarNext_lt_theta_of_lt_etaStar` are satisfiable. -/
 example : exSpec.thetaBarNext exNoise (1 / 2) ![1, 1] < exSpec.theta ![1, 1] :=
-  exSpec.thetaBarNext_lt_theta_of_lt_etaStar exNoise _ _ (by rw [exSpec_pCoef]; norm_num)
-    (by norm_num) (by rw [exSpec_etaStar]; norm_num)
+  exSpec.thetaBarNext_lt_theta_of_lt_etaStar exNoise _ _ (by norm_num)
+    (by rw [exSpec_etaStar]; norm_num)
 
 /-- Increase regime (`p_t > 0`, `η = 1 > η*_t = 2/3`): the hypotheses of
 `Spec.theta_lt_thetaBarNext_of_etaStar_lt` are satisfiable. -/
