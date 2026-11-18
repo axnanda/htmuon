@@ -1097,7 +1097,7 @@ actual `d×n` gradient matrix. Seeds are fixed in each script. Total runtime of 
 | ID | statement checked | script | sizes | max discrepancy / outcome |
 |---|---|---|---|---|
 | C1 | Echelon head–tail = filter `min(σ,τ)/τ`; NS5 port = scalar filter | `validate_m2_commuting.py` | `(d,n)` up to `(120,150)`, 6 ranks | `5.5e-13`; `1.4e-15` |
-| C2–C5 | Thm 3.1, 3.2, Cor 3.4, loss formula | same | 28 states, 9 filters, 6 step sizes | `≤ 2.2e-12` (all), `|Δθ|` `2.4e-15`; signs 0/500 |
+| C2–C5 | Thm 3.1, 3.2, Cor 3.4, loss formula | same | 28 states, 9 filters, 6 step sizes | matrices/energies `≤ 2.2e-12`; `Δθ` abs. `2.4e-15` (rel. `4.3e-10`); scaling `9.4e-15` (NS5 `2.3e-8`); signs 0/500 |
 | C6 | Thm 3.3 (bounds, dichotomy, reversed dichotomy) | same | 250 tests | 0 violations |
 | C7 | Prop 4.1 (`θ_flip`, `η* = 2/(ν_𝒟+ν_ℬ)`) | same | 12 configs | `2.2e-16`; `4.6e-15`; 0 violations |
 | C8 | Prop 4.2 (four sign patterns) | same | 4 explicit states | as tabulated |
@@ -1140,9 +1140,9 @@ The exact statements for arbitrary states are Lemma 1.2, Theorem 3.5 (Gram formu
 `a_i = ‖c_i‖` are exact for SGD, and upper bounds for `T^S, V^S, N^S, R^S` under sub-linear filters
 (Prop 3.6). Their accuracy for generic states:
 
-### 8.1 First correction [PROVED as a second-order expansion; NUMERICAL accuracy]
+### 8.1 First correction beyond the commuting formulas
 
-**Proposition 8.1.** Write `M = diag(σ_i²) + E` (`E` = off-diagonal part, `M_ij = λ_iλ_j⟨c_i,c_j⟩`).
+**Proposition 8.1 [standard second-order perturbation expansion, not re-proved here; accuracy NUMERICAL].** Write `M = diag(σ_i²) + E` (`E` = off-diagonal part, `M_ij = λ_iλ_j⟨c_i,c_j⟩`).
 For `g` twice continuously differentiable near the `σ_i² > 0` (distinct),
 
     g(M)_ii = g(σ_i²) + ∑_{j≠i} M_ij² · g[σ_i², σ_i², σ_j²] + O(‖E‖³),
@@ -1156,9 +1156,10 @@ For `g` twice continuously differentiable near the `σ_i² > 0` (distinct),
 For concave `g` the correction is non-positive (consistent with Prop 3.6). The relative deficit of a
 row is `≈ ½∑_j cos²(c_i,c_j)` over the rows `j` with a *much larger* gradient and negligible from
 rows with a much smaller one: **bulk rows are penalised by the dominant rows, not vice versa.**
-Consequently, relative to the commuting formula, non-commutativity lowers `T^ℬ` and `N^ℬ` more than
-`T^𝒟` and `N^𝒟`: it shifts `q` towards negative values (towards Deng's sign) and lowers
-`η_ℬ^loss/η_𝒟^loss` (towards a reversed window) — both effects are visible below.
+Consequently, relative to the commuting formula, non-commutativity lowers `T^ℬ` and `N^ℬ` by a
+larger *fraction* than `T^𝒟` and `N^𝒟`. Near the degenerate point of Muon (blocks with comparable
+`⟨ν⟩`) this shifts `q` towards negative values (towards Deng's sign) and lowers
+`η_ℬ^loss/η_𝒟^loss` (towards a reversed window) **[HEURISTIC]**; both effects are visible below.
 
 Numerics (`second_order.py`; `d = 100`, Gaussian rows with log-normal(0, 0.5) scales, 6 states per
 `n`, direct SVD). Max relative error of `T^S, V^S, N^S, R^S`:
@@ -1222,8 +1223,10 @@ direction predicted by Proposition 8.1, and since here `θ` is slightly above `�
 alignment decreases for every `η`. Muon's `p` equals `sψ(θ_iso − θ)` to `1e-16` (Thm 3.7).
 (iii) For Echelon(k) the row-norm formula is biased even at `n = 3000` (10%): its scale `τ = σ_{k+1}`
 is an extreme singular value of the bulk block, which generic states inflate by a
-Marchenko–Pastur-type factor. With heterogeneous (log-normal(0, 0.5)) row norms the picture is the
-same except that the Echelon(k) ratio is `2.0–4.0` (table in `results/deng_setup.log`).
+Marchenko–Pastur-type factor. With heterogeneous (log-normal(0, 0.5)) row norms: Muon ratio `0.78–0.80`
+(`n = 600`) and `0.97` (`n = 3000`), again independent of `m`; HTMuon(1/8) `1.02–1.72`; Echelon(k)
+`2.0–4.0`; the exact Muon `q` is negative in all 6 cases while the row-norm `q` is positive at
+`n = 600` and negative at `n = 3000` (full table in `results/deng_setup.json`).
 
 ### 8.4 Model (M3): `L(W) = ½ tr(WᵀAWB)` [PROVED (a),(b); NUMERICAL (c); Q2]
 
@@ -1245,7 +1248,7 @@ with `λ_i → h_i` and a *product* dominant block. Checked to `3.1e-14`.
 (c) *Generic states*, left dominant block, `d = 60`, 12 states: the Rayleigh-quotient formula of (a)
 evaluated at the row norms has median relative error in `T^S` of `0.097, 0.12, 0.32` for
 `cond(B) = 1, 3, 30` at `n = 60`, `0.020, 0.047, 0.11` at `n = 240` and `0.005, 0.012, 0.033` at
-`n = 960` (Muon; HTMuon(1/8) within 10% of these), and predicts the sign of `Δθ` in
+`n = 960` (Muon; HTMuon(1/8) slightly smaller), and predicts the sign of `Δθ` in
 `94%, 83%, 69%` of the cases at `n = 60` and `≥ 97%` at `n = 960` (Muon; `cond(B) = 30`, `n = 240`:
 89%). **For an ill-conditioned right factor and a square layer the commuting formulas are not
 reliable**; (M3) with generic states needs the Gram-type treatment with both factors.

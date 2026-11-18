@@ -1175,6 +1175,157 @@ theorem noise_energy_bounds :
   ⟨⟨M.spec.smin_psiD_le_eD M.noise, M.spec.eD_le_smax_psiD M.noise⟩,
     ⟨M.spec.smin_psiB_le_eB M.noise, M.spec.eB_le_smax_psiB M.noise⟩⟩
 
+/-! ### The gradient of the loss -/
+
+/-- `∇L(x) = A x` (paper §3.2): the gradient of `L(x) = ½ xᵀ A x` at `x` is `A x`
+(this uses the symmetry of `A`). -/
+theorem hasGradientAt_loss (x : EuclideanSpace ℝ (Fin d)) : HasGradientAt M.loss (M.grad x) x := by
+  rw [hasGradientAt_iff_hasFDerivAt]
+  have h1 : HasFDerivAt (fun y : EuclideanSpace ℝ (Fin d) =>
+      (LinearMap.toContinuousLinearMap M.A.toEuclideanLin) y)
+      (LinearMap.toContinuousLinearMap M.A.toEuclideanLin) x :=
+    (LinearMap.toContinuousLinearMap M.A.toEuclideanLin).hasFDerivAt
+  have h2 := ((hasFDerivAt_id x).inner ℝ h1).const_mul (1 / 2 : ℝ)
+  have hsym : ∀ y, ⟪M.A.toEuclideanLin x, y⟫_ℝ = ⟪x, M.A.toEuclideanLin y⟫_ℝ := fun y =>
+    (Matrix.isSymmetric_toEuclideanLin_iff.mpr M.A_isHermitian) x y
+  refine h2.congr_fderiv ?_
+  ext y
+  simp only [ContinuousLinearMap.coe_smul', Pi.smul_apply, ContinuousLinearMap.coe_comp',
+    Function.comp_apply, ContinuousLinearMap.prod_apply, fderivInnerCLM_apply, smul_eq_mul,
+    InnerProductSpace.toDual_apply_apply, LinearMap.coe_toContinuousLinearMap', id_eq,
+    ContinuousLinearMap.coe_id']
+  rw [grad, hsym y, real_inner_comm y (M.A.toEuclideanLin x), hsym y]
+  ring
+
+/-! ### Independence of the choice of the eigenvectors
+
+The paper fixes "the" decomposition `A = U Λ Uᵀ`, but `U` is not unique (signs; rotations inside
+eigenspaces of repeated eigenvalues).  We show that nothing block-level depends on the choice:
+the sorted eigenvalue list is unique, the projectors `P^𝒟`, `P^ℬ` are unique *because of the gap*,
+and therefore `s^𝒟, s^ℬ, s, θ, L, τ^𝒟, τ^ℬ, ψ_𝒟, ψ_ℬ, e_𝒟, e_ℬ` are intrinsic to `(A, Σ, k)`.
+(Individual coordinates `c_i` and variances `κ_i²` do depend on `U`.) -/
+
+section Indep
+
+variable {v : OrthonormalBasis (Fin d) ℝ (EuclideanSpace ℝ (Fin d))}
+
+/-- Any decreasing list of eigenvalues of an orthonormal eigenbasis of `A` is `M.lam`. -/
+theorem lam_unique {mu : Fin d → ℝ} (h : IsEigenbasis M.A v mu) (hmu : Antitone mu) :
+    mu = M.lam :=
+  h.eq_sortedEigenvalues hmu M.A_isHermitian
+
+/-- Dominant and bulk eigenvalues are different (the gap). -/
+theorem lam_ne_of_mem_of_not_mem {i j : Fin d} (hi : i ∈ M.spec.D) (hj : j ∉ M.spec.D) :
+    M.lam i ≠ M.lam j := by
+  have h1 : M.spec.lamk ≤ M.lam i := M.spec.lamk_le i hi
+  have h2 : M.lam j ≤ M.spec.lamk1 := M.spec.le_lamk1 j hj
+  have h3 : M.spec.lamk1 < M.spec.lamk := M.spec.gap
+  intro h
+  linarith
+
+/-- **`P^𝒟` does not depend on the choice of the eigenvectors**: for every orthonormal eigenbasis
+`v` of `A` (with the sorted eigenvalues), `∑_{i<k} v_i v_iᵀ = P^𝒟`. -/
+theorem proj_D_eq_PD (h : IsEigenbasis M.A v M.lam) : proj v M.spec.D = M.PD :=
+  h.proj_eq_proj v M.isEigenbasis (fun _ hi _ hj => M.lam_ne_of_mem_of_not_mem hi hj)
+    (fun _ hi _ hj => (M.lam_ne_of_mem_of_not_mem hj hi).symm)
+
+/-- `P^ℬ` does not depend on the choice of the eigenvectors. -/
+theorem proj_B_eq_PB (h : IsEigenbasis M.A v M.lam) : proj v M.spec.B = M.PB := by
+  have h1 : proj v M.spec.D + proj v M.spec.B = 1 := proj_add_proj_compl v M.spec.D
+  have h2 := M.PD_add_PB
+  rw [M.proj_D_eq_PD h] at h1
+  exact add_left_cancel (h1.trans h2.symm)
+
+/-- The block moments in an arbitrary eigenbasis: `∑_{i∈S} λ_i^p ⟪x, v_i⟫² = xᵀ P^S_v A^p x`. -/
+theorem mom_coord_of_isEigenbasis (h : IsEigenbasis M.A v M.lam) (S : Finset (Fin d)) (p : ℕ)
+    (x : EuclideanSpace ℝ (Fin d)) :
+    M.spec.mom S p (MatrixBridge.coord v x) = ⟪x, (proj v S * M.A ^ p).toEuclideanLin x⟫_ℝ := by
+  rw [← h.projPow_eq v, inner_projPow]
+  rfl
+
+/-- The dominant block moments (`s^𝒟`, `τ^𝒟`, …) do not depend on the eigenbasis. -/
+theorem mom_D_coord_eq (h : IsEigenbasis M.A v M.lam) (p : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+    M.spec.mom M.spec.D p (MatrixBridge.coord v x) = M.spec.mom M.spec.D p (M.coord x) := by
+  rw [M.mom_coord_of_isEigenbasis h, M.proj_D_eq_PD h, M.mom_coord]
+  rfl
+
+/-- The bulk block moments (`s^ℬ`, `τ^ℬ`, …) do not depend on the eigenbasis. -/
+theorem mom_B_coord_eq (h : IsEigenbasis M.A v M.lam) (p : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+    M.spec.mom M.spec.B p (MatrixBridge.coord v x) = M.spec.mom M.spec.B p (M.coord x) := by
+  rw [M.mom_coord_of_isEigenbasis h, M.proj_B_eq_PB h, M.mom_coord]
+  rfl
+
+/-- **The alignment does not depend on the eigenbasis**: `Spec.theta` of the coordinates in *any*
+orthonormal eigenbasis of `A` is the paper's `θ(x)`. -/
+theorem theta_coord_eq (h : IsEigenbasis M.A v M.lam) (x : EuclideanSpace ℝ (Fin d)) :
+    M.spec.theta (MatrixBridge.coord v x) = M.theta x := by
+  rw [M.theta_eq]
+  simp only [Spec.theta, Spec.s, Spec.sD, Spec.sB, M.mom_D_coord_eq h, M.mom_B_coord_eq h]
+
+/-- The loss does not depend on the eigenbasis. -/
+theorem loss_coord_eq (h : IsEigenbasis M.A v M.lam) (x : EuclideanSpace ℝ (Fin d)) :
+    M.spec.loss (MatrixBridge.coord v x) = M.loss x := by
+  unfold loss Spec.loss
+  rw [h.inner_mulVec x]
+  rfl
+
+/-- `∑_{i∈S} λ_i^p (v_iᵀ Σ v_i) = Tr(Σ P^S_v A^p)` in an arbitrary eigenbasis. -/
+theorem sum_pow_mul_kap2_of_isEigenbasis (h : IsEigenbasis M.A v M.lam) (S : Finset (Fin d))
+    (p : ℕ) :
+    ∑ i ∈ S, M.lam i ^ p * (M.noiseOf v).kap2 i = (M.Sigma * (proj v S * M.A ^ p)).trace := by
+  rw [← h.projPow_eq v, ← sum_pow_mul_kap2]
+  rfl
+
+/-- `e_𝒟` does not depend on the eigenbasis. -/
+theorem eD_noiseOf_eq (h : IsEigenbasis M.A v M.lam) :
+    M.spec.eD (M.noiseOf v) = M.spec.eD M.noise := by
+  rw [M.eD_eq_trace, ← M.proj_D_eq_PD h]
+  exact M.sum_pow_mul_kap2_of_isEigenbasis h _ 2
+
+/-- `e_ℬ` does not depend on the eigenbasis. -/
+theorem eB_noiseOf_eq (h : IsEigenbasis M.A v M.lam) :
+    M.spec.eB (M.noiseOf v) = M.spec.eB M.noise := by
+  rw [M.eB_eq_trace, ← M.proj_B_eq_PB h]
+  exact M.sum_pow_mul_kap2_of_isEigenbasis h _ 2
+
+end Indep
+
+/-! ### Non-vacuity: diagonal instances -/
+
+section Diagonal
+
+variable {d : ℕ} (w σ : Fin d → ℝ) (k : ℕ) (hw : Antitone w) (hpos : ∀ i, 0 < w i)
+  (hσ : ∀ i, 0 ≤ σ i) (hk : 0 < k) (hkd : k < d)
+  (hgap : w ⟨k, hkd⟩ < w ⟨k - 1, lt_of_le_of_lt (Nat.sub_le k 1) hkd⟩)
+
+/-- **Every admissible spectrum is realised**: for a decreasing positive `w : Fin d → ℝ` with a gap
+`w_{k+1} < w_k` (`0 < k < d`) and nonnegative `σ`, the diagonal matrices `A = diag(w)`,
+`Σ = diag(σ)` form a `MatrixSetting`. -/
+def ofDiagonal : MatrixSetting d where
+  A := diagonal w
+  Sigma := diagonal σ
+  k := k
+  A_posDef := Matrix.posDef_diagonal_iff.mpr hpos
+  Sigma_posSemidef := Matrix.posSemidef_diagonal_iff.mpr hσ
+  k_pos := hk
+  k_lt := hkd
+  gap := by
+    rw [sortedEigenvalues_diagonal hw]
+    exact hgap
+
+/-- The sorted spectrum of `diag(w)` is `w`. -/
+theorem ofDiagonal_lam : (ofDiagonal w σ k hw hpos hσ hk hkd hgap).lam = w :=
+  sortedEigenvalues_diagonal hw _
+
+/-- The standard basis is an eigenbasis of `diag(w)`. -/
+theorem ofDiagonal_isEigenbasis :
+    IsEigenbasis (ofDiagonal w σ k hw hpos hσ hk hkd hgap).A (EuclideanSpace.basisFun (Fin d) ℝ)
+      (ofDiagonal w σ k hw hpos hσ hk hkd hgap).lam := by
+  rw [ofDiagonal_lam]
+  exact isEigenbasis_diagonal w
+
+end Diagonal
+
 end MatrixSetting
 
 end SuspiciousAlignment

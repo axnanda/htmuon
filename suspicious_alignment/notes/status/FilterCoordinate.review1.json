@@ -1,0 +1,245 @@
+{
+ "compiles": true,
+ "sorryFree": true,
+ "axiomsClean": true,
+ "coverage": [
+  {
+   "paperItem": "spec §1 def: oddExt f g = Real.sign g * f |g|",
+   "leanDecl": "Spec.oddExt (+ oddExt_neg, oddExt_id, oddExt_one)",
+   "status": "exact",
+   "comment": "Verbatim. Takes no Spec argument (so it is `Spec.oddExt f g`, not `P.oddExt`); documented in the note."
+  },
+  {
+   "paperItem": "spec §1 def + eq. (1.0): cNextF f η c i = c i − η·oddExt f (λ_i c_i) = c_i − η·sign(c_i)·f(λ_i|c_i|)",
+   "leanDecl": "Spec.cNextF, Spec.cNextF_apply, Spec.cNextF_one",
+   "status": "exact",
+   "comment": "Definition verbatim; (1.0) proved from it using λ_i > 0."
+  },
+  {
+   "paperItem": "spec §1 def: nu f c i = f(λ_i|c_i|)/|c_i| (x/0 = 0)",
+   "leanDecl": "Spec.nu, Spec.nu_of_eq_zero, Spec.nu_one",
+   "status": "exact",
+   "comment": "Verbatim, ν_i = 0 at c_i = 0."
+  },
+  {
+   "paperItem": "spec §1 def: momF f S a c = ∑_{i∈S} ν_i^a λ_i² c_i²",
+   "leanDecl": "Spec.momF",
+   "status": "exact",
+   "comment": "Verbatim."
+  },
+  {
+   "paperItem": "spec §1 def: qF, pF, etaStarF = −qF/pF",
+   "leanDecl": "Spec.qF, Spec.pF, Spec.etaStarF",
+   "status": "exact",
+   "comment": "Verbatim (checked against the spec term by term and numerically)."
+  },
+  {
+   "paperItem": "spec §1 def: fCompareF",
+   "leanDecl": "Spec.fCompareF",
+   "status": "exact",
+   "comment": "s^B(c)·s^D(c⁺) − s^B(c⁺)·s^D(c) with c⁺ = cNextF f η c."
+  },
+  {
+   "paperItem": "task: zero-noise Noise (kap2 = 0, smin = smax = 0), η*₀ = −qCoef/pCoef",
+   "leanDecl": "Noise.noiseFree, Spec.etaStar_noiseFree_eq, Spec.eD_noiseFree, Spec.eB_noiseFree",
+   "status": "exact",
+   "comment": "η*₀ is P.etaStar Noise.noiseFree c; written out form matches tex eq. (2) (lines 388-395) with e_D = e_B = 0."
+  },
+  {
+   "paperItem": "spec 1.1: cNextF f η c i = (1 − η ν_i) c_i",
+   "leanDecl": "Spec.cNextF_eq (key lemma Spec.oddExt_lam_mul)",
+   "status": "exact",
+   "comment": "No hypothesis, includes c_i = 0. Verified numerically (exact rationals, 40000 instances, 8 filters incl. sign-changing ones)."
+  },
+  {
+   "paperItem": "spec 1.2: cNextF id = cNext · · 0; nu id = λ_i if c_i ≠ 0; qF = qCoef; pF = pCoef with zero noise",
+   "leanDecl": "Spec.cNextF_id, Spec.nu_id, Spec.qF_id, Spec.pF_id (+ momF_id, etaStarF_id, fCompareF_id)",
+   "status": "exact",
+   "comment": "Uses Defs.lean's cNext/qCoef/pCoef, identity filter written `_root_.id` (usable as plain `id` outside namespace Spec — checked)."
+  },
+  {
+   "paperItem": "spec 1.3: energies after a filtered step; momF f S 0 c = mom S 2 c",
+   "leanDecl": "Spec.mom_cNextF, Spec.momF_zero",
+   "status": "exact",
+   "comment": "No hypothesis."
+  },
+  {
+   "paperItem": "spec 1.4: fCompareF f η c = pF η² + qF η (exact)",
+   "leanDecl": "Spec.fCompareF_eq (+ Spec.fCompare_noiseFree_eq)",
+   "status": "exact",
+   "comment": "No hypothesis. SGD specialisation matches tex Lemma 'Quadratic form' (1098-1109) at ζ = 0."
+  },
+  {
+   "paperItem": "spec 1.5: θ(c') <,>,= θ(c) ⟺ cross <,>,= 0 for arbitrary states with s(c), s(c') > 0",
+   "leanDecl": "Spec.theta_lt_iff_cross_neg, Spec.theta_gt_iff_cross_pos, Spec.theta_eq_iff_cross_eq_zero",
+   "status": "exact",
+   "comment": "Stated for two arbitrary states c, c' as required for reuse; hypotheses exactly 0 < P.s c, 0 < P.s c'."
+  },
+  {
+   "paperItem": "spec 1.5 'hence': sign of the one-step change = sign of pF η² + qF η",
+   "leanDecl": "Spec.theta_cNextF_lt_iff, Spec.theta_cNextF_gt_iff, Spec.theta_cNextF_eq_iff",
+   "status": "exact",
+   "comment": "Hypotheses s(c) > 0, s(c⁺) > 0; necessity of the latter shown by FilterCoordinate.exSpec_muon_annihilate."
+  },
+  {
+   "paperItem": "spec 1.6: double-sum forms of qF and pF",
+   "leanDecl": "Spec.qF_eq_double_sum, Spec.pF_eq_double_sum",
+   "status": "exact",
+   "comment": "No hypothesis."
+  },
+  {
+   "paperItem": "spec 1.7: qF < 0 < pF, etaStarF > 0",
+   "leanDecl": "Spec.qF_neg_of_ordered, Spec.pF_pos_of_ordered, Spec.etaStarF_pos_of_ordered",
+   "status": "strengthened",
+   "comment": "Sign condition only required on the bulk at non-zero coefficients (qF < 0 needs none). Documented (D2); necessity of a sign condition shown by exSpec_ordered_without_sign. Verified numerically under the weakened hypotheses (15299 ordered instances)."
+  },
+  {
+   "paperItem": "spec 1.7: for η > 0 decrease/unchanged/increase ⟺ η <,=,> etaStarF (given s(c⁺) > 0)",
+   "leanDecl": "Spec.theta_cNextF_lt_iff_of_ordered, Spec.theta_cNextF_eq_iff_of_ordered, Spec.theta_cNextF_gt_iff_of_ordered (+ primed all-η versions, Spec.s_cNextF_pos_of_ordered)",
+   "status": "strengthened",
+   "comment": "The proviso s(c⁺) > 0 is proved, not assumed (D1) — independently confirmed numerically incl. η = |c_i|, η = 1/ν_i, η = η*."
+  },
+  {
+   "paperItem": "spec 1.7 remark: f = id is the noise-free case of Deng's Theorems 2-3",
+   "leanDecl": "Spec.nu_id_lt_nu_id, Spec.pCoef_noiseFree_pos, Spec.etaStar_noiseFree_pos, Spec.theta_cNext_noiseFree_lt_iff / _eq_iff / _gt_iff (+ primed)",
+   "status": "exact",
+   "comment": "Pathwise finite-d statement about P.cNext η c 0 and P.etaStar Noise.noiseFree c."
+  },
+  {
+   "paperItem": "spec 1.8: reversed ordering ⇒ pF < 0 < qF, etaStarF > 0, increase ⟺ 0 < η < etaStarF, decrease ⟺ η > etaStarF",
+   "leanDecl": "Spec.qF_pos_of_reversed, Spec.pF_neg_of_reversed, Spec.etaStarF_pos_of_reversed, Spec.theta_cNextF_gt_iff_of_reversed('), Spec.theta_cNextF_lt_iff_of_reversed('), Spec.theta_cNextF_eq_iff_of_reversed(')",
+   "status": "strengthened",
+   "comment": "Sign condition ν_i ≥ 0 kept only on the dominant block at non-zero coefficients (carried over from 1.7; needed, exSpec_reversed_without_sign); s(c⁺) > 0 proved. 'decrease ⟺ η > η*' carries 0 < η (all-η version: η < 0 ∨ η* < η)."
+  },
+  {
+   "paperItem": "spec 1.8: 'this cannot happen for SGD'",
+   "leanDecl": "Spec.not_reversed_id, Spec.qF_id_nonpos",
+   "status": "exact",
+   "comment": "Reversed ordering impossible for f = id when s^D, s^B > 0; qF id c ≤ 0 always."
+  },
+  {
+   "paperItem": "spec 1.9: 2/(b_D + b_B) ≤ etaStarF ≤ 2/(a_D + a_B)",
+   "leanDecl": "Spec.etaStarF_mem_Icc_of_ordered, Spec.two_div_le_etaStarF_of_ordered, Spec.etaStarF_le_two_div_of_ordered",
+   "status": "exact",
+   "comment": "Two-sided theorem has the spec's hypotheses (bulk-only sign condition); one-sided versions drop unneeded hypotheses. Instantiation on exSpec compiles (reviewer scratch Use.lean). Numerically confirmed (also the weakened one-sided forms)."
+  },
+  {
+   "paperItem": "spec 1.9 proof identity: −qF/pF = 2∑w_ij / ∑w_ij(ν_i+ν_j)",
+   "leanDecl": "Spec.etaStarF_eq_double_sum",
+   "status": "exact",
+   "comment": "Unconditional identity (both sides are −q/p up to rewriting)."
+  },
+  {
+   "paperItem": "spec 1.9 corollary (SGD): 2/(λ_1+λ_{k+1}) ≤ η*₀ ≤ 2/(λ_k+λ_d)",
+   "leanDecl": "Spec.two_div_le_etaStar_noiseFree, Spec.etaStar_noiseFree_le_two_div, Spec.etaStar_noiseFree_mem_Icc",
+   "status": "exact",
+   "comment": "Explicit hypotheses 0 < sD c, 0 < sB c (inherited from 1.7; without them η*₀ = 0 and the lower bound fails — confirmed numerically on 1007 degenerate states). Documented."
+  },
+  {
+   "paperItem": "spec 1.9: comparison with Deng's Theorem 7 (tex 490-499), 2 gap₁/(λ_1²−λ_d²) ≤ 2/(λ_1+λ_{k+1})",
+   "leanDecl": "Spec.thm7_noiseFree_bound_le_two_div, Spec.thm7_noiseFree_bound_eq, Spec.thm7_noiseFree_bound_le_etaStar (+ _lt_two_div, _eq_two_div_iff)",
+   "status": "exact",
+   "comment": "Theorem 7's right-hand side transcribed correctly (checked against tex 492-494); comparison needs no hypothesis; equality iff two-level spectrum (numerically confirmed)."
+  },
+  {
+   "paperItem": "spec §4 defs: ‖g‖, cNextVec, η_eff",
+   "leanDecl": "Spec.gradNorm, Spec.cNextVec, Spec.etaEff",
+   "status": "exact",
+   "comment": "Verbatim; cNextVec parsed as η·f(‖g‖)·g_i/‖g‖."
+  },
+  {
+   "paperItem": "spec 4.1: cNextVec f η c ζ = cNext η_eff c ζ; Muon η_eff = η/‖g‖; HTMuon η_eff = η‖g‖^{p−1}",
+   "leanDecl": "Spec.cNextVec_eq_cNext, Spec.theta_cNextVec, Spec.fCompare_etaEff, Spec.etaEff_one, Spec.etaEff_rpow, Spec.etaEff_id",
+   "status": "hypotheses-added",
+   "comment": "Main identity unconditional (exact). Only the HTMuon closed form needs ‖g‖ ≠ 0 ∨ p ≠ 1 (Lean 0⁰ = 1 vs x/0 = 0; D5) — verified numerically with ‖g‖ = 0 instances."
+  },
+  {
+   "paperItem": "spec 4.2: θ(c⁺) <,> θ(c) ⟺ η‖Ax‖^{p−1} <,> η*₀(c) (ζ = 0, f = σ^p, s^D, s^B > 0)",
+   "leanDecl": "Spec.theta_cNextVec_rpow_lt_iff, Spec.theta_cNextVec_rpow_gt_iff, Spec.theta_cNextVec_rpow_eq_iff (general filter: Spec.theta_cNextVec_noiseFree_lt_iff/_gt_iff/_eq_iff), Spec.gradNorm_noiseFree",
+   "status": "hypotheses-added",
+   "comment": "0 < η added — genuinely necessary: the note's counterexample (λ=(2,1), c=(1,1), p=1/2, η=−0.1) reproduced by the reviewer (Δθ = +0.01875, η‖Ax‖^{p−1} = −0.0669 < 2/3) and proved in general as Spec.theta_cNextVec_rpow_gt_of_neg. p < 1 not needed (holds for all real p)."
+  },
+  {
+   "paperItem": "spec 4.2: η*₀ invariant under c ↦ a c, a ≠ 0",
+   "leanDecl": "Spec.etaStar_noiseFree_smul",
+   "status": "exact",
+   "comment": ""
+  },
+  {
+   "paperItem": "spec 4.2 ray statement: decrease ⟺ a‖Ax‖ > (η/η*₀(c))^{1/(1−p)} (increase: reverse)",
+   "leanDecl": "Spec.theta_cNextVec_rpow_ray_lt_iff, Spec.theta_cNextVec_rpow_ray_gt_iff",
+   "status": "hypotheses-added",
+   "comment": "p < 1, a > 0 as in the spec, plus 0 < η. Numerically confirmed (19571 instances); threshold uses η*₀(c), not η*₀(a c)."
+  },
+  {
+   "paperItem": "spec 4.2 closing remark: p = 1 (SGD) regime selected by η alone",
+   "leanDecl": "Spec.theta_cNextVec_rpow_one_lt_iff, Spec.theta_cNextVec_rpow_one_gt_iff",
+   "status": "exact",
+   "comment": "Stated for f σ = σ^(1:ℝ) (not for `id`; see minor issue)."
+  },
+  {
+   "paperItem": "task: non-vacuity examples for 1.7 / 1.8 (explicit Muon state where alignment INCREASES for small η), 1.9, 4.2",
+   "leanDecl": "FilterCoordinate.exSpec, exSpec_muon_ordered, exSpec_muon_decrease, exSpec_muon_reversed, exSpec_muon_increase, exSpec_muon_increase_explicit, exSpec_etaStar_noiseFree, exSpec_vector_ray",
+   "status": "exact",
+   "comment": "Fin 2, λ = (2,1): Muon at (1,2) decreases, at (2,1) increases for all 0 < η < 4/3 (16/17 → 36/37 at η = 1/2, recomputed by hand)."
+  },
+  {
+   "paperItem": "spec §1 'Where it comes from' (matrix/commuting-state derivation of (1.0)) and §4 first sentence (a d×1 gradient has the single singular value ‖g‖, so F(g) = f(‖g‖) g/‖g‖)",
+   "leanDecl": "—",
+   "status": "missing",
+   "comment": "Modelling premises, not formalized in this file. The spec itself defers the §1 derivation to Filter/MatrixMuon.lean and the task only asks for 4.1-4.2 in §4, so this is out of scope; but the fidelity note has no 'not-formalized' row for them (minor)."
+  }
+ ],
+ "issues": [
+  {
+   "severity": "minor",
+   "where": "notes/fidelity/FilterCoordinate.md (table)",
+   "description": "The table has no row for the two modelling premises of the source ranges that are not formalized here: spec §1 'Where it comes from' (commuting state ⇒ eq. (1.0)) and the opening sentence of §4 ('a d×1 gradient has the single singular value ‖g‖, so F(g) = f(‖g‖) g/‖g‖'). The Lean file takes cNextF / cNextVec as definitions; this is legitimate (the spec defers §1's derivation to MatrixMuon.lean, the task asks only for 4.1-4.2), but the conventions require every source item to appear with a status.",
+   "suggestedFix": "Add two rows with status `not-formalized` (out of scope of this file: §1 premise → Filter/MatrixMuon.lean §5.5; §4 premise → definition of Spec.cNextVec, no SVD-level statement)."
+  },
+  {
+   "severity": "minor",
+   "where": "notes/fidelity/FilterCoordinate.md D4 vs. spec 1.8",
+   "description": "The note flags the missing `η > 0` in 4.2 (D4) but not the same looseness in 1.8: 'decreases iff η > etaStarF' is false for η < 0 if read over all real η (the Lean file's own Spec.theta_cNextF_lt_iff_of_reversed' gives `η < 0 ∨ η* < η`), and Spec.theta_cNextF_lt_iff_of_reversed carries `0 < η`. The Lean statements are correct; only the note is not uniform.",
+   "suggestedFix": "Add one sentence to D2/D4: in 1.8 the clause 'decreases iff η > η*' is read with the `η > 0` of 1.7 (all-η form: primed theorem)."
+  },
+  {
+   "severity": "minor",
+   "where": "notes/fidelity/FilterCoordinate.md (status column)",
+   "description": "Statuses `extra` and `(task)` are not in the vocabulary fixed by AGENT_CONVENTIONS.md; the SGD corollary of 1.9 is labelled `exact` although hD, hB are written explicitly (the row explains why, and they are the inherited hypotheses of 1.7, so this is defensible).",
+   "suggestedFix": "Use the prescribed vocabulary (e.g. `strengthened`/`equivalent-reformulation` for extras, or a separate 'additional results' table)."
+  },
+  {
+   "severity": "minor",
+   "where": "notes/fidelity/FilterCoordinate.md D5",
+   "description": "'the HTMuon formula holds iff ‖g‖ ≠ 0 or p ≠ 1' is slightly imprecise: at ‖g‖ = 0, p = 1 it still holds when η = 0 (0 = 0). Correct as 'holds for all η iff …'.",
+   "suggestedFix": "Reword."
+  },
+  {
+   "severity": "minor",
+   "where": "SuspiciousAlignment/Filter/Coordinate.lean: FilterCoordinate.quad_eq_zero_iff (line 127)",
+   "description": "Docstring says 'For p > 0 > q' but the hypothesis is only `p ≠ 0` (the statement is more general and is used with p < 0 in the reversed case).",
+   "suggestedFix": "Fix the docstring: 'For p ≠ 0 and every real η'."
+  },
+  {
+   "severity": "minor",
+   "where": "SuspiciousAlignment/Filter/Coordinate.lean: section Bounds / non-vacuity",
+   "description": "No in-file `example` instantiates Spec.etaStarF_mem_Icc_of_ordered, the reversed-case bounds or Spec.thm7_noiseFree_bound_lt_two_div; non-vacuity of 1.9 is only implicit (exSpec_muon_ordered gives η* = 4/3 and the docstring says both bounds are attained). The reviewer checked in a scratch file that etaStarF_mem_Icc_of_ordered instantiates on exSpec with a_D = b_D = 1, a_B = b_B = 1/2 and that etaStar_noiseFree_mem_Icc applies, so there is no vacuity.",
+   "suggestedFix": "Optionally add those two short examples (and a Fin 3 spectrum with a multi-element block for the strict Theorem-7 comparison)."
+  },
+  {
+   "severity": "minor",
+   "where": "SuspiciousAlignment/Filter/Coordinate.lean: Spec.theta_cNextVec_rpow_one_lt_iff / _gt_iff",
+   "description": "The 'SGD, p = 1' remark of 4.2 is stated for the filter `fun σ => σ ^ (1:ℝ)` rather than for `_root_.id`, the filter that 1.2 identifies with SGD. The `id` version is a two-line consequence of Spec.theta_cNextVec_noiseFree_lt_iff and Spec.etaEff_id but is not stated.",
+   "suggestedFix": "Add `theta_cNextVec_id_lt_iff` / `_gt_iff` (for η > 0, s^D, s^B > 0: decrease ⟺ η < η*₀) for downstream convenience."
+  },
+  {
+   "severity": "minor",
+   "where": "SuspiciousAlignment/Filter/Coordinate.lean (size)",
+   "description": "1685 lines, above the preferred < 1500 of the conventions. Type-checks in about 12 s, so there is no performance concern.",
+   "suggestedFix": "None required; if the file grows, move the exSpec examples to a separate file."
+  }
+ ],
+ "verdict": "accept",
+ "summary": "Round-1 adversarial review of SuspiciousAlignment/Filter/Coordinate.lean against notes/research/filter_spec.md §1 and §4. SOUNDNESS: `scripts/leancheck` on the file exits 0 with no output (no errors, no warnings, ~12 s); `--build` succeeds (module replayed, olean up to date); grep finds no sorry/admit/axiom/native_decide/unsafe/implemented_by; a scratch meta-command ran `collectAxioms` on all 224 constants of the module (190 non-internal, incl. the one private lemma) — only propext, Classical.choice, Quot.sound occur, and no axiom is declared; `#print axioms` on 32 main theorems confirms this. COVERAGE: every definition (oddExt, cNextF, nu, momF, qF, pF, etaStarF, fCompareF, gradNorm, cNextVec, etaEff, Noise.noiseFree) is verbatim from the spec and uses Defs.lean's mom/sD/sB/theta/cNext/qCoef/pCoef/etaStar; statements 1.1-1.9 (incl. the SGD corollary and the comparison with Deng's Theorem 7, whose right-hand side was checked against tex 490-499), 4.1, 4.2 (both directions, scaling invariance, ray statement, p = 1 remark) are all present; 1.5 is stated for two arbitrary states; non-vacuity examples on Fin 2 include an explicit Muon state where the alignment increases for every 0 < η < 4/3. Nothing is declared unproven and nothing required is missing. FIDELITY: I re-implemented all definitions with Lean's conventions (x/0 = 0, sign 0 = 0, 0^0 = 1) in python and tested every Lean statement independently: exact rational arithmetic, 40000 random instances (d ≤ 6, tied eigenvalues, zero coefficients, isotropic states, η ∈ {|c_i|, 1/ν_i, η*, 0, negative}, 8 filters incl. sign-changing ones) for 1.1-1.9 under the Lean (weakened) hypotheses, and 60000 float instances for §4 (incl. ‖g‖ = 0 and p ∈ {0, 1/8, 1/2, 0.9, 1, 2, −1/2}); no violation. All deviations from the spec are in the direction of weaker hypotheses (bulk-only / dominant-only sign condition, proviso s(c⁺) > 0 proved instead of assumed, p < 1 dropped where not needed) or are genuinely necessary additions (0 < η in 4.2 and in the ray statement, ‖g‖ ≠ 0 ∨ p ≠ 1 in the HTMuon formula for η_eff, s^D, s^B > 0 in the SGD corollary), and each is documented in the fidelity note with a Lean counterexample or sharpness example; I reproduced the note's numerical counterexample for 4.2 at η < 0 and checked its cross-references (tex line numbers, EtaStarBounds names, name-clash statement). No hypothesis set is unsatisfiable (instantiations compile in a scratch file), no statement relies on division by zero, sqrt/rpow of negatives or ℕ-subtraction. VERDICT: accept — no blocker, no major issue; 8 minor points (two missing 'not-formalized' rows and small imprecisions in the fidelity note, one inaccurate docstring, optional extra examples / an `id` version of the p = 1 remark, file length). Reviewer scratch files: /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_FilterCoordinate/{AxiomsAll.lean,Axioms.lean,Use.lean,test_sec1.py,test_sec4.py}."
+}
