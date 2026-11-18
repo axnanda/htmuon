@@ -1,0 +1,17 @@
+noise_free {'eta': 0.010022967960003223, 'E_align': np.float64(0.0), 'loss_late': np.float64(1.609915636334284e-10), 'first_step_all_dominant_coords_exactly_zero': 1049, 'n_exact_zero_dominant_coords_at_end': 50, 'limit_cycle_loss_prediction': 0.0003153809012891293}
+sigma_1e-12 {'eta': 0.010022967960003223, 'E_align': np.float64(1.0), 'loss_late': np.float64(0.0003153809012891015), 'first_step_all_dominant_coords_exactly_zero': None, 'n_exact_zero_dominant_coords_at_end': 0, 'limit_cycle_loss_prediction': 0.0003153809012891293}
+m=20 sgd      c_D=0.9978 c_B=0.9996 (c_B/c_D=1.00)  nu_D=101.6073 nu_B=2.5713 (nu_D/nu_B=39.52; noise var ratio 39.6)  theta(eta->0)=0.9932
+m=20 muon     c_D=0.0892 c_B=0.2371 (c_B/c_D=2.66)  nu_D=0.8960 nu_B=0.1782 (nu_D/nu_B=5.03; noise var ratio 39.6)  theta(eta->0)=0.9802
+m=20 ht0.125  c_D=0.1201 c_B=0.2793 (c_B/c_D=2.33)  nu_D=1.5797 nu_B=0.2375 (nu_D/nu_B=6.65; noise var ratio 39.6)  theta(eta->0)=0.9828
+m=20 ht0.5    c_D=0.2952 c_B=0.4681 (c_B/c_D=1.59)  nu_D=9.0683 nu_B=0.5999 (nu_D/nu_B=15.12; noise var ratio 39.6)  theta(eta->0)=0.9889
+m=20 ech1     c_D=0.0663 c_B=0.0669 (c_B/c_D=1.01)  nu_D=0.4493 nu_B=0.0115 (nu_D/nu_B=38.90; noise var ratio 39.6)  theta(eta->0)=0.9932
+m=20 ech20    c_D=0.0890 c_B=0.1831 (c_B/c_D=2.06)  nu_D=0.8815 nu_B=0.0972 (nu_D/nu_B=9.07; noise var ratio 39.6)  theta(eta->0)=0.9857
+m=20 ech40    c_D=0.0892 c_B=0.2305 (c_B/c_D=2.58)  nu_D=0.8940 nu_B=0.1651 (nu_D/nu_B=5.41; noise var ratio 39.6)  theta(eta->0)=0.9810
+m=100 sgd      c_D=0.9978 c_B=0.9996 (c_B/c_D=1.00)  nu_D=119.2694 nu_B=0.6061 (nu_D/nu_B=196.79; noise var ratio 197.1)  theta(eta->0)=0.9997
+m=100 muon     c_D=0.0855 c_B=0.4444 (c_B/c_D=5.20)  nu_D=0.9756 nu_B=0.1694 (nu_D/nu_B=5.76; noise var ratio 197.1)  theta(eta->0)=0.9982
+m=100 ht0.125  c_D=0.1156 c_B=0.4773 (c_B/c_D=4.13)  nu_D=1.7324 nu_B=0.1864 (nu_D/nu_B=9.29; noise var ratio 197.1)  theta(eta->0)=0.9986
+m=100 ht0.5    c_D=0.2885 c_B=0.6165 (c_B/c_D=2.14)  nu_D=10.1971 nu_B=0.2653 (nu_D/nu_B=38.44; noise var ratio 197.1)  theta(eta->0)=0.9993
+m=100 ech1     c_D=0.0622 c_B=0.0629 (c_B/c_D=1.01)  nu_D=0.4648 nu_B=0.0024 (nu_D/nu_B=193.62; noise var ratio 197.1)  theta(eta->0)=0.9997
+m=100 ech20    c_D=0.0855 c_B=0.3303 (c_B/c_D=3.86)  nu_D=0.9726 nu_B=0.0866 (nu_D/nu_B=11.23; noise var ratio 197.1)  theta(eta->0)=0.9988
+m=100 ech40    c_D=0.0855 c_B=0.4307 (c_B/c_D=5.04)  nu_D=0.9752 nu_B=0.1561 (nu_D/nu_B=6.25; noise var ratio 197.1)  theta(eta->0)=0.9983
+[cpu] {'name': 'extra_checks', 'cpu_s': 3.1, 'wall_s': 3.1}

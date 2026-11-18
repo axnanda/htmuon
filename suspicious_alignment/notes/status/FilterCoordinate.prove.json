@@ -1,0 +1,478 @@
+{
+ "file": "/home/user/htmuon/suspicious_alignment/SuspiciousAlignment/Filter/Coordinate.lean",
+ "compiles": true,
+ "sorryFree": true,
+ "theorems": [
+  {
+   "name": "SuspiciousAlignment.Spec.oddExt",
+   "paperItem": "filter_spec §1 (definition)",
+   "informal": "oddExt f g = Real.sign g * f |g| (odd extension φ_f of the filter); takes no Spec argument.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.cNextF",
+   "paperItem": "filter_spec §1 (definition), eq. (1.0)",
+   "informal": "cNextF f η c i = c i − η * oddExt f (λ_i * c i); Spec.cNextF_apply proves the (1.0) form c_i − η·sign(c_i)·f(λ_i|c_i|), Spec.cNextF_one the Muon form.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.nu",
+   "paperItem": "filter_spec §1 (definition)",
+   "informal": "Effective curvature nu f c i = f(λ_i |c_i|) / |c_i| (= 0 at c_i = 0); Spec.nu_one: Muon gives 1/|c_i|; Spec.nu_nonneg; Spec.nu_of_eq_zero.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.momF",
+   "paperItem": "filter_spec §1 (definition)",
+   "informal": "momF f S a c = ∑_{i∈S} ν_i^a λ_i² c_i².",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.qF",
+   "paperItem": "filter_spec §1 (definition)",
+   "informal": "qF f c = 2 (s^D · momF f B 1 c − s^B · momF f D 1 c).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.pF",
+   "paperItem": "filter_spec §1 (definition)",
+   "informal": "pF f c = s^B · momF f D 2 c − s^D · momF f B 2 c.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaStarF",
+   "paperItem": "filter_spec §1 (definition)",
+   "informal": "etaStarF f c = −qF f c / pF f c.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.fCompareF",
+   "paperItem": "filter_spec §1 (definition)",
+   "informal": "fCompareF f η c = s^B(c) s^D(c⁺) − s^B(c⁺) s^D(c) with c⁺ = cNextF f η c.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Noise.noiseFree",
+   "paperItem": "task (zero noise for η*₀ in 1.2 / 1.9 / 4.2)",
+   "informal": "The Noise with kap2 = 0, smin = smax = 0; the spec's η*₀ is P.etaStar Noise.noiseFree c (written out in Spec.etaStar_noiseFree_eq; Spec.eD_noiseFree, Spec.eB_noiseFree).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.gradNorm",
+   "paperItem": "filter_spec §4 (definition)",
+   "informal": "gradNorm c ζ = √(∑_i (λ_i c_i + ζ_i)²); Spec.gradNorm_noiseFree: with ζ = 0 it is √(s(c)).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.cNextVec",
+   "paperItem": "filter_spec 4.1 (definition)",
+   "informal": "cNextVec f η c ζ i = c_i − η f(‖g‖) (λ_i c_i + ζ_i) / ‖g‖.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaEff",
+   "paperItem": "filter_spec 4.1 (definition)",
+   "informal": "etaEff f η c ζ = η f(‖g‖) / ‖g‖.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.cNextF_eq",
+   "paperItem": "filter_spec 1.1",
+   "informal": "For every i (including c_i = 0): cNextF f η c i = (1 − η ν_i) c_i. Key lemma Spec.oddExt_lam_mul: φ_f(λ_i c_i) = ν_i c_i.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.cNextF_id",
+   "paperItem": "filter_spec 1.2",
+   "informal": "cNextF id η c = P.cNext η c 0 (SGD is the identity filter).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.nu_id",
+   "paperItem": "filter_spec 1.2",
+   "informal": "nu id c i = λ_i whenever c_i ≠ 0 (and Spec.momF_id: momF id S a c = P.mom S (a+2) c).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.qF_id",
+   "paperItem": "filter_spec 1.2",
+   "informal": "qF id c = P.qCoef c.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.pF_id",
+   "paperItem": "filter_spec 1.2",
+   "informal": "pF id c = P.pCoef Noise.noiseFree c (also Spec.etaStarF_id, Spec.fCompareF_id).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.momF_zero",
+   "paperItem": "filter_spec 1.3",
+   "informal": "momF f S 0 c = P.mom S 2 c.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.mom_cNextF",
+   "paperItem": "filter_spec 1.3",
+   "informal": "∑_{i∈S} λ_i² (c_i⁺)² = momF f S 0 c − 2η momF f S 1 c + η² momF f S 2 c.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.fCompareF_eq",
+   "paperItem": "filter_spec 1.4",
+   "informal": "fCompareF f η c = pF f c · η² + qF f c · η, exactly, no hypothesis (SGD case: Spec.fCompare_noiseFree_eq).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_lt_iff_cross_neg",
+   "paperItem": "filter_spec 1.5",
+   "informal": "For arbitrary states c, c' with s(c) > 0, s(c') > 0: θ(c') < θ(c) ⟺ s^B(c) s^D(c') − s^B(c') s^D(c) < 0.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_gt_iff_cross_pos",
+   "paperItem": "filter_spec 1.5",
+   "informal": "Same hypotheses: θ(c) < θ(c') ⟺ 0 < s^B(c) s^D(c') − s^B(c') s^D(c).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_eq_iff_cross_eq_zero",
+   "paperItem": "filter_spec 1.5",
+   "informal": "Same hypotheses: θ(c') = θ(c) ⟺ s^B(c) s^D(c') − s^B(c') s^D(c) = 0.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextF_lt_iff",
+   "paperItem": "filter_spec 1.5 (filtered step)",
+   "informal": "If s(c) > 0 and s(c⁺) > 0: θ(c⁺) < θ(c) ⟺ pF η² + qF η < 0; likewise Spec.theta_cNextF_gt_iff and Spec.theta_cNextF_eq_iff.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.qF_eq_double_sum",
+   "paperItem": "filter_spec 1.6",
+   "informal": "qF = 2 ∑_{i∈D} ∑_{j∈B} s_i s_j (ν_j − ν_i).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.pF_eq_double_sum",
+   "paperItem": "filter_spec 1.6",
+   "informal": "pF = ∑_{i∈D} ∑_{j∈B} s_i s_j (ν_i² − ν_j²).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaStarF_eq_double_sum",
+   "paperItem": "filter_spec 1.9 (proof identity)",
+   "informal": "etaStarF = 2 ∑ w_ij / ∑ w_ij (ν_i + ν_j) with w_ij = s_i s_j (ν_i − ν_j); no hypothesis.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.qF_neg_of_ordered",
+   "paperItem": "filter_spec 1.7",
+   "informal": "s^D, s^B > 0 and ν_j < ν_i on pairs of non-zero coefficients ⟹ qF < 0 (no sign condition needed).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.pF_pos_of_ordered",
+   "paperItem": "filter_spec 1.7",
+   "informal": "s^D, s^B > 0, ν_j ≥ 0 on the bulk (non-zero coefficients), ν_j < ν_i ⟹ 0 < pF.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaStarF_pos_of_ordered",
+   "paperItem": "filter_spec 1.7",
+   "informal": "Under the hypotheses of 1.7: 0 < etaStarF.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.s_cNextF_pos_of_ordered",
+   "paperItem": "filter_spec 1.7 (proviso 'given s(c⁺) > 0')",
+   "informal": "Under s^D, s^B > 0 and the ordering, s(c⁺) > 0 for every real η: the spec's proviso is automatic.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextF_lt_iff_of_ordered",
+   "paperItem": "filter_spec 1.7",
+   "informal": "Hypotheses of 1.7 and η > 0: θ(c⁺) < θ(c) ⟺ η < etaStarF (s(c⁺) > 0 not assumed).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextF_eq_iff_of_ordered",
+   "paperItem": "filter_spec 1.7",
+   "informal": "Hypotheses of 1.7 and η > 0: θ(c⁺) = θ(c) ⟺ η = etaStarF.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextF_gt_iff_of_ordered",
+   "paperItem": "filter_spec 1.7",
+   "informal": "Hypotheses of 1.7 and η > 0: θ(c) < θ(c⁺) ⟺ etaStarF < η.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextF_lt_iff_of_ordered'",
+   "paperItem": "filter_spec 1.7 (all real η)",
+   "informal": "For every real η: decrease ⟺ 0 < η < etaStarF; primed _eq_ (η = 0 ∨ η = etaStarF) and _gt_ (η < 0 ∨ etaStarF < η) versions too.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNext_noiseFree_lt_iff",
+   "paperItem": "filter_spec 1.7 (f = id: noise-free Deng Thm 2)",
+   "informal": "SGD with ζ = 0, s^D, s^B > 0, η > 0: θ(cNext η c 0) < θ(c) ⟺ η < η*₀ (exact, every finite d).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNext_noiseFree_eq_iff",
+   "paperItem": "filter_spec 1.7 (f = id)",
+   "informal": "Same setting: θ unchanged ⟺ η = η*₀.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNext_noiseFree_gt_iff",
+   "paperItem": "filter_spec 1.7 (f = id: noise-free Deng Thm 3)",
+   "informal": "Same setting: θ increases ⟺ η > η*₀ (no g_gap hypothesis needed without noise); primed all-η versions exist.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.pCoef_noiseFree_pos",
+   "paperItem": "filter_spec 1.7 (f = id)",
+   "informal": "s^D, s^B > 0 ⟹ 0 < P.pCoef Noise.noiseFree c; also Spec.etaStar_noiseFree_pos, Spec.s_cNext_noiseFree_pos, Spec.nu_id_lt_nu_id (ordering holds by the gap).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.qF_pos_of_reversed",
+   "paperItem": "filter_spec 1.8",
+   "informal": "s^D, s^B > 0 and ν_i < ν_j on pairs of non-zero coefficients ⟹ 0 < qF.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.pF_neg_of_reversed",
+   "paperItem": "filter_spec 1.8",
+   "informal": "s^D, s^B > 0, ν_i ≥ 0 on the dominant block only (non-zero coefficients), ν_i < ν_j ⟹ pF < 0. (1.8 read with the sign condition of 1.7 carried over; it is necessary, see paperIssues D2.)",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaStarF_pos_of_reversed",
+   "paperItem": "filter_spec 1.8",
+   "informal": "Under the hypotheses of 1.8 (sign condition ν_i ≥ 0 on D carried over from 1.7): 0 < etaStarF.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.s_cNextF_pos_of_reversed",
+   "paperItem": "filter_spec 1.8",
+   "informal": "Under the reversed ordering s(c⁺) > 0 for every real η.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextF_gt_iff_of_reversed",
+   "paperItem": "filter_spec 1.8",
+   "informal": "Reversed ordering, ν_i ≥ 0 on D, η > 0: θ(c) < θ(c⁺) ⟺ η < etaStarF (alignment INCREASES for small η); s(c⁺) > 0 not assumed.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextF_lt_iff_of_reversed",
+   "paperItem": "filter_spec 1.8",
+   "informal": "Same hypotheses, η > 0: θ(c⁺) < θ(c) ⟺ etaStarF < η; Spec.theta_cNextF_eq_iff_of_reversed: unchanged ⟺ η = etaStarF; primed versions for all real η.",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.not_reversed_id",
+   "paperItem": "filter_spec 1.8 ('cannot happen for SGD')",
+   "informal": "For f = id and s^D, s^B > 0 the reversed curvature ordering is impossible; Spec.qF_id_nonpos: qF id c ≤ 0 at every state.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.two_div_le_etaStarF_of_ordered",
+   "paperItem": "filter_spec 1.9 (lower bound)",
+   "informal": "Hypotheses of 1.7 and ν_i ≤ b_D on D, ν_j ≤ b_B on B ⟹ 2/(b_D + b_B) ≤ etaStarF (a's not needed).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaStarF_le_two_div_of_ordered",
+   "paperItem": "filter_spec 1.9 (upper bound)",
+   "informal": "s^D, s^B > 0, ordering, a_D ≤ ν_i on D, a_B ≤ ν_j on B, a_D + a_B > 0 ⟹ etaStarF ≤ 2/(a_D + a_B) (sign condition not needed).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaStarF_mem_Icc_of_ordered",
+   "paperItem": "filter_spec 1.9",
+   "informal": "2/(b_D + b_B) ≤ etaStarF ≤ 2/(a_D + a_B) under the spec's hypotheses.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.two_div_le_etaStarF_of_reversed",
+   "paperItem": "filter_spec 1.9 analogue in the reversed case of 1.8",
+   "informal": "Under the hypotheses of 1.8 the same lower bound holds; Spec.etaStarF_le_two_div_of_reversed gives the upper bound.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.two_div_le_etaStar_noiseFree",
+   "paperItem": "filter_spec 1.9 Corollary (SGD)",
+   "informal": "s^D, s^B > 0 ⟹ 2/(λ_1 + λ_{k+1}) ≤ η*₀ = P.etaStar Noise.noiseFree c.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaStar_noiseFree_le_two_div",
+   "paperItem": "filter_spec 1.9 Corollary (SGD)",
+   "informal": "s^D, s^B > 0 ⟹ η*₀ ≤ 2/(λ_k + λ_d).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaStar_noiseFree_mem_Icc",
+   "paperItem": "filter_spec 1.9 Corollary (SGD)",
+   "informal": "η*₀ ∈ [2/(λ_1 + λ_{k+1}), 2/(λ_k + λ_d)].",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thm7_noiseFree_bound_le_two_div",
+   "paperItem": "filter_spec 1.9 (comparison with Deng Thm 7, tex 490-495)",
+   "informal": "For every spectrum: 2 gap₁/(λ_1² − λ_d²) ≤ 2/(λ_1 + λ_{k+1}).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thm7_noiseFree_bound_eq",
+   "paperItem": "filter_spec 1.9 (Deng Thm 7 with zero noise)",
+   "informal": "With Noise.noiseFree the right-hand side of Theorem 7 equals 2 gap₁/(λ_1² − λ_d²) (bookkeeping).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thm7_noiseFree_bound_le_etaStar",
+   "paperItem": "filter_spec 1.9 (sharpens noise-free Deng Thm 7)",
+   "informal": "s^D, s^B > 0 ⟹ 2 gap₁/(λ_1² − λ_d²) ≤ η*₀, obtained from the new bound.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thm7_noiseFree_bound_lt_two_div",
+   "paperItem": "filter_spec 1.9 (comparison, sharpness)",
+   "informal": "The comparison is strict if λ_k < λ_1 or λ_d < λ_{k+1}; Spec.thm7_noiseFree_bound_eq_two_div_iff: equality ⟺ two-level spectrum.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.cNextVec_eq_cNext",
+   "paperItem": "filter_spec 4.1",
+   "informal": "cNextVec f η c ζ = P.cNext (etaEff f η c ζ) c ζ for all f, η, c, ζ (also when ‖g‖ = 0); transfers Spec.theta_cNextVec, Spec.fCompare_etaEff.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaEff_one",
+   "paperItem": "filter_spec 4.1 (Muon = normalised SGD)",
+   "informal": "For f ≡ 1: etaEff = η / ‖g‖.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaEff_rpow",
+   "paperItem": "filter_spec 4.1 (HTMuon)",
+   "informal": "For f σ = σ^p: etaEff = η ‖g‖^(p−1), provided ‖g‖ ≠ 0 or p ≠ 1 (Spec.etaEff_id: η_eff = η for f = id, ‖g‖ ≠ 0).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextVec_noiseFree_lt_iff",
+   "paperItem": "filter_spec 4.2 (general filter, any real η)",
+   "informal": "ζ = 0, s^D, s^B > 0: θ(c⁺) < θ(c) ⟺ 0 < η_eff < η*₀; _gt_ (η_eff < 0 ∨ η*₀ < η_eff) and _eq_ versions.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextVec_rpow_lt_iff",
+   "paperItem": "filter_spec 4.2",
+   "informal": "ζ = 0, f σ = σ^p (any real p), s^D, s^B > 0, η > 0: θ(c⁺) < θ(c) ⟺ η √(s(c))^(p−1) < η*₀(c).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextVec_rpow_gt_iff",
+   "paperItem": "filter_spec 4.2",
+   "informal": "Same setting: θ(c) < θ(c⁺) ⟺ η*₀(c) < η √(s(c))^(p−1); Spec.theta_cNextVec_rpow_eq_iff for equality.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextVec_rpow_gt_of_neg",
+   "paperItem": "filter_spec 4.2 as literally stated (no restriction on η)",
+   "informal": "For every η < 0 the alignment increases although η ‖Ax‖^(p−1) < η*₀(c): the spec's equivalence fails without η > 0.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaStar_noiseFree_smul",
+   "paperItem": "filter_spec 4.2",
+   "informal": "η*₀(a • c) = η*₀(c) for a ≠ 0.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextVec_rpow_ray_lt_iff",
+   "paperItem": "filter_spec 4.2 (ray statement)",
+   "informal": "p < 1, η > 0, a > 0, s^D, s^B > 0: alignment at a•c decreases ⟺ (η/η*₀(c))^(1/(1−p)) < a √(s(c)).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextVec_rpow_ray_gt_iff",
+   "paperItem": "filter_spec 4.2 (ray statement)",
+   "informal": "Same setting: alignment at a•c increases ⟺ a √(s(c)) < (η/η*₀(c))^(1/(1−p)).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.theta_cNextVec_rpow_one_lt_iff",
+   "paperItem": "filter_spec 4.2 (closing remark, p = 1)",
+   "informal": "For f σ = σ^1, η > 0: decrease ⟺ η < η*₀(c) (regime selected by η alone); Spec.theta_cNextVec_rpow_one_gt_iff for increase.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.FilterCoordinate.exSpec_muon_decrease",
+   "paperItem": "non-vacuity of 1.7 / 1.9",
+   "informal": "Spec λ = (2,1) on Fin 2, D = {0}; Muon at c = (1,2): ordering holds, η* = 4/3 (exSpec_muon_ordered), alignment decreases for all 0 < η < 4/3.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.FilterCoordinate.exSpec_muon_increase",
+   "paperItem": "non-vacuity of 1.8",
+   "informal": "Muon at c = (2,1) on exSpec: reversed ordering, η* = 4/3 (exSpec_muon_reversed), the alignment INCREASES for every 0 < η < 4/3.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.FilterCoordinate.exSpec_muon_increase_explicit",
+   "paperItem": "non-vacuity of 1.8 (direct evaluation)",
+   "informal": "On exSpec: θ(2,1) = 16/17 and after one Muon step with η = 1/2 it is 36/37.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.FilterCoordinate.exSpec_ordered_without_sign",
+   "paperItem": "filter_spec 1.7 (sign condition is necessary)",
+   "informal": "On exSpec at c = (1,1) with f σ = (11σ − 21)/10: ν = (1/10, −1) is ordered but pF = −99/25 < 0.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.FilterCoordinate.exSpec_reversed_without_sign",
+   "paperItem": "filter_spec 1.8 (sign condition is necessary)",
+   "informal": "On exSpec at c = (1,1) with f σ = (12 − 11σ)/10: ν = (−1, 1/10) is reversed but pF = 99/25 > 0.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.FilterCoordinate.exSpec_muon_annihilate",
+   "paperItem": "filter_spec 1.5 (hypothesis s(c') > 0 is necessary)",
+   "informal": "Muon on exSpec at c = (1,1), η = 1: c⁺ = 0, θ(c⁺) = 0 < θ(c) although pF η² + qF η = 0.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.FilterCoordinate.exSpec_etaStar_noiseFree",
+   "paperItem": "non-vacuity of the SGD corollary of 1.9",
+   "informal": "On exSpec at c = (1,2): η*₀ = 2/3 = 2/(λ_0 + λ_1) (both bounds attained).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.FilterCoordinate.exSpec_vector_ray",
+   "paperItem": "non-vacuity of 4.2",
+   "informal": "Normalised SGD (f σ = σ^0) on exSpec along the ray through (1,2): for η, a > 0, decrease ⟺ 3η/2 < a √8.",
+   "status": "extra"
+  }
+ ],
+ "paperIssues": [
+  "D4 (spec 4.2, missing hypothesis): the equivalence 'θ(c⁺) < θ(c) ⟺ η‖Ax‖^{p−1} < η*₀(c)' (and '>' likewise) is stated without restricting η. It needs η > 0: for every η < 0 the alignment strictly increases while η‖Ax‖^{p−1} < 0 < η*₀ (Spec.theta_cNextVec_rpow_gt_of_neg, proved for every state with s^D, s^B > 0 and every p; numerically λ=(2,1), c=(1,1), p=1/2, η=−0.1 gives θ⁺−θ=+0.0187); at η = 0 the '<' form fails as well. The exact all-η statement is θ(c⁺) < θ(c) ⟺ 0 < η_eff < η*₀ (Spec.theta_cNextVec_noiseFree_lt_iff). The Lean versions of 4.2 and of the ray statement carry 0 < η.",
+  "D2 (spec 1.8, sign condition): 1.8 says 'if instead ν_i < ν_j …' and does not repeat 'ν_i ≥ 0'. The sign condition is needed for pF < 0 (FilterCoordinate.exSpec_reversed_without_sign: reversed ordering with ν = (−1, 1/10) gives pF = 99/25 > 0), so 1.8 must be read with it carried over from 1.7; Lean assumes ν_i ≥ 0 only on the dominant block at non-zero coefficients. Symmetrically, in 1.7 only ν_j ≥ 0 on the bulk at non-zero coefficients is needed (and it cannot be dropped: exSpec_ordered_without_sign, pF = −99/25 < 0); qF < 0 resp. qF > 0 needs no sign condition at all.",
+  "D1 (spec 1.7 / 1.8, redundant proviso): 'given s(c⁺) > 0' is automatic under s^D, s^B > 0 and either strict curvature ordering, for every real η (Spec.s_cNextF_pos_of_ordered, Spec.s_cNextF_pos_of_reversed); the Lean dichotomies do not assume it.",
+  "D3 (spec 1.5): the hypothesis s(c') > 0 is genuinely needed in general: Muon at the isotropic state c = (1,1), η = 1 lands on c⁺ = 0, so θ(c⁺) = 0 < θ(c) while pF η² + qF η = 0 (FilterCoordinate.exSpec_muon_annihilate). The spec states the hypothesis; this is a confirmation, not an error.",
+  "D2' (spec 1.9, hypotheses can be weakened): the lower bound 2/(b_D + b_B) ≤ η* needs neither a_D, a_B nor a_D + a_B > 0 (and b_D + b_B > 0 is automatic); the upper bound does not need the sign condition ν ≥ 0 (it is implied where needed by a_D + a_B > 0). The same two bounds also hold in the reversed case of 1.8 (extra theorems).",
+  "D5 (spec 4.1, Lean-convention edge case): 'HTMuon: η_eff = η‖g‖^{p−1}' fails at ‖g‖ = 0 with p = 1 (etaEff = 0 by x/0 = 0, but η·0⁰ = η); Spec.etaEff_rpow assumes ‖g‖ ≠ 0 ∨ p ≠ 1. The main identity 4.1 (Spec.cNextVec_eq_cNext) needs no hypothesis.",
+  "D6 (spec 4.2): p < 1 is not needed for the first equivalences (they hold for every real p; p = 1 gives Deng's noise-free dichotomy η < η*₀, Spec.theta_cNextVec_rpow_one_lt_iff); p < 1 is used only in the ray statement.",
+  "D7 (conventions): Real.sign 0 = 0, so φ_f(0) = 0 even when f 0 ≠ 0 (Muon): a zero coefficient stays zero and ν_i = 0 there. Statements 1.1–1.6 hold with these conventions without any hypothesis on c.",
+  "D8 (spec 4.1, meta-claim): 'every pathwise statement of Deng's one-step theory holds with η replaced by η_eff' is formalized as the identity cNextVec = cNext at η_eff plus the transfers Spec.theta_cNextVec and Spec.fCompare_etaEff. η_eff depends on the realised noise ζ, so expectation-level statements (E[f_t(η)] = p_t η² + q_t η) do NOT transfer by substitution; nothing of that kind is claimed.",
+  "SGD corollary of 1.9: the hypotheses s^D > 0 and s^B > 0 are required (they are the hypotheses of 1.7; without them η*₀ = 0/0 = 0 and the lower bound is false). The spec's corollary does not repeat them explicitly.",
+  "No statement of sections 1 and 4 was found false in its intended reading (η > 0 step sizes, sign condition carried from 1.7 to 1.8)."
+ ],
+ "unproven": [],
+ "notes": "RESUME: a previous prover session had already written the complete file, the fidelity note and had built the module, but no status JSON existed. This session did not start over: it re-read every definition and statement against filter_spec.md §1 and §4 (re-deriving the algebra), re-ran the previous numpy test script (all pass: 20000 instances for 1.1–1.6, 40438 ordered/reversed states for 1.7–1.9, 67200 for §4) and wrote an independent exact rational-arithmetic test (60000 instances, including zero coefficients, η = |c_i|, η = 1/ν_i, η = η*, negative η, s(c⁺) > 0 checks; all pass); added two small corollaries for the spec's closing remark of 4.2 (Spec.theta_cNextVec_rpow_one_lt_iff / _gt_iff), clarified one docstring, corrected three inaccurate passages of the fidelity note, rebuilt, and re-ran the axiom check.\n\nFILES: /home/user/htmuon/suspicious_alignment/SuspiciousAlignment/Filter/Coordinate.lean (1685 lines, 168 declarations, imports Mathlib and SuspiciousAlignment.Defs only); /home/user/htmuon/suspicious_alignment/notes/fidelity/FilterCoordinate.md; /home/user/htmuon/suspicious_alignment/notes/status/FilterCoordinate.prove.json.\n\nCHECKS: `scripts/leancheck --build SuspiciousAlignment.Filter.Coordinate` succeeds (the only message for this file is Lake's generic 'imports Mathlib … module system' notice; no errors, no linter warnings); no sorry/admit/axiom/native_decide/unsafe/implemented_by in the source; a temporary `#print axioms` over all 167 public declarations, run from a scratch file that imports the built module (nothing left in the source), reports only propext, Classical.choice, Quot.sound for each. The one private declaration (Spec.etaStarF_eq_neg) is not reachable from another file, so it was not printed separately; it is used by the reversed-case theorems, whose axiom sets are clean.\n\nSATISFIABILITY: every statement is pathwise, finite-d and algebraic. Hypotheses of 1.7/1.9 are realised by FilterCoordinate.exSpec_muon_ordered (Muon, λ = (2,1), c = (1,2)), those of 1.8 by exSpec_muon_reversed (c = (2,1)), the SGD corollary by exSpec_etaStar_noiseFree, 4.2 by exSpec_vector_ray. No theorem relies on x/0 = 0 to become true; the two places where the convention is visible are documented (Spec.etaEff_rpow needs ‖g‖ ≠ 0 ∨ p ≠ 1; Spec.thm7_noiseFree_bound_eq is bookkeeping and reads 0/0 as 0 at θ = 0, a case excluded in thm7_noiseFree_bound_le_etaStar).\n\nFOR Filter/MuonHT.lean: inside `namespace Spec` the identity filter must be written `_root_.id` (plain `id` resolves to the field Spec.id); Muon is `fun _ => (1:ℝ)` with Spec.nu_one (by rfl) and Spec.cNextF_one; HTMuon is `fun σ => σ ^ p` (Real.rpow). Hypothesis shapes of 1.7–1.9 to copy: hD : 0 < P.sD c, hB : 0 < P.sB c, hnn : ∀ j ∈ P.B, c j ≠ 0 → 0 ≤ P.nu f c j (1.7) or ∀ i ∈ P.D, c i ≠ 0 → 0 ≤ P.nu f c i (1.8), hord : ∀ i ∈ P.D, ∀ j ∈ P.B, c i ≠ 0 → c j ≠ 0 → P.nu f c j < P.nu f c i (reversed in 1.8). 1.5 for two arbitrary states: Spec.theta_lt_iff_cross_neg / theta_gt_iff_cross_pos / theta_eq_iff_cross_eq_zero. Reusable helpers in namespace FilterCoordinate (P explicit): exists_ne_zero_of_mom_pos, mom_pos_of_ne_zero, mom_smul, sD_smul, sB_smul, s_smul, qCoef_smul, pCoef_noiseFree_smul, pairSum and its calculus, quad_neg_iff / quad_pos_iff / quad_eq_zero_iff, exSpec. Short names quad_*, mom_smul, exSpec* also exist in namespaces OneStep and LossThreshold (no full-name clash; avoid opening those namespaces together with FilterCoordinate)."
+}

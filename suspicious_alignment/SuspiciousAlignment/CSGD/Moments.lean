@@ -1482,6 +1482,28 @@ theorem betaC_le (N : Noise ι) (h : P.CSGDStep η) (i : ι) :
   exact div_le_div₀ (mul_nonneg h.pos.le (smax_nonneg' N P))
     (mul_le_mul_of_nonneg_left (N.le_smax i) h.pos.le) P.lamd_pos (h.lamd_le_lam_mul i)
 
+/-- **The paper's bound `β_i ≤ η s_max / (2 λ_d - η λ_d²)` (tex 2176).**  It holds under
+Assumption 14, where `η (λ_1 + λ_d) < 2` makes `λ_d (2 - η λ_d)` the minimum of `λ_i (2 - η λ_i)`;
+the paper's justification "`η < 2/λ_1 ≤ 2/λ_d`" alone is not sufficient (`x ↦ x (2 - η x)` is not
+monotone). -/
+theorem betaC_le_paper (N : Noise ι) (h : P.CSGDStep η) (i : ι) :
+    P.betaC N η i ≤ η * N.smax / (2 * P.lamd - η * P.lamd ^ 2) := by
+  have hη := h.pos
+  have hdi := P.lamd_le_all i
+  have hi1 := mul_le_mul_of_nonneg_left (P.le_lam1_all i) hη.le
+  have hsum : η * (P.lam1 + P.lamd) < 2 := by
+    have := h.eta_mul_add_lt_two
+    have := mul_le_mul_of_nonneg_left P.lamd_le_lamk1 hη.le
+    nlinarith
+  have hden : 0 < 2 * P.lamd - η * P.lamd ^ 2 := P.betaC_den_pos hη h.lt_stab P.id
+  -- `λ_i (2 - η λ_i) - λ_d (2 - η λ_d) = (λ_i - λ_d) (2 - η (λ_i + λ_d)) ≥ 0`
+  have h2 : 0 ≤ 2 - η * (P.lam i + P.lamd) := by nlinarith
+  have hmono : 2 * P.lamd - η * P.lamd ^ 2 ≤ 2 * P.lam i - η * P.lam i ^ 2 := by
+    nlinarith [mul_nonneg (sub_nonneg.mpr hdi) h2]
+  unfold betaC
+  exact div_le_div₀ (mul_nonneg hη.le (smax_nonneg' N P))
+    (mul_le_mul_of_nonneg_left (N.le_smax i) hη.le) hden hmono
+
 /-- `k λ_k² ≤ ψ_𝒟`. -/
 theorem kR_mul_lamk_sq_le_psiD (P : Spec ι) : P.kR * P.lamk ^ 2 ≤ P.psiD := by
   have : ∑ _i ∈ P.D, P.lamk ^ 2 ≤ ∑ i ∈ P.D, P.lam i ^ 2 :=

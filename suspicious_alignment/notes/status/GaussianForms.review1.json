@@ -1,0 +1,137 @@
+{
+ "compiles": true,
+ "sorryFree": true,
+ "axiomsClean": true,
+ "coverage": [
+  {
+   "paperItem": "Lemma 'Variance of Gaussian Forms', hypothesis z ~ N(0,C), C = C^T >= 0 (tex 951)",
+   "leanDecl": "IsCenteredGaussian z C mu (:= HasLaw (fun w => toLp 2 (z w)) (multivariateGaussian 0 C) mu) together with hC : C.PosSemidef; bridges isCenteredGaussian_of_iIndepFun, IsCenteredGaussian.hasLaw_gaussianImage, IsCenteredGaussian.covariance_apply, isCenteredGaussian_ofLp",
+   "status": "equivalent-reformulation",
+   "comment": "Mathlib's multivariate Gaussian; shown equal to the law of M w (w i.i.d. N(0,1), C = M M^T) and to have Cov(z_i,z_j) = C_ij. PosSemidef is a separate hypothesis on every theorem (needed: for non-PSD C Mathlib's multivariateGaussian 0 C is dirac 0). Jointly satisfiable for every PSD C (isCenteredGaussian_ofLp, two examples in the file; re-checked in scratch)."
+  },
+  {
+   "paperItem": "hypothesis ||C||_2 < infinity (tex 951)",
+   "leanDecl": "(none)",
+   "status": "exact",
+   "comment": "Vacuous for a finite matrix; correctly dropped and documented."
+  },
+  {
+   "paperItem": "Var(g^T z) = g^T C g (tex 954)",
+   "leanDecl": "IsCenteredGaussian.variance_linear; variance_gaussian_forms (first conjunct)",
+   "status": "exact",
+   "comment": "Monte-Carlo re-checked (full-rank and singular C)."
+  },
+  {
+   "paperItem": "g^T C g <= ||C||_2 ||g||_2^2 (tex 954)",
+   "leanDecl": "GaussianForms.dotProduct_mulVec_le, GaussianForms.dotProduct_mulVec_le_sum_sq, IsCenteredGaussian.variance_linear_le",
+   "status": "strengthened",
+   "comment": "Holds for every real square C. The norm instance in the statement is Matrix.instL2OpNormedRing (spectral norm), checked with pp.explicit."
+  },
+  {
+   "paperItem": "Var(z^T D z) = 2 tr((C D)^2), D diagonal (tex 957)",
+   "leanDecl": "IsCenteredGaussian.variance_quadratic (any symmetric D), IsCenteredGaussian.variance_diagonal_quadratic, variance_gaussian_forms (diagonal D)",
+   "status": "strengthened",
+   "comment": "Symmetric D; diagonal is the special case stated literally in variance_gaussian_forms. Monte-Carlo re-checked; fails for non-symmetric D as the note says (MC 310.2 vs 2tr((CD)^2) = 183.8 vs 2tr((C symD)^2) = 310.0)."
+  },
+  {
+   "paperItem": "2 tr((C D)^2) <= 2 ||C||_2^2 tr(D^2) (tex 957)",
+   "leanDecl": "GaussianForms.trace_mul_sq_le_of_isSymm, GaussianForms.trace_mul_mul_self_le, IsCenteredGaussian.variance_quadratic_le, GaussianForms.not_trace_mul_sq_le_of_not_isSymm",
+   "status": "strengthened",
+   "comment": "Any real C, symmetric D; formal counterexample for non-symmetric D. 20000 random instances: no violation."
+  },
+  {
+   "paperItem": "Lemma 'Variance of Gaussian Forms', whole statement (tex 950-959)",
+   "leanDecl": "variance_gaussian_forms",
+   "status": "exact",
+   "comment": "Literal statement; no extra hypotheses; no division/sqrt/nat-subtraction conventions involved."
+  },
+  {
+   "paperItem": "Remark: 'the variance formulas are standard results' (tex 990)",
+   "leanDecl": "GaussianForms.form_stdNormalPi, form_gaussianImage, integral_pow_four_stdNormal, stdNormalPi_map_orthonormalBasis, IsCenteredGaussian.affine_quadratic_form",
+   "status": "exact",
+   "comment": "The paper gives no proof; a complete proof (rotation invariance + fourth moment of N(0,1)) is formalised."
+  },
+  {
+   "paperItem": "(implicit / task item ii) E[g^T z] = 0",
+   "leanDecl": "IsCenteredGaussian.integral_linear, IsCenteredGaussian.linear_form",
+   "status": "exact",
+   "comment": ""
+  },
+  {
+   "paperItem": "(implicit / task item iii) E[z^T D z] = tr(C D)",
+   "leanDecl": "IsCenteredGaussian.integral_quadratic, IsCenteredGaussian.integral_diagonal_quadratic, IsCenteredGaussian.integral_form",
+   "status": "exact",
+   "comment": "Symmetric D."
+  },
+  {
+   "paperItem": "Decomposition s^S_{t+1} = chi_S + g_S^T z + z^T D_S z with chi, g, D of tex 1018-1020 (tex 1011-1021)",
+   "leanDecl": "Spec.mom_cNext_eq_gaussian_form with GaussianForms.chi, gVec, dVec",
+   "status": "exact",
+   "comment": "Pure algebra for every zeta; s^S_{t+1} is P.mom S 2 (P.cNext eta c zeta) from Defs (defeq to sD/sB for S = D/B). chi/gVec/dVec match the paper's formulas."
+  },
+  {
+   "paperItem": "'The variance of s^S_{t+1} is the variance of the sum of the linear and quadratic forms' (tex 1022); task item v",
+   "leanDecl": "IsCenteredGaussian.covariance_linear_quadratic, IsCenteredGaussian.variance_form, variance_form_of_iIndepFun, Spec.variance_sNext_of_isCenteredGaussian",
+   "status": "exact",
+   "comment": "Fills the paper's gap (the lemma gives the two variances separately; the cross-covariance is 0). Var(s^S_{t+1}) = g_S^T C g_S + 2 tr((C D_S)^2) exactly."
+  },
+  {
+   "paperItem": "'By Lemma gauss-var and Assumption 1, Var(s^S_{t+1}) = O(|S|)' (tex 1022)",
+   "leanDecl": "Spec.variance_sNext_le_of_isCenteredGaussian, Spec.variance_sNext_le_trace_of_isCenteredGaussian, Spec.variance_sNext_le_lam1_of_isCenteredGaussian",
+   "status": "paper-claim-false",
+   "comment": "Finite-d explicit bounds only; O(|S|) needs a uniform bound on lambda_1 (and eta, ||C||_2) that Assumption 1 does not contain. The note's counterexample (lambda_1 = k^(1/8), c_1^2 = d, C = diag(1/2,0,..)) is correct: I re-derived Var/k = 0.27, 1.87, 7.66, 2423 for k = 1e2, 1e4, 1e6, 1e10 at eta = 0.1, validated the closed form by Monte Carlo on a small instance, and checked a stable-step variant (eta*lambda_1 = 1/2: Var/k = k^(1/4)/4 still diverges). The note labels the row 'hypotheses-added' rather than 'paper-claim-false' and there is no formal counterexample / no explicit-constant O(|S|) corollary (minor, see issues)."
+  },
+  {
+   "paperItem": "'... which satisfies the conditions for Lemma wlln-blocks. This gives the convergence in probability' (tex 1022)",
+   "leanDecl": "(none in this file; Prob/Concentration.lean)",
+   "status": "missing",
+   "comment": "Outside this file's task (items i-v). The outputs of this file do discharge the hypotheses of Concentration.abs_integral_theta_sub_thetaBarNext_le (verified by a scratch composition importing both modules); no issue raised."
+  },
+  {
+   "paperItem": "(extra, Lemma 'Elementwise expectation' tex 1062 for Gaussian noise) E[s^S_{t+1} | x_t] = EsNext",
+   "leanDecl": "Spec.integral_sNext_of_isCenteredGaussian, Spec.memLp_sNext_of_isCenteredGaussian",
+   "status": "exact",
+   "comment": "Extra hypothesis hN : forall i, N.kap2 i = C i i is the paper's kappa_i^2 = C_ii, documented; satisfiable for every PSD C (scratch: Noise with smin = 0, smax = tr C)."
+  }
+ ],
+ "issues": [
+  {
+   "severity": "major",
+   "where": "notes/fidelity/GaussianForms.md, section 4, G2, last bullet 'Relative size' (and paperIssues[5] of GaussianForms.prove.json)",
+   "description": "The task asked the note to assess what the lemma's bound gives relative to (E s^S_{t+1})^2. The note's answer contains a false statement and misses the main positive fact. It says: 'The lemma gives no information when E[s_{t+1}] = o(d) (e.g. x_t small and trace-bounded noise), and positivity of the limit of E[s^D_{t+1}]/k is an extra hypothesis'. This is wrong: the lemma's bound is scale-invariant ((c, C) -> (eps c, eps^2 C) multiplies Var by eps^4 and E by eps^2) and yields, with s_min <= C_ii on S and Lambda_S = max_S lambda_i, the finite-d inequality  Var(s^S_{t+1}) / (E s^S_{t+1})^2 <= (||C||_2/s_min) * Lambda_S^2/psi_S + 2 (||C||_2/s_min)^2 * (sum_S lambda_i^4)/psi_S^2,  with NO assumption on x_t, on eta, or on the size of E s. (Proof: g^T C g <= ||C|| ||g||^2 <= 4 eta^2 ||C|| Lambda_S^2 chi_S and (E s^S)^2 = (chi_S + eta^2 e_S)^2 >= 4 chi_S eta^2 s_min psi_S; 2||C||^2 tr(D_S^2) = 2 eta^4 ||C||^2 sum_S lambda^4 and (E s^S)^2 >= eta^4 s_min^2 psi_S^2.) Concrete instance of the note's own 'e.g.': x_t = 0, Sigma = (T/d) I (trace bounded uniformly in d), eta fixed: E[s^D] = Theta(1) = o(d), and the lemma gives Var/(E s^D)^2 = 2 sum_D lambda^4/psi_D^2 = O(1/k) -> 0. Under the block-moment assumption (p = 2, 4, 8) and bounded condition number s_max/s_min (the quantity already appearing in the paper's g_gap) the right-hand side is O(|S|^(-3/4)), so Var(s^S)/(E s)^2 -> 0 for both blocks without trajectory boundedness, without a bound on lambda_1 or eta, and without positivity of lim E[s]/d; the positivity hypothesis is only needed when the noise is degenerate (s_min = 0), where the complementary bound Var/(E s^S)^2 <= 4 eta^2 ||C|| Lambda_S^2/chi_S + 2 eta^4 ||C||^2 sum_S lambda^4/chi_S^2 applies. I proved the division-free form in Lean (standard axioms only) in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_GaussianForms/Compose.lean (ReviewScratch.relVar) and checked it numerically on 20000 random instances. This matters downstream: Concentration.tendsto_integral_theta_sub_thetaBarNext takes exactly Var(s^S)/(E s)^2 -> 0 as hypothesis.",
+   "suggestedFix": "Rewrite the 'Relative size' bullet (and paperIssues[5]) with the two finite-d relative bounds above and the correct conclusion (the paper's absolute O(|S|) bound is uninformative when E s = o(d), but the lemma itself gives a scale-free bound; positivity of the limit is needed only for degenerate noise / for the paper's y_0 in (0,inf) claim). Add the lemma to the file, e.g. (compiles as is in the scratch file): theorem Spec.variance_sNext_mul_le_integral_sq (hζ : IsCenteredGaussian ζ C μ) (hC : C.PosSemidef) (S : Finset ι) (η : ℝ) (c : ι → ℝ) {smin Λ : ℝ} (hsmin : 0 ≤ smin) (hκ : ∀ i ∈ S, smin ≤ C i i) (hΛ : ∀ i ∈ S, P.lam i ≤ Λ) : smin ^ 2 * (∑ i ∈ S, P.lam i ^ 2) ^ 2 * Var[fun ω => P.mom S 2 (P.cNext η c (ζ ω)); μ] ≤ (‖C‖ * smin * Λ ^ 2 * (∑ i ∈ S, P.lam i ^ 2) + 2 * ‖C‖ ^ 2 * ∑ i ∈ S, P.lam i ^ 4) * (∫ ω, P.mom S 2 (P.cNext η c (ζ ω)) ∂μ) ^ 2 — the proof (about 70 lines, from variance_sNext_le_of_isCenteredGaussian, integral_form and trace_mul_diagonal) can be copied from ReviewScratch.relVar."
+  },
+  {
+   "severity": "minor",
+   "where": "notes/fidelity/GaussianForms.md table row for tex 1022; Spec.variance_sNext_le_lam1_of_isCenteredGaussian",
+   "description": "The row \"Var(s^S_{t+1}) = O(|S|) by Lemma gauss-var and Assumption 1\" is labelled 'hypotheses-added', but G2 of the same note shows (correctly, re-verified) that the claim is false under Assumption 1 as stated. Per the conventions the status should be 'paper-claim-false' and a formal counterexample should be attempted; none is given in Lean (only the informal/numerical one). Also the 'O(|S|)' conclusion itself is not stated in Lean in explicit-constant form (only the bound with sum_S c_i^2 and S.card on the right). Several table statuses ('extra', '(vacuous)', 'extra (fills a gap)') are outside the conventions' vocabulary.",
+   "suggestedFix": "Relabel the row 'paper-claim-false (under Assumption 1 as stated) + hypotheses-added'. Optionally add (a) a corollary: from eta^2 <= H^2, lam1 <= L, ||C|| <= s, sum_S c_i^2 <= K * S.card conclude Var <= (4 H^2 s L^4 (1+H L)^2 K + 2 H^4 s^2 L^4) * S.card; (b) a finite-d formal counterexample family using Spec.variance_sNext_of_isCenteredGaussian (e.g. k = m^8, lambda_1 = m, other dominant lambda = 1, bulk 1/2, c = sqrt(d) e_1, C = diag(1/2,0,...)): normalised block moments <= 2, (1/d) sum c^2 = 1, tr C = 1/2, yet Var(s^D)/k unbounded in m."
+  },
+  {
+   "severity": "minor",
+   "where": "notes/fidelity/GaussianForms.md, G2 counterexample numerics (l. 138-139) and G0 numerics",
+   "description": "The list 'Var/k = 0.27, 1.87, 7.66, ..., 2.4e3 for k = 1e2, 1e4, 1e6, ..., 1e10, eta = 0.1' silently skips k = 1e8, where 1 - eta k^(1/8) = 0 exactly and Var/k ~ 5e-9 (growth is not monotone at fixed eta); and the fixed eta makes eta*lambda_1 > 2 for large k (unstable step), which a reader could take as the reason for the failure. The numerical scripts are not saved, so '107.7 vs 54.1' is not reproducible.",
+   "suggestedFix": "Use (or add) the stable-step variant eta = 1/(2 lambda_1): Var/k = k^(1/4)/4 (0.79, 2.5, 7.9, 25, 79 for k = 1e2..1e10), which shows the O(|S|) claim fails even with eta*lambda_1 = 1/2 and eta -> 0. Mention the k = 1e8 degeneracy or drop the '...'."
+  },
+  {
+   "severity": "minor",
+   "where": "isCenteredGaussian_ofLp docstring; module docstring ('Non-vacuity: isCenteredGaussian_ofLp realises N(0,C) for every C'); fidelity note section 1 last bullet",
+   "description": "For non-PSD C, Mathlib's multivariateGaussian 0 C is dirac 0 (multivariateGaussian_of_not_posSemidef), so 'a centered Gaussian vector with covariance C ... for every C' is inaccurate; the realisation has covariance C only for PSD C. No theorem is affected (all take hC : C.PosSemidef).",
+   "suggestedFix": "Say 'for every positive semidefinite C' in the three places (the theorem may stay unconditional), or bundle PosSemidef into IsCenteredGaussian."
+  },
+  {
+   "severity": "minor",
+   "where": "IsCenteredGaussian API; fidelity note section 5",
+   "description": "Downstream bridge to NoiseModel.IsNoise is not provided and not mentioned: IsCenteredGaussian uses z : Ω → ι → ℝ (as Concentration.lean) while NoiseModel.IsNoise uses ζ : ι → Ω → ℝ and needs MemLp (ζ i) 2, E ζ_i = 0, E ζ_i^2 = kap2 i. These coordinate facts are not stated in the file (only covariance_apply), although they are a 5-line corollary of linear_form and integral_diagonal_quadratic with g = d = Pi.single i 1 (verified in scratch Coord.lean, ReviewScratch.coord).",
+   "suggestedFix": "Add IsCenteredGaussian.memLp_apply / integral_apply / integral_apply_sq (MemLp (fun ω => z ω i) 2 μ, ∫ z ω i = 0, ∫ z ω i ^ 2 = C i i) and note the argument-order difference with IsNoise in section 5 of the note."
+  },
+  {
+   "severity": "minor",
+   "where": "GaussianForms.mgfDeriv, GaussianForms.dotProduct_self_nonneg', anonymous instance IsProbabilityMeasure (gaussianImage M)",
+   "description": "Style only: mgfDeriv is a public definition with a junk branch (| _ => fun _ => 0) used only for n <= 4; a primed helper name; an anonymous instance. No effect on correctness; no name clash with Concentration.lean (scratch import of both modules succeeds) or NoiseModel.lean (grep).",
+   "suggestedFix": "Make mgfDeriv and the purely auxiliary lemmas private (or document the junk branch), name the instance."
+  }
+ ],
+ "verdict": "revise",
+ "summary": "Soundness: scripts/leancheck on the file gives no errors and no warnings; the module builds; grep finds no sorry/admit/axiom/native_decide/unsafe/implemented_by (only set_option linter.unusedSectionVars false); #print axioms on 67 declarations (all main and auxiliary theorems) shows only propext, Classical.choice, Quot.sound. Fidelity of the Lean file: very good. variance_gaussian_forms is the paper's lemma verbatim (diagonal D, spectral norm confirmed to be Matrix.instL2OpNormedRing), items (i)-(v) of the task are all proved (linear-algebra bounds for arbitrary C / symmetric D, E g^T z = 0, Var = g^T C g, E z^T D z = tr(CD), Var = 2 tr((CD)^2), Cov = 0, Var of the affine-quadratic form), the model IsCenteredGaussian is Mathlib's multivariateGaussian 0 C with bridges to z = M w and Cov(z_i,z_j) = C_ij, hypotheses are jointly satisfiable (isCenteredGaussian_ofLp, examples; I also built a Noise with kap2 = diag C), no division/sqrt/nat-subtraction conventions are involved, and the decomposition chi/g/D of tex 1018-1020 is reproduced exactly. Independent numerics (Monte Carlo incl. singular C, 20000 random inequality tests, non-symmetric counterexamples) agree with every identity and inequality. The note's claim that 'Var(s^S_{t+1}) = O(|S|)' does not follow from Assumption 1 is correct (counterexample re-derived, also with a stable step size), as are G0 and G1 and the Mathlib survey; the outputs do plug into Concentration.abs_integral_theta_sub_thetaBarNext_le by exact (scratch composition). One major issue, confined to the fidelity note: the assessment of the bound relative to (E s^S_{t+1})^2, which the task explicitly requested, states that 'the lemma gives no information when E[s_{t+1}] = o(d)' and that positivity of the limit of E[s]/d is needed; this is false - the lemma's bound is scale-invariant and gives Var(s^S)/(E s^S)^2 <= kappa(C) Lambda_S^2/psi_S + 2 kappa(C)^2 sum_S lambda^4/psi_S^2 with no assumption on x_t, eta or the size of E s (I proved the division-free form in Lean with standard axioms, scratch ReviewScratch.relVar). The note must be corrected and the lemma should be added since it is exactly the hypothesis shape needed by Concentration.tendsto_integral_theta_sub_thetaBarNext. Remaining issues are minor (status label 'hypotheses-added' vs 'paper-claim-false' for tex 1022 and no formal counterexample / explicit O(|S|) corollary; a glossed-over data point in the numerics; docstring 'for every C' for non-PSD C; missing coordinate lemmas bridging to NoiseModel.IsNoise; style). Scratch files: /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_GaussianForms/{Axioms.lean, axioms.out, Compose.lean, Coord.lean, check.py, check2.py}. No project file was edited."
+}

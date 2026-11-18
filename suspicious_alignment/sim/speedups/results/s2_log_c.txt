@@ -13,3 +13,8 @@ done m=500 sigma=0.0 seed=1 in 94.3s
 done m=500 sigma=0.0 seed=2 in 99.9s
 done m=500 sigma=0.02 seed=0 in 126.9s
 done m=500 sigma=0.02 seed=1 in 127.2s
+done m=500 sigma=0.02 seed=2 in 80.4s
+done m=500 sigma=0.3 seed=0 in 77.6s
+done m=500 sigma=0.3 seed=1 in 34.3s
+done m=500 sigma=0.3 seed=2 in 33.4s
+wall 676.8784897327423

@@ -1,0 +1,155 @@
+{
+ "compiles": true,
+ "sorryFree": true,
+ "axiomsClean": true,
+ "coverage": [
+  {
+   "paperItem": "Eq. (3)-(4) DSGD / BSGD update rules (tex 539-542)",
+   "leanDecl": "Spec.cNextProj (Defs.lean)",
+   "status": "exact",
+   "comment": "c_i+ = (1 - eta lam_i) c_i - eta zeta_i on S, frozen off S; used unchanged."
+  },
+  {
+   "paperItem": "Eq. (5) tau^S, n^loss_S, mu^S(p,q); appendix recap incl. u^S, theta_t (tex 545-551, 1469-1473)",
+   "leanDecl": "Spec.mom / tauD / tauB / nLoss / mu / theta (Defs.lean); LossThreshold.mu_mul_mom, mom_pos_iff, nLoss_pos_iff",
+   "status": "exact",
+   "comment": "Defs used as given, no file-local redefinitions. mu^S is 0/0 when s^S = 0; every statement using mu carries s^D > 0, s^B > 0."
+  },
+  {
+   "paperItem": "Theorem 10 statement: E[dL | x_t] < 0 <-> 0 < eta < eta^loss_S (tex 554-565, 1477-1488)",
+   "leanDecl": "Spec.expLossChange_neg_iff, Spec.proj_loss_step_size_condition, Spec.expLossChange_neg_iff_of_pos",
+   "status": "hypotheses-added",
+   "comment": "Hypothesis 0 < tau^S + n^loss_S (documented; without it the threshold is 0/0 and E dL == 0: Spec.expLossChange_eq_zero_of_lossDen_eq_zero). eta is an arbitrary real, 0 < eta is part of the iff; s^S > 0 not needed. Checked numerically on 20000 random instances (both blocks, eta of both signs): 0 violations. I also confirmed in a scratch file that the unconditional iff is provable only via x/0 = 0, which the prover correctly declined to state."
+  },
+  {
+   "paperItem": "Proof of Thm 10: dL = -eta g^T A x + (eta^2/2) g^T A g (tex 1491-1495)",
+   "leanDecl": "Spec.loss_cNextProj_sub_loss, Spec.loss_cNextProj_sub_loss_eq_sum",
+   "status": "exact",
+   "comment": "Pathwise for every noise realisation, g_i = lam_i c_i + zeta_i on S."
+  },
+  {
+   "paperItem": "Proof of Thm 10: E[g^T A x] = s^S, E[g^T A g] = tau^S + n^loss_S, E[dL | x_t] = -eta s^S + (eta^2/2)(tau^S + n^loss_S) (tex 1496-1498)",
+   "leanDecl": "Spec.expLossChange_eq_sum, Spec.loss_cNextProj_sub_loss_eq_expLossChange_add, Spec.weighted_sum_loss_change",
+   "status": "equivalent-reformulation",
+   "comment": "Algebraic layer as instructed: sum of per-coordinate expected changes; pathwise decomposition into expLossChange + two mean-zero terms; finite-support expectation. The two intermediate expectations are not stated separately (minor). Only first and second moments of the noise are used, not Gaussianity."
+  },
+  {
+   "paperItem": "Thm 10, loss-increasing side used in the Summary: for eta > 0, E dL > 0 <-> eta > eta^loss_S",
+   "leanDecl": "Spec.expLossChange_pos_iff, Spec.expLossChange_pos_iff_of_pos, Spec.expLossChange_eq_zero_iff, Spec.expLossChange_eq_factor",
+   "status": "hypotheses-added",
+   "comment": "Same denominator hypothesis; correct (numerically checked)."
+  },
+  {
+   "paperItem": "'Additional Notion': alpha_t, beta_t, gamma_t (tex 1504-1512, 571-575)",
+   "leanDecl": "Spec.alphaT, Spec.betaT, Spec.gammaT, Spec.hQuad (Defs.lean)",
+   "status": "exact",
+   "comment": "Note correctly records that gamma_t does not depend on x_t although the paper says all three do."
+  },
+  {
+   "paperItem": "Lemma crossover-quadratic-properties item 1: for all x_t, alpha_t > 0 (tex 1518, 1530-1550), incl. mu^D(3,2) >= lam_k > lam_{k+1} >= mu^B(3,2)",
+   "leanDecl": "Spec.alphaT_pos, Spec.gap_mul_s_le_alphaT, Spec.alphaT_le, LossThreshold.lamk_le_mu_D, LossThreshold.mu_B_le_lamk1, Spec.alphaT_zero",
+   "status": "hypotheses-added",
+   "comment": "Needs s^D > 0 and s^B > 0 (0 < theta_t < 1). Literal 'for all x_t' fails/undefined at x_t = 0 and at theta_t in {0,1}; documented (note 2.2). Verified: with Lean's 0/0 = 0, c = (0,1), lam = (2,1) gives alpha = -tau^B = -1 < 0."
+  },
+  {
+   "paperItem": "Lemma item 2: for all x_t, gamma_t < 0 (tex 1519, 1552-1556)",
+   "leanDecl": "Spec.gammaT_neg, Spec.gammaT_neg_iff, Spec.gammaT_nonpos, LossThreshold.thetaCrit_eq_zero_example",
+   "status": "hypotheses-added",
+   "comment": "Needs n^loss_D > 0, which is NOT implied by the paper's Sigma PSD, Tr Sigma > 0 (I checked tex 353, 380). Formal counterexample kap2 = (0,5) verified in Lean and numerically (gamma = 0, thetaCrit = 0)."
+  },
+  {
+   "paperItem": "Lemma: h(0) = gamma_t < 0, h(1) = alpha+beta+gamma = n^loss_B > 0 (tex 1521, 1558-1564)",
+   "leanDecl": "Spec.hQuad_zero, Spec.hQuad_one_eq_sum, Spec.hQuad_one, Spec.alphaT_add_betaT_add_gammaT, Spec.crossover_quadratic_properties",
+   "status": "hypotheses-added",
+   "comment": "Identities exact and unconditional; signs need n^loss_D > 0 resp. n^loss_B > 0 (counterexample kap2 = (1,0): thetaCrit = 1, verified)."
+  },
+  {
+   "paperItem": "Lemma crossover-quadratic-critical-root: thetaCrit in (0,1), h < 0 on (0,thetaCrit), h > 0 on (thetaCrit,1), unique root in (0,1), explicit formula (tex 1570-1581)",
+   "leanDecl": "Spec.crossover_critical_root, Spec.thetaCrit_eq, Spec.hQuad_thetaCrit, Spec.thetaCrit_mem_Ioo, Spec.hQuad_neg_iff, Spec.hQuad_pos_iff, Spec.hQuad_eq_zero_iff, Spec.existsUnique_hQuad_root, Spec.thetaCrit_pos_iff, Spec.thetaCrit_lt_one_iff",
+   "status": "hypotheses-added",
+   "comment": "Hypotheses s^D, s^B, n^loss_D, n^loss_B > 0; sign statements are strengthened to all theta > 0 under alpha_t > 0 only. Spec.thetaCrit is the Defs formula (thetaCrit_eq is rfl); discriminant is >= 0 under the hypotheses, so no sqrt-of-negative. Checked on 50000 random interior instances: root in (0,1), |h(root)| ~ 0, signs correct."
+  },
+  {
+   "paperItem": "Proof of the critical-root lemma, internal claims: Delta_t > 0, two distinct real roots, one positive and one negative, the minus-sign root is the negative one (tex 1594-1613)",
+   "leanDecl": "LossThreshold.abs_lt_sqrt_disc (generic), Spec.hQuad_disc_nonneg (only >= 0), Spec.hQuad_eq_zero_iff (unique positive root)",
+   "status": "weakened",
+   "comment": "Proof-internal only; the lemma statement itself is fully covered. No Spec-level statement of the strict discriminant or of the second root being negative, and no row in the fidelity table (minor issue 2; a 6-line proof compiles in my scratch file)."
+  },
+  {
+   "paperItem": "Proof of Thm 11: eta^loss_D - eta^loss_B as a quotient, sign identity (tex 1689-1696, 1724-1726)",
+   "leanDecl": "Spec.etaLossD_sub_etaLossB, Spec.etaLossD_lt_etaLossB_iff_hQuad_neg, Spec.etaLossB_lt_etaLossD_iff_hQuad_pos, Spec.etaLossD_eq_etaLossB_iff_hQuad_eq_zero",
+   "status": "hypotheses-added",
+   "comment": "Under s^D, s^B > 0. Only the form already composed with numerator = s_t h(theta_t) is stated; the raw quotient identity of tex 1690 (valid whenever both denominators are non-zero) is not a separate lemma (minor issue 5). Paper typos at 1690/1694 correctly reported."
+  },
+  {
+   "paperItem": "Proof of Thm 11: numerator = s_t * h(theta_t) (tex 1698-1723)",
+   "leanDecl": "Spec.lossGap_eq_s_mul_hQuad",
+   "status": "hypotheses-added",
+   "comment": "Correct; confirms the sign typo at tex 1709 (coefficient of theta_t must be -s_t(mu^D - mu^B) + n_B + n_D)."
+  },
+  {
+   "paperItem": "Theorem 11: unique root of h in (0,1) equals thetaCrit; theta_t < thetaCrit <-> eta^loss_D < eta^loss_B; theta_t > thetaCrit <-> eta^loss_D > eta^loss_B (tex 568-583, 1662-1728); Summary box (603-616)",
+   "leanDecl": "Spec.loss_crossover, Spec.theta_lt_thetaCrit_iff, Spec.thetaCrit_lt_theta_iff, Spec.theta_eq_thetaCrit_iff",
+   "status": "hypotheses-added",
+   "comment": "Equivalences need exactly 0 < theta_t < 1 (s^D, s^B > 0), no noise hypothesis; the (0,1) localisation additionally n^loss_D, n^loss_B > 0. Paper's iff is correct for a fixed interior state (50000 random instances, 0 violations, both regimes populated). State dependence of thetaCrit made explicit (thetaCrit_congr, alphaT_smul, etaLossD_lt_etaLossB_smul_iff, state_dependence_example; numerically thetaCrit(1,1) = 0.8633, thetaCrit(1/2,1/2) = 0.7457 at the same theta = 0.8). Boundary states theta_t in {0,1} are not covered by any statement (minor issue 3)."
+  },
+  {
+   "paperItem": "Summary consequence: for eta in (eta^loss_D, eta^loss_B), E dL_D > 0 and E dL_B < 0 (tex 619-626)",
+   "leanDecl": "Spec.expLossChange_D_pos_B_neg, Spec.low_alignment_descent, Spec.exists_D_pos_B_neg_iff (mirrors: Spec.expLossChange_B_pos_D_neg, Spec.high_alignment_descent)",
+   "status": "hypotheses-added",
+   "comment": "Both denominators positive (the D one is genuinely needed: s^D = 0 = n^loss_D gives E dL_D == 0); automatic when 0 < theta_t < 1. Non-vacuity: suspicious_window_example (eta^loss_D = 0.8 < 0.9 < 1 = eta^loss_B, E_D = 0.45, E_B = -0.09, reproduced numerically)."
+  },
+  {
+   "paperItem": "Summary: 'low-alignment regime [0, thetaCrit)', m -> infinity statements; Theorem 12; Theorem 13; Remark (tex 584-591, 618, 631-653)",
+   "leanDecl": "- (toolkit only: Spec.one_sub_thetaCrit_mul, Spec.one_sub_thetaCrit_mul_alphaT_le, Spec.nLossB_le_one_sub_thetaCrit_mul, Spec.gap_mul_s_le_alphaT)",
+   "status": "missing",
+   "comment": "Explicitly out of scope of this file (next file) and declared 'not-formalized here' in the note. The note's heads-up that the LOWER bound of Theorem 13 is false is confirmed numerically: lam = (10,2,1), D = first two, c = (1,0,1), kap2 = (1,1,1): 1 - thetaCrit = 0.0010858 < 1/114 = 0.00877 (paper's lower bound); upper bound holds. I also checked in Lean that the paper's upper bound follows from the toolkit in about 10 lines."
+  },
+  {
+   "paperItem": "Non-vacuity / sharpness instances",
+   "leanDecl": "LossThreshold.spec2, noise2, noise11, loss_crossover_nonvacuous, suspicious_window_example, state_dependence_example, thetaCrit_eq_zero_example, thetaCrit_eq_one_example",
+   "status": "exact",
+   "comment": "All elaborate over the reals (checked with pp.numericTypes); all values reproduced with python. Hypotheses of every main theorem are jointly satisfiable (c = (1,1) for the low regime, c = (1/2,1/2) for the high regime, kap2 = (0,5) / (1,0) for the degenerate-noise lemmas)."
+  }
+ ],
+ "issues": [
+  {
+   "severity": "minor",
+   "where": "notes/fidelity/LossThreshold.md section 3 ('No theorem uses x/0 = 0'); same sentence in notes/status/LossThreshold.prove.json",
+   "description": "Overstated. It is true of all main theorems (Thm 10, the two lemmas, Thm 11, the Summary consequence: every division in their statements has a denominator made positive by a hypothesis). But several hypothesis-free helper lemmas are true in degenerate cases only through Lean's 0/0 = 0: Spec.etaLoss_nonneg (denominator 0), Spec.alphaT_smul and LossThreshold.theta_smul (states with s^D = 0 or s^B = 0), Spec.alphaT_zero (mu^S(0) = 0/0; presented as a 'formal counterexample'), Spec.thetaCrit_congr, and the labelled bookkeeping lemma Spec.etaLoss_eq_zero_of_lossDen_eq_zero. Likewise the hypotheses of Spec.lossGap_eq_s_mul_hQuad are there for paper-level meaning only (I checked in a scratch file that the identity also holds at s^D = 0 by convention). None of this makes any main result vacuous or wrong.",
+   "suggestedFix": "Reword to 'no main theorem relies on x/0 = 0' and list the helper lemmas whose degenerate cases hold by convention; in the docstring of Spec.alphaT_zero say explicitly that alpha(0) = s(0) * (0/0 - 0/0) evaluates to 0 because s(0) = 0, whatever finite value is given to mu."
+  },
+  {
+   "severity": "minor",
+   "where": "Critical-root lemma, proof-internal claims (tex 1594-1613); fidelity table",
+   "description": "The proof's claims 'Delta_t = beta^2 - 4 alpha gamma > 0, hence two distinct real roots', 'one root positive, one negative' and '(-beta - sqrt Delta)/(2 alpha) is the negative root' have no Spec-level statement: only Spec.hQuad_disc_nonneg (>= 0) and the generic LossThreshold.abs_lt_sqrt_disc exist, and the fidelity table has no row for them. Similarly the two intermediate expectations of the proof of Theorem 10 (E[g^T A x] = s^S, E[g^T A g] = tau^S + n^loss_S, tex 1496-1497) appear only in combined form. The lemma and theorem statements themselves are fully covered, so this is completeness of the record only.",
+   "suggestedFix": "Add e.g. `theorem Spec.hQuad_disc_pos (ha : 0 < P.alphaT c) (hnD : 0 < P.nLossD N) : 0 < P.betaT N c ^ 2 - 4 * P.alphaT c * P.gammaT N` and `Spec.hQuad_other_root_neg : (-P.betaT N c - Real.sqrt (..)) / (2 * P.alphaT c) < 0` (proof: abs_lt_sqrt_disc, neg_abs_le, div_neg_of_neg_of_pos; compiles in my scratch Probe.lean), or add a table row marking these proof steps as 'not formalized separately'."
+  },
+  {
+   "severity": "minor",
+   "where": "Theorem 11 at boundary states theta_t in {0,1}; note section 2.2 ('[0, thetaCrit) should read (0, thetaCrit)') and section 2.4",
+   "description": "No statement covers states with s^D = 0 < s^B or s^B = 0 < s^D. There the paper's thetaCrit is undefined (mu is 0/0), as the note says, but the ORDERING conclusion is still true without any convention: if s^D = 0 < s^B and n^loss_D > 0 then eta^loss_D = 0 < eta^loss_B (and E dL_D > 0 for all eta != 0, E dL_B < 0 on (0, eta^loss_B)); mirror at theta_t = 1 with n^loss_B > 0. So the paper's inclusion of theta_t = 0 in the low-alignment regime is right about the ordering; only the definition of thetaCrit breaks. The note's proposed correction '(0, thetaCrit)' is therefore slightly too strong as a description of where the ordering holds. Related: the note's claim that Theorem 11 fails at x_t = 0 is prose only, and concerns the 'root of h in (0,1)' reading; with the Lean definition Spec.thetaCrit evaluates to 0/0 = 0 at c = 0, so the Lean-level iff is trivially true there. The note should say which reading it means.",
+   "suggestedFix": "Add two small convention-free lemmas, e.g. `Spec.etaLossD_lt_etaLossB_of_sD_eq_zero (hD : P.sD c = 0) (hB : 0 < P.sB c) (hnD : 0 < P.nLossD N) : P.etaLossD N c = 0 /\\ 0 < P.etaLossB N c` and its mirror, and adjust the wording of note 2.2/2.4. Optionally formalize the x_t = 0 remark: for n^loss_D, n^loss_B > 0, `P.hQuad N 0 th = (n_B + n_D) * th - n_D`, `P.theta 0 = 0`, `P.etaLossD N 0 = P.etaLossB N 0` (all three compile in my scratch Probe.lean)."
+  },
+  {
+   "severity": "minor",
+   "where": "Spec.gap_mul_s_le_alphaT (interface for Theorems 12-13)",
+   "description": "The quantitative bound is stated with P.gap1 = lam_k - lam_{k+1}; Theorem 13 is phrased with s_t lam_{k+1} (m - 1), m = P.mRatio. The equality is only mentioned in the docstring; no bridging lemma exists in this file or in Defs.lean, so the next file has to re-derive it.",
+   "suggestedFix": "Add `theorem Spec.lamk1_mul_mRatio_sub_one : P.lamk1 * (P.mRatio - 1) = P.gap1` (unfold mRatio gap1; field_simp) and/or the corollary `P.s c * P.lamk1 * (P.mRatio - 1) <= P.alphaT c`. (Checked: with it, the upper bound of Theorem 13 in the paper's form follows from Spec.one_sub_thetaCrit_mul_alphaT_le in about 10 lines.)"
+  },
+  {
+   "severity": "minor",
+   "where": "Spec.etaLossD_sub_etaLossB vs. tex 1690 / 1694",
+   "description": "The first display of the proof of Theorem 11, eta^loss_D - eta^loss_B = 2 (s^D (tau^B + n_B) - s^B (tau^D + n_D)) / ((tau^D + n_D)(tau^B + n_B)), is formalized only after substituting numerator = s_t h(theta_t) and only under s^D, s^B > 0, although the raw identity holds whenever both denominators are non-zero (e.g. at boundary states with noise).",
+   "suggestedFix": "State the raw identity as its own lemma under `hdD : P.tauD c + P.nLossD N != 0`, `hdB : P.tauB c + P.nLossB N != 0` (proof: unfold; field_simp) and derive etaLossD_sub_etaLossB from it."
+  },
+  {
+   "severity": "minor",
+   "where": "Docstrings: module header ('theta^crit in (0,1) needs in addition n^loss_D > 0 and n^loss_B > 0'), LossThreshold.loss_crossover_nonvacuous, Spec.thetaCrit_congr; status vocabulary of the fidelity table",
+   "description": "(a) n^loss_D > 0 is sufficient, not necessary, for thetaCrit > 0 (Spec.thetaCrit_pos_iff: n^loss_D > 0 or n^loss_B < alpha_t); the header says 'needs'. Spec.loss_crossover / crossover_critical_root / existsUnique_hQuad_root could be stated under the sharp condition. (b) loss_crossover_nonvacuous claims the instance satisfies the hypotheses 'of every result of this file'; it does not for high_alignment_descent, expLossChange_B_pos_D_neg, thetaCrit_eq_zero, thetaCrit_eq_one (those are witnessed by the other examples). (c) thetaCrit_congr's docstring 'in particular thetaCrit is not a function of theta_t alone' does not follow from that lemma but from state_dependence_example. (d) The table uses the status 'extra', which is not in the prescribed vocabulary, and has no row for eq. (5).",
+   "suggestedFix": "Reword the three docstrings; optionally add `Spec.thetaCrit_mem_Ioo_iff (ha : 0 < alpha) : thetaCrit in Ioo 0 1 <-> (0 < n_D \\/ n_B < alpha) /\\ 0 < n_B`; add the eq. (5) row and map 'extra' to 'strengthened' or a declared extra category."
+  }
+ ],
+ "verdict": "accept",
+ "summary": "Round 1 review of SuspiciousAlignment/Projected/LossThreshold.lean: ACCEPT (no blocker, no major issue; 6 minor). Soundness: `scripts/leancheck` on the file exits 0 with no output (no errors, no warnings, about 20 s); grep finds no sorry/admit/axiom/native_decide/unsafe/implemented_by (one kernel `decide` for spec2.B = {1}); the module builds; `#print axioms` on all 140 declarations (scratch Axioms.lean) reports only propext, Classical.choice, Quot.sound. Imports are Mathlib and SuspiciousAlignment.Defs only; no Defs quantity is redefined (LossThreshold.root is definitionally the Defs formula for thetaCrit); no fully-qualified name clash with the other 11 project files. Fidelity: every statement in scope (eq. (3)-(5), Theorem 10 with pathwise identity, per-coordinate sum and both sign characterisations, the 'Additional Notion', both appendix lemmas, Theorem 11 with uniqueness of the root in (0,1) and all three orderings, the Summary consequence) has a Lean counterpart that says what the paper says, with the extra hypotheses (0 < tau^S + n^loss_S; s^D, s^B > 0; n^loss_D, n^loss_B > 0) explicit in the statements and documented. No main theorem exploits x/0 = 0 or sqrt of a negative number, hypotheses are jointly satisfiable (concrete Lean instances, reproduced in python), and elaborated types are all real-valued. Independent numerics: Theorem 10 on 20000 random instances and Theorem 11 plus the critical-root lemma and the Summary consequence on 50000 random interior instances gave 0 violations. Fidelity note: honest and essentially complete. I verified its claims independently: the paper only assumes Sigma PSD with positive trace (tex 353, 380), so n^loss_D > 0 and n^loss_B > 0 are genuine extra assumptions (counterexamples kap2 = (0,5) -> thetaCrit = 0 and kap2 = (1,0) -> thetaCrit = 1 confirmed); alpha_t > 0 fails or is undefined off 0 < theta_t < 1; thetaCrit is state dependent (same theta = 0.8, opposite orderings at c = (1,1) and (1/2,1/2)); the typos at tex 1477, 1544, 1690, 1694, 1709 are real; the out-of-scope warning that the lower bound of Theorem 13 is false is confirmed numerically (1 - thetaCrit = 0.00109 < 1/114). Minor points: the note's 'no theorem uses x/0 = 0' holds for main theorems but not for a few helper lemmas; proof-internal claims of the critical-root lemma (strict discriminant, negative second root) and the raw quotient identity of tex 1690 are not separate statements; boundary states theta_t in {0,1} have no statement although the ordering there is convention-free and the note's '(0, thetaCrit)' correction is slightly too strong; a gap1 = lam_{k+1}(m-1) bridging lemma for the next file is missing; three docstrings overstate. Scratch files: /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_LossThreshold/ (Axioms.lean, Probe.lean, Check.lean, check.py)."
+}

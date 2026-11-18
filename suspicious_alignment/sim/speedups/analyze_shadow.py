@@ -4,6 +4,8 @@ projected-update thresholds along trajectories) and exp_s3_frozen.py (S3b / S1c 
 
 Windows along the driver trajectory (T = 2400 steps, records every 5 steps):
    early = steps 0..100    (large initialisation: very high alignment, spiked momentum spectrum)
+   mid   = steps 400..600  (the alignment dip: the dominant directions have reached their floor, the
+                            bulk has not; the DOMINANT directions are now the small singular values)
    late  = steps 1600..2400 (last third)
 For each window, quantities are averaged over the window, then over the seeds (mean, half-range
 of the 2 seeds).  Thresholds: eta_S^loss = 2 <a_S> / <b_S>, ratio = eta_D^loss / eta_B^loss
@@ -24,7 +26,7 @@ import matplotlib.pyplot as plt
 import config as cfg
 
 plotstyle.apply()
-WINDOWS = {'early': (0, 100), 'late': (1600, 2400)}
+WINDOWS = {'early': (0, 100), 'mid': (400, 600), 'late': (1600, 2400)}
 
 
 def load():

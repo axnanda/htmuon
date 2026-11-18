@@ -1,0 +1,143 @@
+{
+ "compiles": true,
+ "sorryFree": true,
+ "axiomsClean": true,
+ "coverage": [
+  {
+   "paperItem": "Lemma 'Variance of Gaussian Forms' (tex 950-959)",
+   "leanDecl": "(none in this file; owned by Prob/GaussianForms.lean)",
+   "status": "missing",
+   "comment": "Outside this file's assignment (the task lists only the WLLN and CMT lemmas of A.3); declared 'not-formalized (here)' in the fidelity note. Variances enter Concentration.lean only as hypotheses."
+  },
+  {
+   "paperItem": "Lemma 'A Weak Law of Large Numbers for Block Averages', part 1 (tex 962-966)",
+   "leanDecl": "wlln_finset_block_average_centered (literal Finset form), wlln_block_average_centered (block sum S_n, size N_n)",
+   "status": "hypotheses-added",
+   "comment": "Faithful. Added: MemLp (y n i) 2 for every i (implicit in the paper; slightly more than 'the sum is in L^2'), family of probability spaces indexed by n, 'O(|S_d|)' as 'eventually Var <= K*N_n' with K independent of n. Note calls the literal form 'exact'."
+  },
+  {
+   "paperItem": "WLLN part 2 (tex 967)",
+   "leanDecl": "wlln_finset_block_average, wlln_block_average",
+   "status": "exact",
+   "comment": "(1/|S_d|) sum E[y_i] -> l (resp. E[S_n]/N_n -> l) implies block average -> l in probability; same implicit L^2 hypothesis."
+  },
+  {
+   "paperItem": "Proof of WLLN via Chebyshev (tex 969-984)",
+   "leanDecl": "tendstoInProb_sub_integral_of_variance_tendsto_zero, tendstoInProb_of_variance_tendsto_zero, wlln_centered_of_variance_div_sq_tendsto_zero, Concentration.tendstoInProb_of_sub_of_tendsto",
+   "status": "strengthened",
+   "comment": "Var(S_n)/N_n^2 -> 0 suffices. Correct."
+  },
+  {
+   "paperItem": "Lemma 'Continuous Mapping Theorem with Dominated Convergence' (tex 986-988)",
+   "leanDecl": "tendsto_integral_comp_of_tendstoInProb (+ tendsto_integral_comp_of_tendstoInProb_of_ae_bounded, tendsto_integral_of_tendstoInProb_of_bounded, Concentration.abs_integral_comp_sub_le)",
+   "status": "hypotheses-added",
+   "comment": "Added Measurable f and AEMeasurable (Y n) (needed for E f(y_n) to make sense; documented). Bound M is uniform (exists M, forall y). Statement matches the paper."
+  },
+  {
+   "paperItem": "Remarks (tex 990) and the convention 'all measures are conditional on x_t' (tex 994)",
+   "leanDecl": "family (Omega n, mu n) with [forall n, IsProbabilityMeasure (mu n)]; Concentration.tendstoInMeasure_const_iff",
+   "status": "equivalent-reformulation",
+   "comment": "Convergence in probability to a constant written inline exactly as the task prescribes; identified with Mathlib's TendstoInMeasure on a fixed space."
+  },
+  {
+   "paperItem": "Lemma 'Asymptotic ratio of expectations', first claim: (1/k)s^D_{t+1} -> l'_D, (1/(d-k))s^B_{t+1} -> l'_B in probability, l'_S finite (tex 996-1001)",
+   "leanDecl": "wlln_block_average (instantiated inside tendsto_integral_ratio_of_variance_bound)",
+   "status": "hypotheses-added",
+   "comment": "Abstract only: Var(X_n) <= K k_n and E[X_n]/k_n -> a are hypotheses. The model-level derivation from Assumption 1 is not formalized here (by design) and, as the note shows (G3a, G3d; I re-verified the examples numerically), does not follow from Assumption 1 as stated."
+  },
+  {
+   "paperItem": "eq. (ratio-asymp) (tex 1002-1008)",
+   "leanDecl": "tendsto_integral_ratio_paper, tendsto_integral_ratio_of_variance_bound, tendsto_integral_ratio_of_tendstoInProb",
+   "status": "hypotheses-added",
+   "comment": "a = l'_D > 0, b >= 0, rho > 0, X_n, Y_n >= 0 a.s. and measurable; limit 1/(1+b/(rho a)). Correct; non-vacuous (deterministic example in the file; I also checked a random instance)."
+  },
+  {
+   "paperItem": "Unjustified assertion y_0 in (0,oo), i.e. l'_D > 0 (tex 1027)",
+   "leanDecl": "ratio_asymp_fails_without_positive_limit",
+   "status": "paper-claim-false",
+   "comment": "Abstract coin counterexample (E[X/(X+Y)] = 1/2 vs 1/4) is correct. The informal SGD instance of the note (lambda=2/1, x_t=u_1+u_{k+1}, Sigma=uu^T, eta=0.3) reproduced by Gauss-Hermite quadrature: E theta_{t+1} = 0.5200, E s^D/E s = 0.6052, independent of d."
+  },
+  {
+   "paperItem": "Proof: decomposition s^S_{t+1} = chi + g^T z + z^T D z and 'Var(s^S_{t+1}) = O(|S|)' (tex 1011-1022)",
+   "leanDecl": "(none)",
+   "status": "missing",
+   "comment": "Declared not formalized (report notes, note G3d) but has no row in the fidelity table. Variance bound is a hypothesis. The note's counterexample to O(|S|) (lambda_1 = k^(1/8), x_t = k^(1/4)u_1, Sigma = u_1u_1^T: Var ~ 4 eta^4 k^(5/4)) checks out."
+  },
+  {
+   "paperItem": "Proof: y_{k,d} -> y_0 in probability (tex 1023-1028)",
+   "leanDecl": "tendstoInProb_ratio_of_tendstoInProb",
+   "status": "equivalent-reformulation",
+   "comment": "theta-form X/(X+Y) -> rho a/(rho a + b); needs only rho != 0 and rho a + b != 0. No division-by-zero exploitation (k_n, m_n != 0 eventually is derived from rho != 0)."
+  },
+  {
+   "paperItem": "Proof: application of the CMT lemma to f(y) = 1/(1+y) (tex 1029-1034)",
+   "leanDecl": "tendsto_integral_of_tendstoInProb_of_bounded, tendsto_integral_comp_of_tendstoInProb_of_ae_bounded",
+   "status": "strengthened",
+   "comment": "The paper's f is not bounded on R (gap G3c, correctly documented); Lean works with theta in [0,1] directly."
+  },
+  {
+   "paperItem": "'Expectation can be interchanged with the ratio' (tex 1038): quantitative core requested by the task",
+   "leanDecl": "abs_integral_ratio_sub_ratio_integral_le_L1, abs_integral_ratio_sub_ratio_integral_le, abs_integral_ratio_add_sub_ratio_integral_le, abs_integral_ratio_sub_ratio_integral_le_sharp, tendsto_integral_ratio_sub_ratio_integral, tendsto_integral_ratio_of_tendsto_ratio_integral, tendsto_integral_ratio_add_sub_ratio_integral, tendsto_integral_ratio_add_of_tendsto_ratio_integral",
+   "status": "strengthened",
+   "comment": "|E[X/Z]-EX/EZ| <= sqrt(Var Z)/(2 EZ) (C = 1/2, no Var X) implies the requested C(sqrt Var X + sqrt Var Z)/EZ form. Checked numerically on 3*10^5 random discrete laws incl. atoms with Z=0: no violation, sup of LHS/RHS = 1."
+  },
+  {
+   "paperItem": "Display tex 1043: lim theta_t = 1/(1 - ...) (sign typo)",
+   "leanDecl": "Concentration.ratio_eq_one_div_one_add, Concentration.ratio_ne_one_div_one_sub",
+   "status": "paper-claim-false",
+   "comment": "Typo correctly identified and refuted. Only the fixed-d identity is proved; the limit statement x_n/(x_n+y_n) -> 1/(1+b/(rho a)) is not in the file (see major issue)."
+  },
+  {
+   "paperItem": "Display tex 1040-1048: lim E[theta_{t+1}|x_t] < lim theta_t ==> lim E[f_t|x_t] < 0",
+   "leanDecl": "Concentration.ratio_limit_lt_iff, Concentration.ratio_lt_ratio_iff, Concentration.ratio_sub_ratio_eq",
+   "status": "weakened",
+   "comment": "Covered only as algebra on five real numbers. That b a' - b' a is the limit of E[f_t]/(k(d-k)) is asserted in docstrings/note but not proved; no sequence-level statement of the display exists (the note labels this 'equivalent-reformulation'). Provable: see scratch Probe2.lean."
+  },
+  {
+   "paperItem": "Sentence tex 1058: 'it suffices to analyse the sign of E[f_t | x_t]'",
+   "leanDecl": "eventually_integral_ratio_add_lt_add_of_le, eventually_integral_ratio_add_lt_of_gap, eventually_integral_ratio_add_lt_of_tendsto_lt, strict_drift_not_preserved_in_limit",
+   "status": "hypotheses-added",
+   "comment": "Corrected forms (margin / strictly ordered limits) are right. The formal counterexample only shows loss of strictness in the limit; a stronger failure holds and is not recorded (sign of E f_t negative for every d under full concentration, yet E theta_{t+1} > theta_t for every d; scratch Probe3.lean)."
+  },
+  {
+   "paperItem": "Interface with Defs.lean (E[theta_{t+1}|x_t] vs Spec.thetaBarNext)",
+   "leanDecl": "Concentration.abs_integral_theta_sub_thetaBarNext_le, Concentration.tendsto_integral_theta_sub_thetaBarNext",
+   "status": "exact",
+   "comment": "Extra (not a paper item). Uses Spec.theta, cNext, EsNext, thetaBarNext from Defs.lean unchanged; hypotheses satisfiable (zero noise with kap2 = 0; Gaussian noise once moments are supplied)."
+  }
+ ],
+ "issues": [
+  {
+   "severity": "major",
+   "where": "Part 4 (Concentration.ratio_limit_lt_iff, Concentration.ratio_eq_one_div_one_add, eventually_integral_ratio_add_lt_of_tendsto_lt) vs tex 1040-1048 and 1058; fidelity-note row 'display 1040-1048 as a statement about limits'",
+   "description": "The displayed 'consequence' is formalized only as algebra on real numbers (rho, a, b, a', b'). Three provable pieces that turn it into a statement about the actual sequences are missing: (a) the limit formula lim theta_t = 1/(1 + b/(rho a)) for deterministic x_n/k_n -> a > 0, y_n/m_n -> b (only the fixed-d identity ratio_eq_one_div_one_add exists); (b) the identification lim (y_n E[X_n] - E[Y_n] x_n)/(k_n m_n) = b a' - b' a, which the docstring of ratio_limit_lt_iff, the Part 4 header and the fidelity note assert ('b a' - b' a = lim E[f_t]/(k(d-k))') without proof; (c) the paper's own direction at the level of sequences (lim E theta_{t+1} < lim theta_t ==> E[f_t] < 0 for all large d) and its converse in terms of the normalised limit of E[f_t]. eventually_integral_ratio_add_lt_of_tendsto_lt assumes 'ratio of expectations -> L'' and 'theta_n -> L', neither of which is connected to a, b, a', b'. Hence the note's status 'equivalent-reformulation' overstates the coverage of this remark-level claim (it is 'weakened: algebraic core only').",
+   "suggestedFix": "Add the three declarations I compiled against the built module in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_Concentration/Probe2.lean (standard axioms only, about 60 lines, uses only lemmas already in the file): Concentration.tendsto_ratio_of_tendsto (x_n/(x_n+y_n) -> 1/(1+b/(rho a))), Concentration.tendsto_comparison_div ((y_n x'_n - y'_n x_n)/(k_n m_n) -> b a' - b' a), and consequence_display (under the hypotheses of tendsto_integral_ratio_of_variance_bound plus x_n/k_n -> a > 0, y_n/m_n -> b >= 0: both limits of the display, the normalised limit of E[f_t], the equivalence of the two limit inequalities, and 'b a' - b' a < 0 implies eventually E[f_t] < 0 and eventually E[X_n/(X_n+Y_n)] < x_n/(x_n+y_n)'). Then update the fidelity row to point at consequence_display."
+  },
+  {
+   "severity": "minor",
+   "where": "strict_drift_not_preserved_in_limit; fidelity note G4c and 'Suggestions for downstream files'; prove.json notes",
+   "description": "(1) strict_drift_not_preserved_in_limit is the bare fact 1/(1+1/(n+1)) < 1 and -> 1; its statement mentions neither theta_n, nor the ratio of expectations, nor E[f_t], so its role as a counterexample lives only in the docstring, and 'paper-claim-false' is a strong label for what is an invalid inference pattern (in that example the drift IS strictly negative for every d). (2) The literal claim at tex 1058 fails in a stronger way that the note does not record: with full concentration (Var/(E Z)^2 -> 0) one can have ratio of expectations < theta_n (i.e. E[f_t] < 0) for EVERY n and E[theta_{t+1}] > theta_n for EVERY n (X_n = n+1 deterministic, Y_n a fair {0,1} coin, theta_n = (n+1)/(n+3/2) + (1/8)/((n+3/2)(n+2)); Jensen gap 1/(4(n+3/2)(n+2)) > 0). (3) The sentence 'a uniform margin is unavoidable' (note, suggestions; prove.json) is not accurate: a margin is needed, but any margin c_n exceeding the transfer error (sqrt Var X_n + sqrt Var Y_n)/(2(E X_n + E Y_n)) works at that n, so margins tending to 0 slowly enough suffice.",
+   "suggestedFix": "Add the formal counterexample sign_of_comparison_does_not_decide_drift from /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_Concentration/Probe3.lean (compiles, standard axioms; reuses Concentration.coin/integral_coin). Optionally bundle theta_n and the ratio of expectations into the statement of strict_drift_not_preserved_in_limit. Add the finite-n corollary of abs_integral_ratio_add_sub_ratio_integral_le: E X/(E X+E Y) + (sqrt Var X + sqrt Var Y)/(2(E X+E Y)) < theta implies E[X/(X+Y)] < theta. Reword the note: 'a margin dominating the transfer error is required (uniform margin is one sufficient form)'."
+  },
+  {
+   "severity": "minor",
+   "where": "notes/fidelity/Concentration.md, table",
+   "description": "Bookkeeping: (i) the status 'extra' is used in 8 rows but is not one of the statuses fixed by the conventions; (ii) there is no table row for tex 1011-1022 (decomposition of s^S_{t+1}; 'Var = O(|S|) by Lemma gauss-var and Assumption 1') nor for the model-level lemma 'under Assumption 1' itself, although G3d and the report say they are not formalized here; (iii) wlln_finset_block_average_centered is called 'exact' although it adds MemLp (y n i) 2 for each i; (iv) G3a says the limits l'_S 'need not exist' but not that the paper's 'finite constants' can also fail by divergence under Assumption 1 as stated (lambda_1 = k^(1/8), x_t = k^(1/2) u_1: (1/d) sum c_i^2 bounded, all listed spectral moments converge, yet E[s^D_{t+1}]/k ~ eta^2 k^(1/2) -> oo).",
+   "suggestedFix": "Add explicit 'not-formalized' rows for tex 1011-1022 and for the Assumption-1 instantiation (pointing to the module that owns them); relabel the 'extra' rows with an allowed status or state that they are additions with no paper counterpart; mark the literal WLLN as 'hypotheses-added (implicit L^2)'; extend G3a with the divergence example."
+  },
+  {
+   "severity": "minor",
+   "where": "non-vacuity: the `example` after tendsto_integral_ratio_of_variance_bound; CMT theorems; tendsto_integral_ratio_sub_ratio_integral / tendsto_integral_ratio_add_sub_ratio_integral; Part 5",
+   "description": "The only formal satisfiability witness for the asymptotic theorems is deterministic (variance 0, K1 = K2 = 0), and there is none for the CMT theorems, the variance-ratio transfer theorems or the Defs interface. The hypotheses are clearly satisfiable (I checked a random instance in Lean: Z_n = n+1+coin, X_n = coin satisfies every hypothesis of tendsto_integral_ratio_sub_ratio_integral), so this is not a soundness problem.",
+   "suggestedFix": "Add one random `example` (the one at the end of /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_Concentration/Axioms.lean compiles) and, if cheap, a zero-noise instance of Concentration.abs_integral_theta_sub_thetaBarNext_le."
+  },
+  {
+   "severity": "minor",
+   "where": "namespacing / downstream interface (Part 5)",
+   "description": "Most main theorems sit directly in namespace SuspiciousAlignment under generic names (wlln_block_average, tendsto_integral_ratio_paper, strict_drift_not_preserved_in_limit, ...); no clash exists today (checked against the other project files). Part 5 exposes the transfer theorems for Spec but not the 'consequence' theorems: downstream files that want 'thetaBarNext <= theta - c eventually ==> E[theta_{t+1}] < theta_t eventually' or 'thetaBarNext - theta_t = E[f_t]/(E[s_{t+1}] s_t)' must re-specialise eventually_integral_ratio_add_lt_of_gap and Concentration.ratio_sub_ratio_eq by hand.",
+   "suggestedFix": "Optionally add Spec-level wrappers of eventually_integral_ratio_add_lt_of_gap / ratio_lt_ratio_iff in namespace Concentration; no renaming needed unless a clash appears."
+  }
+ ],
+ "verdict": "revise",
+ "summary": "Soundness is clean: `scripts/leancheck SuspiciousAlignment/Prob/Concentration.lean` gives no errors and no warnings; the module builds; no sorry/admit/axiom/native_decide/unsafe/implemented_by; `#print axioms` on all 45 declarations shows only propext, Classical.choice, Quot.sound. Every Lean statement I checked says what it claims: WLLN (both parts, literal Finset form and block-sum form), CMT with bounded convergence, the quantitative bound |E[X/Z]-EX/EZ| <= sqrt(Var Z)/(2 EZ) (stronger than the form the task asked for; numerically never violated, constant 1/2 attained), its asymptotic versions, and the paper's eq. (ratio-asymp) with a > 0, b >= 0, rho > 0. I found no vacuous hypotheses, no use of x/0 = 0, sqrt of a negative, or natural subtraction, and no wrong quantifier order (K and M are fixed before n). All extra hypotheses (L^2, measurability, nonnegativity, E Z > 0, a > 0) are documented. The fidelity note's claims against the paper hold up under independent checks: the sign typo at tex 1043; the missing normalisation; l'_D > 0 not following from Assumption 1 (SGD instance reproduced: E theta_{t+1} = 0.5200 vs E s^D/E s = 0.6052); Var(s^S_{t+1}) = O(|S|) not following from Assumption 1 (Var ~ 4 eta^4 k^(5/4)); loss of strictness in the limit (E f_t = -0.09 d < 0 while E theta_{t+1} -> 1 = theta_t). Verdict 'revise' rests on one major issue, cheap to fix: the displayed 'consequence' (tex 1040-1048, 1058) is covered only by algebra on limit values; the limit formula for theta_t, the identification of b a' - b' a with lim E[f_t]/(k(d-k)) (asserted in docstrings, not proved) and a sequence-level statement of the display are missing. I proved all three against the built module in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_Concentration/Probe2.lean. Minor: the formal counterexample for tex 1058 is weaker than what is true (a sharper one compiles in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_Concentration/Probe3.lean), 'uniform margin is unavoidable' is overstated, some table bookkeeping, and non-vacuity witnesses are deterministic only. Scratch files: /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_Concentration/Axioms.lean (axiom audit, signatures, random non-vacuity instance), /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_Concentration/Probe2.lean, /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_Concentration/Probe3.lean, /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_Concentration/num1.py, /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_Concentration/num2.py."
+}

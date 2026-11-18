@@ -42,3 +42,27 @@
 [M1 p=0.125 large   m=200] pred(SC)=0.99727 meas(authors)=0.99719+-0.00003 meas(ratio)=0.99723+-0.00003 | eta_eff*lam1 pred=1.8951 meas=1.9024 | theta0=0.9999 min=6.97e-01 at t=19
 [M1 p=0.125 large   m=300] pred(SC)=0.99818 meas(authors)=0.99814+-0.00002 meas(ratio)=0.99817+-0.00002 | eta_eff*lam1 pred=1.8952 meas=1.9018 | theta0=1.0000 min=8.44e-01 at t=19
 [M1 p=0.125 large   m=400] pred(SC)=0.99864 meas(authors)=0.99860+-0.00001 meas(ratio)=0.99862+-0.00001 | eta_eff*lam1 pred=1.8952 meas=1.9018 | theta0=1.0000 min=8.95e-01 at t=19
+[M1 p=0.125 large   m=500] pred(SC)=0.99891 meas(authors)=0.99887+-0.00003 meas(ratio)=0.99889+-0.00003 | eta_eff*lam1 pred=1.8953 meas=1.9017 | theta0=1.0000 min=9.32e-01 at t=19
+[M1 p=0.5 matched m=  5] pred(SC)=0.55925 meas(authors)=0.55445+-0.00119 meas(ratio)=0.55933+-0.00124 | eta_eff*lam1 pred=0.2980 meas=0.2981 | theta0=0.8963 min=9.84e-05 at t=105
+[M1 p=0.5 matched m= 10] pred(SC)=0.71700 meas(authors)=0.71174+-0.00104 meas(ratio)=0.71733+-0.00103 | eta_eff*lam1 pred=0.2984 meas=0.2986 | theta0=0.9713 min=1.75e-04 at t=88
+[M1 p=0.5 matched m= 20] pred(SC)=0.83506 meas(authors)=0.83078+-0.00114 meas(ratio)=0.83529+-0.00117 | eta_eff*lam1 pred=0.2986 meas=0.2988 | theta0=0.9926 min=5.66e-04 at t=88
+[M1 p=0.5 matched m= 50] pred(SC)=0.92674 meas(authors)=0.92431+-0.00116 meas(ratio)=0.92687+-0.00112 | eta_eff*lam1 pred=0.2988 meas=0.2990 | theta0=0.9988 min=3.52e-03 at t=90
+[M1 p=0.5 matched m=100] pred(SC)=0.96197 meas(authors)=0.96085+-0.00047 meas(ratio)=0.96229+-0.00044 | eta_eff*lam1 pred=0.2988 meas=0.2990 | theta0=0.9997 min=1.50e-02 at t=64
+[M1 p=0.5 matched m=200] pred(SC)=0.98062 meas(authors)=0.97961+-0.00036 meas(ratio)=0.98039+-0.00035 | eta_eff*lam1 pred=0.2988 meas=0.2990 | theta0=0.9999 min=5.92e-02 at t=112
+[M1 p=0.5 matched m=300] pred(SC)=0.98699 meas(authors)=0.98630+-0.00035 meas(ratio)=0.98683+-0.00034 | eta_eff*lam1 pred=0.2988 meas=0.2990 | theta0=1.0000 min=1.27e-01 at t=69
+[M1 p=0.5 matched m=400] pred(SC)=0.99021 meas(authors)=0.98972+-0.00032 meas(ratio)=0.99012+-0.00031 | eta_eff*lam1 pred=0.2988 meas=0.2990 | theta0=1.0000 min=1.78e-01 at t=78
+[M1 p=0.5 matched m=500] pred(SC)=0.99216 meas(authors)=0.99151+-0.00037 meas(ratio)=0.99185+-0.00035 | eta_eff*lam1 pred=0.2988 meas=0.2990 | theta0=1.0000 min=2.69e-01 at t=120
+[M1 p=0.5 large   m=  5] pred(SC)=0.92893 meas(authors)=0.92668+-0.00019 meas(ratio)=0.92770+-0.00018 | eta_eff*lam1 pred=1.9608 meas=1.9668 | theta0=0.8963 min=4.79e-04 at t=10
+[M1 p=0.5 large   m= 10] pred(SC)=0.96573 meas(authors)=0.96470+-0.00010 meas(ratio)=0.96520+-0.00010 | eta_eff*lam1 pred=1.9634 meas=1.9691 | theta0=0.9713 min=1.41e-03 at t=8
+[M1 p=0.5 large   m= 20] pred(SC)=0.98317 meas(authors)=0.98262+-0.00005 meas(ratio)=0.98287+-0.00005 | eta_eff*lam1 pred=1.9646 meas=1.9706 | theta0=0.9926 min=6.31e-03 at t=6
+[M1 p=0.5 large   m= 50] pred(SC)=0.99334 meas(authors)=0.99313+-0.00005 meas(ratio)=0.99322+-0.00005 | eta_eff*lam1 pred=1.9652 meas=1.9711 | theta0=0.9988 min=8.91e-02 at t=6
+[M1 p=0.5 large   m=100] pred(SC)=0.99668 meas(authors)=0.99657+-0.00004 meas(ratio)=0.99661+-0.00004 | eta_eff*lam1 pred=1.9655 meas=1.9716 | theta0=0.9997 min=3.91e-01 at t=6
+[M1 p=0.5 large   m=200] pred(SC)=0.99834 meas(authors)=0.99829+-0.00002 meas(ratio)=0.99831+-0.00002 | eta_eff*lam1 pred=1.9656 meas=1.9720 | theta0=0.9999 min=7.75e-01 at t=6
+[M1 p=0.5 large   m=300] pred(SC)=0.99890 meas(authors)=0.99887+-0.00002 meas(ratio)=0.99888+-0.00002 | eta_eff*lam1 pred=1.9656 meas=1.9715 | theta0=1.0000 min=8.98e-01 at t=6
+[M1 p=0.5 large   m=400] pred(SC)=0.99917 meas(authors)=0.99915+-0.00001 meas(ratio)=0.99916+-0.00001 | eta_eff*lam1 pred=1.9656 meas=1.9716 | theta0=1.0000 min=9.29e-01 at t=6
+[M1 p=0.5 large   m=500] pred(SC)=0.99934 meas(authors)=0.99931+-0.00001 meas(ratio)=0.99932+-0.00001 | eta_eff*lam1 pred=1.9656 meas=1.9719 | theta0=1.0000 min=9.51e-01 at t=5
+elapsed 212.8828158378601
+
+real	3m33.176s
+user	2m9.654s
+sys	0m0.449s

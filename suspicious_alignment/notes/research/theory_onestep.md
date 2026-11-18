@@ -304,17 +304,363 @@ variance `2Tr Σ² + 4μᵀΣμ ≤ 4‖Σ‖_op N̄²`, so with `ε := 2√‖�
 
     E[T^S] ≈ γ(N̄) τ^S,     E[V^S] ≈ γ(N̄)² (u^S + e_S),     e_S = ∑_S λ_i² κ_i²,
 
-i.e. Deng's formulas with `η → η γ(√(s + Tr Σ))`. The accuracy is second order in `ε` because of the
-Stein identity (Gaussian integration by parts, `γ(N) = N^{p−1}`, `d ≥ 3`)
+i.e. Deng's formulas with `η → η γ(√(s + Tr Σ))`. The error is second order in `ε`; one of its two
+sources is visible in the exact Stein identity (Gaussian integration by parts; `γ(N) = N^{p−1}`,
+`d ≥ 3`)
 
     E[γ(N) g] = E[γ(N)] μ − (1−p) Σ E[N^{p−3} g],                                             (2.2)
 
-whose last term is `O(‖Σ‖_op/N̄²) = O(ε²)` relative to the first; it also shows that under anisotropic
-noise the mean filtered gradient is *not* parallel to `Ax`: coordinates with large noise variance
-are damped by `≈ 1 − (1−p) κ_i²/N̄²`.
+whose last term is `O(‖Σ‖_op/N̄²) = O(ε²)` relative to the first (the other source is the Jensen gap
+`E γ(N) ≠ γ(N̄)`, also `O(ε²)`). Identity (2.2) also shows that under anisotropic noise the mean
+filtered gradient is *not* parallel to `Ax`: coordinates with a large noise variance are damped by
+`≈ 1 − (1−p)κ_i²/N̄²`.
 Numerics (A4; `d ∈ {50, 200, 800}`; isotropic, power-law `κ_i² ∝ 1/i` and "one spike carrying 30% of
 the trace" covariances; `TrΣ/s ∈ {0.1, 1, 10}`; Muon and HTMuon(1/8); `10⁵` samples): the relative
 error of the mean-field values of `(E T^𝒟, E T^ℬ, E V^𝒟, E V^ℬ)` is `≤ 0.27%` when `ε < 0.15`, `≤ 1.5%`
-when `0.15 ≤ ε < 0.5`, and `≤ 9.1%` for `0.5 ≤ ε ≤ 1.04`. The identity (2.2) is checked in S4
-(Section 7).
+when `0.15 ≤ ε < 0.5`, and `≤ 9.1%` for `0.5 ≤ ε ≤ 1.04`. Identity (2.2) is confirmed by Monte Carlo in S4 (`d = 60`,
+power-law `Σ` with `TrΣ = 2s`, `p ∈ {0, 1/8, 1/2}`, 4 test directions, `6·10⁵` samples: residual
+`max |z| = 1.77`; the plain mean-field value is off by 0.6–12% there, `ε = 0.76`).
+
+**Remark 2.7 ((M1) in the setup of the paper's simulation) [NUMERICAL, script `deng_setup.py`, S1–S2].**
+Spectrum of `quad_sim.py` (`d = 500`, `k = 50`, dominant `linspace(100, 80)`, `λ_{k+1} = 80/(m+0.1)`),
+`x₀ ~ N(0, I)` (seed 42), `ς = 0.5`, `η = 0.003`; states `x₀` (`‖Ax‖/(ς√d) ≈ 45–62`: signal-dominated)
+and, for `m = 10`, `0.05·x₀` and `0.01·x₀` (`‖Ax‖/(ς√d) = 2.3` and `0.45`).
+
+| `m` | state | `θ` | `η*` SGD (Deng) | `η*_f` Muon (Thm 2.3) | mean-field `η*_Deng·N̄` | `η*_f` HTMuon(1/8) | `η/η*_f` Muon |
+|---|---|---|---|---|---|---|---|
+| 2 | `x₀` | 0.522 | 0.016712 | 11.502 | 11.502 | 5.0821 | 2.6e-4 |
+| 10 | `x₀` | 0.962 | 0.020322 | 10.305 | 10.305 | 4.7307 | 2.9e-4 |
+| 50 | `x₀` | 0.998 | 0.021315 | 10.610 | 10.610 | 4.8817 | 2.8e-4 |
+| 10 | `0.05 x₀` | 0.962 | 0.020198 | 0.55971 | 0.55958 | 0.36953 | 5.4e-3 |
+| 10 | `0.01 x₀` | 0.962 | 0.017609 | 0.21662 | 0.21617 | 0.15832 | 1.4e-2 |
+
+A direct Monte Carlo (`4·10⁴` samples of the actual update per row and filter) of `E f(η)` at
+`η = η*_f·{0.5, 1, 2}` agrees with `p^fη² + q^fη` (`|z| ≤ 2.3` in 45 tests), and the Monte-Carlo
+`E[θ₊ − θ]` is negative at `0.5η*_f` and positive at `2η*_f` in all 15 cases. At `η = η*_f` itself
+`E[θ₊−θ]` is not zero: it is `≈ −1·10⁻³ ± 4·10⁻⁵` at `0.01x₀` (and `|·| ≤ 2·10⁻⁴` elsewhere) — the
+finite-`d` gap between "sign of `E f`" and "sign of `E θ₊ − θ`" mentioned in the caveat above.
+The projected loss thresholds of Theorem 5.7(b) are confirmed in the same runs (mean loss change at
+the predicted thresholds `|z| ≤ 2.3`).
+Two consequences: (i) the mean-field replacement `η_eff = ηγ(√(s+ς²d))` is accurate to `≤ 0.21%`
+here; (ii) since `‖g‖ ≈ √(s + ς²d) ≥ ς√d = 11.2`, the SGD-equivalent step size of (M1)-Muon is
+capped: `η_eff ≤ η/(ς√d) = 2.7·10⁻⁴`, eleven times smaller than the paper's `η = 0.003`, and it
+varies along the trajectory as `η/√(s_t + ς²d)`. Deng's comparison "`η` versus `η*_t`" becomes
+"`η/√(s_t + ς²d)` versus `η*_t`".
+
+**Remark 2.8 (Deng's Theorem 8 and Corollary 9 need a correction) [PROVED + NUMERICAL].**
+Theorem 8 (main text): if `θ_t ≥ e_ℬ/(e_ℬ+e_𝒟)` then `η*_t ≤ (λ_1−λ_d)/(λ_kλ_1−λ_{k+1}λ_d)`;
+Corollary 9: then `η*_t ≤ 2/λ_1`. Both statements are false.
+
+* *Counterexample.* `d = 3`, `λ = (10, 1, 0.1)`, `𝒟 = {1,2}`, `c = (0.01, 1, 1)`, `Σ = 10⁻⁸ I`. Then
+  `θ = 0.9902 ≥ e_ℬ/(e_ℬ+e_𝒟) = 9.9·10⁻⁵`, but `η* = 1.00407 > 0.99099` (Theorem 8) `> 0.2 = 2/λ_1`
+  (Corollary 9). Direct check: the noise-free step with `η = 0.5 = 2.5·(2/λ_1)` moves `θ` from
+  `0.99020` to `0.97846` (a decrease, as it must for `η < η*`). Replicating every coordinate 100
+  times (`d = 300`, `ρ = 2`) gives the same numbers, so this is not a finite-`d` artefact.
+* *In the paper's own simulation setup* (Remark 2.7): `η*(x₀) = 0.020322` for `m = 10` and
+  `0.021315` for `m = 50`, both above `2/λ_1 = 0.02`, although `θ₀ = 0.962, 0.998` satisfy the
+  hypothesis (`e_ℬ/(e_ℬ+e_𝒟) = 0.026, 0.001`).
+* *Where the proofs fail.* The proof of Theorem 8 bounds `−q_t` without its factor 2 (the appendix
+  restatement has the factor 2), and it uses `∑_𝒟 λ_j⁴c_j² ≥ λ_kλ_1 s^𝒟`, which does not follow from
+  `λ_j ≥ λ_k`. The proof of Corollary 9 needs `λ_1(λ_1−λ_d) ≤ λ_kλ_1 − λ_{k+1}λ_d`, i.e.
+  `λ_1(λ_1−λ_k) ≤ λ_d(λ_1−λ_{k+1})`, which fails as soon as the dominant block is spread.
+* *What is true.* Under Deng's hypothesis `s^ℬe_𝒟 − s^𝒟e_ℬ ≥ 0`, so `p_t ≥ p₀ > 0` and
+  `η*_t ≤ η*₀ ≤ 2/(λ_k + λ_d)` (Theorem 2.1). The appendix form
+  `η*₀ ≤ 2(λ_1−λ_d)/(λ_kλ_1−λ_{k+1}λ_d)` is also true but weaker: with `μ_S := τ^S/s^S`,
+  `u^𝒟/s^𝒟 ≥ λ_kμ_𝒟` and `u^ℬ/s^ℬ ≤ λ_{k+1}μ_ℬ` give
+  `η*₀ ≤ 2(μ_𝒟−μ_ℬ)/(λ_kμ_𝒟 − λ_{k+1}μ_ℬ)`, which is increasing in `μ_𝒟 ≤ λ_1` and decreasing in
+  `μ_ℬ ≥ λ_d`; and `(λ_1−λ_d)(λ_k+λ_d) − (λ_kλ_1−λ_{k+1}λ_d) = λ_d((λ_1−λ_k)+(λ_{k+1}−λ_d)) ≥ 0`.
+  `η* ≤ 2/λ_1` holds when `λ_1 ≤ λ_k + λ_d`.
+* *Random search* (A5: 4000 noise-free instances, `d ≤ 11`): Theorem 8 (main text) violated 2539
+  times, Corollary 9 violated 1329 times, appendix version 0, bounds of Theorem 2.1 0.
+
+---
+
+## 3. Model (M2): `L(W) = ½ tr(WᵀAW)`
+
+### 3.1 Commuting states: exact per-mode dynamics
+
+**Definition.** A state is *commuting* if the rows of `C = UᵀW` are mutually orthogonal:
+`C = diag(a) Q` with `a_i ≥ 0` and `Q ∈ ℝ^{d×n}` such that `QQᵀ = diag(1[a_i > 0])` (unit rows `q_i`
+on the support of `a`, which must have at most `n` elements). Equivalently `CCᵀ = diag(a_i²)`.
+(Name: then `WWᵀ` commutes with `A`. Conversely, if `WWᵀ` commutes with `A`, an eigenbasis `U` of `A`
+can be chosen for which the state is commuting.) The clean gradient is then
+
+    Uᵀ(AW) = ΛC = diag(σ_i) Q,        σ_i = λ_i a_i,
+
+which is a singular value decomposition: **the left singular vectors of the gradient are the Hessian
+eigenvectors**, the singular values are `σ_i`, the right singular vectors are the `q_i`.
+
+For a spectrum-dependent filter (Echelon, NS5), `f` below means the scalar function determined by
+the multiset `{σ_j}`. Define the **effective curvature**
+
+    ν_i := f(σ_i)/a_i = λ_i γ(σ_i)      (a_i > 0),          ν_i := 0  (a_i = 0).
+
+**Theorem 3.1 (per-mode dynamics) [PROVED].** At a commuting state, noise-free,
+
+    UᵀF(AW) = diag(f(σ_i)) Q,       C₊ = diag(a_i − η f(σ_i)) Q,       c_i⁺ = (1 − η ν_i) c_i.
+
+The new state is commuting with the same `Q`; in the signed coordinate `α_i := ⟨c_i, q_i⟩` the whole
+noise-free trajectory is the scalar recursion `α_i ← α_i − η · sign(α_i) f(λ_i|α_i|)`.
+
+*Proof.* `(ΛC)(ΛC)ᵀ = diag(σ_i²)`, so by Lemma 1.1 `F(ΛC) = h(diag(σ_i²)) diag(σ_i) Q =
+diag(h(σ_i²)σ_i) Q = diag(f(σ_i)) Q` (using `f(0) = 0`; no distinctness of the `σ_i` is needed).
+Then `C₊ = C − ηF(ΛC)` and `a_i − ηf(σ_i) = (1 − ην_i)a_i`. If `a_i − ηf(σ_i) < 0` the row is
+`|a_i − ηf(σ_i)|·(−q_i)`: still a commuting state. ∎
+
+So **Deng's per-mode factor `(1 − ηλ_i)` becomes `(1 − ην_i)`**:
+
+| filter | `ν_i` | comment |
+|---|---|---|
+| SGD | `λ_i` | |
+| Muon | `1/a_i = λ_i/σ_i` | the Hessian eigenvalue drops out: `a_i⁺ = |a_i − η|` |
+| HTMuon(p) | `λ_i^p a_i^{p−1} = λ_i σ_i^{p−1}` | geometric interpolation |
+| Echelon(r) | `λ_i/max(σ_i, τ)`, `τ = σ_{(r+1)}` | head (`σ_i > τ`): Muon; tail: SGD with step `η/τ` |
+
+### 3.2 The comparison functional at commuting states
+
+**Theorem 3.2 (comparison functional) [PROVED].** At a commuting state, with
+`τ_f^S := ∑_{i∈S} ν_i s_i = ∑_S λ_i σ_i f(σ_i)` and `u_f^S := ∑_{i∈S} ν_i² s_i = ∑_S λ_i² f(σ_i)²`:
+
+    s₊^S = s^S − 2η τ_f^S + η² u_f^S,
+    f(η) = p_f η² + q_f η,
+    q_f = 2 (s^𝒟 τ_f^ℬ − s^ℬ τ_f^𝒟) = 2 ∑_{i∈𝒟} ∑_{j∈ℬ} s_i s_j (ν_j − ν_i),
+    p_f = s^ℬ u_f^𝒟 − s^𝒟 u_f^ℬ    =   ∑_{i∈𝒟} ∑_{j∈ℬ} s_i s_j (ν_i² − ν_j²),
+    L₊ − L = −η ∑_i σ_i f(σ_i) + (η²/2) ∑_i λ_i f(σ_i)² = ∑_i ℓ_i (−η ν_i + η² ν_i²/2).
+
+These are Deng's `q_t, p_t` (noise-free) with `λ_i³c_i² → ν_i s_i`, `λ_i⁴c_i² → ν_i² s_i`: **the
+weights `s_i = λ_i²a_i²` keep their Hessian dependence, the curvature `λ_i` is replaced by `ν_i`.**
+
+*Proof.* Theorem 3.1 gives `φ_i = f(σ_i)q_i`, so `⟨c_i, φ_i⟩ = a_if(σ_i)`, `‖φ_i‖² = f(σ_i)²`,
+`T^S = ∑_S λ_i²a_if(σ_i) = ∑_S ν_is_i`, `V^S = ∑_S λ_i²f(σ_i)² = ∑_S ν_i²s_i`; apply Lemmas 1.2 and
+1.4. The double sums are `s^𝒟τ_f^ℬ − s^ℬτ_f^𝒟 = ∑_{i∈𝒟,j∈ℬ} s_is_j(ν_j − ν_i)` etc. ∎
+
+### 3.3 Critical step size, dichotomy, reversed dichotomy
+
+**Effective separation.** Let `supp S := {i ∈ S : a_i > 0}` and
+
+    (S+)   min_{i ∈ supp 𝒟} ν_i  >  max_{j ∈ supp ℬ} ν_j,        (S−)   max_{supp 𝒟} ν_i  <  min_{supp ℬ} ν_j.
+
+For SGD (S+) is the Hessian gap `λ_k > λ_{k+1}` and always holds.
+
+**Theorem 3.3 (critical step size; dichotomy and reversed dichotomy) [PROVED].** Commuting state,
+`s^𝒟, s^ℬ > 0`, `η > 0`, `s₊ > 0`.
+(a) Under (S+): `q_f < 0 < p_f`, `η*_f := −q_f/p_f > 0`,
+
+    2/(max_𝒟 ν + max_ℬ ν)  ≤  η*_f  ≤  2/(min_𝒟 ν + min_ℬ ν),
+
+and `θ₊ < θ ⟺ η < η*_f`, `θ₊ = θ ⟺ η = η*_f`, `θ₊ > θ ⟺ η > η*_f` (Deng's dichotomy).
+(b) Under (S−): `p_f < 0 < q_f`, the same bounds hold for `η*_f = −q_f/p_f`, and the dichotomy is
+**reversed**: `θ₊ > θ ⟺ η < η*_f`, `θ₊ < θ ⟺ η > η*_f`.
+(c) Without separation all four sign patterns of `(q_f, p_f)` occur (Proposition 4.2), including
+`q_f, p_f < 0` (alignment decreases for every `η`) and `q_f, p_f > 0` (increases for every `η`),
+with no noise.
+
+*Proof.* (a) Every pair `(i, j) ∈ supp 𝒟 × supp ℬ` has `s_is_j > 0`, `ν_j − ν_i < 0` and
+`ν_i² − ν_j² = (ν_i−ν_j)(ν_i+ν_j) > 0` (`ν ≥ 0`), and there is at least one pair. With
+`w_ij := s_is_j(ν_i − ν_j) > 0`, `1/η*_f = ∑ w_ij (ν_i+ν_j)/2 / ∑ w_ij`, a weighted mean of
+`(ν_i+ν_j)/2`. The trichotomy is Lemma 1.2: `sign(θ₊−θ) = sign(p_fη + q_f)`. (b) Same with all signs
+reversed (`w_ij < 0`). ∎
+
+**Corollary 3.4 (scaling law) [PROVED].** If `f` is homogeneous of degree `p` (`f(tσ) = t^pf(σ)`;
+SGD `p=1`, HTMuon `p`, Muon/Echelon/NS5 `p = 0`) then `ν_i(tC) = t^{p−1}ν_i(C)`,
+`q_f(tC) = t^{3+p}q_f(C)`, `p_f(tC) = t^{2+2p}p_f(C)`, hence `η*_f(tC) = t^{1−p} η*_f(C)`.
+For `p < 1` the critical step size shrinks with the state: with a fixed `η` the alignment regime is
+selected by the *size of the coefficients*, as in Corollary 2.2.
+
+Validation (C2–C6): 28 random commuting states (`(d,n)` from `(50,50)` to `(200,220)` and two
+rank-deficient tall cases `(120,60)`, `(200,90)`; `m ∈ {1.5, 3, 10, 100}`; log-normal row norms with
+independent block scales), 9 filters (SGD, Muon, HTMuon(1/8, 1/4, 1/2), NS5, Echelon(0, k, 3k)),
+6 step sizes each, everything through numpy's SVD of the actual `d×n` gradient. Maximal
+discrepancies over all filters: filtered gradient vs `diag(f(σ))Q` `2.2e-12` (relative); row norms
+after the step `1.6e-12`; off-diagonal Gram entries after the step `2.0e-12`; `s₊^𝒟, s₊^ℬ`
+`3.3e-14`; `θ₊−θ` absolute `2.4e-15`; loss change `2.3e-13`; `f(η)` vs `p_fη²+q_fη` `7.7e-15`;
+`|θ₊−θ|` at `η*_f` `1.4e-15`; sign pattern around the root 0 violations in 500 tests; scaling law
+`9.4e-15` (NS5: `2.3e-8`, the `1e-7` regulariser in its normalisation). Bounds and (reversed)
+dichotomy under (S+)/(S−) (C6): 250 tests, 0 violations.
+
+### 3.4 Arbitrary states: Gram formulas
+
+**Theorem 3.5 (Gram formulas) [PROVED].** Let `f` be index-wise, `W` arbitrary, noise-free, and
+`M := (ΛC)(ΛC)ᵀ = Λ CCᵀ Λ` (the Gram matrix of the gradient rows in the Hessian eigenbasis),
+`g₁(t) := √t f(√t)`, `g₂(t) := f(√t)²`, `P_S := diag(1[i ∈ S])`. Then `Φ = h(M)ΛC` and
+
+    T^S = tr(P_S Λ g₁(M)),    V^S = tr(P_S Λ² g₂(M)),    N^S = tr(P_S g₁(M)),    R^S = tr(P_S Λ g₂(M)).
+
+Hence `q, p`, `θ₊−θ` and all loss changes depend on the state only through `M`. With a noisy gradient
+`Γ = ΛC + UᵀΞ` the same holds with `Φ = h(ΓΓᵀ)Γ`: `T^S = tr(P_S Λ² CΓᵀ h(ΓΓᵀ))`,
+`V^S = tr(P_S Λ² g₂(ΓΓᵀ))`, `N^S = tr(P_S Λ CΓᵀ h(ΓΓᵀ))`, `R^S = tr(P_S Λ g₂(ΓΓᵀ))`.
+
+*Proof.* Lemma 1.1. `∑_{S} λ_i²⟨c_i, φ_i⟩ = tr(P_SΛ² CΦᵀ) = tr(P_SΛ·ΛCCᵀΛ·h(M)) = tr(P_SΛ M h(M))`
+and `M h(M) = g₁(M)`; `∑_S λ_i²‖φ_i‖² = tr(P_SΛ² h(M)Mh(M)) = tr(P_SΛ² g₂(M))`; same for `N, R`. ∎
+
+For SGD `g₁(t) = g₂(t) = t` and only the diagonal `M_ii = σ_i²` enters: *the row-norm formulas of
+Theorem 3.2 are exact for SGD at every state* (this is why Deng's vector analysis lifts verbatim to
+(M2) for SGD). At a commuting state `M = diag(σ_i²)` and Theorem 3.5 reduces to Theorem 3.2.
+
+**Proposition 3.6 (the commuting formulas are upper bounds for sub-linear filters) [PROVED].**
+If `g₁` and `g₂` are concave on `[0,∞)` (HTMuon(p), `0 < p ≤ 1`; for Muon `g₁ = √t` is concave and
+`g₂ = 1[t>0] ≤ 1`), then at every state, with `a_i = ‖c_i‖`, `σ_i = λ_ia_i`:
+
+    T^S ≤ ∑_S λ_i σ_i f(σ_i),   V^S ≤ ∑_S λ_i² f(σ_i)²,   N^S ≤ ∑_S σ_i f(σ_i),   R^S ≤ ∑_S λ_i f(σ_i)²,
+
+with equality at commuting states. Moreover (project-then-filter, Section 5)
+`tr(P_S g₁(M)) ≤ tr(g₁(P_S M P_S))`.
+
+*Proof.* For a unit vector `e` and a concave `g`, `⟨e, g(M)e⟩ ≤ g(⟨e, Me⟩)` (Jensen for the spectral
+measure of `M` in the state `e`); take `e = e_i`, `⟨e_i, Me_i⟩ = σ_i²`, and sum with the positive
+weights `λ_i, λ_i², 1`. For the last claim take for `e` the eigenvectors of `P_SMP_S` in the range of
+`P_S`. ∎
+
+(These one-sided bounds do not control the differences `q, p`.)
+
+Validation (G1, G4, G5): 24 generic states (Gaussian rows with heterogeneous scales and a random
+column covariance; `(d,n)` from `(50,50)` to `(150,400)` and tall `(90,40)`, `(160,100)`), filters
+SGD/Muon/HTMuon(1/8, 1/4, 1/2): Gram formulas vs direct SVD — max relative error of
+`T^S, V^S` `3.9e-12`, of `s₊^S` `7.2e-12`, of `θ₊−θ` (absolute) `1.1e-13`, of the loss thresholds
+`3.1e-12`. Jensen bounds: 576 tests, 0 violations. SGD row-norm formulas exact to `6.9e-13`.
+
+### 3.5 Muon: pinning of the quadratic coefficient, for every state and every noise
+
+**Theorem 3.7 (pinning) [PROVED].** Let `d ≤ n` and let `G ∈ ℝ^{d×n}` be *any* matrix of full row
+rank (the clean gradient, or a stochastic gradient with arbitrary noise). The Muon direction
+`O = msign(G) = (GGᵀ)^{−1/2}G` satisfies `OOᵀ = I_d`, so the rows of `Φ = UᵀO` are orthonormal and
+
+    V^S = ψ_S,     R^S = tr_S,     θ_upd = θ_iso,     p = s^ℬψ_𝒟 − s^𝒟ψ_ℬ = s ψ (θ_iso − θ)
+
+for every state `W` — commuting or not — and for every realisation of the noise. Consequently:
+`p > 0 ⟺ θ < θ_iso`; `θ₊ → θ_iso` as `η → ∞`; and the second-order term of every (projected) loss
+change, `(η²/2) tr_S`, depends neither on the state nor on the noise.
+
+*Proof.* `OOᵀ = (GGᵀ)^{−1/2}GGᵀ(GGᵀ)^{−1/2} = I`; `ΦΦᵀ = UᵀOOᵀU = I`, so `‖φ_i‖ = 1`. Lemma 1.3. ∎
+
+(If `d > n` or `G` is rank-deficient, `OOᵀ = Π` is the projector onto the column space of `G` and
+`‖φ_i‖² = (UᵀΠU)_ii ≤ 1`; the pinning fails and Theorem 3.5 must be used.)
+
+For SGD, Deng needs the two thresholds `g_gap < θ*` to control the sign of `p_t`
+(`θ ≤ g_gap ⇒ p_t > 0`, `θ ≥ θ* ⇒ p_t ≤ 0`), and both depend on the noise. **For Muon the two
+thresholds collapse to the single, noise-independent value `θ_iso`**, and `1 − θ_iso ≤ 1/(1+ρm²)`
+keeps Deng's `Θ(m^{−2})` gap dependence.
+
+**Theorem 3.8 (large steps attract the alignment to `θ_iso`) [PROVED].** Under the hypotheses of
+Theorem 3.7, with `s^𝒟, s^ℬ > 0`, `θ ≠ θ_iso`, let `ā_S := √(s^S/ψ_S)` (a `λ²`-weighted RMS of the row
+norms of block `S`) and
+
+    η_att := 2 / |1/ā_𝒟 − 1/ā_ℬ|.
+
+Then `|q| ≤ 2√(s^𝒟s^ℬ)(√(s^𝒟ψ_ℬ) + √(s^ℬψ_𝒟))`, and for every `η > η_att` (with `s₊ > 0`)
+`sign(θ₊ − θ) = sign(θ_iso − θ)`, for every state and every noise realisation.
+
+*Proof.* `|T^S| ≤ ∑_S λ_i²a_i‖φ_i‖ = ∑_S λ_i·λ_ia_i ≤ √(ψ_Ss^S)` (Cauchy–Schwarz, `‖φ_i‖ = 1`), so
+`|q| ≤ 2(s^𝒟√(ψ_ℬs^ℬ) + s^ℬ√(ψ_𝒟s^𝒟))`. Also
+`|p| = |√(s^ℬψ_𝒟) − √(s^𝒟ψ_ℬ)|·(√(s^ℬψ_𝒟) + √(s^𝒟ψ_ℬ))`. Hence
+`|q|/|p| ≤ 2√(s^𝒟s^ℬ)/|√(s^ℬψ_𝒟) − √(s^𝒟ψ_ℬ)| = η_att`, and for `η > |q|/|p|` the sign of `pη + q`
+is the sign of `p`. ∎
+
+Validation (G2, G3): 20 generic states × 5 noise types (none; i.i.d. Gaussian of twice the gradient
+scale; Gaussian with row- and column-heteroscedastic variances; Student-t(2.5); rank-one), `(d,n)`
+from `(40,40)` to `(150,300)`: `max |‖φ_i‖ − 1| = 1.8e-15`; `p` recovered from two direct
+evaluations of `f(η)` vs `sψ(θ_iso−θ)`: `4.6e-16` relative; attraction for `η = η_att·{1.001, 1.5, 6}`:
+300 tests, 0 violations; `|θ₊ − θ_iso| ≤ 3.7e-8` at `η = 10⁷η_att`; `max |q|/bound = 0.69`.
+
+### 3.6 Noise that preserves the commuting structure
+
+Let the state be commuting, `C = diag(a)Q`. A noise matrix `Ξ` keeps the stochastic gradient in the
+same singular frame — and therefore the next state commuting, per realisation — if it is
+**co-diagonal**: `UᵀΞ = diag(ζ)Q`, i.e. noise along the current gradient's own singular directions.
+(More generally: if the rows of `ΛC + UᵀΞ` are mutually orthogonal and row `i` is orthogonal to
+`c_j`, `j ≠ i`. A generic matrix noise, e.g. i.i.d. Gaussian entries, destroys the commuting
+structure with probability one: Section 3.7.)
+
+Write `f_odd(x) := sign(x) f(|x|)`.
+
+**Theorem 3.9 (co-diagonal noise; Gaussian-smoothed filter) [PROVED].**
+(a) (per realisation) `UᵀF(AW + Ξ) = diag(f_odd(σ_i + ζ_i)) Q`, so in signed coordinates
+`α_i⁺ = α_i − η f_odd(λ_iα_i + ζ_i)` and the new state is commuting with the same `Q`.
+(For spectrum-dependent filters `f` is determined by the multiset `{|σ_j + ζ_j|}`.)
+(b) If `f` is index-wise and `ζ_i ~ N(0, κ_i²)` (any dependence between different `i`), with
+
+    f̄_i(σ) := E f_odd(σ + ζ_i),          f2_i(σ) := E f(|σ + ζ_i|)²,
+
+then `E α_i⁺ = α_i − η f̄_i(σ_i)`, and
+
+    E s₊^S = s^S − 2η ∑_S λ_i σ_i f̄_i(σ_i) + η² ∑_S λ_i² f2_i(σ_i),
+    E f(η) = p̄ η² + q̄ η,   q̄ = 2 ∑_{i∈𝒟,j∈ℬ} s_i s_j (ν̄_j − ν̄_i),   p̄ = s^ℬ ∑_𝒟 λ_i² f2_i − s^𝒟 ∑_ℬ λ_j² f2_j,
+
+with the noise-averaged effective curvature `ν̄_i := f̄_i(σ_i)/a_i`.
+(c) Closed forms. Muon: `f̄(σ) = erf(σ/(√2 κ))`, `f2 = 1`. HTMuon(p):
+
+    f̄(σ) = σ κ^{p−1} 2^{(p+1)/2} Γ(p/2+1)/√π · ₁F₁((1−p)/2; 3/2; −σ²/(2κ²)),
+    f2(σ) = κ^{2p} 2^p Γ(p+1/2)/√π · ₁F₁(−p; 1/2; −σ²/(2κ²)).
+
+*Proof.* (a) `Uᵀ(AW+Ξ) = diag(σ_i+ζ_i)Q` has Gram matrix `diag((σ_i+ζ_i)²)`; Lemma 1.1 gives
+`F = diag(h((σ_i+ζ_i)²)(σ_i+ζ_i))Q = diag(f_odd(σ_i+ζ_i))Q`. (b) Linearity of expectation in
+Lemma 1.2: `T^S = ∑_S λ_i²a_i f_odd(σ_i+ζ_i)`, `V^S = ∑_S λ_i² f(|σ_i+ζ_i|)²`. (c) `E sign(X) =
+erf(σ/(√2κ))` for `X ~ N(σ,κ²)`; the HTMuon expressions are the signed and absolute moments of a
+Gaussian (Kummer-function form); used here as **[NUMERICAL]** facts: they agree with adaptive
+quadrature to `1.8e-15` and `2.7e-15` (N2). ∎
+
+**Corollary 3.10 (noise-dominated regime = renormalised SGD) [PROVED for the leading order].**
+Let `κ_i = κ` and `σ_i ≪ κ` for all `i`. To first order in `σ/κ`,
+`f̄(σ) = χ σ (1 + O(σ²/κ²))` with `χ := E[f_odd(ζ)ζ]/κ² = 2^{(p+1)/2}Γ(p/2+1)/√π · κ^{p−1}` (Muon:
+`χ = √(2/π)/κ`), and `f2(σ) = f2(0)(1 + O(σ²/κ²))`, `f2(0) = κ^{2p}2^pΓ(p+1/2)/√π`. Hence
+
+    E s₊^S ≈ s^S − 2(ηχ) τ^S + (ηχ)² κ_eff² ψ_S,      κ_eff² := f2(0)/χ² = κ² √π Γ(p+1/2) / (2 Γ(p/2+1)²),
+
+which is Deng's SGD formula `s^S − 2η'τ^S + η'²(u^S + κ_eff²ψ_S)` with `η' = ηχ` up to the term
+`η'²u^S`, itself `O(σ²/κ²)` relative to `η'²κ_eff²ψ_S`. In particular `ν̄_i ≈ χλ_i`: **the effective
+curvatures are proportional to the Hessian eigenvalues again, `q̄ ≈ χ q₀ < 0`, and Deng's sign
+facts and gap dependence are restored** (`κ_eff² = (π/2)κ²` for Muon, `κ²` for SGD).
+
+*Proof.* `f̄(σ) = E f_odd(σ+ζ)` is odd and smooth in `σ` (Gaussian smoothing) with derivative at 0
+equal to `E[f_odd(ζ)ζ]/κ²` (Stein); the constants follow from (c) with `₁F₁(·;·;0) = 1`. ∎
+
+Validation: per-realisation map (N1; `d = 60, n = 80`, heterogeneous `κ_i`, 60 realisations, 6
+filters incl. NS5 and Echelon(k)): signed coordinates `7.2e-15`, off-diagonal Gram `5.3e-15`,
+`s₊^S` `8.0e-15`. Monte Carlo through the direct SVD (N3; `d = 40, n = 50`, `κ/median σ ∈ {0.3, 3}`,
+Muon/HTMuon(1/8)/HTMuon(1/2), 3000 samples): `E s₊^𝒟, E s₊^ℬ` and the expected projected loss
+changes at the predicted thresholds, 24 z-scores, `max |z| = 1.49`, relative errors `≤ 1.6e-3`.
+Linear-response slope `χ`: `9.9e-10`. Corollary 3.10 (E3): relative deviation of the exact smoothed
+sums from the renormalised Deng sums `3.6e-3, 3.6e-5, 3.6e-7` for `max σ/κ = 10⁻¹, 10⁻², 10⁻³`
+(quadratic convergence, all three filters within a factor 1.5 of these numbers).
+Sign of `q̄` under Muon at a two-level state above `θ_iso` (E5; direct SVD, 1500 samples): `q̄ > 0`
+for `κ/σ_ℬ ∈ {0.01, 0.3, 1}`, `q̄ < 0` for `κ/σ_ℬ ∈ {3, 10, 100}`; Monte-Carlo vs formula `|z| ≤ 1.5`.
+
+### 3.7 I.i.d. matrix noise
+
+Let `Ξ` have i.i.d. `N(0, ς²)` entries and let the state be commuting, `C = diag(a)Q`, `d ≤ n`, all
+`a_i > 0`. Complete `Q` to an orthogonal `Q̃ ∈ ℝ^{n×n}` and set `Y := UᵀF(G)Q̃ᵀ ∈ ℝ^{d×n}` (coordinates
+of the update in the frame `(u_i, q̃_j)`).
+
+**Lemma 3.11 (symmetry) [PROVED].** `E Y_ij = 0` for `j ≠ i`, and `E[ΦΦᵀ]` is diagonal. Hence
+
+    E c_i⁺ = (1 − η m_i/a_i) c_i,   m_i := E Y_ii,       E s₊^S = s^S − 2η ∑_S λ_i²a_im_i + η² ∑_S λ_i² v_i,   v_i := E‖φ_i‖²:
+
+the *mean* state stays commuting with noise-averaged curvature `ν̄_i = m_i/a_i`, although individual
+realisations do not. For Muon `v_i = 1` (Theorem 3.7).
+
+*Proof.* In frame coordinates `G̃ := UᵀGQ̃ᵀ = [diag(σ) 0] + Ξ̃` with `Ξ̃` again i.i.d. `N(0,ς²)`. For
+sign matrices `D₁ = diag(ε_1..ε_d)`, `D₂ = diag(ε_1..ε_d, ε'_{d+1}..ε'_n)` we have
+`D₁[diag(σ) 0]D₂ = [diag(σ) 0]` and `D₁Ξ̃D₂ ~ Ξ̃`, so `D₁G̃D₂ ~ G̃`, and by Lemma 1.1
+`Y = F(G̃) ~ D₁YD₂`. Thus `E Y_ij = ε_iε_j E Y_ij` (`j ≤ d`) and `E Y_ij = ε_iε'_j E Y_ij` (`j > d`);
+choosing `ε_i = −1` and all other signs `+1` gives `E Y_ij = 0` for `j ≠ i`. Likewise
+`(YYᵀ)_ik ~ ε_iε_k (YYᵀ)_ik`, so `E(ΦΦᵀ)_ik = E(YYᵀ)_ik = 0` for `i ≠ k`. The displayed formulas are
+Lemma 1.2 with `⟨c_i, φ_i⟩ = a_iY_ii`. ∎
+
+The proof uses only the invariance of the law of `Ξ̃` under independent sign flips of rows and
+columns, so it holds for any such noise.
+
+**Proposition 3.12 (wide limit) [HEURISTIC + NUMERICAL].** For `n → ∞` with `d` fixed and `ς²n → ϖ²`:
+`ΞΞᵀ → ϖ²I_d` and `ΛCΞᵀ → 0`, so `GGᵀ → diag(σ_i² + ϖ²)` and
+
+    m_i → σ_i γ(√(σ_i² + ϖ²)),      v_i → f(√(σ_i² + ϖ²))²,      ν̄_i → λ_i γ(√(σ_i² + ϖ²)).
+
+I.e. the filter gain is evaluated at the **noise-inflated singular value**. If `ϖ ≫ σ_i` for all
+`i`, `ν̄_i ≈ γ(ϖ)λ_i`: SGD with step `ηγ(ϖ)`, and Deng's theory (sign of `q`, gap dependence) is
+restored for every filter. Numerics (N5; `d = 10`, `ϖ = median σ`, direct SVD, 1200–3000 samples):
+max relative error of `m_i` for Muon `0.32, 0.060, 0.015, 0.0056, 0.0009` and for HTMuon(1/8)
+`0.25, 0.051, 0.013, 0.0050, 0.0010` at `n = 10, 40, 160, 640, 2560` (decay `≈ 1/n`); of `v_i` for
+HTMuon(1/8) `0.16, 0.022, 0.0053, 0.0013, 0.0004`. Symmetry lemma (N4; `d = 20, n = 30`, `4·10⁴`
+samples): largest off-diagonal `|E Y_ij|` `3.5e-3` with `max |z| = 3.6` over 580 entries (consistent
+with zero; diagonal means range over `0.05–1.45`); off-diagonal `E(ΦΦᵀ)` `≤ 3.9e-4`
+(`max |z| = 2.8`; identically 0 for Muon).
 

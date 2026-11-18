@@ -28,17 +28,51 @@ Contents (paper item → section of this file):
 * **Remark after the lemma** (sign of the parabola) — section *Sign of the parabola*.
 * **Bridge to the deterministic equivalent** `thetaBarNext` — section *Deterministic equivalent*:
   `thetaBarNext - θ_t = 𝔼[f_t(η) | x_t] / (s_t 𝔼[s_{t+1} | x_t])` (`Spec.thetaBarNext_sub_theta`).
-* **Non-vacuity** — the last section exhibits a concrete two-dimensional instance for each regime
-  (`p_t > 0` with `η < η*_t`, `p_t > 0` with `η > η*_t`, `p_t ≤ 0`) and a two-point noise realising
-  the hypotheses of the abstract-expectation lemmas.
+* **Non-vacuity** — the last sections exhibit a concrete two-dimensional instance for each regime
+  (`p_t > 0` with `η < η*_t`, `p_t > 0` with `η > η*_t`, `p_t ≤ 0`), a two-point noise realising
+  the hypotheses of the abstract-expectation lemmas, and two explicit instances showing that at
+  finite `d` the sign of `𝔼[f_t]` does *not* determine the sign of `𝔼[θ_{t+1}] - θ_t`
+  (`OneStep.exSpec_expect_fCompare_pos_and_expect_theta_lt`,
+  `OneStep.exSpec_expect_fCompare_neg_and_theta_lt_expect_theta`).
 
-Positivity hypotheses (`s_t > 0`, `s_{t+1} > 0`, `𝔼[s_{t+1} | x_t] > 0`, `s^𝒟_{t+1} ≠ 0`,
-`p_t ≠ 0`) are always explicit, so that no equivalence or identity below gets its content from
-Lean's `x / 0 = 0`; for each positivity hypothesis a companion lemma (`exists_…_and_…_eq_zero`,
-`theta_zero_lt_thetaBarNext_and_expF_eq_zero`, `OneStep.theta_eq_zero_and_one_div_eq_one`) shows
-that it cannot be dropped. (The only statements that also cover a vanishing denominator are the
-trivial bounds `0 ≤ thetaBarNext ≤ 1`, `thetaBarNext_zero` and the rewriting `etaStar_eq`, which
-hold for the totalised functions.)
+## Positivity hypotheses
+
+Every positivity hypothesis is explicit, and each comparison lemma carries only the one it needs:
+
+* the `>` equivalences (`Spec.theta_lt_theta_cNext_iff`, `Spec.theta_lt_thetaBarNext_iff`) assume
+  only `s_t > 0` (`x_t ≠ 0`) — this hypothesis is missing in the paper;
+* the `<` equivalences (`Spec.theta_cNext_lt_theta_iff`, `Spec.thetaBarNext_lt_theta_iff`) assume
+  only `s_{t+1} > 0`, resp. `𝔼[s_{t+1} | x_t] > 0` — the first is the paper's own assumption
+  (Remark in A.2), so the paper's `<` equivalence is correct as stated;
+* the `=` equivalences and the difference identities (`Spec.theta_cNext_sub_theta`,
+  `Spec.thetaBarNext_sub_theta`) need both;
+* the implications `f_t > 0 → θ_{t+1} > θ_t`, `f_t < 0 → θ_{t+1} < θ_t`,
+  `expF > 0 → θ_t < thetaBarNext`, `expF < 0 → thetaBarNext < θ_t` need none.
+
+For each equivalence a `…_iff_sharp` lemma states *exactly* when it holds (e.g.
+`θ_t < θ_{t+1} ↔ 0 < f_t` holds iff `x_t ≠ 0` or `s^𝒟_{t+1} = 0`), and companion lemmas
+(`Spec.exists_theta_lt_theta_cNext_and_fCompare_eq_zero`,
+`Spec.exists_theta_cNext_lt_theta_and_fCompare_eq_zero`,
+`Spec.theta_zero_lt_thetaBarNext_and_expF_eq_zero`,
+`Spec.exists_thetaBarNext_lt_theta_and_expF_eq_zero`,
+`OneStep.theta_eq_zero_and_one_div_eq_one`) exhibit configurations where the hypothesis fails and
+the conclusion with it. None of the equivalences or identities gets its content from Lean's
+`x / 0 = 0`.
+
+The totalised functions `θ` (with the paper's convention `θ(0) = 0`), `thetaBarNext` and `etaStar`
+(both `0` when their denominator vanishes) are nevertheless used at degenerate points in the
+following statements, which hold there as stated: the first equality of eq. (10)
+(`Spec.theta_cNext_eq_sum_div_sum`), the facts on `θ` of an arbitrary state (`OneStep.theta_pos_iff`,
+`OneStep.theta_eq_zero_iff`, `OneStep.theta_eq_zero_or_eq_one_iff`, …, and therefore
+`Spec.qCoef_neg_iff_theta`, `Spec.qCoef_eq_zero_iff_theta`), the one-sided comparison lemmas above
+(where "both sides are false" at the degenerate point), the bounds `0 ≤ thetaBarNext ≤ 1`,
+`Spec.thetaBarNext_zero`, the rewriting `Spec.etaStar_eq`, and the lemmas about the sign of `η*_t`
+when `p_t = 0` (`Spec.etaStar_nonpos_of_pCoef_nonpos`,
+`Spec.etaStar_pos_iff_pCoef_pos_and_qCoef_neg`; consequently the hypothesis `0 < η < η*_t` of
+`Spec.thetaBarNext_lt_theta_of_lt_etaStar` is empty when `p_t ≤ 0`, where the paper leaves `η*_t`
+undefined (`p_t = 0`) or the Remark treats the case separately (`p_t < 0`)).
+
+## Namespaces
 
 Generic helper lemmas (real-variable facts, facts about `mom` and `theta` of an arbitrary state)
 live in `SuspiciousAlignment.OneStep` and take the spectrum `P` as an explicit first argument; the
@@ -1429,9 +1463,12 @@ theorem thetaBarNext_lt_theta_of_pCoef_nonpos (η : ℝ) (c : ι → ℝ) (hp : 
 /-! ### Abstract expectation
 
 The two lemmas of A.5 only use `𝔼 ζ_i = 0` and `𝔼 ζ_i² = κ_i²`. We record this for an arbitrary
-normalised linear functional `E` on functions of the sample point (finite averages are instances;
-the measure-theoretic version, with integrability side conditions, lives in the probability
-layer and can be derived from `mom_two_cNext_sub_EsNext` and `fCompare_sub_expF`). -/
+normalised linear functional `E` defined on *all* functions of the sample point. Finite averages
+(and finitely additive expectations) are instances; the Bochner integral is not, since it is only
+linear on integrable functions. The measure-theoretic version, with its integrability side
+conditions, belongs to the probability layer (`SuspiciousAlignment/Prob/NoiseModel.lean`), where
+it follows from linearity of the integral exactly as below; the pathwise identities
+`mom_two_cNext_sub_EsNext` and `fCompare_sub_expF` isolate the two terms whose integrals vanish. -/
 
 section AbstractExpectation
 
@@ -1605,6 +1642,102 @@ example (P : Spec ι) (N : Noise ι) (η : ℝ) (c : ι → ℝ) :
       (fun i => if b then Real.sqrt (N.kap2 i) else -Real.sqrt (N.kap2 i))) = P.expF N η c :=
   P.expect_fCompare N boolE (by simp [boolE]) _ (fun i => by simp [boolE])
     (fun i => by simp [boolE, Real.sq_sqrt (Spec.kap2_nonneg N i)]) η c
+
+/-! ### The sign of `𝔼[f_t]` versus the sign of `𝔼[θ_{t+1}] - θ_t` at finite `d`
+
+The Remark after Lemma "Quadratic form" says "`𝔼[f_t(η)] < 0`, implying the expected alignment
+`𝔼[θ_{t+1}]` decreases" (and the analogue for `> 0`). At finite `d` the sign of `𝔼[f_t]` decides
+the sign of `thetaBarNext - θ_t` (section *Deterministic equivalent*), **not** the sign of
+`𝔼[θ_{t+1}] - θ_t`: the two lemmas of A.5 only use the first two moments of the noise, and the two
+explicit instances below (two-point noise `ζ = ±(a, a)` with mean `0` and second moments `a²`, on
+the example spectrum `λ = (2, 1)`, `x_t = (1, 1)`, `θ_t = 4/5`, `η*_t = 2/3`) show that these
+moments do not determine the sign of `𝔼[θ_{t+1}] - θ_t`, in either direction. (For Gaussian noise
+the same phenomenon is observed numerically, see the fidelity note; the paper's implication is
+only valid in the limit `d → ∞`.) -/
+
+/-- Isotropic noise `κ_i² = 4` on `Fin 2`. -/
+def exNoise4 : Noise (Fin 2) where
+  kap2 := fun _ => 4
+  smin := 4
+  smax := 4
+  smin_nonneg := by norm_num
+  smin_le := fun _ => le_refl _
+  le_smax := fun _ => le_refl _
+
+theorem exSpec_pCoef_4 : exSpec.pCoef exNoise4 ![1, 1] = 12 := by
+  simp [Spec.pCoef, Spec.sD, Spec.sB, exSpec_eD, exSpec_eB, exSpec_mom_D, exSpec_mom_B, exNoise4]
+  norm_num
+
+theorem exSpec_etaStar_4 : exSpec.etaStar exNoise4 ![1, 1] = 2 / 3 := by
+  unfold Spec.etaStar
+  rw [exSpec_qCoef, exSpec_pCoef_4]
+  norm_num
+
+/-- The alignment of an explicit state for the example spectrum:
+`θ(v) = 4 v_0² / (4 v_0² + v_1²)`. -/
+theorem exSpec_theta (v : Fin 2 → ℝ) :
+    exSpec.theta v = 4 * v 0 ^ 2 / (4 * v 0 ^ 2 + v 1 ^ 2) := by
+  unfold Spec.theta Spec.s Spec.sD Spec.sB
+  rw [exSpec_mom_D, exSpec_mom_B]
+  norm_num
+
+theorem exSpec_cNext_zero (η : ℝ) (c ζ : Fin 2 → ℝ) :
+    exSpec.cNext η c ζ 0 = (1 - η * 2) * c 0 - η * ζ 0 := rfl
+
+theorem exSpec_cNext_one (η : ℝ) (c ζ : Fin 2 → ℝ) :
+    exSpec.cNext η c ζ 1 = (1 - η * 1) * c 1 - η * ζ 1 := rfl
+
+theorem boolE_apply (f : Bool → ℝ) : boolE f = (f true + f false) / 2 := rfl
+
+/-- The symmetric two-point noise `ζ = ±(a, a)` on the sample space `Bool`. -/
+def exZeta (a : ℝ) : Bool → Fin 2 → ℝ := fun b _ => if b then a else -a
+
+/-- The two-point noise `±(a, a)` has mean `0` and second moments `a²`; hence, for any noise
+profile with `κ_i² = a²`, its expected comparison functional is `expF = p_t η² + q_t η`
+(an instance of `Spec.expect_fCompare`). -/
+theorem boolE_fCompare_exZeta (N : Noise (Fin 2)) (a : ℝ) (hN : ∀ i, N.kap2 i = a ^ 2) (η : ℝ)
+    (c : Fin 2 → ℝ) :
+    boolE (fun b => exSpec.fCompare η c (exZeta a b)) = exSpec.expF N η c :=
+  exSpec.expect_fCompare N boolE (by simp [boolE]) _ (fun i => by simp [boolE, exZeta])
+    (fun i => by rw [hN i]; simp [boolE, exZeta]) η c
+
+/-- **At finite `d`, `𝔼[f_t] > 0` does not imply that `𝔼[θ_{t+1}]` increases.** For
+`λ = (2, 1)`, `x_t = (1, 1)`, `κ² = (1, 1)`, `η = 1 > η*_t = 2/3` and the two-point noise
+`ζ = ±(1, 1)`: `𝔼[f_t] = 4 > 0` and `θ_t = 4/5 < thetaBarNext = 8/9`, but
+`𝔼[θ_{t+1}] = (16/17 + 0)/2 = 8/17 < 4/5 = θ_t`. -/
+theorem exSpec_expect_fCompare_pos_and_expect_theta_lt :
+    0 < boolE (fun b => exSpec.fCompare 1 ![1, 1] (exZeta 1 b)) ∧
+      exSpec.theta ![1, 1] < exSpec.thetaBarNext exNoise 1 ![1, 1] ∧
+      boolE (fun b => exSpec.theta (exSpec.cNext 1 ![1, 1] (exZeta 1 b))) <
+        exSpec.theta ![1, 1] := by
+  have h : 0 < exSpec.expF exNoise 1 ![1, 1] := by
+    rw [Spec.expF_eq, exSpec_pCoef, exSpec_qCoef]
+    norm_num
+  refine ⟨?_, exSpec.theta_lt_thetaBarNext_of_expF_pos exNoise _ _ h, ?_⟩
+  · rw [boolE_fCompare_exZeta exNoise 1 (fun _ => by norm_num [exNoise])]
+    exact h
+  · simp only [boolE_apply, exSpec_theta, exSpec_cNext_zero, exSpec_cNext_one, exZeta]
+    norm_num
+
+/-- **At finite `d`, `0 < η < η*_t` (hence `𝔼[f_t] < 0`) does not imply that `𝔼[θ_{t+1}]`
+decreases.** For `λ = (2, 1)`, `x_t = (1, 1)`, `κ² = (4, 4)`, `η = 1/3 < η*_t = 2/3` and the
+two-point noise `ζ = ±(2, 2)`: `𝔼[f_t] = -4/3 < 0` and `thetaBarNext = 5/7 < 4/5 = θ_t`, but
+`𝔼[θ_{t+1}] = (1 + 9/13)/2 = 11/13 > 4/5 = θ_t`. -/
+theorem exSpec_expect_fCompare_neg_and_theta_lt_expect_theta :
+    (0 : ℝ) < 1 / 3 ∧ (1 / 3 : ℝ) < exSpec.etaStar exNoise4 ![1, 1] ∧
+      boolE (fun b => exSpec.fCompare (1 / 3) ![1, 1] (exZeta 2 b)) < 0 ∧
+      exSpec.thetaBarNext exNoise4 (1 / 3) ![1, 1] < exSpec.theta ![1, 1] ∧
+      exSpec.theta ![1, 1] <
+        boolE (fun b => exSpec.theta (exSpec.cNext (1 / 3) ![1, 1] (exZeta 2 b))) := by
+  have h : exSpec.expF exNoise4 (1 / 3) ![1, 1] < 0 := by
+    rw [Spec.expF_eq, exSpec_pCoef_4, exSpec_qCoef]
+    norm_num
+  refine ⟨by norm_num, by rw [exSpec_etaStar_4]; norm_num, ?_,
+    exSpec.thetaBarNext_lt_theta_of_expF_neg exNoise4 _ _ h, ?_⟩
+  · rw [boolE_fCompare_exZeta exNoise4 2 (fun _ => by norm_num [exNoise4])]
+    exact h
+  · simp only [boolE_apply, exSpec_theta, exSpec_cNext_zero, exSpec_cNext_one, exZeta]
+    norm_num
 
 end OneStep
 

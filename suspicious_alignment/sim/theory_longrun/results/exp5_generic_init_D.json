@@ -1,0 +1,136 @@
+{
+ "rows": [
+  {
+   "n": 1,
+   "opt": "muon",
+   "pred_top_n": 1.0,
+   "theta": [
+    1.0,
+    0.0
+   ],
+   "frac_energy_top_n": [
+    1.0,
+    0.0
+   ],
+   "max_rel_dev_energy_from_floor": 0.12895960922112737
+  },
+  {
+   "n": 1,
+   "opt": "ht0.125",
+   "pred_top_n": 1.0,
+   "theta": [
+    1.0,
+    0.0
+   ],
+   "frac_energy_top_n": [
+    1.0,
+    0.0
+   ],
+   "max_rel_dev_energy_from_floor": 5.329070518200751e-15
+  },
+  {
+   "n": 1,
+   "opt": "ht0.5",
+   "pred_top_n": 1.0,
+   "theta": [
+    1.0,
+    0.0
+   ],
+   "frac_energy_top_n": [
+    1.0,
+    0.0
+   ],
+   "max_rel_dev_energy_from_floor": 3.530509218307998e-14
+  },
+  {
+   "n": 2,
+   "opt": "muon",
+   "pred_top_n": 1.0,
+   "theta": [
+    1.0,
+    0.0
+   ],
+   "frac_energy_top_n": [
+    1.0,
+    0.0
+   ],
+   "max_rel_dev_energy_from_floor": 0.36491340969856134
+  },
+  {
+   "n": 2,
+   "opt": "ht0.125",
+   "pred_top_n": 1.0,
+   "theta": [
+    1.0,
+    0.0
+   ],
+   "frac_energy_top_n": [
+    1.0,
+    0.0
+   ],
+   "max_rel_dev_energy_from_floor": 9.103828801926284e-15
+  },
+  {
+   "n": 2,
+   "opt": "ht0.5",
+   "pred_top_n": 1.0,
+   "theta": [
+    1.0,
+    0.0
+   ],
+   "frac_energy_top_n": [
+    1.0,
+    0.0
+   ],
+   "max_rel_dev_energy_from_floor": 3.530509218307998e-14
+  },
+  {
+   "n": 8,
+   "opt": "muon",
+   "pred_top_n": 0.9940387312064939,
+   "theta": [
+    0.9942246581210452,
+    0.00032272954523668453
+   ],
+   "frac_energy_top_n": [
+    1.0,
+    0.0
+   ],
+   "max_rel_dev_energy_from_floor": 0.7949971406698881
+  },
+  {
+   "n": 8,
+   "opt": "ht0.125",
+   "pred_top_n": 0.9971407319042273,
+   "theta": [
+    0.9971407319042275,
+    0.0
+   ],
+   "frac_energy_top_n": [
+    1.0,
+    0.0
+   ],
+   "max_rel_dev_energy_from_floor": 2.353672812205332e-14
+  },
+  {
+   "n": 8,
+   "opt": "ht0.5",
+   "pred_top_n": 0.999966830308275,
+   "theta": [
+    0.9999668303082753,
+    0.0
+   ],
+   "frac_energy_top_n": [
+    1.0,
+    0.0
+   ],
+   "max_rel_dev_energy_from_floor": 1.4162004902118497e-12
+  }
+ ],
+ "config": {
+  "d": 40,
+  "k": 4,
+  "m": 10,
+  "eta": 0.01
+ }
+}

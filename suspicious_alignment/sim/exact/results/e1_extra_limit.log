@@ -17,3 +17,10 @@ m=20 n=20 ht0.5: theta_late=1.00000 pred(top-n, q=4.00)=1.00000 ratio_q(all d)=0
 m=20 n=50 muon: theta_late=0.99683 pred(top-n, q=2.00)=0.99747 ratio_q(all d)=0.99324 energy[D, k..n, >=n]=[0.99681 0.00319 0.     ] updD=0.400
 m=20 n=50 ht0.125: theta_late=0.99898 pred(top-n, q=2.29)=0.99898 ratio_q(all d)=0.99746 energy[D, k..n, >=n]=[0.99898 0.00102 0.     ] updD=0.624
 m=20 n=50 ht0.5: theta_late=1.00000 pred(top-n, q=4.00)=1.00000 ratio_q(all d)=0.99999 energy[D, k..n, >=n]=[1. 0. 0.] updD=0.997
+m=20 n=100 muon: theta_late=0.99455 pred(top-n, q=2.00)=0.99481 ratio_q(all d)=0.99324 energy[D, k..n, >=n]=[0.9944 0.0056 0.    ] updD=0.200
+m=20 n=100 ht0.125: theta_late=0.99798 pred(top-n, q=2.29)=0.99798 ratio_q(all d)=0.99746 energy[D, k..n, >=n]=[0.99798 0.00202 0.     ] updD=0.393
+m=20 n=100 ht0.5: theta_late=0.99999 pred(top-n, q=4.00)=0.99999 ratio_q(all d)=0.99999 energy[D, k..n, >=n]=[9.9999e-01 1.0000e-05 0.0000e+00] updD=0.995
+m=5 n=200 muon: theta_late=0.89384 pred(top-n, q=2.00)=0.90439 ratio_q(all d)=0.90439 energy[D, k..n, >=n]=[0.89284 0.10716 0.     ] updD=0.100
+m=20 n=1 muon: theta_late=1.00000 pred(top-n, q=2.00)=1.00000 ratio_q(all d)=0.99324 energy[D, k..n, >=n]=[1. 0. 0.] updD=1.000
+m=20 n=5 muon: theta_late=1.00000 pred(top-n, q=2.00)=1.00000 ratio_q(all d)=0.99324 energy[D, k..n, >=n]=[1. 0. 0.] updD=1.000
+[cpu] {'name': 'e1_extra_limit', 'cpu_s': 51.8, 'wall_s': 79.3}

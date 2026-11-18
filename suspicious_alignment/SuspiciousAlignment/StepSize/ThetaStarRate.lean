@@ -7,7 +7,7 @@ import SuspiciousAlignment.Defs
 Paper: Deng et al., *Suspicious Alignment of SGD* (arXiv:2601.11789v2), Theorem 5
 ("Asymptotic rate of `θ*_t`", tex lines 443–457, proof 1260–1350):
 
-> with `m := λ_k / λ_{k+1} > 1` there are constants `α, β > 0` with
+> Under Assumption 1, with `m := λ_k / λ_{k+1} > 1` there are constants `α, β > 0` with
 > `1 - β / m² ≤ θ*_t ≤ 1 - α / m²`, i.e. `θ*_t = 1 - Θ(1/m²)`.
 
 For a single fixed problem such an existence statement is trivial, so the content is *which
@@ -15,6 +15,8 @@ quantities the constants depend on*.  This file proves the following, all for fi
 the only extra hypothesis `0 < s_min` (needed for `r_{0,t}` to be the root of a genuine quadratic).
 
 Write `a = s_min ψ_ℬ`, `h = s_max ψ_𝒟`, `M = s_t (λ_1² - λ_d²)` for the coefficients of Theorem 4.
+
+## What is true
 
 * `Spec.thetaStar_rate_aux_sandwich` — the exact size of `1 - θ*_t`:
   `a / (M + h + a) ≤ 1 - θ*_t < a / (M + h)` (and `1 - θ*_t ≤ a / (a + h)`).
@@ -31,34 +33,53 @@ Write `a = s_min ψ_ℬ`, `h = s_max ψ_𝒟`, `M = s_t (λ_1² - λ_d²)` for t
   `Spec.thetaStar_rate_of_bounded_state`, `Spec.thetaStar_rate_exists` — the same bound on
   `1 - θ*_t`, and its uniform / trajectory-bounded / purely existential forms.
 * `thetaStar_rate_isTheta` — the `Θ` form `1 - θ* = Θ(1/m²)` for a family of problems along which
-  `ρ s_max/s_min`, `s_t/(s_min (d-k))`, `λ_1/λ_k`, `λ_{k+1}/λ_d` stay bounded.
-* `thetaStar_tendsto_one_of_gap` — the paper's interpretation "`θ*_t → 1` as
-  `λ_k/λ_{k+1} → ∞`" (needs only `ρ s_max/s_min` bounded below).
+  (eventually) `ρ s_max/s_min`, `s_t/(s_min (d-k))`, `λ_1/λ_k`, `λ_{k+1}/λ_d` stay bounded;
+  instances with `m → ∞`: `thetaStar_rate_isTheta_gapSpecNat_zero` (fixed `d`),
+  `thetaStar_rate_isTheta_under_assumption1_zero_state` (inside Assumption 1).
+* `thetaStar_tendsto_one_of_gap`, `thetaStar_tendsto_one_of_gap_of_rho`,
+  `thetaStar_tendsto_one_of_assumption1` — the paper's interpretation "`θ*_t → 1` as
+  `λ_k/λ_{k+1} → ∞`" (needs only `ρ` bounded below, automatic under Assumption 1).
 
 The lower bound `θ*_t ≥ 1 - β / m²` is therefore genuinely uniform.  The upper bound
-`θ*_t ≤ 1 - α / m²` is **not**: `α` cannot be chosen independently of `s_t`, and the claimed
-`m⁻²` rate is false in natural regimes.
+`θ*_t ≤ 1 - α / m²` is **not**.
+
+## What is false: dependence of `α` (any dimension)
 
 * `Spec.thetaStar_rate_energy_bound` — `1 - θ*_t < s_min (d-k) / (s_t (m² - 1))`.
 * `Spec.thetaStar_rate_alpha_not_uniform_in_state` — for a fixed problem and every `α > 0` there
-  is a state with `θ*_t > 1 - α / m²`.
+  is a (large) state with `θ*_t > 1 - α / m²`.
 * `Spec.thetaStar_rate_quartic` — `1 - θ*_t < C / (m² (m² - 1))` with
   `C = s_min (d-k) / (λ_{k+1}² ‖P^𝒟 x_t‖²)`: if `λ_{k+1} = Θ(1)` and the state is fixed, the rate is
   `m⁻⁴`, not `m⁻²`.
-* `Spec.thetaStar_rate_trace_bound` — `1 - θ*_t < Tr Σ / ((1+ρ) s_t (m² - 1))`: under the paper's
-  Assumption 1 (`Tr Σ` bounded) with `s_t` of order `d`, `θ*_t → 1` at *fixed* `m`.
-* `thetaStar_rate_fails_fixed_state` — a concrete three-dimensional family (`λ = (μ, 1, 1)`,
-  `𝒟 = {1}`, `Σ = I`, `x = u_1`; every parameter except `m = μ` is fixed) in which
-  `1 - θ* < 2 / (μ² (μ² - 1))`, so no `α > 0` works for all `μ`.
-* `thetaStar_rate_not_isTheta` — along `A_n = diag(n+2, 1, 1)`, `Σ = I`, `x = u_1`, the function
-  `1 - θ*` is not `Θ(1/m²)`.
-* `Spec.thetaStar_rate_cond_bound` — `1 - θ*_t ≤ ((d-k) s_min/s_max) / ((λ_1/λ_k)² m²)`: `α` must
-  also degrade with the dominant-block condition number.
+* `Spec.thetaStar_rate_trace_bound` — `1 - θ*_t < Tr Σ / ((1+ρ) s_t (m² - 1))`.
+* `Spec.thetaStar_rate_psi_bound` — `1 - θ*_t ≤ s_min ψ_ℬ / (s_max ψ_𝒟) ≤ ψ_ℬ/ψ_𝒟` for all states.
+* `Spec.thetaStar_rate_cond_bound` — `1 - θ*_t ≤ ((d-k) s_min/s_max) / ((λ_1/λ_k)² m²)`.
+* `thetaStar_rate_fails_fixed_state`, `thetaStar_rate_not_isTheta` — a three-dimensional family
+  (`λ = (μ, 1, 1)`, `𝒟 = {1}`, `Σ = I`, `x = u_1`) in which `1 - θ* < 2 / (μ² (μ² - 1))`.  These
+  have `d = 3` fixed and `λ_k → ∞`: they are **outside** the regime of Assumption 1.
 * `thetaStar_rate_paper_beta_fails` — the constant `β := ρ s_max/s_min` named in the paper's proof
-  does not satisfy `1 - β/m² ≤ θ*_t` (it is the reciprocal of the correct constant).
+  does not satisfy `1 - β/m² ≤ θ*_t` (it is the reciprocal of the correct constant);
+  `thetaStar_rate_paper_psiB_bound_fails` — the proof's step `|ℬ| λ_{k+1}² ≤ ψ_ℬ` is false.
+
+## What is false inside the regime of Assumption 1 (`d, k → ∞`)
+
+`ThetaStarRate.Assumption1` formalizes the paper's Assumption 1 for a sequence of problems
+(`d, k → ∞`, `‖x‖²/d` bounded, `ρ` fixed, block spectral moments convergent for
+`p ∈ {2,3,4,6,8}`, `Tr Σ` bounded).  On the index types `Fin (n+2) ⊕ Fin (n+2)` with `Σ_n = I/d`:
+
+* `thetaStar_rate_isLittleO_of_trace_bounded`, `thetaStar_rate_fails_of_trace_bounded`,
+  `thetaStar_rate_not_isTheta_of_trace_bounded`, `thetaStar_rate_isLittleO_of_assumption1` —
+  general: bounded `Tr Σ`, `m ≥ m₀ > 1` and `s_t → ∞` force `1 - θ* = o(1/m²)`.
+* `thetaStar_rate_fails_under_assumption1` — `A_n = diag(2,…,2,1,…,1)`, `x_n = ∑ u_i`:
+  Assumption 1 holds with constant moments, `m = 2`, yet `1 - θ* < 1/(24(n+2))`; no
+  dimension-free `α`.
+* `thetaStar_rate_not_isTheta_under_assumption1` — `A_n = diag(1,…,1,ε_n,…,ε_n)`, `x_n = ∑ u_i`:
+  Assumption 1 holds, `m_n = n + 2 → ∞`, and `1 - θ*` is not `Θ(1/m²)`.
+* `thetaStar_rate_fails_under_assumption1_all_states` — `A_n = diag(2,…,2,1,ε_n,…,ε_n)`:
+  Assumption 1 holds, `m = 2`, and `1 - θ* ≤ 1/(2(n+2))` for *every* state and *every* noise.
 
 Helper lemmas (facts about `r_{0,t}`, proved locally because the file for Theorem 4 is written
-concurrently) live in `namespace SuspiciousAlignment.ThetaStarRate`.
+concurrently) and the example families live in `namespace SuspiciousAlignment.ThetaStarRate`.
 -/
 
 set_option linter.unusedSectionVars false
@@ -728,7 +749,10 @@ theorem thetaStar_rate_alpha_not_uniform_in_state (hs : 0 < N.smin) {α : ℝ} (
 /-- **The `m⁻⁴` regime.**  If the state has a non-zero dominant component, then
 `1 - θ*_t < C / (m² (m² - 1))` with `C = s_min (d-k) / (λ_{k+1}² ‖P^𝒟 x_t‖²)`.
 `C` does not involve `λ_k`: when the gap ratio `m` grows through `λ_k → ∞` with
-`λ_{k+1} = Θ(1)` and the state fixed, `1 - θ*_t = O(m⁻⁴)`, contradicting `1 - θ*_t = Θ(m⁻²)`. -/
+`λ_{k+1} = Θ(1)` and the state fixed, `1 - θ*_t = O(m⁻⁴)`, contradicting `1 - θ*_t = Θ(m⁻²)`.
+(This mechanism needs `λ_k → ∞` and is therefore a fixed-`d` phenomenon: along `d → ∞` the
+block-moment item of Assumption 1 gives `λ_k² ≤ ψ_𝒟/k = O(1)`, so `m → ∞` only through
+`λ_{k+1} → 0`, and then the bound reads `s_min (d-k) / (λ_k² ‖P^𝒟 x_t‖² (m² - 1))`.) -/
 theorem thetaStar_rate_quartic (hs : 0 < N.smin) (c : ι → ℝ) (hc : 0 < P.normSqD c) :
     1 - P.thetaStar N c
       < N.smin * P.dkR / (P.lamk1 ^ 2 * P.normSqD c) / (P.mRatio ^ 2 * (P.mRatio ^ 2 - 1)) := by
@@ -855,34 +879,42 @@ open Filter Topology Asymptotics ThetaStarRate
 variable {J : Type*} {κ : J → Type*} [∀ j, Fintype (κ j)] [∀ j, DecidableEq (κ j)]
 
 /-- **Theorem 5, `Θ` form** (`θ*_t = 1 - Θ(1/m²)`) for an arbitrary family of problems/states
-(indexed by `j`, along any filter `l`): if along the family
+(indexed by `j`, along any filter `l`): if eventually along `l`
 `0 < R₁ ≤ ρ s_max/s_min ≤ R₂`, `s_t/(s_min (d-k)) ≤ Ω`, `λ_1/λ_k ≤ K_𝒟`, `λ_{k+1}/λ_d ≤ K_ℬ`,
-then `1 - θ* = Θ(1/m²)`.  The boundedness hypotheses are exactly what the paper's "constants"
-hide; without the bound `Ω` on `s_t/(s_min (d-k))` the statement is false
-(`thetaStar_rate_fails_fixed_state`). -/
+then `1 - θ* = Θ(1/m²)`.
+
+These boundedness hypotheses are *sufficient*; they are what the paper's "constants" hide.  On
+their necessity: the bound `Ω` on `s_t/(s_min (d-k))` cannot be dropped
+(`thetaStar_rate_fails_fixed_state` at fixed `d`; `thetaStar_rate_fails_under_assumption1` inside
+the regime of Assumption 1); neither can `K_ℬ`
+(`thetaStar_rate_fails_under_assumption1_all_states`), nor `R₂` (`Spec.thetaStar_rate`:
+`(1 - θ*) m² < s_min/(ρ s_max)`), nor — along families with bounded `d - k` — `K_𝒟`
+(`Spec.thetaStar_rate_cond_bound`).  Families with `m → ∞` satisfying all hypotheses:
+`thetaStar_rate_isTheta_gapSpecNat_zero`, `thetaStar_rate_isTheta_under_assumption1_zero_state`. -/
 theorem thetaStar_rate_isTheta (l : Filter J) (P : ∀ j, Spec (κ j)) (N : ∀ j, Noise (κ j))
-    (c : ∀ j, κ j → ℝ) (hs : ∀ j, 0 < (N j).smin) {R₁ R₂ Ω KD KB : ℝ} (hR₁ : 0 < R₁)
-    (hR₁' : ∀ j, R₁ ≤ (P j).rho * (N j).smax / (N j).smin)
-    (hR₂ : ∀ j, (P j).rho * (N j).smax / (N j).smin ≤ R₂)
-    (hΩ : ∀ j, (P j).s (c j) / ((N j).smin * (P j).dkR) ≤ Ω)
-    (hKD : ∀ j, (P j).lam1 / (P j).lamk ≤ KD) (hKB : ∀ j, (P j).lamk1 / (P j).lamd ≤ KB) :
+    (c : ∀ j, κ j → ℝ) (hs : ∀ᶠ j in l, 0 < (N j).smin) {R₁ R₂ Ω KD KB : ℝ} (hR₁ : 0 < R₁)
+    (hR₁' : ∀ᶠ j in l, R₁ ≤ (P j).rho * (N j).smax / (N j).smin)
+    (hR₂ : ∀ᶠ j in l, (P j).rho * (N j).smax / (N j).smin ≤ R₂)
+    (hΩ : ∀ᶠ j in l, (P j).s (c j) / ((N j).smin * (P j).dkR) ≤ Ω)
+    (hKD : ∀ᶠ j in l, (P j).lam1 / (P j).lamk ≤ KD)
+    (hKB : ∀ᶠ j in l, (P j).lamk1 / (P j).lamd ≤ KB) :
     (fun j => 1 - (P j).thetaStar (N j) (c j)) =Θ[l] (fun j => 1 / (P j).mRatio ^ 2) := by
-  have key : ∀ j, 0 < 1 - (P j).thetaStar (N j) (c j) ∧
+  have key : ∀ᶠ j in l, 0 < 1 - (P j).thetaStar (N j) (c j) ∧
       1 - (P j).thetaStar (N j) (c j) ≤ (1 / R₁) * (1 / (P j).mRatio ^ 2) ∧
       1 / (P j).mRatio ^ 2 ≤
         (1 + (R₂ + Ω) * KD ^ 2 * KB ^ 2) * (1 - (P j).thetaStar (N j) (c j)) := by
-    intro j
+    filter_upwards [hs, hR₁', hR₂, hΩ, hKD, hKB] with j hsj hR₁j hR₂j hΩj hKDj hKBj
     have hm := (P j).one_lt_mRatio
     have hm2 : 0 < (P j).mRatio ^ 2 := by positivity
     obtain ⟨hlo, hhi⟩ :=
-      (P j).thetaStar_rate_uniform (N j) (hs j) (c j) hR₁ (hR₁' j) (hR₂ j) (hΩ j) (hKD j) (hKB j)
-    have hmem := thetaStar_mem_Ioo (P j) (N j) (hs j) (c j)
+      (P j).thetaStar_rate_uniform (N j) hsj (c j) hR₁ hR₁j hR₂j hΩj hKDj hKBj
+    have hmem := thetaStar_mem_Ioo (P j) (N j) hsj (c j)
     have hr : 0 < (P j).rho * (N j).smax / (N j).smin :=
-      div_pos (mul_pos (P j).rho_pos (smax_pos (P j) (N j) (hs j))) (hs j)
+      div_pos (mul_pos (P j).rho_pos (smax_pos (P j) (N j) hsj)) hsj
     have hω : 0 ≤ (P j).s (c j) / ((N j).smin * (P j).dkR) :=
-      div_nonneg ((P j).s_nonneg (c j)) (mul_pos (hs j) (P j).dkR_pos).le
+      div_nonneg ((P j).s_nonneg (c j)) (mul_pos hsj (P j).dkR_pos).le
     have hA : 0 ≤ (R₂ + Ω) * KD ^ 2 * KB ^ 2 :=
-      mul_nonneg (mul_nonneg (by linarith [hR₂ j, hΩ j]) (sq_nonneg _)) (sq_nonneg _)
+      mul_nonneg (mul_nonneg (by linarith) (sq_nonneg _)) (sq_nonneg _)
     refine ⟨by linarith [hmem.2], ?_, ?_⟩
     · have e : (1 / R₁) * (1 / (P j).mRatio ^ 2) = (1 / R₁) / (P j).mRatio ^ 2 := by ring
       rw [e]
@@ -891,25 +923,27 @@ theorem thetaStar_rate_isTheta (l : Filter J) (P : ∀ j, Spec (κ j)) (N : ∀ 
           = (1 / (P j).mRatio ^ 2) / (1 + (R₂ + Ω) * KD ^ 2 * KB ^ 2) := by ring
       rw [e, div_le_iff₀ (by linarith)] at hlo
       linarith
+  have hmpos : ∀ j, (0 : ℝ) ≤ 1 / (P j).mRatio ^ 2 := fun j => by
+    have := (P j).one_lt_mRatio
+    positivity
   constructor
-  · refine IsBigO.of_bound (1 / R₁) (Eventually.of_forall fun j => ?_)
-    obtain ⟨h1, h2, -⟩ := key j
-    have hm2 : 0 < (P j).mRatio ^ 2 := by have := (P j).one_lt_mRatio; positivity
-    rw [Real.norm_of_nonneg h1.le, Real.norm_of_nonneg (by positivity)]
-    exact h2
-  · refine IsBigO.of_bound (1 + (R₂ + Ω) * KD ^ 2 * KB ^ 2) (Eventually.of_forall fun j => ?_)
-    obtain ⟨h1, -, h3⟩ := key j
-    have hm2 : 0 < (P j).mRatio ^ 2 := by have := (P j).one_lt_mRatio; positivity
-    rw [Real.norm_of_nonneg h1.le, Real.norm_of_nonneg (by positivity)]
-    exact h3
+  · refine IsBigO.of_bound (1 / R₁) (key.mono fun j hj => ?_)
+    rw [Real.norm_of_nonneg hj.1.le, Real.norm_of_nonneg (hmpos j)]
+    exact hj.2.1
+  · refine IsBigO.of_bound (1 + (R₂ + Ω) * KD ^ 2 * KB ^ 2) (key.mono fun j hj => ?_)
+    rw [Real.norm_of_nonneg hj.1.le, Real.norm_of_nonneg (hmpos j)]
+    exact hj.2.2
 
 /-- **Interpretation of Theorem 5** ("as the dominant–bulk gap grows, `θ*_t → 1`").  For any
-family of problems and states along which `ρ s_max / s_min` stays bounded below by some
-`R₁ > 0` and the gap ratio `m = λ_k/λ_{k+1}` tends to `∞`, the threshold `θ*` tends to `1`.
-No assumption on the states is needed (the lower bound of Theorem 5 is state-independent). -/
+family of problems and states along which (eventually) `ρ s_max / s_min` stays bounded below by
+some `R₁ > 0` and the gap ratio `m = λ_k/λ_{k+1}` tends to `∞`, the threshold `θ*` tends to `1`.
+No assumption on the states is needed (the lower bound of Theorem 5 is state-independent).
+Since `s_max ≥ s_min`, a lower bound on `ρ` alone suffices
+(`thetaStar_tendsto_one_of_gap_of_rho`), so under Assumption 1 (fixed `ρ`) the hypothesis is
+automatic (`thetaStar_tendsto_one_of_assumption1`). -/
 theorem thetaStar_tendsto_one_of_gap (l : Filter J) (P : ∀ j, Spec (κ j)) (N : ∀ j, Noise (κ j))
-    (c : ∀ j, κ j → ℝ) (hs : ∀ j, 0 < (N j).smin) {R₁ : ℝ} (hR₁ : 0 < R₁)
-    (hR₁' : ∀ j, R₁ ≤ (P j).rho * (N j).smax / (N j).smin)
+    (c : ∀ j, κ j → ℝ) (hs : ∀ᶠ j in l, 0 < (N j).smin) {R₁ : ℝ} (hR₁ : 0 < R₁)
+    (hR₁' : ∀ᶠ j in l, R₁ ≤ (P j).rho * (N j).smax / (N j).smin)
     (hm : Tendsto (fun j => (P j).mRatio) l atTop) :
     Tendsto (fun j => (P j).thetaStar (N j) (c j)) l (𝓝 1) := by
   have hpow : Tendsto (fun j => (P j).mRatio ^ 2) l atTop :=
@@ -918,13 +952,114 @@ theorem thetaStar_tendsto_one_of_gap (l : Filter J) (P : ∀ j, Spec (κ j)) (N 
     tendsto_const_nhds.div_atTop hpow
   have hlow : Tendsto (fun j => 1 - (1 / R₁) / (P j).mRatio ^ 2) l (𝓝 1) := by
     simpa using tendsto_const_nhds.sub h0
-  refine tendsto_of_tendsto_of_tendsto_of_le_of_le hlow tendsto_const_nhds (fun j => ?_)
-    (fun j => ?_)
-  · have h := ((P j).thetaStar_rate_uniform (N j) (hs j) (c j) hR₁ (hR₁' j) le_rfl le_rfl
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le' hlow tendsto_const_nhds ?_ ?_
+  · filter_upwards [hs, hR₁'] with j hsj hRj
+    have h := ((P j).thetaStar_rate_uniform (N j) hsj (c j) hR₁ hRj le_rfl le_rfl
       le_rfl le_rfl).2
-    show 1 - (1 / R₁) / (P j).mRatio ^ 2 ≤ (P j).thetaStar (N j) (c j)
     linarith
-  · exact (thetaStar_mem_Ioo (P j) (N j) (hs j) (c j)).2.le
+  · filter_upwards [hs] with j hsj
+    exact (thetaStar_mem_Ioo (P j) (N j) hsj (c j)).2.le
+
+/-- **Interpretation of Theorem 5, with a hypothesis on `ρ` only.**  If (eventually) `ρ ≥ ρ₀ > 0`
+— in particular if `ρ` is a fixed constant, as in Assumption 1 — and `m → ∞`, then `θ* → 1`:
+`ρ s_max/s_min ≥ ρ` because `s_max ≥ s_min`. -/
+theorem thetaStar_tendsto_one_of_gap_of_rho (l : Filter J) (P : ∀ j, Spec (κ j))
+    (N : ∀ j, Noise (κ j)) (c : ∀ j, κ j → ℝ) (hs : ∀ᶠ j in l, 0 < (N j).smin) {ρ₀ : ℝ}
+    (hρ₀ : 0 < ρ₀) (hρ : ∀ᶠ j in l, ρ₀ ≤ (P j).rho)
+    (hm : Tendsto (fun j => (P j).mRatio) l atTop) :
+    Tendsto (fun j => (P j).thetaStar (N j) (c j)) l (𝓝 1) := by
+  refine thetaStar_tendsto_one_of_gap l P N c hs hρ₀ ?_ hm
+  filter_upwards [hs, hρ] with j hsj hρj
+  rw [le_div_iff₀ hsj]
+  exact mul_le_mul hρj (le_trans ((N j).smin_le (P j).i1) ((N j).le_smax (P j).i1)) hsj.le
+    (P j).rho_pos.le
+
+/-- **Bounded noise trace and growing gradient energy force `1 - θ* = o(1/m²)`.**  For any family
+of problems/states along which (eventually) `Tr Σ = ∑_i κ_i² ≤ T` and `m ≥ m₀ > 1`, and the
+gradient energy `s_t = ‖A x_t‖²` tends to `∞`, one has `(1 - θ*) m² → 0`.  This is the generic
+situation under Assumption 1 (`Tr Σ` bounded, `‖x_t‖² ≍ d`, `d → ∞`): the upper bound
+`θ* ≤ 1 - α/m²` of Theorem 5 then fails for every fixed `α > 0`
+(`thetaStar_rate_fails_of_trace_bounded`). -/
+theorem thetaStar_rate_isLittleO_of_trace_bounded (l : Filter J) (P : ∀ j, Spec (κ j))
+    (N : ∀ j, Noise (κ j)) (c : ∀ j, κ j → ℝ) (hs : ∀ᶠ j in l, 0 < (N j).smin) {T m₀ : ℝ}
+    (hm₀ : 1 < m₀) (hT : ∀ᶠ j in l, ∑ i, (N j).kap2 i ≤ T)
+    (hm : ∀ᶠ j in l, m₀ ≤ (P j).mRatio)
+    (hS : Tendsto (fun j => (P j).s (c j)) l atTop) :
+    (fun j => 1 - (P j).thetaStar (N j) (c j)) =o[l] (fun j => 1 / (P j).mRatio ^ 2) := by
+  rw [isLittleO_iff]
+  intro ε hε
+  have hγ : 0 < 1 - 1 / m₀ ^ 2 := by
+    have : 1 / m₀ ^ 2 < 1 := by
+      rw [div_lt_one (by positivity)]
+      nlinarith
+    linarith
+  filter_upwards [hs, hT, hm, hS.eventually_ge_atTop (T / ((1 - 1 / m₀ ^ 2) * ε)),
+    hS.eventually_gt_atTop 0] with j hsj hTj hmj hSj hSpos
+  have hρ := (P j).rho_pos
+  have hm1 := (P j).one_lt_mRatio
+  have hm2 : 0 < (P j).mRatio ^ 2 := by positivity
+  have hm3 : 0 < (P j).mRatio ^ 2 - 1 := by nlinarith
+  have h := (P j).thetaStar_rate_trace_bound (N j) hsj (c j) hSpos
+  have hmem := thetaStar_mem_Ioo (P j) (N j) hsj (c j)
+  rw [Real.norm_of_nonneg (by linarith [hmem.2]), Real.norm_of_nonneg (by positivity)]
+  -- `m² - 1 ≥ (1 - 1/m₀²) m²` and `T ≤ s (1 - 1/m₀²) ε`
+  have hγm : (1 - 1 / m₀ ^ 2) * (P j).mRatio ^ 2 ≤ (P j).mRatio ^ 2 - 1 := by
+    have h1 : 1 ≤ (P j).mRatio ^ 2 / m₀ ^ 2 := by
+      rw [one_le_div (by positivity)]
+      exact pow_le_pow_left₀ (by linarith) hmj 2
+    have e : (1 - 1 / m₀ ^ 2) * (P j).mRatio ^ 2
+        = (P j).mRatio ^ 2 - (P j).mRatio ^ 2 / m₀ ^ 2 := by ring
+    linarith
+  have hTs : T ≤ (P j).s (c j) * ((1 - 1 / m₀ ^ 2) * ε) := by
+    rwa [div_le_iff₀ (by positivity)] at hSj
+  refine le_of_lt (lt_of_lt_of_le h ?_)
+  rw [div_le_iff₀ (by positivity)]
+  have h1 : (P j).s (c j) * ((1 - 1 / m₀ ^ 2) * (P j).mRatio ^ 2)
+      ≤ (1 + (P j).rho) * (P j).s (c j) * ((P j).mRatio ^ 2 - 1) := by
+    have a1 := mul_le_mul_of_nonneg_left hγm hSpos.le
+    have a2 : 0 ≤ (P j).rho * ((P j).s (c j) * ((P j).mRatio ^ 2 - 1)) := by positivity
+    linarith
+  calc ∑ i, (N j).kap2 i ≤ T := hTj
+    _ ≤ (P j).s (c j) * ((1 - 1 / m₀ ^ 2) * ε) := hTs
+    _ = ε * (1 / (P j).mRatio ^ 2)
+          * ((P j).s (c j) * ((1 - 1 / m₀ ^ 2) * (P j).mRatio ^ 2)) := by
+        field_simp
+    _ ≤ ε * (1 / (P j).mRatio ^ 2)
+          * ((1 + (P j).rho) * (P j).s (c j) * ((P j).mRatio ^ 2 - 1)) :=
+        mul_le_mul_of_nonneg_left h1 (by positivity)
+
+/-- Under the hypotheses of `thetaStar_rate_isLittleO_of_trace_bounded`, for **every** `α > 0`
+the paper's upper bound `θ* ≤ 1 - α/m²` is eventually violated. -/
+theorem thetaStar_rate_fails_of_trace_bounded (l : Filter J) (P : ∀ j, Spec (κ j))
+    (N : ∀ j, Noise (κ j)) (c : ∀ j, κ j → ℝ) (hs : ∀ᶠ j in l, 0 < (N j).smin) {T m₀ : ℝ}
+    (hm₀ : 1 < m₀) (hT : ∀ᶠ j in l, ∑ i, (N j).kap2 i ≤ T)
+    (hm : ∀ᶠ j in l, m₀ ≤ (P j).mRatio)
+    (hS : Tendsto (fun j => (P j).s (c j)) l atTop) {α : ℝ} (hα : 0 < α) :
+    ∀ᶠ j in l, 1 - α / (P j).mRatio ^ 2 < (P j).thetaStar (N j) (c j) := by
+  have ho := thetaStar_rate_isLittleO_of_trace_bounded l P N c hs hm₀ hT hm hS
+  filter_upwards [(isLittleO_iff.mp ho) (half_pos hα)] with j hj
+  have hm1 := (P j).one_lt_mRatio
+  have hm2 : 0 < (P j).mRatio ^ 2 := by positivity
+  have e : ‖1 / (P j).mRatio ^ 2‖ = 1 / (P j).mRatio ^ 2 := Real.norm_of_nonneg (by positivity)
+  rw [e] at hj
+  have h1 := (Real.le_norm_self _).trans hj
+  have h2 : 0 < α / (P j).mRatio ^ 2 := by positivity
+  have e2 : α / 2 * (1 / (P j).mRatio ^ 2) = α / (P j).mRatio ^ 2 / 2 := by ring
+  linarith
+
+/-- Under the hypotheses of `thetaStar_rate_isLittleO_of_trace_bounded` (along a non-trivial
+filter), `1 - θ*` is **not** `Θ(1/m²)`. -/
+theorem thetaStar_rate_not_isTheta_of_trace_bounded (l : Filter J) [l.NeBot]
+    (P : ∀ j, Spec (κ j)) (N : ∀ j, Noise (κ j)) (c : ∀ j, κ j → ℝ)
+    (hs : ∀ᶠ j in l, 0 < (N j).smin) {T m₀ : ℝ} (hm₀ : 1 < m₀)
+    (hT : ∀ᶠ j in l, ∑ i, (N j).kap2 i ≤ T) (hm : ∀ᶠ j in l, m₀ ≤ (P j).mRatio)
+    (hS : Tendsto (fun j => (P j).s (c j)) l atTop) :
+    ¬ ((fun j => 1 - (P j).thetaStar (N j) (c j)) =Θ[l] (fun j => 1 / (P j).mRatio ^ 2)) := by
+  intro h
+  have ho := thetaStar_rate_isLittleO_of_trace_bounded l P N c hs hm₀ hT hm hS
+  refine ho.not_isBigO ?_ h.2
+  refine (hs.mono fun j hsj => ?_).frequently
+  exact (sub_pos.mpr (thetaStar_mem_Ioo (P j) (N j) hsj (c j)).2).ne'
 
 end Families
 
@@ -1074,16 +1209,333 @@ theorem one_sub_thetaStar_gapSpecNat_lt (n : ℕ) :
       < 2 / (((n : ℝ) + 2) ^ 2 * (((n : ℝ) + 2) ^ 2 - 1)) :=
   one_sub_thetaStar_gapSpec_lt _ _
 
+/-! ### Assumption 1 and block families with `d → ∞` -/
+
+open Filter Topology in
+/-- **Assumption 1 (Asymptotic Spectral Assumptions, tex 367–384)** for a sequence of problems
+`(A_n, Σ_n)` with states `x_n` (the state at the time `t` under consideration), `n → ∞`.
+The fields are the paper's table, read as literally as possible:
+
+* `d_tendsto`, `k_tendsto` — "the high-dimensional regime, where both `d` and `k(d) → ∞`";
+* `trajectory` — *trajectory boundedness*: `limsup_d (1/d) ∑_i c_i² < ∞`
+  (the paper's `sup_t` is over times; `θ*_t` involves a single time);
+* `block_proportion` — `ρ = k/(d-k) ∈ (0, ∞)` is a fixed constant;
+* `momentsD`, `momentsB` — *block spectral moments*: for `p ∈ {2, 3, 4, 6, 8}`,
+  `(1/k) ∑_𝒟 λ_i^p → λ_{𝒟,p} ∈ (0, ∞)` and `(1/(d-k)) ∑_ℬ λ_i^p → λ_{ℬ,p} ∈ [0, ∞)`;
+* `trace_bounded` — *noise spectral bounds*: `Tr Σ = ∑_i κ_i² ∈ (0, ∞)` is bounded.
+
+This predicate is local to this file (it is only used to certify that the families below lie in
+the regime in which Theorem 5 is stated). -/
+structure Assumption1 {κ : ℕ → Type*} [∀ n, Fintype (κ n)] [∀ n, DecidableEq (κ n)]
+    (P : ∀ n, Spec (κ n)) (N : ∀ n, Noise (κ n)) (c : ∀ n, κ n → ℝ) : Prop where
+  /-- high-dimensional regime: `d → ∞` -/
+  d_tendsto : Tendsto (fun n => Fintype.card (κ n)) atTop atTop
+  /-- `k(d) → ∞` -/
+  k_tendsto : Tendsto (fun n => (P n).D.card) atTop atTop
+  /-- trajectory boundedness: `‖x‖² ≤ C d` eventually -/
+  trajectory : ∃ C : ℝ, ∀ᶠ n in atTop, Spec.normSq (c n) ≤ C * (Fintype.card (κ n) : ℝ)
+  /-- block proportion: `ρ = k/(d-k)` is a fixed constant in `(0, ∞)` -/
+  block_proportion : ∃ ρ₀ : ℝ, 0 < ρ₀ ∧ ∀ n, (P n).rho = ρ₀
+  /-- the block spectral moments of the dominant block converge in `(0, ∞)` -/
+  momentsD : ∀ p ∈ ({2, 3, 4, 6, 8} : Finset ℕ), ∃ L : ℝ, 0 < L ∧
+    Tendsto (fun n => (∑ i ∈ (P n).D, (P n).lam i ^ p) / (P n).kR) atTop (𝓝 L)
+  /-- the block spectral moments of the bulk block converge in `[0, ∞)` -/
+  momentsB : ∀ p ∈ ({2, 3, 4, 6, 8} : Finset ℕ), ∃ L : ℝ, 0 ≤ L ∧
+    Tendsto (fun n => (∑ i ∈ (P n).B, (P n).lam i ^ p) / (P n).dkR) atTop (𝓝 L)
+  /-- noise spectral bounds: `Tr Σ` is positive and bounded -/
+  trace_bounded : ∃ T : ℝ, ∀ n, 0 < ∑ i, (N n).kap2 i ∧ ∑ i, (N n).kap2 i ≤ T
+
+/-- Index type of dimension `d = 2 (n + 2)`: `k = n + 2` dominant (`Sum.inl`) and `d - k = n + 2`
+bulk (`Sum.inr`) directions, so `ρ = 1`. -/
+abbrev BlockIdx (n : ℕ) : Type := Fin (n + 2) ⊕ Fin (n + 2)
+
+/-- The block spectrum `A = diag(μ, …, μ, ν, ε, …, ε)` on `BlockIdx n` (`0 < ε ≤ ν < μ`): the
+dominant block is flat (`λ = μ`, `n + 2` times), the bulk has one eigenvalue `ν = λ_{k+1}` and
+`n + 1` eigenvalues `ε = λ_d`.  `m = μ/ν`, `λ_1/λ_k = 1`, `λ_{k+1}/λ_d = ν/ε`. -/
+def blockSpec (n : ℕ) {μ ν ε : ℝ} (hε : 0 < ε) (hεν : ε ≤ ν) (hνμ : ν < μ) :
+    Spec (BlockIdx n) where
+  lam := Sum.elim (fun _ => μ) (fun j => if j = 0 then ν else ε)
+  D := Finset.univ.map Function.Embedding.inl
+  i1 := Sum.inl 0
+  ik := Sum.inl 0
+  ik1 := Sum.inr 0
+  id := Sum.inr 1
+  i1_mem := by simp
+  ik_mem := by simp
+  ik1_not_mem := by simp
+  id_not_mem := by simp
+  lam_pos := by
+    rintro (i | i)
+    · simp only [Sum.elim_inl]; linarith
+    · simp only [Sum.elim_inr]; split_ifs <;> linarith
+  le_lam1 := by rintro (i | i) hi <;> simp at hi ⊢
+  lamk_le := by rintro (i | i) hi <;> simp at hi ⊢
+  le_lamk1 := by
+    rintro (i | i) hi
+    · simp at hi
+    · simp only [Sum.elim_inr]; split_ifs <;> simp [hεν]
+  lamd_le := by
+    rintro (i | i) hi
+    · simp at hi
+    · simp only [Sum.elim_inr]; split_ifs <;> simp_all
+  gap := by simpa using hνμ
+
+/-- Isotropic noise with **trace one**: `Σ = I / d`, `d = 2 (n + 2)` (`s_min = s_max = 1/d`). -/
+noncomputable def scaledNoise (n : ℕ) : Noise (BlockIdx n) where
+  kap2 := fun _ => 1 / (2 * ((n : ℝ) + 2))
+  smin := 1 / (2 * ((n : ℝ) + 2))
+  smax := 1 / (2 * ((n : ℝ) + 2))
+  smin_nonneg := by positivity
+  smin_le := fun _ => le_rfl
+  le_smax := fun _ => le_rfl
+
+theorem scaledNoise_smin_pos (n : ℕ) : 0 < (scaledNoise n).smin := by
+  show (0 : ℝ) < 1 / (2 * ((n : ℝ) + 2))
+  positivity
+
+theorem scaledNoise_ratio (n : ℕ) : (scaledNoise n).smax / (scaledNoise n).smin = 1 :=
+  div_self (scaledNoise_smin_pos n).ne'
+
+/-- `Tr Σ = ∑_i κ_i² = 1` for every `n`. -/
+theorem scaledNoise_trace (n : ℕ) : ∑ i, (scaledNoise n).kap2 i = 1 := by
+  have h : (0 : ℝ) < (n : ℝ) + 2 := by positivity
+  simp [scaledNoise]
+  field_simp
+  ring
+
+section BlockLemmas
+
+variable (n : ℕ) {μ ν ε : ℝ} (hε : 0 < ε) (hεν : ε ≤ ν) (hνμ : ν < μ)
+
+theorem blockSpec_B :
+    (blockSpec n hε hεν hνμ).B = Finset.univ.map Function.Embedding.inr := by
+  ext (i | i) <;> simp [Spec.B, blockSpec]
+
+@[simp] theorem blockSpec_mRatio : (blockSpec n hε hεν hνμ).mRatio = μ / ν := by
+  simp [Spec.mRatio, Spec.lamk, Spec.lamk1, blockSpec]
+
+@[simp] theorem blockSpec_lam1 : (blockSpec n hε hεν hνμ).lam1 = μ := by
+  simp [Spec.lam1, blockSpec]
+
+@[simp] theorem blockSpec_lamk : (blockSpec n hε hεν hνμ).lamk = μ := by
+  simp [Spec.lamk, blockSpec]
+
+@[simp] theorem blockSpec_lamk1 : (blockSpec n hε hεν hνμ).lamk1 = ν := by
+  simp [Spec.lamk1, blockSpec]
+
+@[simp] theorem blockSpec_lamd : (blockSpec n hε hεν hνμ).lamd = ε := by
+  simp [Spec.lamd, blockSpec]
+
+/-- Sums over the dominant block: `∑_𝒟 f(λ_i) = (n + 2) f(μ)`. -/
+theorem blockSpec_sum_D (f : ℝ → ℝ) :
+    ∑ i ∈ (blockSpec n hε hεν hνμ).D, f ((blockSpec n hε hεν hνμ).lam i)
+      = ((n : ℝ) + 2) * f μ := by
+  simp [blockSpec, Finset.sum_map]
+
+/-- Sums over the bulk block: `∑_ℬ f(λ_i) = f(ν) + (n + 1) f(ε)`. -/
+theorem blockSpec_sum_B (f : ℝ → ℝ) :
+    ∑ i ∈ (blockSpec n hε hεν hνμ).B, f ((blockSpec n hε hεν hνμ).lam i)
+      = f ν + ((n : ℝ) + 1) * f ε := by
+  rw [blockSpec_B, Finset.sum_map]
+  simp [blockSpec, Fin.sum_univ_succ]
+
+@[simp] theorem blockSpec_kR : (blockSpec n hε hεν hνμ).kR = (n : ℝ) + 2 := by
+  simp [Spec.kR, blockSpec]
+
+@[simp] theorem blockSpec_dkR : (blockSpec n hε hεν hνμ).dkR = (n : ℝ) + 2 := by
+  simp [Spec.dkR, blockSpec_B]
+
+@[simp] theorem blockSpec_rho : (blockSpec n hε hεν hνμ).rho = 1 := by
+  have h : (n : ℝ) + 2 ≠ 0 := by positivity
+  simp [Spec.rho, h]
+
+@[simp] theorem blockSpec_psiD : (blockSpec n hε hεν hνμ).psiD = ((n : ℝ) + 2) * μ ^ 2 :=
+  blockSpec_sum_D n hε hεν hνμ (fun x => x ^ 2)
+
+@[simp] theorem blockSpec_psiB :
+    (blockSpec n hε hεν hνμ).psiB = ν ^ 2 + ((n : ℝ) + 1) * ε ^ 2 :=
+  blockSpec_sum_B n hε hεν hνμ (fun x => x ^ 2)
+
+/-- `s_t ≥ (n + 2) μ²` at the all-ones state `x = ∑_i u_i`. -/
+theorem blockSpec_le_s_ones :
+    ((n : ℝ) + 2) * μ ^ 2 ≤ (blockSpec n hε hεν hνμ).s (fun _ => 1) := by
+  have h1 : (blockSpec n hε hεν hνμ).sD (fun _ => 1) = ((n : ℝ) + 2) * μ ^ 2 := by
+    simpa [Spec.sD, Spec.mom] using blockSpec_sum_D n hε hεν hνμ (fun x => x ^ 2)
+  have h2 := (blockSpec n hε hεν hνμ).sB_nonneg (fun _ => 1)
+  unfold Spec.s
+  linarith
+
+/-- For the block spectrum with `Σ = I/d` and the all-ones state,
+`1 - θ* < 1 / (2 (n + 2) μ² (m² - 1))`, `m = μ/ν` (from `Spec.thetaStar_rate_trace_bound`). -/
+theorem one_sub_thetaStar_blockSpec_ones_lt :
+    1 - (blockSpec n hε hεν hνμ).thetaStar (scaledNoise n) (fun _ => 1)
+      < 1 / (2 * ((n : ℝ) + 2) * μ ^ 2 * ((μ / ν) ^ 2 - 1)) := by
+  have hs := blockSpec_le_s_ones n hε hεν hνμ
+  have hμ : 0 < μ := by linarith
+  have hn : (0 : ℝ) < (n : ℝ) + 2 := by positivity
+  have hpos : 0 < (blockSpec n hε hεν hνμ).s (fun _ => 1) := lt_of_lt_of_le (by positivity) hs
+  have h := (blockSpec n hε hεν hνμ).thetaStar_rate_trace_bound (scaledNoise n)
+    (scaledNoise_smin_pos n) (fun _ => 1) hpos
+  rw [scaledNoise_trace, blockSpec_rho, blockSpec_mRatio] at h
+  have hm : 0 < (μ / ν) ^ 2 - 1 := by
+    have := (blockSpec n hε hεν hνμ).one_lt_mRatio
+    rw [blockSpec_mRatio] at this
+    nlinarith
+  refine lt_of_lt_of_le h (one_div_le_one_div_of_le (by positivity) ?_)
+  nlinarith [mul_le_mul_of_nonneg_right hs hm.le]
+
+end BlockLemmas
+
+/-- The vanishing bulk eigenvalue `ε_n = 1 / (n + 2)`. -/
+noncomputable def eps (n : ℕ) : ℝ := 1 / ((n : ℝ) + 2)
+
+theorem eps_pos (n : ℕ) : 0 < eps n := by unfold eps; positivity
+
+theorem eps_lt_one (n : ℕ) : eps n < 1 := by
+  unfold eps
+  have h : (0 : ℝ) ≤ n := Nat.cast_nonneg n
+  rw [div_lt_one (by positivity)]
+  linarith
+
+/-- `(n + 1) ε_n^p ≤ 1` for `p ≥ 1`. -/
+theorem succ_mul_eps_pow_le (n : ℕ) {p : ℕ} (hp : p ≠ 0) : ((n : ℝ) + 1) * eps n ^ p ≤ 1 := by
+  have h : (0 : ℝ) ≤ n := Nat.cast_nonneg n
+  have h1 : eps n ^ p ≤ eps n := pow_le_of_le_one (eps_pos n).le (eps_lt_one n).le hp
+  have h2 : ((n : ℝ) + 1) * eps n ≤ 1 := by
+    unfold eps
+    rw [mul_one_div, div_le_one (by positivity)]
+    linarith
+  nlinarith
+
+open Filter Topology in
+/-- The normalised bulk moments `(ν_n^p + (n+1) ε_n^p)/(n+2)` tend to `0` when `0 ≤ ν_n ≤ 1`. -/
+theorem tendsto_bulk_moment {ν : ℕ → ℝ} (h0 : ∀ n, 0 ≤ ν n) (h1 : ∀ n, ν n ≤ 1) {p : ℕ}
+    (hp : p ≠ 0) :
+    Tendsto (fun n : ℕ => (ν n ^ p + ((n : ℝ) + 1) * eps n ^ p) / ((n : ℝ) + 2)) atTop (𝓝 0) := by
+  have hlim : Tendsto (fun n : ℕ => 2 / ((n : ℝ) + 2)) atTop (𝓝 0) :=
+    tendsto_const_nhds.div_atTop (tendsto_atTop_add_const_right _ _ tendsto_natCast_atTop_atTop)
+  refine squeeze_zero (fun n => ?_) (fun n => ?_) hlim
+  · have := eps_pos n
+    have := h0 n
+    positivity
+  · have h2 := succ_mul_eps_pow_le n hp
+    have h3 : ν n ^ p ≤ 1 := pow_le_one₀ (h0 n) (h1 n)
+    exact div_le_div_of_nonneg_right (by linarith) (by positivity)
+
+open Filter Topology in
+/-- A block family `diag(μ, …, μ, ν_n, ε_n, …, ε_n)` with `Σ = I/d` and states with
+`‖x‖² ≤ C d` satisfies Assumption 1 as soon as its normalised bulk moments converge
+(here `d = 2 (n + 2)`, `k = n + 2`, `ρ = 1`, the dominant moments are `μ^p`, `Tr Σ = 1`). -/
+theorem assumption1_blockSpec {μ : ℝ} (ν ε : ℕ → ℝ) (hε : ∀ n, 0 < ε n)
+    (hεν : ∀ n, ε n ≤ ν n) (hνμ : ∀ n, ν n < μ) (c : ∀ n, BlockIdx n → ℝ)
+    (hc : ∃ C : ℝ, ∀ n, Spec.normSq (c n) ≤ C * (Fintype.card (BlockIdx n) : ℝ))
+    (hB : ∀ p ∈ ({2, 3, 4, 6, 8} : Finset ℕ), ∃ L : ℝ, 0 ≤ L ∧
+      Tendsto (fun n : ℕ => (ν n ^ p + ((n : ℝ) + 1) * ε n ^ p) / ((n : ℝ) + 2)) atTop (𝓝 L)) :
+    Assumption1 (fun n => blockSpec n (hε n) (hεν n) (hνμ n)) scaledNoise c where
+  d_tendsto := tendsto_atTop_mono (fun n => by
+    show n ≤ Fintype.card (Fin (n + 2) ⊕ Fin (n + 2))
+    rw [Fintype.card_sum, Fintype.card_fin]; omega) tendsto_id
+  k_tendsto := tendsto_atTop_mono (fun n => by
+    show n ≤ (Finset.univ.map _).card
+    rw [Finset.card_map, Finset.card_univ, Fintype.card_fin]; omega) tendsto_id
+  trajectory := by
+    obtain ⟨C, hC⟩ := hc
+    exact ⟨C, Eventually.of_forall hC⟩
+  block_proportion := ⟨1, one_pos, fun n => blockSpec_rho n _ _ _⟩
+  momentsD := fun p _ => by
+    refine ⟨μ ^ p, pow_pos (lt_of_le_of_lt ((hε 0).le.trans (hεν 0)) (hνμ 0)) p, ?_⟩
+    refine tendsto_const_nhds.congr fun n => ?_
+    have h : (n : ℝ) + 2 ≠ 0 := by positivity
+    rw [blockSpec_sum_D n (hε n) (hεν n) (hνμ n) (fun x => x ^ p), blockSpec_kR]
+    field_simp
+  momentsB := fun p hp => by
+    obtain ⟨L, hL, hlim⟩ := hB p hp
+    refine ⟨L, hL, hlim.congr fun n => ?_⟩
+    rw [blockSpec_sum_B n (hε n) (hεν n) (hνμ n) (fun x => x ^ p), blockSpec_dkR]
+  trace_bounded := ⟨1, fun n => by rw [scaledNoise_trace]; norm_num⟩
+
+/-- **Family 1** (non-degenerate limits, fixed gap): `A_n = diag(2, …, 2, 1, …, 1)`, `d = 2(n+2)`,
+`k = n + 2`; `m = 2`, all block moments are constant (`2^p` and `1`). -/
+def asp1Spec (n : ℕ) : Spec (BlockIdx n) :=
+  blockSpec n (μ := 2) (ν := 1) (ε := 1) one_pos le_rfl one_lt_two
+
+/-- **Family 2** (growing gap): `A_n = diag(1, …, 1, ε_n, …, ε_n)`, `ε_n = 1/(n+2)`; `m = n + 2`.
+Under Assumption 1 the dominant moments are bounded, so `m → ∞` forces `λ_{k+1} → 0`, as here. -/
+noncomputable def asp1GapSpec (n : ℕ) : Spec (BlockIdx n) :=
+  blockSpec n (μ := 1) (ν := eps n) (ε := eps n) (eps_pos n) le_rfl (eps_lt_one n)
+
+/-- **Family 3** (spiked bulk, fixed gap): `A_n = diag(2, …, 2, 1, ε_n, …, ε_n)`,
+`ε_n = 1/(n+2)`; `m = 2`, `λ_{k+1} = 1`, but the bulk mean square `ψ_ℬ/(d-k) → 0`. -/
+noncomputable def asp1SpikeSpec (n : ℕ) : Spec (BlockIdx n) :=
+  blockSpec n (μ := 2) (ν := 1) (ε := eps n) (eps_pos n) (eps_lt_one n).le one_lt_two
+
+theorem asp1Spec_mRatio (n : ℕ) : (asp1Spec n).mRatio = 2 := by
+  simp [asp1Spec]
+
+theorem asp1GapSpec_mRatio (n : ℕ) : (asp1GapSpec n).mRatio = (n : ℝ) + 2 := by
+  simp [asp1GapSpec, eps]
+
+theorem asp1SpikeSpec_mRatio (n : ℕ) : (asp1SpikeSpec n).mRatio = 2 := by
+  simp [asp1SpikeSpec]
+
+/-- `‖x‖² = d` for the all-ones state. -/
+theorem normSq_ones_le (n : ℕ) :
+    Spec.normSq (fun _ : BlockIdx n => (1 : ℝ)) ≤ 1 * (Fintype.card (BlockIdx n) : ℝ) := by
+  simp [Spec.normSq]
+
+theorem normSq_zero_le (n : ℕ) :
+    Spec.normSq (0 : BlockIdx n → ℝ) ≤ 0 * (Fintype.card (BlockIdx n) : ℝ) := by
+  simp [Spec.normSq]
+
+theorem ne_zero_of_mem_moments {p : ℕ} (hp : p ∈ ({2, 3, 4, 6, 8} : Finset ℕ)) : p ≠ 0 := by
+  simp only [Finset.mem_insert, Finset.mem_singleton] at hp
+  omega
+
+/-- Family 1 with `Σ = I/d` and the all-ones state satisfies Assumption 1. -/
+theorem assumption1_asp1Spec : Assumption1 asp1Spec scaledNoise (fun _ _ => 1) :=
+  assumption1_blockSpec (fun _ => 1) (fun _ => 1) (fun _ => one_pos) (fun _ => le_rfl)
+    (fun _ => one_lt_two) _ ⟨1, normSq_ones_le⟩ fun _ _ => ⟨1, zero_le_one, by
+      refine tendsto_const_nhds.congr fun n => ?_
+      have h : (n : ℝ) + 2 ≠ 0 := by positivity
+      field_simp
+      ring⟩
+
+/-- Family 2 with `Σ = I/d` satisfies Assumption 1 for every sequence of states with
+`‖x‖² ≤ C d` (bulk moment limits `λ_{ℬ,p} = 0`, which the assumption allows). -/
+theorem assumption1_asp1GapSpec (c : ∀ n, BlockIdx n → ℝ)
+    (hc : ∃ C : ℝ, ∀ n, Spec.normSq (c n) ≤ C * (Fintype.card (BlockIdx n) : ℝ)) :
+    Assumption1 asp1GapSpec scaledNoise c :=
+  assumption1_blockSpec eps eps eps_pos (fun _ => le_rfl) eps_lt_one c hc fun _ hp =>
+    ⟨0, le_rfl, tendsto_bulk_moment (fun n => (eps_pos n).le) (fun n => (eps_lt_one n).le)
+      (ne_zero_of_mem_moments hp)⟩
+
+/-- Family 3 with `Σ = I/d` satisfies Assumption 1 for every sequence of states with
+`‖x‖² ≤ C d` (bulk moment limits `λ_{ℬ,p} = 0`). -/
+theorem assumption1_asp1SpikeSpec (c : ∀ n, BlockIdx n → ℝ)
+    (hc : ∃ C : ℝ, ∀ n, Spec.normSq (c n) ≤ C * (Fintype.card (BlockIdx n) : ℝ)) :
+    Assumption1 asp1SpikeSpec scaledNoise c :=
+  assumption1_blockSpec (fun _ => 1) eps eps_pos (fun n => (eps_lt_one n).le)
+    (fun _ => one_lt_two) c hc fun _ hp =>
+    ⟨0, le_rfl, tendsto_bulk_moment (fun _ => zero_le_one) (fun _ => le_rfl)
+      (ne_zero_of_mem_moments hp)⟩
+
 end ThetaStarRate
 
 open ThetaStarRate in
-/-- **The rate `θ* = 1 - Θ(1/m²)` of Theorem 5 fails for a fixed state when `λ_{k+1} = Θ(1)`.**
+/-- **The rate `θ* = 1 - Θ(1/m²)` of Theorem 5 fails for a fixed state when `λ_{k+1} = Θ(1)`
+(fixed dimension).**
 In the family `A = diag(μ, 1, 1)`, `𝒟 = {1}`, `Σ = I`, `x = u_1` — where `ρ = 1/2`,
 `s_min = s_max = 1`, `λ_1/λ_k = λ_{k+1}/λ_d = 1`, `λ_{k+1} = 1`, `‖x‖ = 1` are all fixed and only
 the gap ratio `m = μ` varies (`ThetaStarRate.gapSpec_rho`, `gapSpec_lam1`, `gapSpec_lamk`,
 `gapSpec_lamk1`, `gapSpec_lamd`, `unitNoise_smin`, `unitNoise_smax`, `normSq_e1`,
 `gapSpec_mRatio`) — for every `α > 0` the paper's upper bound `θ* ≤ 1 - α/m²` is
-violated for all sufficiently large `m`.  (Here in fact `1 - θ* < 2/(m²(m²-1))`.) -/
+violated for all sufficiently large `m`.  (Here in fact `1 - θ* < 2/(m²(m²-1))`.)
+
+Scope: this family has `d = 3`, `k = 1` fixed and `λ_k → ∞`, so it is **outside** the regime of
+Assumption 1 (`d, k → ∞`, bounded block moments, which force `λ_k = O(1)`).  It refutes the
+reading "constants independent of `m`" at fixed `d`; for the refutations inside Assumption 1 see
+`thetaStar_rate_fails_under_assumption1`, `thetaStar_rate_fails_under_assumption1_all_states`
+and `thetaStar_rate_not_isTheta_under_assumption1`. -/
 theorem thetaStar_rate_fails_fixed_state {α : ℝ} (hα : 0 < α) :
     ∃ μ₀ : ℝ, 1 < μ₀ ∧ ∀ (μ : ℝ) (hμ : 1 < μ), μ₀ ≤ μ →
       1 - α / (gapSpec μ hμ).mRatio ^ 2 < (gapSpec μ hμ).thetaStar unitNoise e1 := by
@@ -1101,10 +1553,12 @@ theorem thetaStar_rate_fails_fixed_state {α : ℝ} (hα : 0 < α) :
   linarith
 
 open ThetaStarRate Asymptotics in
-/-- **Formal negation of "`θ*_t = 1 - Θ(1/m²)`" along a concrete sequence.**  For
-`A_n = diag(n + 2, 1, 1)`, `𝒟 = {1}`, `Σ = I`, `x = u_1` (so `m_n = n + 2 → ∞` while
+/-- **Formal negation of "`θ*_t = 1 - Θ(1/m²)`" along a concrete sequence (fixed dimension).**
+For `A_n = diag(n + 2, 1, 1)`, `𝒟 = {1}`, `Σ = I`, `x = u_1` (so `m_n = n + 2 → ∞` while
 `ρ, s_min, s_max, λ_1/λ_k, λ_{k+1}/λ_d, λ_{k+1}, ‖x‖` are constant), `1 - θ*` is **not**
-`Θ(1/m²)`: it is `O(1/m⁴)`. -/
+`Θ(1/m²)`: it is `O(1/m⁴)`.  Like `thetaStar_rate_fails_fixed_state`, this sequence has `d = 3`
+and `λ_k → ∞` and is outside the regime of Assumption 1; the in-regime counterpart is
+`thetaStar_rate_not_isTheta_under_assumption1`. -/
 theorem thetaStar_rate_not_isTheta :
     ¬ ((fun n : ℕ => 1 - (gapSpecNat n).thetaStar unitNoise e1)
         =Θ[Filter.atTop] (fun n : ℕ => 1 / (gapSpecNat n).mRatio ^ 2)) := by
@@ -1157,6 +1611,186 @@ theorem thetaStar_rate_paper_beta_fails :
   simp only [gapSpec_rho, gapSpec_mRatio, unitNoise_smin, unitNoise_smax]
   norm_num at h ⊢
   linarith
+
+/-! ### Theorem 5 inside the regime of Assumption 1 (`d, k → ∞`) -/
+
+open ThetaStarRate Filter Topology Asymptotics in
+/-- **Under Assumption 1 the interpretation of Theorem 5 holds as stated**: if a sequence of
+problems satisfies Assumption 1 (in particular `ρ` is a fixed constant), `s_min > 0`, and
+`m = λ_k/λ_{k+1} → ∞`, then `θ* → 1`.  No lower bound on `ρ s_max/s_min` has to be added. -/
+theorem thetaStar_tendsto_one_of_assumption1 {κ : ℕ → Type*} [∀ n, Fintype (κ n)]
+    [∀ n, DecidableEq (κ n)] (P : ∀ n, Spec (κ n)) (N : ∀ n, Noise (κ n)) (c : ∀ n, κ n → ℝ)
+    (h : Assumption1 P N c) (hs : ∀ᶠ n in atTop, 0 < (N n).smin)
+    (hm : Tendsto (fun n => (P n).mRatio) atTop atTop) :
+    Tendsto (fun n => (P n).thetaStar (N n) (c n)) atTop (𝓝 1) := by
+  obtain ⟨ρ₀, hρ₀, hρ⟩ := h.block_proportion
+  exact thetaStar_tendsto_one_of_gap_of_rho atTop P N c hs hρ₀
+    (Eventually.of_forall fun n => (hρ n).ge) hm
+
+open ThetaStarRate Filter Topology Asymptotics in
+/-- **Generic failure of the rate under Assumption 1.**  For every sequence of problems
+satisfying Assumption 1 with `s_min > 0`, gap ratio bounded away from `1` (`m ≥ m₀ > 1`) and
+gradient energy `s_t = ‖A x_t‖² → ∞` (the typical case when `‖x_t‖² ≍ d`), one has
+`1 - θ* = o(1/m²)`: Assumption 1 bounds `Tr Σ`, and `1 - θ* < Tr Σ / ((1+ρ) s_t (m² - 1))`. -/
+theorem thetaStar_rate_isLittleO_of_assumption1 {κ : ℕ → Type*} [∀ n, Fintype (κ n)]
+    [∀ n, DecidableEq (κ n)] (P : ∀ n, Spec (κ n)) (N : ∀ n, Noise (κ n)) (c : ∀ n, κ n → ℝ)
+    (h : Assumption1 P N c) (hs : ∀ᶠ n in atTop, 0 < (N n).smin) {m₀ : ℝ} (hm₀ : 1 < m₀)
+    (hm : ∀ᶠ n in atTop, m₀ ≤ (P n).mRatio)
+    (hS : Tendsto (fun n => (P n).s (c n)) atTop atTop) :
+    (fun n => 1 - (P n).thetaStar (N n) (c n)) =o[atTop] (fun n => 1 / (P n).mRatio ^ 2) := by
+  obtain ⟨T, hT⟩ := h.trace_bounded
+  exact thetaStar_rate_isLittleO_of_trace_bounded atTop P N c hs hm₀
+    (Eventually.of_forall fun n => (hT n).2) hm hS
+
+open ThetaStarRate in
+/-- **Theorem 5 fails inside the regime of Assumption 1 (fixed gap, non-degenerate limits).**
+Family 1: `A_n = diag(2, …, 2, 1, …, 1)` (`d = 2(n+2)`, `k = n+2`), `Σ_n = I/d`, `x_n = ∑ u_i`.
+All four items of Assumption 1 hold — `‖x_n‖²/d = 1`, `ρ = 1`, the block moments are the
+constants `2^p` and `1`, `Tr Σ_n = 1` — and `m = 2` for every `n`.  Nevertheless
+`1 - θ* < 1/(24 (n+2)) → 0`, so for **every** `α > 0` the upper bound `θ* ≤ 1 - α/m²` of
+Theorem 5 is violated for all large `n`: no dimension-free constant `α` exists.
+(Mechanism: `s_min ≤ Tr Σ/d`, so `s_t/(s_min (d-k)) ≥ (1+ρ) s_t/Tr Σ → ∞`.) -/
+theorem thetaStar_rate_fails_under_assumption1 :
+    Assumption1 asp1Spec scaledNoise (fun _ _ => 1) ∧ (∀ n, (asp1Spec n).mRatio = 2) ∧
+      (∀ n : ℕ, 1 - (asp1Spec n).thetaStar (scaledNoise n) (fun _ => 1)
+        < 1 / (24 * ((n : ℝ) + 2))) ∧
+      ∀ α : ℝ, 0 < α → ∃ n₀ : ℕ, ∀ n ≥ n₀,
+        1 - α / (asp1Spec n).mRatio ^ 2 < (asp1Spec n).thetaStar (scaledNoise n) (fun _ => 1) := by
+  have hb : ∀ n : ℕ, 1 - (asp1Spec n).thetaStar (scaledNoise n) (fun _ => 1)
+      < 1 / (24 * ((n : ℝ) + 2)) := fun n => by
+    have h := one_sub_thetaStar_blockSpec_ones_lt n (μ := 2) (ν := 1) (ε := 1) one_pos le_rfl
+      one_lt_two
+    have e : 2 * ((n : ℝ) + 2) * 2 ^ 2 * ((2 / 1) ^ 2 - 1) = 24 * ((n : ℝ) + 2) := by ring
+    rwa [e] at h
+  refine ⟨assumption1_asp1Spec, asp1Spec_mRatio, hb, fun α hα => ⟨⌈1 / α⌉₊, fun n hn => ?_⟩⟩
+  have h := hb n
+  have hn' : 1 / α ≤ (n : ℝ) := le_trans (Nat.le_ceil _) (by exact_mod_cast hn)
+  have hn0 : (0 : ℝ) ≤ n := Nat.cast_nonneg n
+  rw [asp1Spec_mRatio]
+  have hle : 1 / (24 * ((n : ℝ) + 2)) ≤ α / 2 ^ 2 := by
+    rw [div_le_div_iff₀ (by positivity) (by positivity)]
+    rw [div_le_iff₀ hα] at hn'
+    nlinarith
+  linarith
+
+open ThetaStarRate Filter Asymptotics in
+/-- **"`θ* = 1 - Θ(1/m²)`" fails inside the regime of Assumption 1 with `m → ∞`.**
+Family 2: `A_n = diag(1, …, 1, ε_n, …, ε_n)`, `ε_n = 1/(n+2)`, `Σ_n = I/d`, `x_n = ∑ u_i`.
+Assumption 1 holds (`‖x_n‖²/d = 1`, `ρ = 1`, dominant moments `1`, bulk moments `→ 0`,
+`Tr Σ_n = 1`), the gap ratio is `m_n = n + 2 → ∞`, and `1 - θ*` is **not** `Θ(1/m²)`
+(it is `o(1/m²)`). -/
+theorem thetaStar_rate_not_isTheta_under_assumption1 :
+    Assumption1 asp1GapSpec scaledNoise (fun _ _ => 1) ∧
+      Tendsto (fun n => (asp1GapSpec n).mRatio) atTop atTop ∧
+      ¬ ((fun n : ℕ => 1 - (asp1GapSpec n).thetaStar (scaledNoise n) (fun _ => 1))
+          =Θ[atTop] (fun n : ℕ => 1 / (asp1GapSpec n).mRatio ^ 2)) := by
+  have hm : Tendsto (fun n => (asp1GapSpec n).mRatio) atTop atTop := by
+    simp only [asp1GapSpec_mRatio]
+    exact tendsto_atTop_add_const_right _ _ tendsto_natCast_atTop_atTop
+  refine ⟨assumption1_asp1GapSpec _ ⟨1, normSq_ones_le⟩, hm, ?_⟩
+  refine thetaStar_rate_not_isTheta_of_trace_bounded atTop asp1GapSpec scaledNoise
+    (fun _ _ => 1) (Eventually.of_forall scaledNoise_smin_pos) one_lt_two
+    (Eventually.of_forall fun n => (scaledNoise_trace n).le)
+    (Eventually.of_forall fun n => ?_) ?_
+  · rw [asp1GapSpec_mRatio]
+    linarith [(Nat.cast_nonneg n : (0 : ℝ) ≤ n)]
+  · refine tendsto_atTop_mono (fun n => ?_) tendsto_natCast_atTop_atTop
+    have h := blockSpec_le_s_ones n (μ := 1) (eps_pos n) le_rfl (eps_lt_one n)
+    show (n : ℝ) ≤ (asp1GapSpec n).s (fun _ => 1)
+    unfold asp1GapSpec
+    linarith
+
+open ThetaStarRate Filter Asymptotics in
+/-- **The same problems at the zero state do satisfy `θ* = 1 - Θ(1/m²)`.**  Family 2 with
+`x_n = 0` satisfies Assumption 1 and all hypotheses of `thetaStar_rate_isTheta`
+(`ρ s_max/s_min = 1`, `s_t = 0`, `λ_1/λ_k = λ_{k+1}/λ_d = 1`) while `m_n = n + 2 → ∞`.  Together
+with `thetaStar_rate_not_isTheta_under_assumption1` (same `A_n`, `Σ_n`, other state): under
+Assumption 1 the truth of the rate claim depends on the state. -/
+theorem thetaStar_rate_isTheta_under_assumption1_zero_state :
+    Assumption1 asp1GapSpec scaledNoise (fun n => (0 : BlockIdx n → ℝ)) ∧
+      (fun n : ℕ => 1 - (asp1GapSpec n).thetaStar (scaledNoise n) 0)
+        =Θ[atTop] (fun n : ℕ => 1 / (asp1GapSpec n).mRatio ^ 2) := by
+  refine ⟨assumption1_asp1GapSpec _ ⟨0, normSq_zero_le⟩, ?_⟩
+  refine thetaStar_rate_isTheta atTop asp1GapSpec scaledNoise (fun n => (0 : BlockIdx n → ℝ))
+    (Eventually.of_forall scaledNoise_smin_pos) (R₁ := 1) (R₂ := 1) (Ω := 0) (KD := 1) (KB := 1)
+    one_pos ?_ ?_ ?_ ?_ ?_ <;> refine Eventually.of_forall fun n => ?_
+  · rw [mul_div_assoc, scaledNoise_ratio]; simp [asp1GapSpec]
+  · rw [mul_div_assoc, scaledNoise_ratio]; simp [asp1GapSpec]
+  · rw [((asp1GapSpec n).s_eq_zero_iff 0).mpr rfl]; simp
+  · simp [asp1GapSpec]
+  · have := (eps_pos n).ne'
+    simp [asp1GapSpec, this]
+
+open ThetaStarRate in
+/-- **Theorem 5 fails inside the regime of Assumption 1 for every state and every noise.**
+Family 3: `A_n = diag(2, …, 2, 1, ε_n, …, ε_n)`, `ε_n = 1/(n+2)` (`d = 2(n+2)`, `k = n+2`,
+`ρ = 1`, `m = 2`, `λ_1/λ_k = 1`, `λ_{k+1} = 1`).  With `Σ_n = I/d` and `x_n = 0` (or any states
+with `‖x_n‖² ≤ C d`, `ThetaStarRate.assumption1_asp1SpikeSpec`) Assumption 1 holds, the bulk
+moment limits being `λ_{ℬ,p} = 0`, which the assumption allows.  But for **every** noise with
+`s_min > 0` and **every** state, `1 - θ* ≤ ψ_ℬ/ψ_𝒟 ≤ 1/(2(n+2))`.  So for every `α > 0` the
+bound `θ* ≤ 1 - α/m²` fails for all large `n`, uniformly in the noise and the state: the constant
+`α` must depend on `λ_{k+1}/λ_d` (more precisely on `ψ_ℬ/((d-k) λ_{k+1}²)`), which Assumption 1
+does not control. -/
+theorem thetaStar_rate_fails_under_assumption1_all_states :
+    Assumption1 asp1SpikeSpec scaledNoise (fun n => (0 : BlockIdx n → ℝ)) ∧
+      (∀ n, (asp1SpikeSpec n).mRatio = 2) ∧
+      (∀ (n : ℕ) (N : Noise (BlockIdx n)) (c : BlockIdx n → ℝ), 0 < N.smin →
+        1 - (asp1SpikeSpec n).thetaStar N c ≤ 1 / (2 * ((n : ℝ) + 2))) ∧
+      ∀ α : ℝ, 0 < α → ∃ n₀ : ℕ, ∀ n ≥ n₀, ∀ (N : Noise (BlockIdx n)) (c : BlockIdx n → ℝ),
+        0 < N.smin → 1 - α / (asp1SpikeSpec n).mRatio ^ 2 < (asp1SpikeSpec n).thetaStar N c := by
+  have hb : ∀ (n : ℕ) (N : Noise (BlockIdx n)) (c : BlockIdx n → ℝ), 0 < N.smin →
+      1 - (asp1SpikeSpec n).thetaStar N c ≤ 1 / (2 * ((n : ℝ) + 2)) := fun n N c hs => by
+    have h := ((asp1SpikeSpec n).thetaStar_rate_psi_bound N hs c).2
+    have hn : (0 : ℝ) < (n : ℝ) + 2 := by positivity
+    have h2 := succ_mul_eps_pow_le n (p := 2) two_ne_zero
+    refine h.trans ?_
+    unfold asp1SpikeSpec
+    rw [blockSpec_psiB, blockSpec_psiD, div_le_div_iff₀ (by positivity) (by positivity)]
+    nlinarith
+  refine ⟨assumption1_asp1SpikeSpec _ ⟨0, normSq_zero_le⟩, asp1SpikeSpec_mRatio, hb,
+    fun α hα => ⟨⌈2 / α⌉₊, fun n hn N c hs => ?_⟩⟩
+  have h := hb n N c hs
+  have hn' : 2 / α ≤ (n : ℝ) := le_trans (Nat.le_ceil _) (by exact_mod_cast hn)
+  have hn0 : (0 : ℝ) ≤ n := Nat.cast_nonneg n
+  rw [asp1SpikeSpec_mRatio]
+  have hlt : 1 / (2 * ((n : ℝ) + 2)) < α / 2 ^ 2 := by
+    rw [div_lt_div_iff₀ (by positivity) (by positivity)]
+    rw [div_le_iff₀ hα] at hn'
+    nlinarith
+  linarith
+
+open ThetaStarRate in
+/-- **A step of the paper's proof fails formally.**  The proof of Theorem 5 claims
+`ℓ_ℬ := |ℬ| λ_{k+1}² ≤ ψ_ℬ` (tex 1312–1315) and uses it as `a ≥ s_min ℓ_ℬ` to obtain the "fixed
+scalar `α`" (tex 1334).  In Family 3, `ψ_ℬ < (d-k) λ_{k+1}²` for every `n`
+(e.g. `n = 0`: `ψ_ℬ = 5/4 < 2`). -/
+theorem thetaStar_rate_paper_psiB_bound_fails (n : ℕ) :
+    (asp1SpikeSpec n).psiB < (asp1SpikeSpec n).dkR * (asp1SpikeSpec n).lamk1 ^ 2 := by
+  have hn0 : (0 : ℝ) ≤ n := Nat.cast_nonneg n
+  have h1 := succ_mul_eps_pow_le n (p := 1) one_ne_zero
+  have h2 := mul_le_mul_of_nonneg_right h1 (eps_pos n).le
+  have h3 := eps_lt_one n
+  unfold asp1SpikeSpec
+  rw [blockSpec_psiB, blockSpec_dkR, blockSpec_lamk1]
+  nlinarith
+
+open ThetaStarRate Filter Asymptotics in
+/-- **Non-vacuity of `thetaStar_rate_isTheta` with `m → ∞`** (fixed `d = 3`):
+`A_n = diag(n+2, 1, 1)`, `Σ = I`, `x = 0` satisfies its hypotheses with `R₁ = R₂ = 1/2`, `Ω = 0`,
+`K_𝒟 = K_ℬ = 1`, hence `1 - θ* = Θ(1/m²)` there — while for `x = u_1` it is not
+(`thetaStar_rate_not_isTheta`). -/
+theorem thetaStar_rate_isTheta_gapSpecNat_zero :
+    (fun n : ℕ => 1 - (gapSpecNat n).thetaStar unitNoise 0)
+      =Θ[atTop] (fun n : ℕ => 1 / (gapSpecNat n).mRatio ^ 2) := by
+  refine thetaStar_rate_isTheta atTop gapSpecNat (fun _ => unitNoise) (fun _ => 0)
+    (Eventually.of_forall fun _ => by simp) (R₁ := 1 / 2) (R₂ := 1 / 2) (Ω := 0) (KD := 1)
+    (KB := 1) (by norm_num) ?_ ?_ ?_ ?_ ?_ <;> refine Eventually.of_forall fun n => ?_
+  · simp [gapSpecNat]
+  · simp [gapSpecNat]
+  · rw [((gapSpecNat n).s_eq_zero_iff 0).mpr rfl]; simp
+  · have h : (n : ℝ) + 2 ≠ 0 := by positivity
+    simp [gapSpecNat, h]
+  · simp [gapSpecNat]
 
 /-- Non-vacuity: the hypotheses used in this file (`0 < s_min`, and for the `m⁻⁴` bound
 `0 < ‖P^𝒟 x‖²`) are jointly satisfiable. -/

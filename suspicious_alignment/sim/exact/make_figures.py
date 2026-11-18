@@ -228,18 +228,20 @@ def fig_diag():
 
 def fig_momentum():
     rows, L = _logs(["momentum"])
-    r0, L0 = _logs(["twophase_a", "twophase_b"])
-    fig, axs = plt.subplots(2, 3, figsize=(14.5, 7.0), sharex=True)
-    for jx, m in enumerate((5, 20, 100)):
+    fig, axs = plt.subplots(2, 2, figsize=(11.5, 7.0))
+    panels = [("large", "drift-matched learning rate (T = 6000)"),
+              ("nomomlr", "momentum-free learning rate (T = 2000)")]
+    for jx, (tag, title) in enumerate(panels):
+        rr = [r for r in rows if r.get("tag") == tag]
         for o in CORE:
-            r = [r for r in rows if r["m"] == m and r["opt"] == o and r["init"] == "gauss" and r["sigma"] > 0][0]
+            r = [r for r in rr if r["opt"] == o][0]
             t = L[r["rid"] + "__t"] + 1
             ps.line(axs[0, jx], t, np.nanmean(L[r["rid"] + "__theta"], 0), o, lw=1.7)
             ps.line(axs[1, jx], t, np.nanmean(L[r["rid"] + "__loss"], 0), o, lw=1.7)
-        s = [r for r in r0 if r["m"] == m and r["opt"] == "sgd"][0]
-        ref(axs[0, jx], s["ratio1"], "Σ_D λ / Σ λ", va="top")
-        ref(axs[0, jx], s["ratio2"], "Σ_D λ² / Σ λ²")
-        axs[0, jx].set_title(f"m = {m}, Nesterov β = 0.95")
+        s = [r for r in rr if r["opt"] == "sgd"][0]
+        ref(axs[0, jx], s["sgdmom_theta_inf_at_eta_eff"], "SGD + Nesterov, exact stationary (η = 0.003)", va="top")
+        ref(axs[0, jx], s["thm16_at_eta_eff"], "Theorem 16 (no momentum, η = 0.003)")
+        axs[0, jx].set_title(f"m = 20, Nesterov β = 0.95, {title}", fontsize=9.5)
         axs[1, jx].set_yscale("log")
         axs[1, jx].set_xlabel("step t + 1")
         for a in axs[:, jx]:
@@ -333,7 +335,8 @@ def fig_e2():
         axs[1, 2].set_ylabel("η*_F (raw)")
     except Exception as ex:
         axs[1, 2].set_title(str(ex))
-    ps.legend_below(fig, axs[0, 0], ncol=6, y=0.05)
+    fig.subplots_adjust(hspace=0.55, wspace=0.28)
+    ps.legend_below(fig, axs[0, 0], ncol=6, y=0.03)
     save(fig, "e2_alignment_response.png")
 
 
@@ -414,8 +417,8 @@ def fig_e4():
         ax.set_title(title, fontsize=9.5)
         ax.set_xlabel("step t + 1")
         ax.set_ylabel("alignment θ_t")
-    ps.legend_below(fig, axs[0, 0], ncol=7, y=0.04)
     fig.tight_layout()
+    ps.legend_below(fig, axs[0, 0], ncol=7, y=0.0)
     save(fig, "e4_robustness.png")
 
 

@@ -1,0 +1,36 @@
+[muon equal  m=  2] psiD/psi=0.546856 theta0=0.546856 min=5.4686e-01+-0.0e+00 at t=74 (arrivals 1000..1000) end=0.546856
+[muon equal  m=  5] psiD/psi=0.882939 theta0=0.882939 min=8.8294e-01+-0.0e+00 at t=58 (arrivals 1000..1000) end=0.882939
+[muon equal  m= 10] psiD/psi=0.967918 theta0=0.967918 min=9.6792e-01+-0.0e+00 at t=395 (arrivals 1000..1000) end=0.967918
+[muon equal  m= 20] psiD/psi=0.991782 theta0=0.991782 min=9.9178e-01+-0.0e+00 at t=928 (arrivals 1000..1000) end=0.991782
+[muon equal  m= 50] psiD/psi=0.998676 theta0=0.998676 min=9.9868e-01+-0.0e+00 at t=17 (arrivals 1000..1000) end=0.998676
+[muon equal  m=100] psiD/psi=0.999669 theta0=0.999669 min=9.9967e-01+-0.0e+00 at t=287 (arrivals 1000..1000) end=0.999669
+[muon equal  m=200] psiD/psi=0.999917 theta0=0.999917 min=9.9992e-01+-0.0e+00 at t=995 (arrivals 1000..1000) end=0.999917
+[muon equal  m=500] psiD/psi=0.999987 theta0=0.999987 min=9.9999e-01+-0.0e+00 at t=218 (arrivals 1000..1000) end=0.999987
+[muon chi100 m=  2] psiD/psi=0.546856 theta0=0.546266 min=8.3681e-02+-7.7e-02 at t=1152 (arrivals 770..1259) end=0.554872
+[muon chi100 m=  5] psiD/psi=0.882939 theta0=0.882669 min=3.1031e-01+-2.2e-01 at t=1152 (arrivals 770..1259) end=0.885977
+[muon chi100 m= 10] psiD/psi=0.967918 theta0=0.967835 min=5.6139e-01+-2.8e-01 at t=1152 (arrivals 770..1259) end=0.968808
+[muon chi100 m= 20] psiD/psi=0.991782 theta0=0.991760 min=7.7254e-01+-2.4e-01 at t=1152 (arrivals 770..1259) end=0.992014
+[muon chi100 m= 50] psiD/psi=0.998676 theta0=0.998672 min=9.3156e-01+-1.1e-01 at t=1152 (arrivals 770..1259) end=0.998714
+[muon chi100 m=100] psiD/psi=0.999669 theta0=0.999668 min=9.7923e-01+-3.6e-02 at t=1152 (arrivals 770..1259) end=0.999678
+[muon chi100 m=200] psiD/psi=0.999917 theta0=0.999917 min=9.9448e-01+-9.9e-03 at t=1152 (arrivals 770..1259) end=0.999919
+[muon chi100 m=500] psiD/psi=0.999987 theta0=0.999987 min=9.9910e-01+-1.6e-03 at t=1152 (arrivals 770..1259) end=0.999987
+[muon chi4   m=  2] psiD/psi=0.546856 theta0=0.552841 min=3.8958e-03+-1.0e-02 at t=1720 (arrivals 99..2478) end=0.543985
+[muon chi4   m=  5] psiD/psi=0.882939 theta0=0.884883 min=2.1355e-02+-5.5e-02 at t=1720 (arrivals 99..2478) end=0.881421
+[muon chi4   m= 10] psiD/psi=0.967918 theta0=0.968460 min=6.0182e-02+-1.5e-01 at t=1720 (arrivals 99..2478) end=0.967437
+[muon chi4   m= 20] psiD/psi=0.991782 theta0=0.991921 min=1.2006e-01+-2.5e-01 at t=1720 (arrivals 99..2478) end=0.991654
+[muon chi4   m= 50] psiD/psi=0.998676 theta0=0.998698 min=2.6083e-01+-2.8e-01 at t=1720 (arrivals 99..2478) end=0.998655
+[muon chi4   m=100] psiD/psi=0.999669 theta0=0.999674 min=5.0431e-01+-2.0e-01 at t=1720 (arrivals 99..2478) end=0.999663
+[muon chi4   m=200] psiD/psi=0.999917 theta0=0.999919 min=7.8409e-01+-9.1e-02 at t=1720 (arrivals 99..2478) end=0.999916
+[muon chi4   m=500] psiD/psi=0.999987 theta0=0.999987 min=9.5626e-01+-1.9e-02 at t=1720 (arrivals 99..2478) end=0.999987
+[ht0.125 equal m=  2] theta0=0.546856 min=1.280e-05 at t=785 end=0.62755186 pred=0.62755186 | rigorous window: T_D <= 786, T_B(k+1) >= 749
+[ht0.125 equal m=  5] theta0=0.882939 min=2.560e-05 at t=700 end=0.93189105 pred=0.93189105 | rigorous window: T_D <= 701, T_B(k+1) >= 749
+[ht0.125 equal m= 10] theta0=0.967918 min=6.661e-05 at t=642 end=0.98523243 pred=0.98523243 | rigorous window: T_D <= 643, T_B(k+1) >= 749
+[ht0.125 equal m= 20] theta0=0.991782 min=2.055e-04 at t=589 end=0.99693543 pred=0.99693543 | rigorous window: T_D <= 589, T_B(k+1) >= 749
+[ht0.125 equal m= 50] theta0=0.998676 min=1.066e-03 at t=525 end=0.99962159 pred=0.99962159 | rigorous window: T_D <= 526, T_B(k+1) >= 749
+[ht0.125 equal m=100] theta0=0.999669 min=4.001e-03 at t=481 end=0.99992237 pred=0.99992237 | rigorous window: T_D <= 482, T_B(k+1) >= 749
+[ht0.125 equal m=200] theta0=0.999917 min=1.555e-02 at t=441 end=0.99998408 pred=0.99998408 | rigorous window: T_D <= 442, T_B(k+1) >= 749
+[ht0.125 equal m=500] theta0=0.999987 min=9.271e-02 at t=393 end=0.99999804 pred=0.99999804 | rigorous window: T_D <= 394, T_B(k+1) >= 749
+
+real	0m0.872s
+user	0m0.802s
+sys	0m0.056s

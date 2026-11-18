@@ -28,3 +28,26 @@
 [B ht p=0.125 n=160 m=100] theta_final=0.99992308 pred=0.99992308 |err|=1.1e-16 |K-K*|/|K*|=6.9e-13 offdiag=6.6e-13 | min theta=2.58e-01 at 66 (T_D ~ 64), back at 147 (T_B ~ 125)
 [B ht p=0.5 n=160 m=  2] theta_final=0.92630767 pred=0.92630767 |err|=1.1e-16 |K-K*|/|K*|=2.5e-15 offdiag=6.8e-16 | min theta=8.80e-06 at 214 (T_D ~ 141), back at 301 (T_B ~ 283)
 [B ht p=0.5 n=160 m= 10] theta_final=0.99987273 pred=0.99987273 |err|=2.2e-16 |K-K*|/|K*|=2.8e-14 offdiag=9.9e-16 | min theta=1.99e-05 at 80 (T_D ~ 63), back at 302 (T_B ~ 283)
+[B ht p=0.5 n=160 m=100] theta_final=0.99999999 pred=0.99999999 |err|=2.2e-16 |K-K*|/|K*|=6.6e-12 offdiag=3.1e-15 | min theta=4.15e-02 at 18 (T_D ~ 20), back at 231 (T_B ~ 283)
+[C ech r= 2 m= 10] theta=1.000000+-0.0e+00 pred(top r+1)=1.000000 active=3.0 fracTop=1.0000 min theta=7.50e-26 at 204
+[C ech r= 2 m=100] theta=1.000000+-0.0e+00 pred(top r+1)=1.000000 active=3.0 fracTop=1.0000 min theta=2.15e-08 at 140
+[C ech r= 4 m= 10] theta=0.998587+-1.5e-04 pred(top r+1)=0.998437 active=5.0 fracTop=1.0000 min theta=1.43e-19 at 144
+[C ech r= 4 m=100] theta=0.999981+-1.7e-06 pred(top r+1)=0.999984 active=5.0 fracTop=1.0000 min theta=4.71e-01 at 116
+[C ech r= 8 m= 10] theta=0.995081+-1.8e-04 pred(top r+1)=0.992666 active=9.3 fracTop=1.0000 min theta=7.74e-10 at 133
+[C ech r= 8 m=100] theta=0.999912+-1.9e-05 pred(top r+1)=0.999926 active=9.0 fracTop=1.0000 min theta=5.42e-01 at 108
+[C ech r=16 m= 10] theta=0.984922+-5.6e-04 pred(top r+1)=0.983219 active=17.0 fracTop=1.0000 min theta=3.09e-02 at 114
+[C ech r=16 m=100] theta=0.999731+-8.6e-05 pred(top r+1)=0.999829 active=17.3 fracTop=1.0000 min theta=7.57e-01 at 113
+[D tall n=1 muon    ] theta=1.000000+-0.0e+00 pred(top-n, lam^q)=1.000000 energy share of top-n eigen-directions=1.000000 max |E_i/(eta lam_i/2)^q - 1| (i<=n) = 1.29e-01
+[D tall n=1 ht0.125 ] theta=1.000000+-0.0e+00 pred(top-n, lam^q)=1.000000 energy share of top-n eigen-directions=1.000000 max |E_i/(eta lam_i/2)^q - 1| (i<=n) = 5.33e-15
+[D tall n=1 ht0.5   ] theta=1.000000+-0.0e+00 pred(top-n, lam^q)=1.000000 energy share of top-n eigen-directions=1.000000 max |E_i/(eta lam_i/2)^q - 1| (i<=n) = 3.53e-14
+[D tall n=2 muon    ] theta=1.000000+-0.0e+00 pred(top-n, lam^q)=1.000000 energy share of top-n eigen-directions=1.000000 max |E_i/(eta lam_i/2)^q - 1| (i<=n) = 3.65e-01
+[D tall n=2 ht0.125 ] theta=1.000000+-0.0e+00 pred(top-n, lam^q)=1.000000 energy share of top-n eigen-directions=1.000000 max |E_i/(eta lam_i/2)^q - 1| (i<=n) = 9.10e-15
+[D tall n=2 ht0.5   ] theta=1.000000+-0.0e+00 pred(top-n, lam^q)=1.000000 energy share of top-n eigen-directions=1.000000 max |E_i/(eta lam_i/2)^q - 1| (i<=n) = 3.53e-14
+[D tall n=8 muon    ] theta=0.994225+-3.2e-04 pred(top-n, lam^q)=0.994039 energy share of top-n eigen-directions=1.000000 max |E_i/(eta lam_i/2)^q - 1| (i<=n) = 7.95e-01
+[D tall n=8 ht0.125 ] theta=0.997141+-0.0e+00 pred(top-n, lam^q)=0.997141 energy share of top-n eigen-directions=1.000000 max |E_i/(eta lam_i/2)^q - 1| (i<=n) = 2.35e-14
+[D tall n=8 ht0.5   ] theta=0.999967+-0.0e+00 pred(top-n, lam^q)=0.999967 energy share of top-n eigen-directions=1.000000 max |E_i/(eta lam_i/2)^q - 1| (i<=n) = 1.42e-12
+elapsed 136.76463317871094
+
+real	2m17.181s
+user	1m34.168s
+sys	0m0.138s
