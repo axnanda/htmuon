@@ -90,7 +90,7 @@ def main():
                     if j in ECH_J:
                         O = sp.Echelon.assemble(parts, parts['tau_pi'])
                         res[f'ech_r{tag}_j{j}'] = summarize(O, U, S, Vh, ex_muon)
-                        res[f'ech_r{tag}_j{j}']['tau_ratio'] = float(parts['tau_pi'] / np.linalg.norm(parts['T'], 2))
+                        res[f'ech_r{tag}_j{j}']['tau_ratio'] = float(parts['tau_pi'] / sp.spec_norm(parts['T']))
                         if j in (1, 100):
                             res[f'ech_r{tag}_pol_j{j}'] = summarize(sp.cubic_step(O), U, S, Vh, ex_muon)
                             Of = sp.Echelon.assemble(parts, parts['tau_fro'])

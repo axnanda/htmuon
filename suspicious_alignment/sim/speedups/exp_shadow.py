@@ -98,7 +98,7 @@ def job(args):
         G = A @ W
         g = G + sigma * rng.standard_normal((d, n)) if sigma > 0 else G
         M, mom = sp.nesterov_lerp(g, mom, 0.95, True)
-        U, S, Vh = np.linalg.svd(M, full_matrices=False)
+        U, S, Vh = sp.svd(M, full_matrices=False)
         E = U @ Vh if family == 'muon' else (U * (S ** P)[None, :]) @ Vh
         rec = (t % rec_every == 0)
         # stateful shadows: every step
@@ -131,7 +131,7 @@ def job(args):
                     O = sp.Echelon.assemble(p_, p_['tau_pi'])
                     data[f'ech_r{tag}'][i] = mk(O)
                     extra[f'frame_err_r{r}'][i] = 1.0 - np.sum((U[:, :r].T @ p_['U']) ** 2) / r
-                    extra[f'tau_ratio_r{r}'][i] = p_['tau_pi'] / np.linalg.norm(p_['T'], 2)
+                    extra[f'tau_ratio_r{r}'][i] = p_['tau_pi'] / sp.spec_norm(p_['T'])
                     if r in (4, k):
                         data[f'ech_r{tag}_pol'][i] = mk(sp.cubic_step(O))
                         data[f'ech_r{tag}_fro'][i] = mk(sp.Echelon.assemble(p_, p_['tau_fro']))

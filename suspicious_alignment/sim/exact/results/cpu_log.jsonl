@@ -9,3 +9,12 @@
 {"name": "e1_late_b", "cpu_s": 142.8, "wall_s": 233.9, "n_runs": 18, "n_svd": 141210}
 {"name": "e2e3_onestep_states", "cpu_s": 48.7, "wall_s": 58.9}
 {"name": "e1_signal", "cpu_s": 132.9, "wall_s": 190.4, "n_runs": 51, "n_svd": 146520}
+{"name": "e1_lownoise", "cpu_s": 57.6, "wall_s": 58.1, "n_runs": 17, "n_svd": 62750}
+{"name": "e1_n1", "cpu_s": 79.8, "wall_s": 80.8, "n_runs": 246}
+{"name": "e3_continue", "cpu_s": 115.6, "wall_s": 166.9, "n_runs": 343}
+{"name": "e2e3_onestep_scale", "cpu_s": 2.0, "wall_s": 3.1}
+{"name": "e2e3_onestep_mdep", "cpu_s": 3.7, "wall_s": 6.1}
+{"name": "e1_momentum", "cpu_s": 183.5, "wall_s": 237.6, "n_runs": 42, "n_svd": 183190}
+{"name": "e2e3_onestep_highalign", "cpu_s": 6.1, "wall_s": 6.8}
+{"name": "e4_aniso", "cpu_s": 86.9, "wall_s": 157.2, "n_runs": 28, "n_svd": 91220}
+{"name": "e2_etastar_bounds", "cpu_s": 3.1, "wall_s": 6.0}

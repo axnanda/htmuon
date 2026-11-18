@@ -106,6 +106,129 @@ theorem quad_eq_zero_iff {p q η : ℝ} (hp : 0 < p) (hη : 0 < η) :
     right
     linarith
 
+/-! ### Comparing two ratios `a / (a + b)`
+
+Both the alignment `θ = s^𝒟 / (s^𝒟 + s^ℬ)` and its deterministic equivalent
+`thetaBarNext = 𝔼s^𝒟 / (𝔼s^𝒟 + 𝔼s^ℬ)` are ratios `a / (a + b)` of nonnegative reals, with Lean's
+convention `0 / 0 = 0` (the paper's `θ(0) = 0`). The lemmas below compare two such ratios through
+the cross-difference `b a' - b' a` and say *exactly* when each comparison is valid. -/
+
+/-- `a'/(a'+b') - a/(a+b) = (b a' - b' a) / ((a+b)(a'+b'))` when both denominators are
+non-zero. -/
+theorem ratio_sub_ratio {a b a' b' : ℝ} (h : a + b ≠ 0) (h' : a' + b' ≠ 0) :
+    a' / (a' + b') - a / (a + b) = (b * a' - b' * a) / ((a + b) * (a' + b')) := by
+  rw [div_sub_div _ _ h' h, mul_comm (a' + b') (a + b)]
+  congr 1
+  ring
+
+/-- **Sharp comparison of ratios (`<`)**: for nonnegative reals, the equivalence
+`a/(a+b) < a'/(a'+b') ↔ 0 < b a' - b' a` holds *if and only if* `a + b > 0` or `a' = 0`.
+(It fails exactly when `a = b = 0 < a'`: then the left ratio is `0/0 = 0 < a'/(a'+b')` although the
+cross-difference vanishes. No condition on `a' + b'` is needed: if `a' = b' = 0` both sides are
+false.) -/
+theorem ratio_lt_ratio_iff_sharp {a b a' b' : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (ha' : 0 ≤ a')
+    (hb' : 0 ≤ b') :
+    (a / (a + b) < a' / (a' + b') ↔ 0 < b * a' - b' * a) ↔ (0 < a + b ∨ a' = 0) := by
+  rcases (add_nonneg ha hb).eq_or_lt with h | h
+  · -- `a = b = 0`: the left ratio is `0` and the cross-difference is `0`
+    have ha0 : a = 0 := by linarith
+    have hb0 : b = 0 := by linarith
+    have hcross : ¬ (0 < b * a' - b' * a) := by
+      rw [ha0, hb0]
+      simp
+    have hratio : a / (a + b) = 0 := by rw [ha0, zero_div]
+    constructor
+    · intro hiff
+      right
+      by_contra hne
+      have hpos : 0 < a' := lt_of_le_of_ne ha' (Ne.symm hne)
+      have hlt : a / (a + b) < a' / (a' + b') := by
+        rw [hratio]
+        exact div_pos hpos (by linarith)
+      exact hcross (hiff.mp hlt)
+    · rintro (hpos | ha'0)
+      · linarith
+      · refine iff_of_false ?_ hcross
+        rw [hratio, ha'0, zero_div]
+        exact lt_irrefl 0
+  · -- `a + b > 0`: the equivalence always holds
+    refine iff_of_true ?_ (Or.inl h)
+    rcases (add_nonneg ha' hb').eq_or_lt with h' | h'
+    · have ha0 : a' = 0 := by linarith
+      have hb0 : b' = 0 := by linarith
+      refine iff_of_false ?_ ?_
+      · rw [ha0, zero_div]
+        exact not_lt.mpr (div_nonneg ha h.le)
+      · rw [ha0, hb0]
+        simp
+    · rw [← sub_pos, ratio_sub_ratio h.ne' h'.ne', div_pos_iff_of_pos_right (mul_pos h h')]
+
+/-- **Sharp comparison of ratios (`>`)**: for nonnegative reals, the equivalence
+`a'/(a'+b') < a/(a+b) ↔ b a' - b' a < 0` holds *if and only if* `a' + b' > 0` or `a = 0`.
+(It fails exactly when `a' = b' = 0 < a`. No condition on `a + b` is needed.) -/
+theorem ratio_gt_ratio_iff_sharp {a b a' b' : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (ha' : 0 ≤ a')
+    (hb' : 0 ≤ b') :
+    (a' / (a' + b') < a / (a + b) ↔ b * a' - b' * a < 0) ↔ (0 < a' + b' ∨ a = 0) := by
+  have hflip : b * a' - b' * a < 0 ↔ 0 < b' * a - b * a' := by
+    constructor <;> intro h <;> linarith
+  rw [hflip]
+  exact ratio_lt_ratio_iff_sharp ha' hb' ha hb
+
+/-- **Sharp comparison of ratios (`=`)**: for nonnegative reals, the equivalence
+`a'/(a'+b') = a/(a+b) ↔ b a' - b' a = 0` holds *if and only if* both
+(`a + b > 0` or `a' = 0`) and (`a' + b' > 0` or `a = 0`). -/
+theorem ratio_eq_ratio_iff_sharp {a b a' b' : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (ha' : 0 ≤ a')
+    (hb' : 0 ≤ b') :
+    (a' / (a' + b') = a / (a + b) ↔ b * a' - b' * a = 0) ↔
+      ((0 < a + b ∨ a' = 0) ∧ (0 < a' + b' ∨ a = 0)) := by
+  rcases (add_nonneg ha hb).eq_or_lt with h | h
+  · -- `a = b = 0`
+    have ha0 : a = 0 := by linarith
+    have hb0 : b = 0 := by linarith
+    have hcross : b * a' - b' * a = 0 := by
+      rw [ha0, hb0]
+      ring
+    have hratio : a / (a + b) = 0 := by rw [ha0, zero_div]
+    constructor
+    · intro hiff
+      have h0 : a' / (a' + b') = 0 := (hiff.mpr hcross).trans hratio
+      refine ⟨Or.inr ?_, Or.inr ha0⟩
+      by_contra hne
+      have hpos : 0 < a' := lt_of_le_of_ne ha' (Ne.symm hne)
+      have : 0 < a' / (a' + b') := div_pos hpos (by linarith)
+      linarith
+    · rintro ⟨hpos | ha'0, -⟩
+      · linarith
+      · refine iff_of_true ?_ hcross
+        rw [hratio, ha'0, zero_div]
+  · rcases (add_nonneg ha' hb').eq_or_lt with h' | h'
+    · -- `a + b > 0`, `a' = b' = 0`
+      have ha0 : a' = 0 := by linarith
+      have hb0 : b' = 0 := by linarith
+      have hcross : b * a' - b' * a = 0 := by
+        rw [ha0, hb0]
+        ring
+      have hratio : a' / (a' + b') = 0 := by rw [ha0, zero_div]
+      constructor
+      · intro hiff
+        have h0 : a / (a + b) = 0 := (hiff.mpr hcross).symm.trans hratio
+        refine ⟨Or.inl h, Or.inr ?_⟩
+        rcases div_eq_zero_iff.mp h0 with h1 | h1
+        · exact h1
+        · exact absurd h1 h.ne'
+      · rintro ⟨-, hpos | ha0'⟩
+        · linarith
+        · refine iff_of_true ?_ hcross
+          rw [hratio, ha0', zero_div]
+    · -- both denominators positive
+      refine iff_of_true ?_ ⟨Or.inl h, Or.inl h'⟩
+      rw [← sub_eq_zero, ratio_sub_ratio h.ne' h'.ne', div_eq_zero_iff]
+      constructor
+      · rintro (h0 | h0)
+        · exact h0
+        · exact absurd h0 (mul_pos h h').ne'
+      · exact Or.inl
+
 variable (P : Spec ι)
 
 /-! ### Elementary facts about moments -/
@@ -295,52 +418,80 @@ theorem theta_sub_theta (c c' : ι → ℝ) (hs : P.s c ≠ 0) (hs' : P.s c' ≠
   unfold Spec.s
   ring
 
-/-- For non-zero states, `θ(c) < θ(c')` iff the cross-difference
-`s^ℬ(c) s^𝒟(c') - s^ℬ(c') s^𝒟(c)` is positive. -/
-theorem theta_lt_theta_iff (c c' : ι → ℝ) (hs : 0 < P.s c) (hs' : 0 < P.s c') :
-    P.theta c < P.theta c' ↔ 0 < P.sB c * P.sD c' - P.sB c' * P.sD c := by
-  rw [← sub_pos, theta_sub_theta P c c' hs.ne' hs'.ne',
-    div_pos_iff_of_pos_right (mul_pos hs hs')]
+/-- **Exact validity of the `>` comparison**: for two arbitrary states, the equivalence
+`θ(c) < θ(c') ↔ 0 < s^ℬ(c) s^𝒟(c') - s^ℬ(c') s^𝒟(c)` holds *if and only if* `s(c) > 0` or
+`s^𝒟(c') = 0`. It fails exactly when `c = 0` (where `θ(c) = 0` by convention and the
+cross-difference vanishes) while `c'` has a dominant component (`θ(c') > 0`). -/
+theorem theta_lt_theta_iff_sharp (c c' : ι → ℝ) :
+    (P.theta c < P.theta c' ↔ 0 < P.sB c * P.sD c' - P.sB c' * P.sD c) ↔
+      (0 < P.s c ∨ P.sD c' = 0) := by
+  unfold Spec.theta Spec.s
+  exact ratio_lt_ratio_iff_sharp (P.sD_nonneg c) (P.sB_nonneg c) (P.sD_nonneg c')
+    (P.sB_nonneg c')
 
-/-- For non-zero states, `θ(c') < θ(c)` iff the cross-difference
-`s^ℬ(c) s^𝒟(c') - s^ℬ(c') s^𝒟(c)` is negative. -/
-theorem theta_gt_theta_iff (c c' : ι → ℝ) (hs : 0 < P.s c) (hs' : 0 < P.s c') :
-    P.theta c' < P.theta c ↔ P.sB c * P.sD c' - P.sB c' * P.sD c < 0 := by
-  rw [← sub_neg, theta_sub_theta P c c' hs.ne' hs'.ne', div_lt_iff₀ (mul_pos hs hs'), zero_mul]
+/-- **Exact validity of the `<` comparison**: for two arbitrary states, the equivalence
+`θ(c') < θ(c) ↔ s^ℬ(c) s^𝒟(c') - s^ℬ(c') s^𝒟(c) < 0` holds *if and only if* `s(c') > 0` or
+`s^𝒟(c) = 0`. It fails exactly when `c' = 0` while `c` has a dominant component. -/
+theorem theta_gt_theta_iff_sharp (c c' : ι → ℝ) :
+    (P.theta c' < P.theta c ↔ P.sB c * P.sD c' - P.sB c' * P.sD c < 0) ↔
+      (0 < P.s c' ∨ P.sD c = 0) := by
+  unfold Spec.theta Spec.s
+  exact ratio_gt_ratio_iff_sharp (P.sD_nonneg c) (P.sB_nonneg c) (P.sD_nonneg c')
+    (P.sB_nonneg c')
 
-/-- For non-zero states, `θ(c') = θ(c)` iff the cross-difference vanishes. -/
+/-- **Exact validity of the `=` comparison**: for two arbitrary states, the equivalence
+`θ(c') = θ(c) ↔ s^ℬ(c) s^𝒟(c') - s^ℬ(c') s^𝒟(c) = 0` holds *if and only if* both
+(`s(c) > 0` or `s^𝒟(c') = 0`) and (`s(c') > 0` or `s^𝒟(c) = 0`). -/
+theorem theta_eq_theta_iff_sharp (c c' : ι → ℝ) :
+    (P.theta c' = P.theta c ↔ P.sB c * P.sD c' - P.sB c' * P.sD c = 0) ↔
+      ((0 < P.s c ∨ P.sD c' = 0) ∧ (0 < P.s c' ∨ P.sD c = 0)) := by
+  unfold Spec.theta Spec.s
+  exact ratio_eq_ratio_iff_sharp (P.sD_nonneg c) (P.sB_nonneg c) (P.sD_nonneg c')
+    (P.sB_nonneg c')
+
+/-- If `c ≠ 0` (`s(c) > 0`; nothing is assumed on `c'`), then `θ(c) < θ(c')` iff the
+cross-difference `s^ℬ(c) s^𝒟(c') - s^ℬ(c') s^𝒟(c)` is positive. (If `c' = 0` both sides are
+false. The hypothesis is the only positivity assumption needed, see
+`theta_lt_theta_iff_sharp`.) -/
+theorem theta_lt_theta_iff (c c' : ι → ℝ) (hs : 0 < P.s c) :
+    P.theta c < P.theta c' ↔ 0 < P.sB c * P.sD c' - P.sB c' * P.sD c :=
+  (theta_lt_theta_iff_sharp P c c').mpr (Or.inl hs)
+
+/-- If `c' ≠ 0` (`s(c') > 0`; nothing is assumed on `c`), then `θ(c') < θ(c)` iff the
+cross-difference `s^ℬ(c) s^𝒟(c') - s^ℬ(c') s^𝒟(c)` is negative. (If `c = 0` both sides are
+false. The hypothesis is the only positivity assumption needed, see
+`theta_gt_theta_iff_sharp`.) -/
+theorem theta_gt_theta_iff (c c' : ι → ℝ) (hs' : 0 < P.s c') :
+    P.theta c' < P.theta c ↔ P.sB c * P.sD c' - P.sB c' * P.sD c < 0 :=
+  (theta_gt_theta_iff_sharp P c c').mpr (Or.inl hs')
+
+/-- For two non-zero states, `θ(c') = θ(c)` iff the cross-difference vanishes. (Here both
+positivity hypotheses are needed, see `theta_eq_theta_iff_sharp`.) -/
 theorem theta_eq_theta_iff (c c' : ι → ℝ) (hs : 0 < P.s c) (hs' : 0 < P.s c') :
-    P.theta c' = P.theta c ↔ P.sB c * P.sD c' - P.sB c' * P.sD c = 0 := by
-  rw [← sub_eq_zero, theta_sub_theta P c c' hs.ne' hs'.ne', div_eq_zero_iff]
-  constructor
-  · rintro (h | h)
-    · exact h
-    · exact absurd h (mul_pos hs hs').ne'
-  · exact Or.inl
+    P.theta c' = P.theta c ↔ P.sB c * P.sD c' - P.sB c' * P.sD c = 0 :=
+  (theta_eq_theta_iff_sharp P c c').mpr ⟨Or.inl hs, Or.inl hs'⟩
 
-/-- A positive cross-difference forces both states to be non-zero, hence `θ(c) < θ(c')`
+/-- A positive cross-difference forces `c ≠ 0`, hence `θ(c) < θ(c')`
 (no positivity hypothesis needed). -/
 theorem theta_lt_theta_of_pos (c c' : ι → ℝ)
     (h : 0 < P.sB c * P.sD c' - P.sB c' * P.sD c) : P.theta c < P.theta c' := by
   have h1 : 0 < P.sB c * P.sD c' := by
     have := mul_nonneg (P.sB_nonneg c') (P.sD_nonneg c)
     linarith
-  obtain ⟨hB, hD'⟩ := pos_and_pos_of_mul_pos h1 (P.sB_nonneg _) (P.sD_nonneg _)
+  obtain ⟨hB, -⟩ := pos_and_pos_of_mul_pos h1 (P.sB_nonneg _) (P.sD_nonneg _)
   have hs : 0 < P.s c := by unfold Spec.s; linarith [P.sD_nonneg c]
-  have hs' : 0 < P.s c' := by unfold Spec.s; linarith [P.sB_nonneg c']
-  exact (theta_lt_theta_iff P c c' hs hs').mpr h
+  exact (theta_lt_theta_iff P c c' hs).mpr h
 
-/-- A negative cross-difference forces both states to be non-zero, hence `θ(c') < θ(c)`
+/-- A negative cross-difference forces `c' ≠ 0`, hence `θ(c') < θ(c)`
 (no positivity hypothesis needed). -/
 theorem theta_gt_theta_of_neg (c c' : ι → ℝ)
     (h : P.sB c * P.sD c' - P.sB c' * P.sD c < 0) : P.theta c' < P.theta c := by
   have h1 : 0 < P.sB c' * P.sD c := by
     have := mul_nonneg (P.sB_nonneg c) (P.sD_nonneg c')
     linarith
-  obtain ⟨hB', hD⟩ := pos_and_pos_of_mul_pos h1 (P.sB_nonneg _) (P.sD_nonneg _)
-  have hs : 0 < P.s c := by unfold Spec.s; linarith [P.sB_nonneg c]
+  obtain ⟨hB', -⟩ := pos_and_pos_of_mul_pos h1 (P.sB_nonneg _) (P.sD_nonneg _)
   have hs' : 0 < P.s c' := by unfold Spec.s; linarith [P.sD_nonneg c']
-  exact (theta_gt_theta_iff P c c' hs hs').mpr h
+  exact (theta_gt_theta_iff P c c' hs').mpr h
 
 end OneStep
 
@@ -402,25 +553,74 @@ theorem theta_cNext_sub_theta (η : ℝ) (c ζ : ι → ℝ) (hs : P.s c ≠ 0)
       P.fCompare η c ζ / (P.s c * P.s (P.cNext η c ζ)) :=
   theta_sub_theta P c _ hs hs'
 
-/-- **Paper A.2 (after eq. (12))**: `θ_{t+1} > θ_t ↔ f_t(η) > 0`, for `x_t ≠ 0`, `x_{t+1} ≠ 0`
-(i.e. `s_t > 0`, `s_{t+1} > 0`). -/
-theorem theta_lt_theta_cNext_iff (η : ℝ) (c ζ : ι → ℝ) (hs : 0 < P.s c)
-    (hs' : 0 < P.s (P.cNext η c ζ)) :
+/-- The other exceptional set of the Remark in A.2: `s_{t+1} = 0` (i.e. `x_{t+1} = 0`) iff the
+noise satisfies `η ζ_i = (1 - η λ_i) c_i` for **every** `i` — for `η ≠ 0` this is the single point
+`ζ = ((1 - η λ_i) c_i / η)_i`. -/
+theorem s_cNext_eq_zero_iff (η : ℝ) (c ζ : ι → ℝ) :
+    P.s (P.cNext η c ζ) = 0 ↔ ∀ i, η * ζ i = (1 - η * P.lam i) * c i := by
+  rw [P.s_eq_zero_iff]
+  constructor
+  · intro h i
+    have := congrFun h i
+    simp only [cNext, Pi.zero_apply] at this
+    linarith
+  · intro h
+    funext i
+    simp only [cNext, Pi.zero_apply]
+    linarith [h i]
+
+/-- `s_{t+1} > 0` (i.e. `x_{t+1} ≠ 0`) iff `η ζ_i ≠ (1 - η λ_i) c_i` for some `i`. -/
+theorem s_cNext_pos_iff (η : ℝ) (c ζ : ι → ℝ) :
+    0 < P.s (P.cNext η c ζ) ↔ ∃ i, η * ζ i ≠ (1 - η * P.lam i) * c i := by
+  rw [(P.s_nonneg _).lt_iff_ne, ne_comm, Ne, P.s_cNext_eq_zero_iff]
+  exact not_forall
+
+/-- **Paper A.2 (after eq. (12))**: `θ_{t+1} > θ_t ↔ f_t(η) > 0`, for `x_t ≠ 0` (i.e. `s_t > 0`).
+Nothing is assumed on `x_{t+1}`: if `x_{t+1} = 0` both sides are false. The hypothesis `x_t ≠ 0`
+is missing in the paper and cannot be dropped (`theta_lt_theta_cNext_iff_sharp`,
+`exists_theta_lt_theta_cNext_and_fCompare_eq_zero`). -/
+theorem theta_lt_theta_cNext_iff (η : ℝ) (c ζ : ι → ℝ) (hs : 0 < P.s c) :
     P.theta c < P.theta (P.cNext η c ζ) ↔ 0 < P.fCompare η c ζ :=
-  theta_lt_theta_iff P c _ hs hs'
+  theta_lt_theta_iff P c _ hs
 
-/-- **Paper A.2 (after eq. (12))**: `θ_{t+1} < θ_t ↔ f_t(η) < 0`, for `x_t ≠ 0`, `x_{t+1} ≠ 0`
-(i.e. `s_t > 0`, `s_{t+1} > 0`). -/
-theorem theta_cNext_lt_theta_iff (η : ℝ) (c ζ : ι → ℝ) (hs : 0 < P.s c)
-    (hs' : 0 < P.s (P.cNext η c ζ)) :
+/-- **Paper A.2 (after eq. (12))**: `θ_{t+1} < θ_t ↔ f_t(η) < 0`, for `x_{t+1} ≠ 0` (i.e.
+`s_{t+1} > 0`), which is the paper's own standing assumption (Remark in A.2: "we can assume
+`s_{t+1} ≠ 0`"). Nothing is assumed on `x_t`: if `x_t = 0` both sides are false. The hypothesis
+cannot be dropped (`theta_cNext_lt_theta_iff_sharp`,
+`exists_theta_cNext_lt_theta_and_fCompare_eq_zero`). -/
+theorem theta_cNext_lt_theta_iff (η : ℝ) (c ζ : ι → ℝ) (hs' : 0 < P.s (P.cNext η c ζ)) :
     P.theta (P.cNext η c ζ) < P.theta c ↔ P.fCompare η c ζ < 0 :=
-  theta_gt_theta_iff P c _ hs hs'
+  theta_gt_theta_iff P c _ hs'
 
-/-- `θ_{t+1} = θ_t ↔ f_t(η) = 0`, for `s_t > 0`, `s_{t+1} > 0`. -/
+/-- `θ_{t+1} = θ_t ↔ f_t(η) = 0`, for `s_t > 0`, `s_{t+1} > 0` (here both hypotheses are needed,
+see `theta_cNext_eq_theta_iff_sharp`). -/
 theorem theta_cNext_eq_theta_iff (η : ℝ) (c ζ : ι → ℝ) (hs : 0 < P.s c)
     (hs' : 0 < P.s (P.cNext η c ζ)) :
     P.theta (P.cNext η c ζ) = P.theta c ↔ P.fCompare η c ζ = 0 :=
   theta_eq_theta_iff P c _ hs hs'
+
+/-- **Exact validity of the paper's `θ_{t+1} > θ_t ⟺ f_t(η) > 0`**: the equivalence holds *if and
+only if* `x_t ≠ 0` or `s^𝒟_{t+1} = 0`. Under the paper's assumption `s^𝒟_{t+1} ≠ 0` it therefore
+holds exactly when `x_t ≠ 0`. -/
+theorem theta_lt_theta_cNext_iff_sharp (η : ℝ) (c ζ : ι → ℝ) :
+    (P.theta c < P.theta (P.cNext η c ζ) ↔ 0 < P.fCompare η c ζ) ↔
+      (0 < P.s c ∨ P.sD (P.cNext η c ζ) = 0) :=
+  theta_lt_theta_iff_sharp P c _
+
+/-- **Exact validity of the paper's `θ_{t+1} < θ_t ⟺ f_t(η) < 0`**: the equivalence holds *if and
+only if* `x_{t+1} ≠ 0` or `s^𝒟_t = 0`. In particular it holds under the paper's assumption
+`s_{t+1} ≠ 0`, for every `x_t` (including `x_t = 0`). -/
+theorem theta_cNext_lt_theta_iff_sharp (η : ℝ) (c ζ : ι → ℝ) :
+    (P.theta (P.cNext η c ζ) < P.theta c ↔ P.fCompare η c ζ < 0) ↔
+      (0 < P.s (P.cNext η c ζ) ∨ P.sD c = 0) :=
+  theta_gt_theta_iff_sharp P c _
+
+/-- **Exact validity of `θ_{t+1} = θ_t ⟺ f_t(η) = 0`**: the equivalence holds *if and only if*
+both (`x_t ≠ 0` or `s^𝒟_{t+1} = 0`) and (`x_{t+1} ≠ 0` or `s^𝒟_t = 0`). -/
+theorem theta_cNext_eq_theta_iff_sharp (η : ℝ) (c ζ : ι → ℝ) :
+    (P.theta (P.cNext η c ζ) = P.theta c ↔ P.fCompare η c ζ = 0) ↔
+      ((0 < P.s c ∨ P.sD (P.cNext η c ζ) = 0) ∧ (0 < P.s (P.cNext η c ζ) ∨ P.sD c = 0)) :=
+  theta_eq_theta_iff_sharp P c _
 
 /-- `f_t(η) > 0 → θ_{t+1} > θ_t` holds with no positivity hypothesis. -/
 theorem theta_lt_theta_cNext_of_fCompare_pos (η : ℝ) (c ζ : ι → ℝ) (h : 0 < P.fCompare η c ζ) :
@@ -432,8 +632,10 @@ theorem theta_cNext_lt_theta_of_fCompare_neg (η : ℝ) (c ζ : ι → ℝ) (h :
     P.theta (P.cNext η c ζ) < P.theta c :=
   theta_gt_theta_of_neg P c _ h
 
-/-- The hypothesis `s_t > 0` in `theta_lt_theta_cNext_iff` cannot be dropped: from `x_t = 0`
-(where `θ_t = 0` by convention) the alignment can increase although `f_t(η) = 0`. -/
+/-- The hypothesis `s_t > 0` in `theta_lt_theta_cNext_iff` (and in `theta_cNext_eq_theta_iff`)
+cannot be dropped: from `x_t = 0` (where `θ_t = 0` by convention) the alignment can increase
+although `f_t(η) = 0` (here `x_{t+1} ≠ 0`, so this is a genuine counterexample to the paper's
+`θ_{t+1} > θ_t ⟺ f_t(η) > 0` at `x_t = 0`). -/
 theorem exists_theta_lt_theta_cNext_and_fCompare_eq_zero :
     ∃ (η : ℝ) (c ζ : ι → ℝ), P.theta c < P.theta (P.cNext η c ζ) ∧ P.fCompare η c ζ = 0 := by
   refine ⟨1, 0, Pi.single P.i1 1, ?_, ?_⟩
@@ -443,9 +645,11 @@ theorem exists_theta_lt_theta_cNext_and_fCompare_eq_zero :
     exact ⟨P.i1, P.i1_mem, by simp [cNext]⟩
   · simp [fCompare, sB, sD, mom]
 
-/-- The hypothesis `s_{t+1} > 0` in `theta_cNext_lt_theta_iff` cannot be dropped: the step
-`η = 1/λ_1` from a state on the `λ_1`-eigendirection with zero noise lands on `x_{t+1} = 0`, so
-`θ_{t+1} = 0 < 1 = θ_t` although `f_t(η) = 0`. -/
+/-- The hypothesis `s_{t+1} > 0` in `theta_cNext_lt_theta_iff` (and in
+`theta_cNext_eq_theta_iff`) cannot be dropped: the step `η = 1/λ_1` from a state on the
+`λ_1`-eigendirection with zero noise lands on `x_{t+1} = 0`, so `θ_{t+1} = 0 < 1 = θ_t` although
+`f_t(η) = 0`. (This configuration is excluded by the paper's assumption `s_{t+1} ≠ 0`, so it is
+not an error of the paper.) -/
 theorem exists_theta_cNext_lt_theta_and_fCompare_eq_zero :
     ∃ (η : ℝ) (c ζ : ι → ℝ), P.theta (P.cNext η c ζ) < P.theta c ∧ P.fCompare η c ζ = 0 := by
   have hc' : P.cNext (1 / P.lam P.i1) (Pi.single P.i1 1) 0 = 0 := by
@@ -1022,64 +1226,98 @@ theorem thetaBarNext_sub_theta (η : ℝ) (c : ι → ℝ) (hs : P.s c ≠ 0)
   unfold s
   ring
 
-/-- **Bridge (decrease)**: for `s_t > 0` and `𝔼[s_{t+1} | x_t] > 0`,
-`thetaBarNext < θ_t ↔ 𝔼[f_t(η) | x_t] < 0`. -/
-theorem thetaBarNext_lt_theta_iff (η : ℝ) (c : ι → ℝ) (hs : 0 < P.s c)
-    (hE : 0 < P.EsNext N P.D η c + P.EsNext N P.B η c) :
-    P.thetaBarNext N η c < P.theta c ↔ P.expF N η c < 0 := by
-  rw [← sub_neg, P.thetaBarNext_sub_theta N η c hs.ne' hE.ne', div_lt_iff₀ (mul_pos hs hE),
-    zero_mul]
+/-- **Exact validity of the bridge (decrease)**: the equivalence
+`thetaBarNext < θ_t ↔ 𝔼[f_t(η) | x_t] < 0` holds *if and only if* `𝔼[s_{t+1} | x_t] > 0` or
+`s^𝒟_t = 0`. -/
+theorem thetaBarNext_lt_theta_iff_sharp (η : ℝ) (c : ι → ℝ) :
+    (P.thetaBarNext N η c < P.theta c ↔ P.expF N η c < 0) ↔
+      (0 < P.EsNext N P.D η c + P.EsNext N P.B η c ∨ P.sD c = 0) := by
+  unfold thetaBarNext theta s expF
+  exact ratio_gt_ratio_iff_sharp (P.sD_nonneg c) (P.sB_nonneg c) (P.EsNext_nonneg N P.D η c)
+    (P.EsNext_nonneg N P.B η c)
 
-/-- **Bridge (increase)**: for `s_t > 0` and `𝔼[s_{t+1} | x_t] > 0`,
-`θ_t < thetaBarNext ↔ 𝔼[f_t(η) | x_t] > 0`. -/
-theorem theta_lt_thetaBarNext_iff (η : ℝ) (c : ι → ℝ) (hs : 0 < P.s c)
+/-- **Exact validity of the bridge (increase)**: the equivalence
+`θ_t < thetaBarNext ↔ 𝔼[f_t(η) | x_t] > 0` holds *if and only if* `x_t ≠ 0` or
+`𝔼[s^𝒟_{t+1} | x_t] = 0`. -/
+theorem theta_lt_thetaBarNext_iff_sharp (η : ℝ) (c : ι → ℝ) :
+    (P.theta c < P.thetaBarNext N η c ↔ 0 < P.expF N η c) ↔
+      (0 < P.s c ∨ P.EsNext N P.D η c = 0) := by
+  unfold thetaBarNext theta s expF
+  exact ratio_lt_ratio_iff_sharp (P.sD_nonneg c) (P.sB_nonneg c) (P.EsNext_nonneg N P.D η c)
+    (P.EsNext_nonneg N P.B η c)
+
+/-- **Exact validity of the bridge (equality)**: the equivalence
+`thetaBarNext = θ_t ↔ 𝔼[f_t(η) | x_t] = 0` holds *if and only if* both
+(`x_t ≠ 0` or `𝔼[s^𝒟_{t+1} | x_t] = 0`) and (`𝔼[s_{t+1} | x_t] > 0` or `s^𝒟_t = 0`). -/
+theorem thetaBarNext_eq_theta_iff_sharp (η : ℝ) (c : ι → ℝ) :
+    (P.thetaBarNext N η c = P.theta c ↔ P.expF N η c = 0) ↔
+      ((0 < P.s c ∨ P.EsNext N P.D η c = 0) ∧
+        (0 < P.EsNext N P.D η c + P.EsNext N P.B η c ∨ P.sD c = 0)) := by
+  unfold thetaBarNext theta s expF
+  exact ratio_eq_ratio_iff_sharp (P.sD_nonneg c) (P.sB_nonneg c) (P.EsNext_nonneg N P.D η c)
+    (P.EsNext_nonneg N P.B η c)
+
+/-- **Bridge (decrease)**: for `𝔼[s_{t+1} | x_t] > 0`,
+`thetaBarNext < θ_t ↔ 𝔼[f_t(η) | x_t] < 0`. Nothing is assumed on `x_t`: if `x_t = 0` both sides
+are false. The hypothesis cannot be dropped (`thetaBarNext_lt_theta_iff_sharp`,
+`exists_thetaBarNext_lt_theta_and_expF_eq_zero`); it holds for every state as soon as `η ≠ 0` and
+`s_min > 0` (`thetaBarNext_lt_theta_iff_of_smin_pos`). -/
+theorem thetaBarNext_lt_theta_iff (η : ℝ) (c : ι → ℝ)
     (hE : 0 < P.EsNext N P.D η c + P.EsNext N P.B η c) :
-    P.theta c < P.thetaBarNext N η c ↔ 0 < P.expF N η c := by
-  rw [← sub_pos, P.thetaBarNext_sub_theta N η c hs.ne' hE.ne',
-    div_pos_iff_of_pos_right (mul_pos hs hE)]
+    P.thetaBarNext N η c < P.theta c ↔ P.expF N η c < 0 :=
+  (P.thetaBarNext_lt_theta_iff_sharp N η c).mpr (Or.inl hE)
+
+/-- **Bridge (increase)**: for `x_t ≠ 0` (`s_t > 0`),
+`θ_t < thetaBarNext ↔ 𝔼[f_t(η) | x_t] > 0`. Nothing is assumed on `𝔼[s_{t+1} | x_t]`: if it
+vanishes both sides are false. The hypothesis cannot be dropped
+(`theta_lt_thetaBarNext_iff_sharp`, `theta_zero_lt_thetaBarNext_and_expF_eq_zero`). -/
+theorem theta_lt_thetaBarNext_iff (η : ℝ) (c : ι → ℝ) (hs : 0 < P.s c) :
+    P.theta c < P.thetaBarNext N η c ↔ 0 < P.expF N η c :=
+  (P.theta_lt_thetaBarNext_iff_sharp N η c).mpr (Or.inl hs)
 
 /-- **Bridge (equality)**: for `s_t > 0` and `𝔼[s_{t+1} | x_t] > 0`,
-`thetaBarNext = θ_t ↔ 𝔼[f_t(η) | x_t] = 0`. -/
+`thetaBarNext = θ_t ↔ 𝔼[f_t(η) | x_t] = 0` (here both hypotheses are needed, see
+`thetaBarNext_eq_theta_iff_sharp`). -/
 theorem thetaBarNext_eq_theta_iff (η : ℝ) (c : ι → ℝ) (hs : 0 < P.s c)
     (hE : 0 < P.EsNext N P.D η c + P.EsNext N P.B η c) :
-    P.thetaBarNext N η c = P.theta c ↔ P.expF N η c = 0 := by
-  rw [← sub_eq_zero, P.thetaBarNext_sub_theta N η c hs.ne' hE.ne', div_eq_zero_iff]
-  constructor
-  · rintro (h | h)
-    · exact h
-    · exact absurd h (mul_pos hs hE).ne'
-  · exact Or.inl
+    P.thetaBarNext N η c = P.theta c ↔ P.expF N η c = 0 :=
+  (P.thetaBarNext_eq_theta_iff_sharp N η c).mpr ⟨Or.inl hs, Or.inl hE⟩
+
+/-- **Bridge (decrease) under non-degenerate noise**: for `η ≠ 0` and `s_min > 0`,
+`thetaBarNext < θ_t ↔ 𝔼[f_t(η) | x_t] < 0` holds for *every* state (including `x_t = 0`). -/
+theorem thetaBarNext_lt_theta_iff_of_smin_pos {η : ℝ} (hη : η ≠ 0) (hs : 0 < N.smin)
+    (c : ι → ℝ) : P.thetaBarNext N η c < P.theta c ↔ P.expF N η c < 0 :=
+  P.thetaBarNext_lt_theta_iff N η c (P.EsNext_D_add_EsNext_B_pos_of_smin_pos N hη hs c)
 
 /-- `𝔼[f_t(η) | x_t] < 0 → thetaBarNext < θ_t`, with no positivity hypothesis (negativity of
-`expF` already forces `s_t > 0` and `𝔼[s_{t+1} | x_t] > 0`). -/
+`expF` already forces `𝔼[s_{t+1} | x_t] > 0`). -/
 theorem thetaBarNext_lt_theta_of_expF_neg (η : ℝ) (c : ι → ℝ) (h : P.expF N η c < 0) :
     P.thetaBarNext N η c < P.theta c := by
   have h1 : 0 < P.EsNext N P.B η c * P.sD c := by
     have := mul_nonneg (P.sB_nonneg c) (P.EsNext_nonneg N P.D η c)
     unfold expF at h
     linarith
-  obtain ⟨hEB, hD⟩ := pos_and_pos_of_mul_pos h1 (P.EsNext_nonneg N _ η c) (P.sD_nonneg c)
-  have hs : 0 < P.s c := by unfold s; linarith [P.sB_nonneg c]
+  obtain ⟨hEB, -⟩ := pos_and_pos_of_mul_pos h1 (P.EsNext_nonneg N _ η c) (P.sD_nonneg c)
   have hE : 0 < P.EsNext N P.D η c + P.EsNext N P.B η c := by
     linarith [P.EsNext_nonneg N P.D η c]
-  exact (P.thetaBarNext_lt_theta_iff N η c hs hE).mpr h
+  exact (P.thetaBarNext_lt_theta_iff N η c hE).mpr h
 
-/-- `𝔼[f_t(η) | x_t] > 0 → θ_t < thetaBarNext`, with no positivity hypothesis. -/
+/-- `𝔼[f_t(η) | x_t] > 0 → θ_t < thetaBarNext`, with no positivity hypothesis (positivity of
+`expF` already forces `s_t > 0`). -/
 theorem theta_lt_thetaBarNext_of_expF_pos (η : ℝ) (c : ι → ℝ) (h : 0 < P.expF N η c) :
     P.theta c < P.thetaBarNext N η c := by
   have h1 : 0 < P.sB c * P.EsNext N P.D η c := by
     have := mul_nonneg (P.EsNext_nonneg N P.B η c) (P.sD_nonneg c)
     unfold expF at h
     linarith
-  obtain ⟨hB, hED⟩ := pos_and_pos_of_mul_pos h1 (P.sB_nonneg c) (P.EsNext_nonneg N _ η c)
+  obtain ⟨hB, -⟩ := pos_and_pos_of_mul_pos h1 (P.sB_nonneg c) (P.EsNext_nonneg N _ η c)
   have hs : 0 < P.s c := by unfold s; linarith [P.sD_nonneg c]
-  have hE : 0 < P.EsNext N P.D η c + P.EsNext N P.B η c := by
-    linarith [P.EsNext_nonneg N P.B η c]
-  exact (P.theta_lt_thetaBarNext_iff N η c hs hE).mpr h
+  exact (P.theta_lt_thetaBarNext_iff N η c hs).mpr h
 
-/-- The hypothesis `s_t > 0` in `theta_lt_thetaBarNext_iff` cannot be dropped: at `x_t = 0`
-(where `θ_t = 0` by convention) with noise in the dominant block (`e_𝒟 > 0`) and `η ≠ 0`, the
-deterministic equivalent is positive although `𝔼[f_t(η) | x_t] = 0`. -/
+/-- The hypothesis `s_t > 0` in `theta_lt_thetaBarNext_iff` (and in `thetaBarNext_eq_theta_iff`)
+cannot be dropped: at `x_t = 0` (where `θ_t = 0` by convention) with noise in the dominant block
+(`e_𝒟 > 0`) and `η ≠ 0`, the deterministic equivalent is positive although
+`𝔼[f_t(η) | x_t] = 0`. -/
 theorem theta_zero_lt_thetaBarNext_and_expF_eq_zero {η : ℝ} (hη : η ≠ 0) (he : 0 < P.eD N) :
     P.theta 0 < P.thetaBarNext N η 0 ∧ P.expF N η 0 = 0 := by
   have hD : P.EsNext N P.D η 0 = η ^ 2 * P.eD N := by

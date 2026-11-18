@@ -227,33 +227,88 @@ def e1_lownoise():
         t.append([NAME[r["opt"]], r["m"], r["init_scale"], r["T"], f(r["theta0"], 3), f"{r['theta_min']:.3f} @ {r['t_min']}",
                   f(r["theta_late"]), g(r["loss_late"], 4), f(r["sgd_finiteT_at_eta_eff"])])
     if t:
-        P("Large init (W0 std 10, sigma=0.5, kappa=1, 1 seed):\n")
+        P("Large init (W0 std 10, sigma=0.5, kappa=1, 1 seed, T=6000 — NOT long enough for Muon / HT p=.125, see T1h):\n")
         tab(["filter", "m", "init std", "T", "theta_0", "theta_min @ t", "theta late", "late loss", "SGD exact finite-T at eta_eff"], t)
+
+
+def _final_theta(logs, rid, last=200):
+    t = logs[rid + "__t"]
+    th = logs[rid + "__theta"]
+    sel = t >= t[-1] - last
+    return float(np.nanmean(th[:, sel])), int(t[-1])
 
 
 def e1_momentum():
     rows = e1_rows("e1_momentum.json")
     if not rows:
         return
-    P("### T1f. E1 with Nesterov momentum beta=0.95 (as in muon.py; sigma=0.5 unless stated; 2 seeds)\n")
-    for init, title in (("gauss", "W0 ~ N(0,1), T=2000"), ("zero", "zero init (late-time runs)")):
-        rr = [r for r in rows if r["init"] == init and r["sigma"] > 0]
-        t = []
-        for r in rr:
-            t.append([NAME[r["opt"]], r["m"], r["T"], g(r["eta"], 4), f(r["theta0"], 3), f"{r['theta_min']:.3f} @ {r['t_min']}",
-                      pm(r["theta_late"], r["theta_late_sd"]), g(r["loss_late"], 4), f(r["thm16_at_eta_eff"]),
-                      f(r["sgd_finiteT_at_eta_eff"]), f(r["theta_inp_late"], 3), f(r["upd_frac_late"], 3), f(r["ovl_inp_late"], 3),
-                      f"{r['sv_inp_late'][0]:.2f} / {r['sv_inp_late'][5]:.2f} / {r['sv_true_late'][0]:.2f}"])
-        P(f"*{title}*\n")
-        tab(["filter", "m", "T", "eta", "theta_0", "theta_min @ t", "theta late", "late loss", "Thm 16 at eta_eff",
-             "SGD exact finite-T at eta_eff (no momentum)", "theta of filter input X", "update fraction in D", "overlap_k(X)",
-             "top / median s.v. of X / top s.v. of AW"], t)
+    logs = np.load(os.path.join(sf.RES, "e1_momentum_logs.npz"))
+    P("### T1f. E1 with Nesterov momentum beta=0.95 (M <- beta M + (1-beta) G, X = (1-beta) G + beta M, as in muon.py; "
+      "sigma=0.5 unless stated; 2 seeds)\n")
+    P("Reference columns: exact stationary / finite-T alignment of SGD WITH the same Nesterov momentum at the drift-equivalent "
+      "step eta_eff (2x2 Lyapunov recursion per eigen-direction, `Problem.sgd_nesterov_theta`), and Theorem 16 (no momentum) "
+      "at the same eta_eff.\n")
+    hdr = ["filter", "m", "T", "eta", "eta_eff", "theta_0", "theta_min @ t", "theta late (last 20%)", "theta final 200 steps",
+           "late loss", "SGD+Nesterov exact, finite T", "SGD+Nesterov exact, stationary", "Thm 16 (no momentum) at eta_eff",
+           "theta of filter input X", "update fraction in D", "overlap_k(X)", "top / median s.v. of X / top s.v. of AW"]
+
+    def line(r):
+        fin, _ = _final_theta(logs, r["rid"])
+        return [NAME[r["opt"]], r["m"], r["T"], g(r["eta"], 4), g(r["eta_eff_drift"], 4), f(r["theta0"], 3),
+                f"{r['theta_min']:.3f} @ {r['t_min']}", pm(r["theta_late"], r["theta_late_sd"]), f(fin), g(r["loss_late"], 4),
+                f(r.get("sgdmom_finiteT_at_eta_eff")), f(r.get("sgdmom_theta_inf_at_eta_eff")), f(r.get("thm16_at_eta_eff")),
+                f(r["theta_inp_late"], 3), f(r["upd_frac_late"], 3), f(r["ovl_inp_late"], 3),
+                f"{r['sv_inp_late'][0]:.2f} / {r['sv_inp_late'][5]:.2f} / {r['sv_true_late'][0]:.2f}"]
+
+    for tag, title in ((None, "(i) zero init, drift-matched learning rate (late-time runs)"),
+                       ("large", "(ii) W0 ~ N(0,1), drift-matched learning rate, T=6000"),
+                       ("nomomlr", "(iii) W0 ~ N(0,1), momentum switched on at the momentum-free learning rate, T=2000")):
+        rr = [r for r in rows if r.get("tag") == tag and r["sigma"] > 0]
+        if rr:
+            P(f"*{title}*\n")
+            tab(hdr, [line(r) for r in rr])
     rr = [r for r in rows if r["sigma"] == 0]
     if rr:
-        P("*noise-free, W0 ~ 0.01 N(0,1), m=20, T=1500*\n")
+        P("*(iv) noise-free, W0 ~ 0.01 N(0,1), m=20, T=1500, momentum-free learning rate*\n")
         tab(["filter", "eta", "theta late", "late loss", "update fraction in D", "sum lam^2 ratio"],
             [[NAME[r["opt"]], g(r["eta"], 4), pm(r["theta_late"], r["theta_late_sd"]), g(r["loss_late"], 4),
               f(r["upd_frac_late"], 3), f(r["ratio2"], 5)] for r in rr])
+
+
+def e1_largeinit():
+    rows = e1_rows("e1_largeinit.json")
+    if not rows:
+        return
+    logs = np.load(os.path.join(sf.RES, "e1_largeinit_logs.npz"))
+    P("### T1h. E1 larger initialisation (m=20, sigma=0.5, kappa=1, 1 seed) and long Nesterov runs\n")
+    t = []
+    for r in rows:
+        fin, _ = _final_theta(logs, r["rid"])
+        ref = r.get("sgdmom_theta_inf_at_eta_eff") if r["beta"] > 0 else r.get("thm16_at_eta_eff")
+        t.append([NAME[r["opt"]], r["init_scale"], r["beta"], r["T"], g(r["eta"], 4), f(r["theta0"], 3),
+                  f"{r['theta_min']:.4f} @ {r['t_min']}", f(fin), g(r["loss_late"], 4), f(ref),
+                  "yes" if r["two_phase"] else "no"])
+    tab(["filter", "W0 std", "beta", "T", "eta", "theta_0", "theta_min @ t", "theta final 200 steps", "late loss (last 20%)",
+         "stationary SGD reference at eta_eff (Thm 16, or SGD+Nesterov if beta>0)", "two-phase"], t)
+
+
+def e1_extra():
+    j = load("e1_extra_limit.json")
+    if j:
+        P("### T1i. Noise-free limit cycles versus the number of columns n (M2, d=200, k=20, sigma=0, W0 ~ 0.01 N(0,1), seed 0)\n")
+        P("Prediction tested: theta_late = sum_{i<=k} lam_i^q / sum_{i<=min(n,d)} lam_i^q with q = 2/(1-p) "
+          "(the limit cycle of a rank-n update lives in the top-n Hessian eigen-directions).\n")
+        tab(["m", "n", "filter", "T", "theta late", "prediction (top-n, q)", "sum_D lam^q / sum_all lam^q", "q",
+             "gradient energy in rows <k / k..n-1 / >=n (last 200 steps)", "update fraction in D", "late loss"],
+            [[r["m"], r["n"], NAME[r["opt"]], r["T"], f(r["theta_late"], 5), f(r["pred_topn"], 5), f(r["ratio_q"], 5), g(r["q"], 3),
+              f"{r['theta_tail_energy']:.5f} / {r['energy_rows_k_to_n']:.5f} / {r['energy_rows_ge_n']:.2g}",
+              f(r["upd_frac_late"], 3), g(r["loss_late"], 3)] for r in j["rows"]])
+    j = load("e1_extra_stat.json")
+    if j:
+        P("### T1j. Stationarity cross-check: runs started from SGD's exact stationary law (sigma=0.5, kappa=1, T=1500, 2 seeds)\n")
+        tab(["filter", "m", "theta late", "Thm 16 at eta_eff", "late loss"],
+            [[NAME[r["opt"]], r["m"], pm(r["theta_late"], r["theta_late_sd"]), f(r["thm16_at_eta_eff"]), g(r["loss_late"], 4)]
+             for r in j["rows"]])
 
 
 def e1_n1():
@@ -418,6 +473,66 @@ def e2_mdep():
         tab(["m", "theta", "Deng theta_crit"] + [NAME[o] for o in OPTS], t)
 
 
+def reg_str2(d, eta_scale=1.0):
+    """Like reg_str, but an exactly vanishing linear coefficient with a negative quadratic one is 'decrease for all eta'."""
+    if d["regime"] == "inc<dec" and d["q_lin"] == 0:
+        return "↓ all"
+    return reg_str(d, eta_scale)
+
+
+def e2_highalign():
+    j = load("e23_highalign.json")
+    if not j:
+        return
+    P("### T2f. E2 / (D2): states above the stationary alignment band (base state = sample of SGD's stationary law at eta=0.003; "
+      "48 draws)\n")
+    P("Entries: regime and RAW critical step (↓↑ x: decrease below x, increase above; ↓ all: decrease for every step; "
+      "↑↓ x: INCREASE below x, decrease above).\n")
+    for m in (5, 20, 100):
+        rr = [r for r in j["rows"] if r["m"] == m]
+        P(f"**m = {m}** (theta_inf = {rr[0]['theta_inf']:.4f})\n")
+        t = []
+        for r in rr:
+            num, den = r["deng_num"], r["deng_den"]
+            dstr = g(r["deng_eta_star"], 3) if (num > 0 and den > 0) else "↓ all"
+            t.append([f"{'bulk' if r['scaled'] == 'bulk' else 'D'} x {r['factor']:g}", f"{r['theta']:.6f}",
+                      f"{r['deng_theta_star']:.6f}", g(r["snr_frob"], 3), dstr] + [reg_str2(r["per_opt"][o]) for o in OPTS])
+        tab(["state", "theta", "Deng theta*", "||AW||^2/E||Xi||^2", "Deng closed form (SGD)"] + [NAME[o] for o in OPTS], t)
+
+
+def e2_bounds():
+    j = load("e2_etastar_bounds.json")
+    if not j:
+        return
+    P("### T2g. (D3) Deng's eta*_t against the paper's bounds, vector model d=500, k=50, sigma=0.5, SGD eta=0.003 "
+      "(closed form along one trajectory per seed)\n")
+    t = []
+    for r in j["rows"]:
+        if r["seed"] != 42:
+            continue
+        es = r["eta_star"]
+        t.append([r["m"], r["t"], f(r["theta"]), g(r["snr"], 3), g(es, 4) if es is not None else "↓ all", g(r["L7"], 3),
+                  g(r["U8"], 4), g(r["two_over_lam1"], 3), f"[{r['nf_lo']:.4f}, {r['nf_hi']:.4f}]",
+                  "yes" if r["cond_thm8"] else "no",
+                  "–" if es is None else ("VIOLATED" if (r["cond_thm8"] and es > r["two_over_lam1"]) else
+                                          ("U8 violated" if (r["cond_thm8"] and es > r["U8"]) else "ok"))])
+    tab(["m", "t", "theta_t", "|Ax|^2/E|xi|^2", "eta*_t", "Thm 7 lower bound", "Thm 8 upper bound", "2/lam_1",
+         "noise-free sandwich [2/(lam_1+lam_k+1), 2/(lam_k+lam_d)]", "Thm 8 hypothesis theta >= e_B/(e_B+e_D)",
+         "Cor. 9 (eta* <= 2/lam_1)"], t)
+    viol = [r for r in j["rows"] if r["eta_star"] is not None and r["cond_thm8"] and r["eta_star"] > r["two_over_lam1"]]
+    v8 = [r for r in j["rows"] if r["eta_star"] is not None and r["cond_thm8"] and r["eta_star"] > r["U8"]]
+    nrow = len(j["rows"])
+    P(f"Over both seeds: {len(viol)} of {nrow} states violate eta* <= 2/lam_1 although the hypothesis of Theorem 8 holds; "
+      f"{len(v8)} of {nrow} violate the Theorem-8 bound itself; all states satisfy the Theorem-7 lower bound: "
+      f"{all(r['eta_star'] is None or r['eta_star'] >= r['L7'] for r in j['rows'])}.\n")
+    mc = j["mc"]
+    P(f"Monte-Carlo check at t=0 (m={mc['m']}, seed {mc['seed']}, {mc['N']} noise draws): closed-form eta* = "
+      f"{mc['eta_star_closed_form']:.5f}, 2/lam_1 = 0.02.\n")
+    tab(["eta", "E[theta_1] − theta_0 (mean of the ratio)", "s.e.", "ratio of expectations"],
+        [[f"{e:.5f}", f"{a:+.3e}", f"{b_:.1e}", f"{c:+.3e}"] for e, a, b_, c in
+         zip(mc["etas"], mc["dtheta_mean"], mc["dtheta_se"], mc["dtheta_ratio_of_expectations"])])
+
+
 def e3():
     j = load("e23_states.json")
     if not j:
@@ -479,10 +594,13 @@ def e3_continue():
                 if not ro:
                     continue
                 r0 = ro["full"]
+                x2 = [("div" if ro[v]["diverged"] else f"{ro[v]['ratio']:.3f}") if v in ro else "–"
+                      for v in ("full_x2", "updD_x2", "updB_x2")]
                 t.append([NAME[o], f(r0["theta0"], 3), g(r0["L0"], 4), g(r0["L0"] / r0["loss_final_run"], 3), f(r0["LD0_frac"], 3)] +
-                         [("div" if ro[v]["diverged"] else f"{ro[v]['ratio']:.3f}") for v in ("full", "updD", "updB", "gradD", "gradB")])
+                         [("div" if ro[v]["diverged"] else f"{ro[v]['ratio']:.3f}") for v in ("full", "updD", "updB", "gradD", "gradB")]
+                         + x2)
             tab(["filter", "theta(t0)", "L(t0)", "L(t0) / late loss of the run", "share of L in D", "full", "P^D F(G)", "P^B F(G)",
-                 "F(P^D G)", "F(P^B G)"], t)
+                 "F(P^D G)", "F(P^B G)", "2 eta: full", "2 eta: P^D F(G)", "2 eta: P^B F(G)"], t)
 
 
 # ------------------------------------------------------------------ E4
@@ -545,8 +663,8 @@ def cpu():
 
 
 if __name__ == "__main__":
-    for fn in (e0, e1_twophase, e1_late, e1_sweep, e1_signal, e1_lownoise, e1_momentum, e1_n1, e2, e2_scale, e2_mdep, e3,
-               e3_continue, e4, cpu):
+    for fn in (e0, e1_twophase, e1_late, e1_sweep, e1_signal, e1_lownoise, e1_largeinit, e1_momentum, e1_n1, e1_extra,
+               e2, e2_scale, e2_mdep, e2_highalign, e2_bounds, e3, e3_continue, e4, cpu):
         try:
             fn()
         except Exception as ex:           # keep going; report the problem in the output

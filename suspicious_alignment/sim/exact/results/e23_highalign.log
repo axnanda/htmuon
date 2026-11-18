@@ -1,0 +1,6 @@
+/home/user/htmuon/suspicious_alignment/sim/exact/specfilt.py:191: RuntimeWarning: invalid value encountered in scalar divide
+  al = s * (b["tauD"] / b["sD"] - b["tauB"] / b["sB"])
+highalign 5
+highalign 20
+highalign 100
+[cpu] {'name': 'e2e3_onestep_highalign', 'cpu_s': 6.1, 'wall_s': 6.8}

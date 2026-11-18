@@ -12,9 +12,12 @@ Layer: exact finite-`d`, pathwise, purely algebraic (no probability, no limits).
 holds for every finite index type `ι`, every spectrum `P : Spec ι`, every filter `f : ℝ → ℝ`
 (no regularity assumed), every state `c`.
 
-Status: 0 `sorry`; `#print axioms` on all 165 declarations of the file gives only `propext`,
-`Classical.choice`, `Quot.sound`; `lake build SuspiciousAlignment.Filter.Coordinate` succeeds with
-no warnings from this file. Nothing in the task is left unproven.
+Status: 0 `sorry`; `#print axioms` on all 167 public declarations of the file gives only `propext`,
+`Classical.choice`, `Quot.sound`; `scripts/leancheck --build SuspiciousAlignment.Filter.Coordinate`
+succeeds with no warnings from this file other than Lake's generic "imports `Mathlib` … module
+system" notice. Nothing in the task is left unproven. (After a machine restart the file was
+re-checked from scratch by a second prover session: full re-read of every statement against the
+spec, re-run of the numerical tests, rebuild, and a fresh `#print axioms` pass.)
 
 This file is the first formal check of the specification. Before proving, every statement was
 tested with numpy on random instances (random spectra with `2 ≤ d ≤ 6`, random block sizes,
@@ -70,7 +73,7 @@ weakened, one Lean-convention edge case in 4.1).
 | 1.9 two-sided bound | `Spec.etaStarF_mem_Icc_of_ordered` | exact | Exactly the hypotheses of the spec (with the bulk-only sign condition). |
 | (1.9 in the reversed case) | `Spec.two_div_le_etaStarF_of_reversed`, `Spec.etaStarF_le_two_div_of_reversed` | extra | The same two bounds hold under the hypotheses of 1.8 (useful for Muon, spec 2.2). |
 | 1.9 corollary for SGD `2/(λ_1+λ_{k+1}) ≤ η*₀ ≤ 2/(λ_k+λ_d)` | `Spec.two_div_le_etaStar_noiseFree`, `Spec.etaStar_noiseFree_le_two_div`, `Spec.etaStar_noiseFree_mem_Icc` | exact | Hypotheses `0 < P.sD c`, `0 < P.sB c` (the hypotheses of 1.7; without them `η*₀ = 0/0 = 0` and the lower bound is false). `η*₀ = P.etaStar Noise.noiseFree c = −qCoef / pCoef` with zero noise. |
-| 1.9 comparison with Deng's Theorem 7 | `Spec.thm7_noiseFree_bound_eq`, `Spec.thm7_noiseFree_bound_le_two_div`, `Spec.thm7_noiseFree_bound_le_etaStar` | exact | With zero noise the right-hand side of Theorem 7 is `2 gap₁/(λ_1² − λ_d²)`; `2 gap₁/(λ_1² − λ_d²) ≤ 2/(λ_1+λ_{k+1})` for every spectrum; hence the noise-free Theorem 7 follows from the corollary. |
+| 1.9 comparison with Deng's Theorem 7 | `Spec.thm7_noiseFree_bound_eq`, `Spec.thm7_noiseFree_bound_le_two_div`, `Spec.thm7_noiseFree_bound_le_etaStar` | exact | With zero noise the right-hand side of Theorem 7 (tex 490–495) is `2 gap₁/(λ_1² − λ_d²)`; `2 gap₁/(λ_1² − λ_d²) ≤ 2/(λ_1+λ_{k+1})` for every spectrum (no hypothesis beyond `Spec`); hence the noise-free Theorem 7 follows from the corollary. `thm7_noiseFree_bound_eq` is bookkeeping (the noise term is `0/(λ_d²‖x‖²θ) = 0`); at a state with `θ = 0` the paper's expression is `0/0`, which Lean reads as `0` — that degenerate case is excluded in `thm7_noiseFree_bound_le_etaStar` by `s^𝒟, s^ℬ > 0`. |
 | (sharpness of the comparison) | `Spec.thm7_noiseFree_bound_lt_two_div`, `Spec.thm7_noiseFree_bound_eq_two_div_iff` | extra | The improvement is strict unless the spectrum is two-level: equality `⟺ λ_k = λ_1 ∧ λ_d = λ_{k+1}`. |
 | 4.1 `cNextVec f η c ζ = P.cNext η_eff c ζ` | `Spec.cNextVec_eq_cNext` | exact | Equality of functions, no hypothesis (also for `‖g‖ = 0`, where both sides are `c`). Consequences: `Spec.theta_cNextVec`, `Spec.fCompare_etaEff`. |
 | 4.1 Muon `η_eff = η/‖g‖` | `Spec.etaEff_one` | exact | |
@@ -80,6 +83,7 @@ weakened, one Lean-convention edge case in 4.1).
 | 4.2 as literally stated (no restriction on `η`) | `Spec.theta_cNextVec_rpow_gt_of_neg` | paper-claim-false | For every `η < 0` the alignment *increases* although `η‖Ax‖^{p−1} < η*₀(c)` (D4). |
 | 4.2 `η*₀` invariant under `c ↦ a c`, `a ≠ 0` | `Spec.etaStar_noiseFree_smul` | exact | |
 | 4.2 ray statement | `Spec.theta_cNextVec_rpow_ray_lt_iff`, `Spec.theta_cNextVec_rpow_ray_gt_iff` | hypotheses-added | `p < 1`, `0 < a`, and `0 < η` (added): decrease `⟺ (η/η*₀(c))^{1/(1−p)} < a √(s(c))`, increase `⟺` the reverse strict inequality. |
+| 4.2 closing remark "for SGD, `p = 1`, the regime is selected by `η` alone" | `Spec.theta_cNextVec_rpow_one_lt_iff`, `Spec.theta_cNextVec_rpow_one_gt_iff` | exact | `f σ = σ ^ (1:ℝ)`, `s^𝒟, s^ℬ > 0`, `η > 0`: decrease `⟺ η < η*₀(c)`, increase `⟺ η*₀(c) < η` — no dependence on `‖Ax‖`. |
 | non-vacuity of 1.7, 1.9 | `FilterCoordinate.exSpec`, `exSpec_muon_ordered`, `exSpec_muon_decrease` | extra | `λ = (2,1)` on `Fin 2`, `𝒟 = {0}`; Muon at `c = (1,2)`: ordering holds, `η* = 4/3 = 2/(ν_0+ν_1)` (both bounds of 1.9 attained), alignment decreases for all `0 < η < 4/3`. |
 | non-vacuity of 1.8 | `exSpec_muon_reversed`, `exSpec_muon_increase`, `exSpec_muon_increase_explicit` | extra | Muon at `c = (2,1)`: reversed ordering, `η* = 4/3`, the alignment **increases** for all `0 < η < 4/3`; direct evaluation at `η = 1/2`: `θ` goes from `16/17` to `36/37`. |
 | non-vacuity of the SGD corollary and of 4.2 | `exSpec_etaStar_noiseFree`, `exSpec_vector_ray` | extra | `η*₀ = 2/3 = 2/(λ_0+λ_1)` at `c = (1,2)`; normalised SGD along the ray through `c`: decrease `⟺ 3η/2 < a√8`. |
@@ -118,11 +122,11 @@ confirmation that it cannot be removed.
 has `η_eff < 0 < η*₀`, so the right-hand side of the spec's equivalence holds while the alignment
 strictly increases (`Spec.theta_cNextVec_rpow_gt_of_neg`, valid at every state with
 `s^𝒟, s^ℬ > 0` and every `p`). Numerical instance: `λ = (2,1)`, `c = (1,1)`, `p = 1/2`,
-`η = −0.1`: `θ(c⁺) − θ(c) = +0.0187`, `η‖Ax‖^{p−1} = −0.0669 < η*₀ = 2/3`. For `η = 0` the
-equivalence happens to hold in the `<` form but fails in the `>` form … no: at `η = 0` both
-`θ(c⁺) < θ(c)` and `θ(c⁺) > θ(c)` are false, while `0 < η*₀` is true, so the `<` form fails at
-`η = 0` as well. The Lean statements carry `0 < η`. (Step sizes are positive in the intended
-reading; 1.7 says "for `η > 0`" explicitly, 4.2 does not.)
+`η = −0.1`: `θ(c⁺) − θ(c) = +0.0187`, `η‖Ax‖^{p−1} = −0.0669 < η*₀ = 2/3`. At `η = 0` the `<` form
+fails too (`θ(c⁺) = θ(c)`, yet `0 < η*₀`), while the `>` form happens to hold (both sides false).
+So the `<` form of the spec's equivalence is false exactly for `η ≤ 0`, and the `>` form exactly
+for `η < 0`. The Lean statements carry `0 < η`. (Step sizes are positive in the intended reading;
+1.7 says "for `η > 0`" explicitly, 4.2 does not.)
 
 **D5 (4.1: `η_eff = η‖g‖^{p−1}` at `‖g‖ = 0`).** With `Real.rpow`, `0^{p−1} = 0` for `p ≠ 1` and
 `0⁰ = 1`, while `etaEff = η·0^p/0 = 0` by `x/0 = 0`. So the HTMuon formula holds iff `‖g‖ ≠ 0` or
@@ -157,10 +161,14 @@ claimed here.
   `2/(λ_1+λ_{k+1})` is at least Theorem 7's `2 gap₁/(λ_1² − λ_d²)` and strictly larger unless the
   spectrum is two-level. The upper bound `2/(λ_k+λ_d)` is attained (e.g. `d = 2`,
   `exSpec_etaStar_noiseFree`), so no better state-independent upper bound exists without noise. It
-  coincides with the corrected form of the paper's Theorem 8 found independently in
-  `StepSize/EtaStarBounds.lean` (the main-text constant `(λ_1−λ_d)/(λ_kλ_1−λ_{k+1}λ_d)` of
-  Theorem 8 is violated already for `λ = (2,1)`, `c = (1,1)`: `η* = 2/3 > 1/3`); that discussion
-  belongs to the other file and is not repeated here.
+  has the same form as the corrected Theorem 8 proved independently in
+  `StepSize/EtaStarBounds.lean` (`Spec.etaStar_le_two_div_lamk_add_lamd`, for general noise under
+  `p_t > 0` and `s^𝒟 e_ℬ ≤ s^ℬ e_𝒟`). For orientation only: the main-text constant
+  `(λ_1−λ_d)/(λ_kλ_1−λ_{k+1}λ_d)` of the paper's Theorem 8 (tex 509–514) equals `1/3` for
+  `λ = (2,1)`, while the noise-free `η*₀ = 2/3` at `c = (1,1)`; without noise the paper's
+  hypothesis `θ_t ≥ e_ℬ/(e_ℬ+e_𝒟)` is the degenerate `0/0`, so this is not by itself a
+  counterexample to Theorem 8 — the genuine counterexamples and the discussion are in the other
+  file (`EtaStarBounds.thm8_cor9_fail`) and are not repeated here.
 
 ## Notes for downstream files (`Filter/MuonHT.lean`)
 
@@ -180,7 +188,13 @@ claimed here.
   `pairSum_lt_pairSum`, `qF_eq_pairSum`, `pF_eq_pairSum`, `neg_qF_eq_pairSum`, the real-variable
   lemmas `quad_neg_iff`, `quad_pos_iff`, `quad_eq_zero_iff`, and the example spectrum `exSpec`
   (with `exSpec_B`, `exSpec_mom_D`, `exSpec_mom_B`, `exSpec_sD`, `exSpec_sB`).
-* Names that exist elsewhere in the project with a different namespace: `Spec.mom_smul` /
-  `Spec.theta_smul` in `Projected/LossThreshold.lean` versus `FilterCoordinate.mom_smul` here — no
-  clash, but `open FilterCoordinate` together with `namespace Spec` makes `mom_smul` ambiguous if
-  both files are imported; use the qualified names.
+* Short names that also exist elsewhere in the project, in other namespaces (checked against all
+  project files present on 2026-11-18): `LossThreshold.mom_smul` (stated for `fun i => t * c i`,
+  whereas `FilterCoordinate.mom_smul` is stated for `a • c`), `LossThreshold.quad_neg_iff` /
+  `quad_pos_iff` / `quad_eq_zero_iff`, `OneStep.quad_eq_mul` / `quad_neg_iff` / `quad_pos_iff` /
+  `quad_eq_zero_iff`, and `OneStep.exSpec`, `exSpec_B`, `exSpec_mom_D`, `exSpec_mom_B`,
+  `exSpec_sD`, `exSpec_sB`. There is no clash of full names (everything here is under
+  `FilterCoordinate.`), but a downstream file that does `open FilterCoordinate` together with
+  `open OneStep` or `open LossThreshold` gets ambiguous identifiers; use qualified names there.
+  No declaration of this file in `namespace Spec` or `namespace Noise` shares its name with a
+  declaration of another project file.

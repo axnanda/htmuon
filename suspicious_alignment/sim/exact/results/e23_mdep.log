@@ -1,0 +1,8 @@
+mdep 5 349
+mdep 10 568
+mdep 20 886
+mdep 50 1441
+mdep 100 1978
+mdep 200 2550
+mdep 500 2895
+[cpu] {'name': 'e2e3_onestep_mdep', 'cpu_s': 3.7, 'wall_s': 6.1}

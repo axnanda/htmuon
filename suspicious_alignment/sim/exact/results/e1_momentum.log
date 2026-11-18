@@ -1,7 +1,45 @@
-/home/user/htmuon/suspicious_alignment/sim/exact/e1_trajectories.py:111: RuntimeWarning: Mean of empty slice
+/home/user/htmuon/suspicious_alignment/sim/exact/e1_trajectories.py:132: RuntimeWarning: Mean of empty slice
   logs[rid + "__" + key] = f32(np.nanmean(out[key], axis=0))
-sgd_m5_s0.5_iso_gauss1.0_k1.0_b0.95_n50: eta=0.003 div=False loss_late=1.801 theta0=0.900 min=0.030@15 late=0.4846 updD=0.088 cpu=1.8s
-muon_m5_s0.5_iso_gauss1.0_k1.0_b0.95_n50: eta=0.003575 div=False loss_late=2.026e+04 theta0=0.900 min=0.574@2000 late=0.6442 updD=0.159 cpu=3.9s
-ht0.125_m5_s0.5_iso_gauss1.0_k1.0_b0.95_n50: eta=0.003539 div=False loss_late=4862 theta0=0.900 min=0.000@2000 late=0.0042 updD=0.007 cpu=3.8s
-ht0.5_m5_s0.5_iso_gauss1.0_k1.0_b0.95_n50: eta=0.00336 div=False loss_late=1.792 theta0=0.900 min=0.000@320 late=0.4868 updD=0.090 cpu=3.9s
-ech1_m5_s0.5_iso_gauss1.0_k1.0_b0.95_n50: eta=0.005275 div=False loss_late=2.556e+04 theta0=0.900 min=0.084@2000 late=0.2101 updD=0.202 cpu=4.0s
+sgd_m5_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.003 div=False loss_late=1.821 theta0=0.000 min=0.000@0 late=0.4879 updD=0.089 cpu=1.0s
+muon_m5_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.003575 div=False loss_late=1.751 theta0=0.000 min=0.000@0 late=0.4931 updD=0.091 cpu=1.5s
+ht0.125_m5_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.003539 div=False loss_late=1.771 theta0=0.000 min=0.000@0 late=0.4921 updD=0.091 cpu=1.5s
+ht0.5_m5_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.00336 div=False loss_late=1.812 theta0=0.000 min=0.000@0 late=0.4897 updD=0.090 cpu=1.5s
+ech1_m5_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.005275 div=False loss_late=1.845 theta0=0.000 min=0.000@0 late=0.4874 updD=0.089 cpu=1.5s
+ech20_m5_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.004192 div=False loss_late=1.827 theta0=0.000 min=0.000@0 late=0.4892 updD=0.089 cpu=1.5s
+ech40_m5_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.003685 div=False loss_late=1.773 theta0=0.000 min=0.000@0 late=0.4919 updD=0.091 cpu=1.4s
+sgd_m20_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.003 div=False loss_late=1.838 theta0=0.000 min=0.000@0 late=0.7870 updD=0.087 cpu=0.9s
+muon_m20_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.003575 div=False loss_late=1.755 theta0=0.000 min=0.000@0 late=0.7906 updD=0.090 cpu=1.5s
+ht0.125_m20_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.003539 div=False loss_late=1.777 theta0=0.000 min=0.000@0 late=0.7899 updD=0.090 cpu=1.4s
+ht0.5_m20_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.00336 div=False loss_late=1.822 theta0=0.000 min=0.000@0 late=0.7883 updD=0.089 cpu=1.5s
+ech1_m20_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.005275 div=False loss_late=1.851 theta0=0.000 min=0.000@0 late=0.7867 updD=0.087 cpu=1.5s
+ech20_m20_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.004192 div=False loss_late=1.833 theta0=0.000 min=0.000@0 late=0.7881 updD=0.088 cpu=1.6s
+ech40_m20_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.003685 div=False loss_late=1.778 theta0=0.000 min=0.000@0 late=0.7899 updD=0.090 cpu=1.5s
+sgd_m100_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.003 div=False loss_late=1.81 theta0=0.000 min=0.000@0 late=0.9476 updD=0.086 cpu=2.5s
+muon_m100_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.003575 div=False loss_late=1.725 theta0=0.000 min=0.000@0 late=0.9489 updD=0.090 cpu=6.5s
+ht0.125_m100_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.003539 div=False loss_late=1.747 theta0=0.000 min=0.000@0 late=0.9487 updD=0.089 cpu=6.6s
+ht0.5_m100_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.00336 div=False loss_late=1.793 theta0=0.000 min=0.000@0 late=0.9481 updD=0.088 cpu=6.6s
+ech1_m100_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.005275 div=False loss_late=1.818 theta0=0.000 min=0.000@0 late=0.9476 updD=0.086 cpu=7.1s
+ech20_m100_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.004192 div=False loss_late=1.802 theta0=0.000 min=0.000@0 late=0.9480 updD=0.088 cpu=7.0s
+ech40_m100_s0.5_iso_zero1.0_k1.0_b0.95_n50: eta=0.003685 div=False loss_late=1.748 theta0=0.000 min=0.000@0 late=0.9487 updD=0.089 cpu=6.7s
+sgd_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_large: eta=0.003 div=False loss_late=1.827 theta0=0.993 min=0.016@208 late=0.7836 updD=0.087 cpu=3.8s
+muon_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_large: eta=0.003575 div=False loss_late=124 theta0=0.993 min=0.002@3500 late=0.0809 updD=0.073 cpu=10.4s
+ht0.125_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_large: eta=0.003539 div=False loss_late=2.037 theta0=0.993 min=0.001@1700 late=0.7783 updD=0.089 cpu=10.8s
+ht0.5_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_large: eta=0.00336 div=False loss_late=1.813 theta0=0.993 min=0.001@330 late=0.7852 updD=0.088 cpu=10.7s
+ech1_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_large: eta=0.005275 div=False loss_late=91.61 theta0=0.993 min=0.000@2480 late=0.2059 updD=0.038 cpu=10.6s
+ech20_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_large: eta=0.004192 div=False loss_late=26.66 theta0=0.993 min=0.001@3010 late=0.3834 updD=0.078 cpu=10.5s
+ech40_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_large: eta=0.003685 div=False loss_late=94.87 theta0=0.993 min=0.002@3390 late=0.1149 updD=0.074 cpu=10.3s
+sgd_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_nomomlr: eta=0.003 div=False loss_late=1.967 theta0=0.993 min=0.016@208 late=0.7812 updD=0.087 cpu=1.5s
+muon_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_nomomlr: eta=0.02051 div=False loss_late=9.646 theta0=0.993 min=0.010@640 late=0.6976 updD=0.069 cpu=3.5s
+ht0.125_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_nomomlr: eta=0.01632 div=False loss_late=7.888 theta0=0.993 min=0.005@440 late=0.7127 updD=0.071 cpu=3.6s
+ht0.5_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_nomomlr: eta=0.008048 div=False loss_late=4.255 theta0=0.993 min=0.005@246 late=0.7522 updD=0.078 cpu=3.6s
+ech1_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_nomomlr: eta=0.03028 div=False loss_late=10.16 theta0=0.993 min=0.001@510 late=0.6841 updD=0.062 cpu=3.6s
+ech20_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_nomomlr: eta=0.02406 div=False loss_late=10.07 theta0=0.993 min=0.005@550 late=0.6882 updD=0.064 cpu=3.5s
+ech40_m20_s0.5_iso_gauss1.0_k1.0_b0.95_n50_nomomlr: eta=0.02114 div=False loss_late=9.769 theta0=0.993 min=0.010@620 late=0.6949 updD=0.068 cpu=3.6s
+sgd_m20_s0.0_iso_gauss0.01_k1.0_b0.95_n50_free: eta=0.003 div=False loss_late=0.0001037 theta0=0.993 min=0.000@1500 late=0.0000 updD=0.000 cpu=0.9s
+muon_m20_s0.0_iso_gauss0.01_k1.0_b0.95_n50_free: eta=0.02051 div=False loss_late=0.1947 theta0=0.993 min=0.935@20 late=0.9987 updD=0.400 cpu=2.1s
+ht0.125_m20_s0.0_iso_gauss0.01_k1.0_b0.95_n50_free: eta=0.01632 div=False loss_late=0.02677 theta0=0.993 min=0.832@30 late=0.9990 updD=0.624 cpu=2.2s
+ht0.5_m20_s0.0_iso_gauss0.01_k1.0_b0.95_n50_free: eta=0.008048 div=False loss_late=1.071e-05 theta0=0.993 min=0.000@150 late=1.0000 updD=0.997 cpu=2.1s
+ech1_m20_s0.0_iso_gauss0.01_k1.0_b0.95_n50_free: eta=0.03028 div=False loss_late=0.02279 theta0=0.993 min=0.005@16 late=1.0000 updD=1.000 cpu=2.0s
+ech20_m20_s0.0_iso_gauss0.01_k1.0_b0.95_n50_free: eta=0.02406 div=False loss_late=0.1558 theta0=0.993 min=0.931@16 late=0.9999 updD=0.952 cpu=1.9s
+ech40_m20_s0.0_iso_gauss0.01_k1.0_b0.95_n50_free: eta=0.02114 div=False loss_late=0.2082 theta0=0.993 min=0.938@19 late=0.9990 updD=0.465 cpu=2.1s
+[cpu] {'name': 'e1_momentum', 'cpu_s': 183.5, 'wall_s': 237.6, 'n_runs': 42, 'n_svd': 183190}

@@ -35,14 +35,16 @@ def job(args):
     W0 = model.init_W(seed)
     reg = sp.optimizer_registry(cfg.K)
     names = list(reg.keys())
-    loss, theta, upd, lrs, div, secs = [], [], [], [], [], []
+    loss, theta, upd, lrs, div, secs, nfb = [], [], [], [], [], [], []
     for name in names:
         fam = reg[name][0]
         lr = tuned[fam]['lr']
         opt = sp.make_opt(name, (cfg.D, cfg.N), cfg.K, seed=seed)
         t1 = time.time()
+        fb0 = sp.SVD_FALLBACKS
         r = sp.run(model, opt, lr, cfg.T_EVAL, sigma, W0, noise_seed=seed, rec_every=cfg.REC_EVERY)
         secs.append(time.time() - t1)
+        nfb.append(sp.SVD_FALLBACKS - fb0)      # gesdd failures handled by the gesvd fallback
         loss.append(r['loss'])
         theta.append(r['theta'])
         upd.append(r['upd_dom'])
@@ -52,6 +54,7 @@ def job(args):
                         names=np.array(names), family=np.array([reg[n][0] for n in names]),
                         loss=np.array(loss), theta=np.array(theta), upd_dom=np.array(upd),
                         lr=np.array(lrs), diverged=np.array(div), secs=np.array(secs),
+                        svd_fallbacks=np.array(nfb),
                         lam=model.lam, m=m, sigma=sigma, seed=seed,
                         T=cfg.T_EVAL, rec_every=cfg.REC_EVERY)
     return (m, sigma, seed, time.time() - t0)

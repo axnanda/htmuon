@@ -117,6 +117,49 @@ class Problem:
     def sgd_loss_bar(self, eta, t, c0sq):
         return 0.5 * (self.H * self.sgd_second_moment(eta, t, c0sq)).sum(axis=(-2, -1))
 
+    # -- SGD with the muon.py Nesterov-EMA momentum (exact second moments, 2x2 Lyapunov per eigen-direction) --
+    def sgd_nesterov_theta(self, eta, beta, T=None, c0sq=0.0, window=None):
+        """Exact ratio-of-expectations alignment of SGD with
+               M <- beta M + (1-beta) G,   X = (1-beta) G + beta M,   w <- w - eta X      (G = h w + xi)
+        i.e. the linear recursion z+ = T z + b xi for z = (w, M) with
+               T = [[1 - eta (1-beta^2) h, -eta beta^2], [(1-beta) h, beta]],  b = (-eta (1-beta^2), 1-beta).
+        T=None: stationary value (solves the 3x3 Lyapunov system per entry); otherwise iterates the covariance
+        recursion from E w^2 = c0sq, M = 0 and returns the mean of theta_bar_t over the steps t in `window`
+        (default: t >= 0.8 T).  Also returns the corresponding loss 1/2 sum h E w^2."""
+        h, s2 = self.H, self.kap2
+        t11, t12 = 1 - eta * (1 - beta ** 2) * h, -eta * beta ** 2 * np.ones_like(h)
+        t21, t22 = (1 - beta) * h, beta * np.ones_like(h)
+        b1, b2 = -eta * (1 - beta ** 2), (1 - beta)
+
+        def ratio(a):
+            e = h ** 2 * a
+            return float((e * self.maskf).sum() / e.sum()), float(0.5 * (h * a).sum())
+
+        if T is None:
+            K = np.empty(h.shape + (3, 3))
+            K[..., 0, 0], K[..., 0, 1], K[..., 0, 2] = t11 ** 2, 2 * t11 * t12, t12 ** 2
+            K[..., 1, 0], K[..., 1, 1], K[..., 1, 2] = t11 * t21, t11 * t22 + t12 * t21, t12 * t22
+            K[..., 2, 0], K[..., 2, 1], K[..., 2, 2] = t21 ** 2, 2 * t21 * t22, t22 ** 2
+            q = np.stack([s2 * b1 * b1, s2 * b1 * b2, s2 * b2 * b2], axis=-1)[..., None]
+            sol = np.linalg.solve(np.eye(3) - K, q)[..., 0]
+            return ratio(sol[..., 0])
+        a = c0sq * np.ones_like(h)
+        b = np.zeros_like(h)
+        c = np.zeros_like(h)
+        if window is None:
+            window = [t for t in range(T + 1) if t >= 0.8 * T]
+        wset = set(int(t) for t in window)
+        th, ls = [], []
+        for t in range(T + 1):
+            if t in wset:
+                r = ratio(a)
+                th.append(r[0])
+                ls.append(r[1])
+            a, b, c = (t11 ** 2 * a + 2 * t11 * t12 * b + t12 ** 2 * c + s2 * b1 * b1,
+                       t11 * t21 * a + (t11 * t22 + t12 * t21) * b + t12 * t22 * c + s2 * b1 * b2,
+                       t21 ** 2 * a + 2 * t21 * t22 * b + t22 ** 2 * c + s2 * b2 * b2)
+        return float(np.mean(th)), float(np.mean(ls))
+
     def blocks(self, W):
         """s, tau, q (=sum lam^4 c^2), e (=sum lam^2 kap^2), nloss (=sum lam kap^2) for S in D, B."""
         out = {}

@@ -18,6 +18,36 @@ import math
 import numpy as np
 
 # --------------------------------------------------------------------------------------------
+# robust SVD
+# --------------------------------------------------------------------------------------------
+# numpy's SVD (LAPACK gesdd, divide and conquer) occasionally fails with "SVD did not converge" on
+# FINITE but numerically rank-deficient matrices.  This happens here in noise-free runs with a large
+# gap m, where an Echelon optimizer drives the bulk part of the momentum to ~1e-13 of the head (first
+# seen: ech_r16_ideal, m = 100, sigma = 0, seed 0).  In that case we fall back to the QR-iteration
+# driver gesvd (scipy).  SVD_FALLBACKS counts the fallbacks of the current process.
+SVD_FALLBACKS = 0
+
+
+def svd(X, full_matrices=False):
+    """np.linalg.svd with a gesvd fallback (see above).  Returns (U, S, Vh)."""
+    global SVD_FALLBACKS
+    try:
+        return np.linalg.svd(X, full_matrices=full_matrices)
+    except np.linalg.LinAlgError:
+        if not np.all(np.isfinite(X)):
+            raise
+        import scipy.linalg as sl
+        SVD_FALLBACKS += 1
+        return sl.svd(X, full_matrices=full_matrices, lapack_driver='gesvd')
+
+
+def spec_norm(X):
+    """Spectral norm ||X||_2 through the robust SVD."""
+    if X.size == 0:
+        return 0.0
+    return float(svd(X)[1][0])
+
+# --------------------------------------------------------------------------------------------
 # precision helpers
 # --------------------------------------------------------------------------------------------
 
@@ -84,7 +114,7 @@ def ns5_scalar(x, steps=5):
 
 def polar_svd(G):
     """Exact Muon filter: U V^T for the thin SVD G = U S V^T (float64)."""
-    U, _, Vh = np.linalg.svd(np.asarray(G, dtype=np.float64), full_matrices=False)
+    U, _, Vh = svd(np.asarray(G, dtype=np.float64), full_matrices=False)
     return U @ Vh
 
 
@@ -95,7 +125,7 @@ def polar_svd(G):
 def msign_generalized_ht_v2(g, p=0.25, prec='f64'):
     """Port of muon.py:320-332: U S^p V^T by SVD (float32 in the original)."""
     dt, _ = _prec('f32' if prec == 'bf16' else prec)
-    U, S, Vh = np.linalg.svd(np.asarray(g, dtype=dt), full_matrices=False)
+    U, S, Vh = svd(np.asarray(g, dtype=dt), full_matrices=False)
     Sp = S ** dt(p)
     return (U * Sp[None, :]) @ Vh
 
@@ -240,7 +270,7 @@ class Echelon:
         d, n = X.shape
         r = min(self.r, d, n)
         if self.frame == 'exact':
-            Uf, _, _ = np.linalg.svd(X, full_matrices=False)
+            Uf, _, _ = svd(X, full_matrices=False)
             U = Uf[:, :r]
         else:
             if self.U is None or self.U.shape != (d, r):
@@ -250,12 +280,12 @@ class Echelon:
                 self.U = U0
             U = self.U
         H = U.T @ X                                   # r x n
-        Uh, _, Vhh = np.linalg.svd(H, full_matrices=False)
+        Uh, _, Vhh = svd(H, full_matrices=False)
         P = Uh @ Vhh                                  # polar factor of the small matrix
         T = X - U @ H                                 # tail
         out = dict(U=U, P=P, T=T)
         if self.tau == 'exact':
-            out['tau'] = np.linalg.norm(T, 2) if T.size else 0.0
+            out['tau'] = spec_norm(T)
         else:
             # power iteration (always run for 'pi' and 'fro' objects so that both scales are
             # available from one tracked frame)
@@ -274,9 +304,9 @@ class Echelon:
             out['tau_fro'] = np.linalg.norm(T)
             out['tau'] = out['tau_fro'] if self.tau == 'fro' else out['tau_pi']
         if self.diagnose:
-            t2 = np.linalg.norm(T, 2)
+            t2 = spec_norm(T)
             self.last_tau_ratio = out['tau'] / t2 if t2 > 0 else np.nan
-            Uf, _, _ = np.linalg.svd(X, full_matrices=False)
+            Uf, _, _ = svd(X, full_matrices=False)
             Ue = Uf[:, :r]
             # mean squared-cosine deficit of the tracked frame w.r.t. the exact top-r left
             # singular subspace: 1 - ||Ue^T U||_F^2 / r  (0 = exact)
@@ -535,6 +565,9 @@ def run(model, opt, lr, T, sigma, W0, noise_seed, rec_every=1, checkpoints=(), b
             ck[t] = W.copy()
         g = G + sigma * rng.standard_normal((d, n)) if sigma > 0 else G
         O = opt.direction(g)
+        if not np.all(np.isfinite(O)):      # blow-up between two recorded steps
+            diverged = True
+            break
         if rec:
             upd[i] = model.dom_fraction(O)
         W = W - lr * O
@@ -574,7 +607,7 @@ if __name__ == '__main__':
     # minimal self-test of the ports (see test_port.py for the full set)
     rng = np.random.default_rng(0)
     G = rng.standard_normal((200, 40))
-    U, S, Vh = np.linalg.svd(G, full_matrices=False)
+    U, S, Vh = svd(G, full_matrices=False)
     t, off = transfer(zeropower_via_newtonschulz5(G), U, Vh)
     print('NS5 transfer range on a Gaussian 200x40:', t.min(), t.max(), 'offdiag', off)
     R = gram_root_1_16_via_newtonschulz(G, 0.125)

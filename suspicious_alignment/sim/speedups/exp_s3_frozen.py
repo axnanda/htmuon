@@ -81,7 +81,7 @@ def job(args):
             outs[nm], Vst[nm] = sp.msign_generalized_ht_v2_stream_qr(M, Vst[nm], p=P, rank=rk)
         if t < WARM:
             continue
-        U, S, Vh = np.linalg.svd(M, full_matrices=False)
+        U, S, Vh = sp.svd(M, full_matrices=False)
         Em = U @ Vh
         Eh = (U * (S ** P)[None, :]) @ Vh
         Emt, Eht = Q.T @ Em, Q.T @ Eh
@@ -103,6 +103,11 @@ def job(args):
             if r in (4, k):
                 cur[f'ech_r{tag}_pol'] = mkm(sp.cubic_step(O))
                 cur[f'ech_r{tag}_fro'] = mkm(sp.Echelon.assemble(p_, p_['tau_fro']))
+            # the two pieces of the tracked Echelon update separately: orthogonalised head U P and
+            # normalised-SGD tail T / tau  (thresholds "inside the tail")
+            cur[f'ech_r{tag}_headonly'] = mkm(p_['U'] @ p_['P'])
+            if p_['tau_pi'] > 1e-300:
+                cur[f'ech_r{tag}_tailonly'] = mkm(p_['T'] / p_['tau_pi'])
         cur['ht_exact'] = mkh(Eh)
         cur['ht_ns'] = mkh(ht_ns_opt.filter(M))
         cur['ht_avg'] = mkh(0.8 * ns5 + 0.2 * Eh)
@@ -136,8 +141,9 @@ def job(args):
         r_['etaD'] = 2 * r_['aD'] / r_['bD'] if r_['bD'] > 0 else float('nan')
         r_['etaB'] = 2 * r_['aB'] / r_['bB'] if r_['bB'] > 0 else float('nan')
         r_['ratio_D_over_B'] = r_['etaD'] / r_['etaB'] if r_['etaB'] != 0 else float('nan')
-        r_['eta_full'] = 2 * (r_['aD'] + r_['aB']) / (r_['bD'] + r_['bB'])
-    return dict(m=m, one_minus_theta=omt, theta=float(theta), sigma=sigma, seed=seed, res=res)
+        r_['eta_full'] = 2 * (r_['aD'] + r_['aB']) / (r_['bD'] + r_['bB']) if (r_['bD'] + r_['bB']) > 0 else float('nan')
+    return dict(m=m, one_minus_theta=omt, theta=float(theta), sigma=sigma, seed=seed,
+                loss=float(0.5 * np.sum(e / lam)), res=res)
 
 
 def main():

@@ -14,7 +14,8 @@ and SGD.  Step sizes are also reported 'norm-equalised': eta_n = eta * sqrt(E||F
 step with the same update norm.
 
 Parts:  states (default) | scale (gradient-norm scaling) | mdep (m-dependence at the common initial state)
-Usage:  python3 e2e3_onestep.py [states|scale|mdep|all]
+        | highalign (states above the stationary alignment band, takeaway D2)
+Usage:  python3 e2e3_onestep.py [states|scale|mdep|highalign|all]
 """
 import os
 import sys
@@ -153,6 +154,30 @@ def part_mdep():
     sf.save_json(os.path.join(sf.RES, "e23_mdep.json"), dict(rows=rows))
 
 
+def part_highalign():
+    """Probe of takeaway (D2): states with alignment ABOVE the stationary band.
+    Base state: a sample of constant-step SGD's stationary law, W_s = sqrt(beta(eta0)) * Z  (theta ~ theta_inf).
+      'bulk x g' : bulk rows multiplied by g in {1, 0.7, 0.5, 0.3, 0.1, 0}   (D at its noise floor, less bulk)
+      'D x g'    : dominant rows multiplied by g in {3, 10, 100}             (D signal-dominated, bulk at floor)
+    For every filter: regime of the expected one-step alignment change as a function of the step size."""
+    rows = []
+    for m in (5, 20, 100):
+        prob = sf.Problem(D, K, N, m)
+        Z = sf.init_state(prob, [0])[0]
+        Ws = np.sqrt(prob.beta(sf.ETA0)) * Z
+        states = [("bulk", g) for g in (1.0, 0.7, 0.5, 0.3, 0.1, 0.0)] + [("D", g) for g in (3.0, 10.0, 100.0)]
+        for which, g in states:
+            W = Ws.copy()
+            if which == "bulk":
+                W[K:] *= g
+            else:
+                W[:K] *= g
+            info, per, _ = analyse_state(prob, W, OPTS, 48, seed=11 + m)
+            rows.append(dict(m=m, scaled=which, factor=g, theta_inf=float(prob.theta_inf(sf.ETA0)), **info, per_opt=per))
+        print("highalign", m, flush=True)
+    sf.save_json(os.path.join(sf.RES, "e23_highalign.json"), dict(rows=rows, N_draws=48))
+
+
 if __name__ == "__main__":
     part = sys.argv[1] if len(sys.argv) > 1 else "states"
     cpu = sf.CpuLog("e2e3_onestep_" + part)
@@ -162,4 +187,6 @@ if __name__ == "__main__":
         part_scale()
     if part in ("mdep", "all"):
         part_mdep()
+    if part in ("highalign", "all"):
+        part_highalign()
     cpu.done()

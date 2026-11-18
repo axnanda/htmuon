@@ -1,0 +1,13 @@
+18 jobs to run
+done m=100 sigma=0.0 seed=0 in 25.8s
+done m=100 sigma=0.0 seed=1 in 27.9s
+done m=100 sigma=0.0 seed=2 in 66.0s
+done m=100 sigma=0.02 seed=0 in 89.0s
+done m=100 sigma=0.02 seed=1 in 80.4s
+done m=100 sigma=0.02 seed=2 in 76.2s
+done m=100 sigma=0.3 seed=0 in 64.3s
+done m=100 sigma=0.3 seed=1 in 53.8s
+done m=100 sigma=0.3 seed=2 in 98.8s
+done m=500 sigma=0.0 seed=0 in 91.6s
+done m=500 sigma=0.0 seed=1 in 94.3s
+done m=500 sigma=0.0 seed=2 in 99.9s

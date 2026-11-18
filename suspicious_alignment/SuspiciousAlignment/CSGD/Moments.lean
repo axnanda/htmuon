@@ -1028,12 +1028,6 @@ theorem thetaInf_isotropic_bounds {σ2 : ℝ} (hσ : 0 < σ2) (hiso : ∀ i, N.k
   exact ⟨sub_nonneg.mpr (P.thetaSmallStep_le_thetaInf N hη h hκ),
     P.thetaInf_sub_le_quarter N hη h hκ⟩
 
-end Spec
-
-namespace Spec
-
-variable (P : Spec ι) (N : Noise ι)
-
 /-! ### (d') Interpretation paragraph: large spectral gap -/
 
 /-- `1 - θ_∞ = A_ℬ / (A_𝒟 + A_ℬ)`. -/

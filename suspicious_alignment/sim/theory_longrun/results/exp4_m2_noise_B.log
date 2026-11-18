@@ -1,14 +1,54 @@
 [B m=2] sgd      meas=0.50498+-0.00023 Thm16=0.50517
-[B m=2] muon     meas=0.41051+-0.00033 MF=0.41069 | Deng-small=0.40000 lam^q=0.68576 | E_D m/p=1.005 E_B m/p=1.006 tau/nu=1.217
-[B m=2] ht0.125  meas=0.40905+-0.00031 MF=0.40909 | Deng-small=0.40000 lam^q=0.75330 | E_D m/p=1.002 E_B m/p=1.003 tau/nu=1.207
-[B m=2] ht0.5    meas=0.40512+-0.00051 MF=0.40513 | Deng-small=0.40000 lam^q=0.95732 | E_D m/p=0.999 E_B m/p=0.999 tau/nu=1.192
-[B m=2] ech2     meas=0.41908+-0.00050 MF=0.42003 MF(edge)=0.44389 | Deng-small=0.40000 lam^q=0.68576 | E_D m/p=0.903 E_B m/p=0.906 tau/nu=1.163
-[B m=2] ech4     meas=0.41839+-0.00026 MF=0.41206 MF(edge)=0.44564 | Deng-small=0.40000 lam^q=0.68576 | E_D m/p=0.923 E_B m/p=0.899 tau/nu=1.127
-[B m=2] ech8     meas=0.41653+-0.00042 MF=0.41151 MF(edge)=0.43318 | Deng-small=0.40000 lam^q=0.68576 | E_D m/p=0.954 E_B m/p=0.935 tau/nu=1.066
+[B m=2] muon     meas=0.41085+-0.00055 MF=0.41069 | Deng-small=0.40000 lam^q=0.68576 | E_D m/p=1.006 E_B m/p=1.006 tau/nu=1.218
+[B m=2] ht0.125  meas=0.40916+-0.00027 MF=0.40909 | Deng-small=0.40000 lam^q=0.75330 | E_D m/p=1.003 E_B m/p=1.003 tau/nu=1.208
+[B m=2] ht0.5    meas=0.40576+-0.00038 MF=0.40513 | Deng-small=0.40000 lam^q=0.95732 | E_D m/p=1.000 E_B m/p=0.997 tau/nu=1.192
+[B m=2] ech2     meas=0.41868+-0.00040 MF=0.42003 MF(edge)=0.44389 | Deng-small=0.40000 lam^q=0.68576 | E_D m/p=0.901 E_B m/p=0.906 tau/nu=1.163
+[B m=2] ech4     meas=0.41823+-0.00035 MF=0.41206 MF(edge)=0.44564 | Deng-small=0.40000 lam^q=0.68576 | E_D m/p=0.922 E_B m/p=0.899 tau/nu=1.127
+[B m=2] ech8     meas=0.41621+-0.00047 MF=0.41151 MF(edge)=0.43318 | Deng-small=0.40000 lam^q=0.68576 | E_D m/p=0.953 E_B m/p=0.935 tau/nu=1.067
 [B m=5] sgd      meas=0.73565+-0.00038 Thm16=0.73568
-[B m=5] muon     meas=0.65716+-0.00015 MF=0.65714 | Deng-small=0.62500 lam^q=0.93169 | E_D m/p=1.005 E_B m/p=1.005 tau/nu=1.289
-[B m=5] ht0.125  meas=0.65278+-0.00018 MF=0.65272 | Deng-small=0.62500 lam^q=0.96123 | E_D m/p=1.003 E_B m/p=1.003 tau/nu=1.251
-[B m=5] ht0.5    meas=0.64081+-0.00062 MF=0.64092 | Deng-small=0.62500 lam^q=0.99886 | E_D m/p=0.997 E_B m/p=0.998 tau/nu=1.202
-[B m=5] ech2     meas=0.68236+-0.00018 MF=0.68481 MF(edge)=0.68994 | Deng-small=0.62500 lam^q=0.93169 | E_D m/p=0.946 E_B m/p=0.957 tau/nu=1.203
-[B m=5] ech4     meas=0.67756+-0.00054 MF=0.65841 MF(edge)=0.68856 | Deng-small=0.62500 lam^q=0.93169 | E_D m/p=0.961 E_B m/p=0.881 tau/nu=1.152
-[B m=5] ech8     meas=0.67045+-0.00011 MF=0.65790 MF(edge)=0.67761 | Deng-small=0.62500 lam^q=0.93169 | E_D m/p=0.980 E_B m/p=0.926 tau/nu=1.080
+[B m=5] muon     meas=0.65717+-0.00023 MF=0.65714 | Deng-small=0.62500 lam^q=0.93169 | E_D m/p=1.006 E_B m/p=1.005 tau/nu=1.289
+[B m=5] ht0.125  meas=0.65266+-0.00036 MF=0.65272 | Deng-small=0.62500 lam^q=0.96123 | E_D m/p=1.002 E_B m/p=1.003 tau/nu=1.251
+[B m=5] ht0.5    meas=0.64101+-0.00040 MF=0.64092 | Deng-small=0.62500 lam^q=0.99886 | E_D m/p=0.999 E_B m/p=0.999 tau/nu=1.202
+[B m=5] ech2     meas=0.68174+-0.00031 MF=0.68481 MF(edge)=0.68994 | Deng-small=0.62500 lam^q=0.93169 | E_D m/p=0.945 E_B m/p=0.959 tau/nu=1.203
+[B m=5] ech4     meas=0.67752+-0.00020 MF=0.65841 MF(edge)=0.68856 | Deng-small=0.62500 lam^q=0.93169 | E_D m/p=0.962 E_B m/p=0.883 tau/nu=1.152
+[B m=5] ech8     meas=0.67047+-0.00019 MF=0.65790 MF(edge)=0.67761 | Deng-small=0.62500 lam^q=0.93169 | E_D m/p=0.980 E_B m/p=0.926 tau/nu=1.081
+[B m=10] sgd      meas=0.85111+-0.00015 Thm16=0.85118
+[B m=10] muon     meas=0.81754+-0.00019 MF=0.81748 | Deng-small=0.76923 lam^q=0.98200 | E_D m/p=1.005 E_B m/p=1.005 tau/nu=1.495
+[B m=10] ht0.125  meas=0.81184+-0.00037 MF=0.81205 | Deng-small=0.76923 lam^q=0.99180 | E_D m/p=1.002 E_B m/p=1.004 tau/nu=1.393
+[B m=10] ht0.5    meas=0.79497+-0.00010 MF=0.79489 | Deng-small=0.76923 lam^q=0.99993 | E_D m/p=0.998 E_B m/p=0.998 tau/nu=1.235
+[B m=10] ech2     meas=0.85164+-0.00004 MF=0.85383 MF(edge)=0.85383 | Deng-small=0.76923 lam^q=0.98200 | E_D m/p=0.975 E_B m/p=0.992 tau/nu=1.343
+[B m=10] ech4     meas=0.83723+-0.00006 MF=0.81832 MF(edge)=0.83783 | Deng-small=0.76923 lam^q=0.98200 | E_D m/p=0.988 E_B m/p=0.865 tau/nu=1.172
+[B m=10] ech8     meas=0.82899+-0.00014 MF=0.81798 MF(edge)=0.83084 | Deng-small=0.76923 lam^q=0.98200 | E_D m/p=0.995 E_B m/p=0.922 tau/nu=1.088
+[B m=20] sgd      meas=0.92061+-0.00010 Thm16=0.92059
+[B m=20] muon     meas=0.92274+-0.00005 MF=0.92279 | Deng-small=0.86957 lam^q=0.99544 | E_D m/p=1.005 E_B m/p=1.006 tau/nu=2.035
+[B m=20] ht0.125  meas=0.91926+-0.00008 MF=0.91937 | Deng-small=0.86957 lam^q=0.99831 | E_D m/p=1.002 E_B m/p=1.004 tau/nu=1.806
+[B m=20] ht0.5    meas=0.90255+-0.00011 MF=0.90258 | Deng-small=0.86957 lam^q=1.00000 | E_D m/p=0.998 E_B m/p=0.998 tau/nu=1.366
+[B m=20] ech2     meas=0.95215+-0.00003 MF=0.95268 MF(edge)=0.95268 | Deng-small=0.86957 lam^q=0.99544 | E_D m/p=0.992 E_B m/p=1.004 tau/nu=1.735
+[B m=20] ech4     meas=0.93288+-0.00008 MF=0.92319 MF(edge)=0.93237 | Deng-small=0.86957 lam^q=0.99544 | E_D m/p=0.999 E_B m/p=0.864 tau/nu=1.177
+[B m=20] ech8     meas=0.92881+-0.00006 MF=0.92303 MF(edge)=0.92911 | Deng-small=0.86957 lam^q=0.99544 | E_D m/p=1.001 E_B m/p=0.920 tau/nu=1.092
+[B m=50] sgd      meas=0.96690+-0.00005 Thm16=0.96690
+[B m=50] muon     meas=0.98268+-0.00001 MF=0.98275 | Deng-small=0.94340 lam^q=0.99927 | E_D m/p=1.003 E_B m/p=1.007 tau/nu=4.033
+[B m=50] ht0.125  meas=0.98311+-0.00001 MF=0.98317 | Deng-small=0.94340 lam^q=0.99979 | E_D m/p=1.000 E_B m/p=1.004 tau/nu=3.588
+[B m=50] ht0.5    meas=0.97813+-0.00002 MF=0.97816 | Deng-small=0.94340 lam^q=1.00000 | E_D m/p=0.998 E_B m/p=0.999 tau/nu=2.233
+[B m=50] ech2     meas=0.99410+-0.00001 MF=0.99414 MF(edge)=0.99414 | Deng-small=0.94340 lam^q=0.99927 | E_D m/p=1.000 E_B m/p=1.005 tau/nu=3.214
+[B m=50] ech4     meas=0.98518+-0.00001 MF=0.98285 MF(edge)=0.98501 | Deng-small=0.94340 lam^q=0.99927 | E_D m/p=1.002 E_B m/p=0.863 tau/nu=1.179
+[B m=50] ech8     meas=0.98418+-0.00002 MF=0.98281 MF(edge)=0.98425 | Deng-small=0.94340 lam^q=0.99927 | E_D m/p=1.002 E_B m/p=0.921 tau/nu=1.093
+[B m=100] sgd      meas=0.98325+-0.00007 Thm16=0.98321
+[B m=100] muon     meas=0.99533+-0.00000 MF=0.99535 | Deng-small=0.97087 lam^q=0.99982 | E_D m/p=1.004 E_B m/p=1.008 tau/nu=7.751
+[B m=100] ht0.125  meas=0.99609+-0.00000 MF=0.99610 | Deng-small=0.97087 lam^q=0.99996 | E_D m/p=1.000 E_B m/p=1.002 tau/nu=7.358
+[B m=100] ht0.5    meas=0.99701+-0.00001 MF=0.99701 | Deng-small=0.97087 lam^q=1.00000 | E_D m/p=0.999 E_B m/p=0.999 tau/nu=5.959
+[B m=100] ech2     meas=0.99912+-0.00000 MF=0.99912 MF(edge)=0.99912 | Deng-small=0.97087 lam^q=0.99982 | E_D m/p=1.000 E_B m/p=1.002 tau/nu=5.985
+[B m=100] ech4     meas=0.99601+-0.00000 MF=0.99537 MF(edge)=0.99596 | Deng-small=0.97087 lam^q=0.99982 | E_D m/p=1.002 E_B m/p=0.864 tau/nu=1.180
+[B m=100] ech8     meas=0.99574+-0.00001 MF=0.99536 MF(edge)=0.99576 | Deng-small=0.97087 lam^q=0.99982 | E_D m/p=1.003 E_B m/p=0.921 tau/nu=1.094
+[B m=200] sgd      meas=0.99153+-0.00000 Thm16=0.99155
+[B m=200] muon     meas=0.99887+-0.00001 MF=0.99881 | Deng-small=0.98522 lam^q=0.99995 | E_D m/p=1.059 E_B m/p=1.007 tau/nu=17.877
+[B m=200] ht0.125  meas=0.99917+-0.00000 MF=0.99918 | Deng-small=0.98522 lam^q=0.99999 | E_D m/p=1.000 E_B m/p=1.003 tau/nu=15.968
+[B m=200] ht0.5    meas=0.99979+-0.00000 MF=0.99979 | Deng-small=0.98522 lam^q=1.00000 | E_D m/p=1.000 E_B m/p=0.998 tau/nu=22.588
+[B m=200] ech2     meas=0.99988+-0.00000 MF=0.99988 MF(edge)=0.99988 | Deng-small=0.98522 lam^q=0.99995 | E_D m/p=1.006 E_B m/p=1.011 tau/nu=11.689
+[B m=200] ech4     meas=0.99904+-0.00001 MF=0.99882 MF(edge)=0.99897 | Deng-small=0.98522 lam^q=0.99995 | E_D m/p=1.066 E_B m/p=0.863 tau/nu=1.180
+[B m=200] ech8     meas=0.99898+-0.00001 MF=0.99882 MF(edge)=0.99892 | Deng-small=0.98522 lam^q=0.99995 | E_D m/p=1.069 E_B m/p=0.922 tau/nu=1.094
+elapsed 313.3820879459381
+
+real	5m13.494s
+user	3m15.779s
+sys	0m0.269s

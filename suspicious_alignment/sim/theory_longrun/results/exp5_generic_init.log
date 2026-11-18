@@ -1,0 +1,2 @@
+[A muon n=1d m=  2] thetabar=0.500667+-4.1e-03 psiD/psi=0.547730 bounds=[0.2695,0.725102] | even/odd=0.50051/0.50458 | absorbed at 210 (never: 0) Lbar/(eta^2 trA)=0.1493 trZ^2/d=0.238 |Z|=0.931 |Z_DB|^2/k=0.053 | theta0=0.5485 min=0.0159 at 173 max=0.5508 | lin-descent len 1 err 8.4e-15
+[A muon n=1d m=  5] thetabar=0.861263+-2.1e-03 psiD/psi=0.883303 bounds=[0.6465,0.942810] | even/odd=0.85799/0.86496 | absorbed at 216 (never: 0) Lbar/(eta^2 trA)=0.1406 trZ^2/d=0.211 |Z|=0.886 |Z_DB|^2/k=0.019 | theta0=0.8897 min=0.0128 at 153 max=0.8897 | lin-descent len 1 err 1.4e-14

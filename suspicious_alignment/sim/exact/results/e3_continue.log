@@ -1,0 +1,57 @@
+sgd      m= 20 t= 100 theta=0.004 L0=     2345 (L_D/L=0.000) | full:0.134  updD:1.000  updB:0.134  gradD:1.000  gradB:0.134
+sgd      m= 20 t=1000 theta=0.724 L0=    7.026 (L_D/L=0.032) | full:0.574  updD:0.998  updB:0.576  gradD:0.998  gradB:0.576
+sgd      m= 20 t=1500 theta=0.820 L0=    2.471 (L_D/L=0.087) | full:0.859  updD:0.999  updB:0.860  gradD:0.999  gradB:0.860  full_x2:1.578  updD_x2:1.118  updB_x2:1.460
+muon     m= 20 t= 100 theta=0.989 L0=3.143e+04 (L_D/L=0.732) | full:0.295  updD:0.393  updB:0.916  gradD:0.392  gradB:0.863
+muon     m= 20 t=1000 theta=0.076 L0=    154.4 (L_D/L=0.001) | full:0.316  updD:1.000  updB:0.316  gradD:1.019  gradB:0.303
+muon     m= 20 t=1500 theta=0.622 L0=     11.1 (L_D/L=0.019) | full:0.510  updD:0.999  updB:0.510  gradD:1.271  gradB:0.503  full_x2:0.484  updD_x2:1.023  updB_x2:0.461
+ht0.125  m= 20 t= 100 theta=0.982 L0=2.072e+04 (L_D/L=0.616) | full:0.193  updD:0.388  updB:0.848  gradD:0.388  gradB:0.772
+ht0.125  m= 20 t=1000 theta=0.261 L0=    50.19 (L_D/L=0.004) | full:0.381  updD:1.000  updB:0.381  gradD:1.004  gradB:0.368
+ht0.125  m= 20 t=1500 theta=0.737 L0=     5.91 (L_D/L=0.037) | full:0.612  updD:0.999  updB:0.612  gradD:1.031  gradB:0.615  full_x2:0.762  updD_x2:1.043  updB_x2:0.720
+ht0.5    m= 20 t= 100 theta=0.001 L0=     5311 (L_D/L=0.000) | full:0.202  updD:1.000  updB:0.202  gradD:1.000  gradB:0.200
+ht0.5    m= 20 t=1000 theta=0.604 L0=     13.1 (L_D/L=0.017) | full:0.491  updD:0.999  updB:0.491  gradD:1.006  gradB:0.487
+ht0.5    m= 20 t=1500 theta=0.807 L0=     3.07 (L_D/L=0.070) | full:0.778  updD:0.998  updB:0.780  gradD:1.028  gradB:0.790  full_x2:1.296  updD_x2:1.088  updB_x2:1.211
+ech1     m= 20 t= 100 theta=0.986 L0=3.118e+04 (L_D/L=0.677) | full:0.315  updD:0.349  updB:0.984  gradD:0.347  gradB:0.838
+ech1     m= 20 t=1000 theta=0.082 L0=      168 (L_D/L=0.001) | full:0.314  updD:1.000  updB:0.314  gradD:1.001  gradB:0.301
+ech1     m= 20 t=1500 theta=0.616 L0=       12 (L_D/L=0.018) | full:0.499  updD:1.000  updB:0.499  gradD:1.016  gradB:0.491  full_x2:0.458  updD_x2:1.023  updB_x2:0.435
+ech20    m= 20 t= 100 theta=0.988 L0=2.893e+04 (L_D/L=0.701) | full:0.254  updD:0.369  updB:0.910  gradD:0.368  gradB:0.840
+ech20    m= 20 t=1000 theta=0.170 L0=    80.69 (L_D/L=0.003) | full:0.343  updD:1.000  updB:0.343  gradD:1.048  gradB:0.328
+ech20    m= 20 t=1500 theta=0.704 L0=     7.43 (L_D/L=0.029) | full:0.563  updD:0.999  updB:0.564  gradD:1.524  gradB:0.561  full_x2:0.637  updD_x2:1.036  updB_x2:0.603
+ech40    m= 20 t= 100 theta=0.989 L0=3.093e+04 (L_D/L=0.728) | full:0.284  updD:0.386  updB:0.913  gradD:0.386  gradB:0.858
+ech40    m= 20 t=1000 theta=0.093 L0=    130.6 (L_D/L=0.002) | full:0.317  updD:1.000  updB:0.317  gradD:1.023  gradB:0.304
+ech40    m= 20 t=1500 theta=0.649 L0=    9.766 (L_D/L=0.022) | full:0.524  updD:0.999  updB:0.524  gradD:1.309  gradB:0.519  full_x2:0.525  updD_x2:1.026  updB_x2:0.499
+sgd      m=100 t= 400 theta=0.064 L0=    617.9 (L_D/L=0.000) | full:0.604  updD:1.000  updB:0.604  gradD:1.000  gradB:0.604
+sgd      m=100 t=2000 theta=0.725 L0=    28.93 (L_D/L=0.007) | full:0.785  updD:1.000  updB:0.785  gradD:1.000  gradB:0.785  full_x2:0.671  updD_x2:1.010  updB_x2:0.660
+sgd      m=100 t=3000 theta=0.896 L0=    9.621 (L_D/L=0.022) | full:0.842  updD:1.000  updB:0.842  gradD:1.000  gradB:0.842  full_x2:0.854  updD_x2:1.030  updB_x2:0.824
+muon     m=100 t= 400 theta=0.991 L0=     1852 (L_D/L=0.391) | full:0.402  updD:0.609  updB:0.817  gradD:0.608  gradB:0.777
+muon     m=100 t=2000 theta=0.567 L0=    49.99 (L_D/L=0.004) | full:0.766  updD:1.000  updB:0.766  gradD:1.016  gradB:0.756  full_x2:0.624  updD_x2:1.005  updB_x2:0.617
+muon     m=100 t=3000 theta=0.843 L0=    14.91 (L_D/L=0.014) | full:0.828  updD:1.000  updB:0.828  gradD:1.054  gradB:0.822  full_x2:0.777  updD_x2:1.018  updB_x2:0.758
+ht0.125  m=100 t= 400 theta=0.033 L0=    966.8 (L_D/L=0.000) | full:0.633  updD:1.000  updB:0.633  gradD:1.000  gradB:0.622
+ht0.125  m=100 t=2000 theta=0.615 L0=    42.88 (L_D/L=0.005) | full:0.773  updD:1.000  updB:0.772  gradD:1.005  gradB:0.764  full_x2:0.637  updD_x2:1.006  updB_x2:0.630
+ht0.125  m=100 t=3000 theta=0.859 L0=    13.24 (L_D/L=0.016) | full:0.832  updD:1.000  updB:0.832  gradD:1.014  gradB:0.828  full_x2:0.795  updD_x2:1.020  updB_x2:0.774
+ht0.5    m=100 t= 400 theta=0.049 L0=    736.5 (L_D/L=0.000) | full:0.614  updD:1.000  updB:0.614  gradD:1.000  gradB:0.607
+ht0.5    m=100 t=2000 theta=0.685 L0=    33.45 (L_D/L=0.006) | full:0.780  updD:1.000  updB:0.780  gradD:1.003  gradB:0.776  full_x2:0.657  updD_x2:1.008  updB_x2:0.648
+ht0.5    m=100 t=3000 theta=0.883 L0=     10.8 (L_D/L=0.019) | full:0.838  updD:1.000  updB:0.838  gradD:1.009  gradB:0.836  full_x2:0.829  updD_x2:1.026  updB_x2:0.804
+ech1     m=100 t= 400 theta=0.016 L0=     1651 (L_D/L=0.000) | full:0.626  updD:1.000  updB:0.626  gradD:1.000  gradB:0.619
+ech1     m=100 t=2000 theta=0.554 L0=    54.62 (L_D/L=0.004) | full:0.752  updD:1.000  updB:0.752  gradD:1.004  gradB:0.744  full_x2:0.604  updD_x2:1.005  updB_x2:0.596
+ech1     m=100 t=3000 theta=0.845 L0=    15.11 (L_D/L=0.014) | full:0.819  updD:1.000  updB:0.819  gradD:1.013  gradB:0.814  full_x2:0.765  updD_x2:1.019  updB_x2:0.746
+ech20    m=100 t= 400 theta=0.963 L0=     1253 (L_D/L=0.128) | full:0.548  updD:0.872  updB:0.689  gradD:0.871  gradB:0.664
+ech20    m=100 t=2000 theta=0.614 L0=    43.18 (L_D/L=0.005) | full:0.766  updD:1.000  updB:0.766  gradD:1.026  gradB:0.756  full_x2:0.628  updD_x2:1.006  updB_x2:0.620
+ech20    m=100 t=3000 theta=0.864 L0=     12.9 (L_D/L=0.016) | full:0.828  updD:1.000  updB:0.828  gradD:1.083  gradB:0.823  full_x2:0.793  updD_x2:1.021  updB_x2:0.771
+ech40    m=100 t= 400 theta=0.989 L0=     1680 (L_D/L=0.337) | full:0.432  updD:0.663  updB:0.794  gradD:0.662  gradB:0.754
+ech40    m=100 t=2000 theta=0.581 L0=    47.72 (L_D/L=0.004) | full:0.766  updD:1.000  updB:0.766  gradD:1.017  gradB:0.756  full_x2:0.625  updD_x2:1.006  updB_x2:0.618
+ech40    m=100 t=3000 theta=0.850 L0=    14.24 (L_D/L=0.015) | full:0.828  updD:1.000  updB:0.828  gradD:1.059  gradB:0.822  full_x2:0.781  updD_x2:1.019  updB_x2:0.762
+sgd      m=500 t= 200 theta=0.331 L0=      364 (L_D/L=0.001) | full:0.885  updD:1.000  updB:0.885  gradD:1.000  gradB:0.885
+sgd      m=500 t=3000 theta=0.755 L0=    74.07 (L_D/L=0.003) | full:0.911  updD:1.000  updB:0.911  gradD:1.000  gradB:0.911
+muon     m=500 t= 200 theta=1.000 L0=1.055e+04 (L_D/L=0.964) | full:0.115  updD:0.118  updB:0.997  gradD:0.118  gradB:0.996
+muon     m=500 t=3000 theta=0.708 L0=    87.67 (L_D/L=0.002) | full:0.914  updD:1.000  updB:0.914  gradD:1.003  gradB:0.910
+ht0.125  m=500 t= 200 theta=1.000 L0=     2207 (L_D/L=0.828) | full:0.155  updD:0.173  updB:0.984  gradD:0.173  gradB:0.981
+ht0.125  m=500 t=3000 theta=0.720 L0=     83.7 (L_D/L=0.002) | full:0.914  updD:1.000  updB:0.914  gradD:1.002  gradB:0.910
+ht0.5    m=500 t= 200 theta=0.322 L0=      369 (L_D/L=0.001) | full:0.888  updD:1.000  updB:0.888  gradD:1.000  gradB:0.885
+ht0.5    m=500 t=3000 theta=0.742 L0=    77.11 (L_D/L=0.003) | full:0.912  updD:1.000  updB:0.912  gradD:1.001  gradB:0.910
+ech1     m=500 t= 200 theta=1.000 L0=     7253 (L_D/L=0.943) | full:0.054  updD:0.057  updB:1.000  gradD:0.057  gradB:0.993
+ech1     m=500 t=3000 theta=0.711 L0=    88.47 (L_D/L=0.002) | full:0.909  updD:1.000  updB:0.909  gradD:1.002  gradB:0.905
+ech20    m=500 t= 200 theta=1.000 L0=     7641 (L_D/L=0.950) | full:0.073  updD:0.078  updB:0.996  gradD:0.077  gradB:0.994
+ech20    m=500 t=3000 theta=0.729 L0=    81.73 (L_D/L=0.003) | full:0.911  updD:1.000  updB:0.911  gradD:1.005  gradB:0.907
+ech40    m=500 t= 200 theta=1.000 L0=     9978 (L_D/L=0.962) | full:0.104  updD:0.107  updB:0.997  gradD:0.107  gradB:0.996
+ech40    m=500 t=3000 theta=0.715 L0=    85.79 (L_D/L=0.002) | full:0.913  updD:1.000  updB:0.913  gradD:1.004  gradB:0.909
+[cpu] {'name': 'e3_continue', 'cpu_s': 115.6, 'wall_s': 166.9, 'n_runs': 343}

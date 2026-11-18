@@ -1,0 +1,33 @@
+/home/user/htmuon/suspicious_alignment/sim/exact/e1_trajectories.py:132: RuntimeWarning: Mean of empty slice
+  logs[rid + "__" + key] = f32(np.nanmean(out[key], axis=0))
+sgd_m20_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.003 div=False loss_late=2.328 theta0=0.993 min=0.009@24 late=0.9934 updD=0.836 cpu=1.6s
+muon_m20_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.02216 div=False loss_late=2.035 theta0=0.993 min=0.026@560 late=0.9808 updD=0.362 cpu=3.3s
+ht0.125_m20_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.01792 div=False loss_late=1.999 theta0=0.993 min=0.013@340 late=0.9838 updD=0.432 cpu=3.3s
+ht0.5_m20_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.008851 div=False loss_late=2.062 theta0=0.993 min=0.006@85 late=0.9898 updD=0.645 cpu=3.3s
+ech1_m20_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.04501 div=False loss_late=3.156 theta0=0.993 min=0.004@278 late=0.9885 updD=0.832 cpu=3.4s
+ech20_m20_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.0255 div=False loss_late=2.143 theta0=0.993 min=0.018@480 late=0.9858 updD=0.510 cpu=3.5s
+ech40_m20_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.02264 div=False loss_late=2.036 theta0=0.993 min=0.026@540 late=0.9817 updD=0.379 cpu=3.3s
+sgd_m20_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.003 div=False loss_late=2.123 theta0=0.000 min=0.000@0 late=0.9941 updD=0.834 cpu=0.8s
+muon_m20_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.02216 div=False loss_late=1.956 theta0=0.000 min=0.000@0 late=0.9811 updD=0.361 cpu=1.4s
+ht0.125_m20_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.01792 div=False loss_late=1.97 theta0=0.000 min=0.000@0 late=0.9838 updD=0.431 cpu=1.4s
+ht0.5_m20_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.008851 div=False loss_late=2.024 theta0=0.000 min=0.000@0 late=0.9898 updD=0.643 cpu=1.5s
+ech1_m20_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.04501 div=False loss_late=1.965 theta0=0.000 min=0.000@0 late=0.9940 updD=0.831 cpu=1.4s
+ech20_m20_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.0255 div=False loss_late=1.971 theta0=0.000 min=0.000@0 late=0.9865 updD=0.508 cpu=1.4s
+ech40_m20_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.02264 div=False loss_late=1.959 theta0=0.000 min=0.000@0 late=0.9819 updD=0.379 cpu=1.4s
+one-step done for {'noise': 'propA', 'm': 20}
+sgd_m100_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.003 div=False loss_late=39.34 theta0=1.000 min=0.148@35 late=0.9534 updD=0.956 cpu=1.4s
+muon_m100_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.02516 div=False loss_late=2.991 theta0=1.000 min=0.355@470 late=0.9971 updD=0.391 cpu=3.4s
+ht0.125_m100_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.0202 div=False loss_late=3.6 theta0=1.000 min=0.229@287 late=0.9969 updD=0.513 cpu=3.4s
+ht0.5_m100_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.009549 div=False loss_late=9.878 theta0=1.000 min=0.147@82 late=0.9907 updD=0.819 cpu=3.4s
+ech1_m100_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.048 div=False loss_late=63.19 theta0=1.000 min=0.145@247 late=0.9108 updD=0.950 cpu=3.4s
+ech20_m100_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.02726 div=False loss_late=5.674 theta0=1.000 min=0.285@430 late=0.9946 updD=0.557 cpu=3.5s
+ech40_m100_s0.5_propA_gauss1.0_k1.0_b0.0_n50: eta=0.02547 div=False loss_late=3.127 theta0=1.000 min=0.356@470 late=0.9971 updD=0.411 cpu=3.3s
+sgd_m100_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.003 div=False loss_late=2.158 theta0=0.000 min=0.000@0 late=0.9998 updD=0.962 cpu=1.7s
+muon_m100_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.02516 div=False loss_late=1.952 theta0=0.000 min=0.000@0 late=0.9983 updD=0.391 cpu=4.4s
+ht0.125_m100_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.0202 div=False loss_late=1.974 theta0=0.000 min=0.000@0 late=0.9987 updD=0.513 cpu=4.4s
+ht0.5_m100_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.009549 div=False loss_late=2.049 theta0=0.000 min=0.000@0 late=0.9994 updD=0.822 cpu=4.2s
+ech1_m100_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.048 div=False loss_late=1.984 theta0=0.000 min=0.000@0 late=0.9998 updD=0.961 cpu=4.2s
+ech20_m100_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.02726 div=False loss_late=1.968 theta0=0.000 min=0.000@0 late=0.9988 updD=0.559 cpu=4.2s
+ech40_m100_s0.5_propA_zero1.0_k1.0_b0.0_n50: eta=0.02547 div=False loss_late=1.955 theta0=0.000 min=0.000@0 late=0.9984 updD=0.411 cpu=4.4s
+one-step done for {'noise': 'propA', 'm': 100}
+[cpu] {'name': 'e4_aniso', 'cpu_s': 86.9, 'wall_s': 157.2, 'n_runs': 28, 'n_svd': 91220}

@@ -209,7 +209,9 @@ def main():
               'State with prescribed alignment theta, rms gradient entry 1; mean of 2 seeds.',
               'etaB = loss threshold of the bulk-projected update; ratio = etaD/etaB; bulk_gain = ||P^B F||/||P^B F_exact||.\n']
         groups = {'Muon family': ['sgd_deng', 'sgd_mc', 'sgdm', 'muon_exact', 'muon_ns5', 'ech_r1', 'ech_r4', 'ech_r16', 'ech_rk',
-                                  'ech_r1_ideal', 'ech_r4_ideal', 'ech_r16_ideal', 'ech_rk_ideal', 'ech_r4_pol', 'ech_rk_pol', 'ech_r4_fro', 'ech_rk_fro'],
+                                  'ech_r1_ideal', 'ech_r4_ideal', 'ech_r16_ideal', 'ech_rk_ideal', 'ech_r4_pol', 'ech_rk_pol', 'ech_r4_fro', 'ech_rk_fro',
+                                  'ech_r1_tailonly', 'ech_r4_tailonly', 'ech_r16_tailonly', 'ech_rk_tailonly',
+                                  'ech_r4_headonly', 'ech_rk_headonly'],
                   'HTMuon family': ['ht_exact', 'ht_ns', 'ht_interval_cycle', 'ht_avg', 'ht_stream', 'ht_stream_rk', 'ht_stream_r4']}
         for m in fms:
             for s in fsig:
@@ -219,7 +221,7 @@ def main():
                     md.append('|---|' + '---|' * len(omts))
                     for g, lst in groups.items():
                         for nm in lst:
-                            vals = [fsum[f'm{m}_s{s}_omt{o:g}_{nm}'].get(q, float('nan')) for o in omts]
+                            vals = [fsum.get(f'm{m}_s{s}_omt{o:g}_{nm}', {}).get(q, float('nan')) for o in omts]
                             if all(np.isnan(v) for v in vals):
                                 continue
                             md.append(f'| {nm} | ' + ' | '.join(f'{v:.3g}' for v in vals) + ' |')
@@ -234,7 +236,7 @@ def main():
                 for ri, lst in enumerate(sets):
                     a = axes[ri, ci]
                     for li, nm in enumerate(lst):
-                        y = np.array([fsum[f'm{mm}_s{s}_omt{o:g}_{nm}'].get(q, np.nan) for o in omts], dtype=float)
+                        y = np.array([fsum.get(f'm{mm}_s{s}_omt{o:g}_{nm}', {}).get(q, np.nan) for o in omts], dtype=float)
                         if np.all(np.isnan(y)):
                             continue
                         exact = nm in ('muon_exact', 'ht_exact')

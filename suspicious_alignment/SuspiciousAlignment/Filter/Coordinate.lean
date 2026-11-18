@@ -54,6 +54,8 @@ replaced by `φ_f(g_i)`, `φ_f(g) = sign(g) f(|g|)` (`Spec.oddExt`).  The key qu
 * **4.2** `Spec.theta_cNextVec_noiseFree_lt_iff` (general filter; and `_gt_`, `_eq_`),
   `Spec.theta_cNextVec_rpow_lt_iff` (and `_gt_`, `_eq_`), `Spec.etaStar_noiseFree_smul`,
   `Spec.theta_cNextVec_rpow_ray_lt_iff`, `Spec.theta_cNextVec_rpow_ray_gt_iff`;
+  `Spec.theta_cNextVec_rpow_one_lt_iff`, `Spec.theta_cNextVec_rpow_one_gt_iff` (`p = 1`: the
+  regime is selected by `η` alone);
   `Spec.theta_cNextVec_rpow_gt_of_neg` shows that `η > 0` is needed.
 * Non-vacuity and sharpness of hypotheses: `FilterCoordinate.exSpec` (`λ = (2, 1)` on `Fin 2`)
   with explicit Muon states where the alignment decreases (`exSpec_muon_decrease`, 1.7) resp.
@@ -1140,7 +1142,10 @@ theorem etaStar_noiseFree_mem_Icc (hD : 0 < P.sD c) (hB : 0 < P.sB c) :
   ⟨P.two_div_le_etaStar_noiseFree hD hB, P.etaStar_noiseFree_le_two_div hD hB⟩
 
 /-- With zero noise the right-hand side of Deng's Theorem 7,
-`2 gap₁ / ((λ_1² - λ_d²) + s_max ψ_𝒟 / (λ_d² ‖x‖² θ))`, is `2 gap₁ / (λ_1² - λ_d²)`. -/
+`2 gap₁ / ((λ_1² - λ_d²) + s_max ψ_𝒟 / (λ_d² ‖x‖² θ))`, is `2 gap₁ / (λ_1² - λ_d²)`.
+(Bookkeeping only: the noise term is `0 / (λ_d² ‖x‖² θ) = 0`.  At a state with `θ(c) = 0` the
+paper's expression reads `0 / 0` and Lean's convention makes it `0`; this degenerate case is
+excluded in `thm7_noiseFree_bound_le_etaStar`, whose hypotheses force `‖x‖² θ > 0`.) -/
 theorem thm7_noiseFree_bound_eq (c : ι → ℝ) :
     2 * P.gap1 / ((P.lam1 ^ 2 - P.lamd ^ 2) +
         (Noise.noiseFree : Noise ι).smax * P.psiD / (P.lamd ^ 2 * normSq c * P.theta c)) =
@@ -1378,6 +1383,22 @@ theorem theta_cNextVec_rpow_eq_iff (hD : 0 < P.sD c) (hB : 0 < P.sB c) (p : ℝ)
   have hs : 0 < P.s c := by unfold s; linarith
   rw [P.theta_cNextVec_noiseFree_eq_iff hD hB, P.etaEff_rpow_noiseFree p η hs]
   exact or_iff_right (mul_pos hη (Real.rpow_pos_of_pos (Real.sqrt_pos.mpr hs) _)).ne'
+
+/-- **Spec 4.2, closing remark (SGD, `p = 1`), `<`.** For `f σ = σ ^ 1` the regime is selected by
+`η` alone: `θ(c⁺) < θ(c) ↔ η < η*₀(c)`, whatever the gradient norm is. -/
+theorem theta_cNextVec_rpow_one_lt_iff (hD : 0 < P.sD c) (hB : 0 < P.sB c) {η : ℝ}
+    (hη : 0 < η) :
+    P.theta (P.cNextVec (fun σ => σ ^ (1 : ℝ)) η c 0) < P.theta c ↔
+      η < P.etaStar Noise.noiseFree c := by
+  rw [P.theta_cNextVec_rpow_lt_iff hD hB 1 hη, sub_self, Real.rpow_zero, mul_one]
+
+/-- **Spec 4.2, closing remark (SGD, `p = 1`), `>`.** For `f σ = σ ^ 1`:
+`θ(c) < θ(c⁺) ↔ η*₀(c) < η`. -/
+theorem theta_cNextVec_rpow_one_gt_iff (hD : 0 < P.sD c) (hB : 0 < P.sB c) {η : ℝ}
+    (hη : 0 < η) :
+    P.theta c < P.theta (P.cNextVec (fun σ => σ ^ (1 : ℝ)) η c 0) ↔
+      P.etaStar Noise.noiseFree c < η := by
+  rw [P.theta_cNextVec_rpow_gt_iff hD hB 1 hη, sub_self, Real.rpow_zero, mul_one]
 
 /-- **Spec 4.2 needs `η > 0`.** For a *negative* step size the alignment increases although
 `η ‖A x‖^{p-1} < η*₀(c)`: the equivalence of 4.2 is false for `η < 0`. -/

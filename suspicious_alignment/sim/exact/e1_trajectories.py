@@ -2,7 +2,7 @@
 (and the vector model M1, n=1, group 'n1').
 
 Usage:  python3 e1_trajectories.py <group>
-        groups: twophase_a twophase_b sweep late_a late_b signal lownoise momentum   (n1: see e1_n1.py)
+        groups: twophase_a twophase_b sweep late_a late_b signal lownoise largeinit momentum   (n1: see e1_n1.py)
 Each group writes results/e1_<group>.json (summary rows) and results/e1_<group>_logs.npz (time series).
 
 Learning rates.  'rule' learning rate of a filter F (see specfilt.calibrate): the step that gives the same
@@ -40,10 +40,17 @@ def lr_for(opt, kappa=1.0, beta=0.0, n=N, sigma=sf.SIGMA0, noise="iso", m=20, d=
     c = cal(opt, n=n, sigma=sigma, noise=noise, m=m, d=d, k=k)
     if beta == 0:
         return kappa * c["eta_rule"], kappa * c["eta_eff"]
-    sc = sf.nesterov_noise_scale(beta)
-    prob = sf.Problem(d, k, n, m, sigma=sigma, noise=noise)
-    ci = sf.calibrate(prob, opt, nmc=100, sigma_in_scale=sc)
+    ci = cal_in(opt, beta, n=n, sigma=sigma, noise=noise, m=m, d=d, k=k)
     return kappa * ci["eta_rule_in"], kappa * c["eta_eff"]
+
+
+def cal_in(opt, beta, n=N, sigma=sf.SIGMA0, noise="iso", m=20, d=D, k=K):
+    """Calibration for the Nesterov-averaged filter input (noise std scaled by nesterov_noise_scale(beta))."""
+    key = ("in", opt, beta, n, sigma, noise, m if noise != "iso" else 0, d)
+    if key not in _CAL:
+        prob = sf.Problem(d, k, n, m, sigma=sigma, noise=noise)
+        _CAL[key] = sf.calibrate(prob, opt, nmc=100, sigma_in_scale=sf.nesterov_noise_scale(beta))
+    return _CAL[key]
 
 
 def two_phase_stats(t, th):
@@ -64,12 +71,20 @@ def run_config(cfg, logs, ckstore):
                           m=c["m"], d=c["d"], k=c["k"])
     if "eta" in cfg:
         eta = cfg["eta"]
+    if c.get("eta_nomom"):
+        # momentum run at the SAME learning rate as the momentum-free kappa=1 run (what one does in practice);
+        # its drift step is eta * c_in (c_in: linear-response coefficient for the averaged, less noisy input)
+        eta = cal(c["opt"], n=c["n"], sigma=c["sigma_rule"], noise=c["noise"], m=c["m"], d=c["d"], k=c["k"])["eta_rule"]
+        eta_eff = eta * cal_in(c["opt"], c["beta"], n=c["n"], sigma=c["sigma_rule"], noise=c["noise"], m=c["m"],
+                               d=c["d"], k=c["k"])["c_in"]
     import time
     t0 = time.process_time()
     out = sf.run(prob, c["opt"], eta, c["T"], c["seeds"], init=c["init"], init_scale=c["init_scale"],
                  beta=c["beta"], ckpt_steps=[s for s in CKPT_STEPS if s <= c["T"]] if c["ckpt"] else ())
     cpu = time.process_time() - t0
     rid = c.get("rid") or "{opt}_m{m}_s{sigma}_{noise}_{init}{init_scale}_k{kappa}_b{beta}_n{n}".format(**c)
+    if c.get("tag"):
+        rid += "_" + c["tag"]
     if mu is not None:
         rid += "_a{mu_alpha}_K{Kdom}".format(**c)
     ls = sf.late_stats(out)
@@ -99,6 +114,12 @@ def run_config(cfg, logs, ckstore):
                 row["linresp_theta_inf"] = float(sf.linresp_theta(prob, cl, eta))
                 if c["init"] == "zero":
                     row["linresp_theta_finiteT"] = float(np.mean(sf.linresp_theta(prob, cl, eta, sel)))
+        if c["beta"] > 0 and c["sigma"] > 0:
+            # exact SGD + Nesterov-EMA references at the drift-equivalent step eta_eff
+            row["sgdmom_theta_inf_at_eta_eff"], row["sgdmom_loss_inf_at_eta_eff"] = prob.sgd_nesterov_theta(eta_eff, c["beta"])
+            c0sq = (c["init_scale"] ** 2 if c["init"] == "gauss" else 0.0)
+            row["sgdmom_finiteT_at_eta_eff"], row["sgdmom_loss_finiteT_at_eta_eff"] = prob.sgd_nesterov_theta(
+                eta_eff, c["beta"], T=c["T"], c0sq=c0sq, window=t[t >= 0.8 * t[-1]])
         row["gap_ratio"] = float(prob.gap_ratio())
         row["Kdom_size"] = prob.K
     f32 = lambda x: np.asarray(x, np.float32)
@@ -153,14 +174,30 @@ def group_configs(group):
             # 'large init': W0 std 10 at sigma = 0.5 (== sigma 0.05, init std 1, rescaled eta, by scale covariance)
             cfgs.append(dict(opt=o, m=20, T=6000, seeds=[0], init_scale=10.0))
     elif group == "momentum":
-        for m in (5, 20, 100):
-            for o in OPTS_CORE:
-                cfgs.append(dict(opt=o, m=m, T=2000, seeds=[0, 1], beta=0.95))
+        # (i) late-time runs from zero init at the drift-matched learning rate eta_rule_in (see lr_for)
         for m, T in ((5, 800), (20, 800), (100, 3650)):
             for o in OPTS_CORE:
                 cfgs.append(dict(opt=o, m=m, T=T, seeds=[0, 1], beta=0.95, init="zero"))
+        # (ii) large init, drift-matched learning rate.  The Muon-type steps are ~5.7x smaller than without
+        #      momentum (the averaged input is less noisy), so the transient is ~5.7x longer: T = 6000.
         for o in OPTS_CORE:
-            cfgs.append(dict(opt=o, m=20, T=1500, seeds=[0, 1], beta=0.95, sigma=0.0, init_scale=0.01))
+            cfgs.append(dict(opt=o, m=20, T=6000, seeds=[0, 1], beta=0.95, tag="large"))
+        # (iii) large init, momentum simply switched on at the momentum-free learning rate, T = 2000
+        for o in OPTS_CORE:
+            cfgs.append(dict(opt=o, m=20, T=2000, seeds=[0, 1], beta=0.95, eta_nomom=True, tag="nomomlr"))
+        # (iv) noise-free
+        for o in OPTS_CORE:
+            cfgs.append(dict(opt=o, m=20, T=1500, seeds=[0, 1], beta=0.95, sigma=0.0, init_scale=0.01,
+                             eta_nomom=True, tag="free"))
+    elif group == "largeinit":
+        # larger initialisation (sigma = 0.5, kappa = 1, m = 20, 1 seed): W0 std 3 for five filters, std 10 for Muon
+        for o in ("sgd", "muon", "ht0.125", "ht0.5", "ech20"):
+            cfgs.append(dict(opt=o, m=20, T=5000, seeds=[0], init_scale=3.0))
+        cfgs.append(dict(opt="muon", m=20, T=14000, seeds=[0], init_scale=10.0))
+        # Nesterov momentum, drift-matched learning rate, W0 std 1: the Muon / Echelon transients of the
+        # 'momentum' group are not finished at T = 6000 -> one longer run each
+        for o in ("muon", "ech20"):
+            cfgs.append(dict(opt=o, m=20, T=9000, seeds=[0], beta=0.95, tag="large9k"))
     elif group == "pilot":
         for o in OPTS:
             cfgs.append(dict(opt=o, m=20, T=600, seeds=[0], init="zero"))
