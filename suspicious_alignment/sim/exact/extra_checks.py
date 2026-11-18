@@ -1,4 +1,4 @@
-"""Two small supporting checks  ->  results/extra_checks.json      (about 15 CPU-s)
+"""Three small supporting checks  ->  results/extra_checks.json      (about 15 CPU-s)
 
  A. Floating-point caveat of the noise-free n = 1 run 'free_ht0.5_m100' of e1_n1.py (E[Align] = 0, loss ~ 1e-10):
     the dominant coordinates contract geometrically while the slow bulk still dominates |g|, underflow to
@@ -7,6 +7,7 @@
     artefact and restores the limit cycle (theta -> 1, loss = 0.5 lam_1 (eta^2 lam_1 / 4)^2).
  B. Row-resolved linear-response coefficients of the filters for Sigma ∝ A noise (E4): drift coefficient c_i and
     injected noise nu_i averaged over the dominant / bulk rows (specfilt.calibrate), d=200, k=20, n=50.
+ C. Reversal of the loss-threshold ordering at the isotropic initial state: noisy versus noise-free thresholds.
 Usage:  python3 extra_checks.py
 """
 import os
@@ -64,8 +65,35 @@ def part_b():
     return rows
 
 
+def part_c():
+    """Is the reversal eta_D^loss > eta_B^loss of the Muon-type filters at the isotropic initial state a noise effect?
+    Same state W = Z (std 1) as e2e3_onestep.py::part_mdep, thresholds with sigma = 0.5 (32 draws) and noise-free
+    (exact), plus the share of the TRUE bulk gradient in the bulk block of the stochastic gradient."""
+    rows = []
+    opts = ["sgd", "muon", "ht0.125", "ht0.5", "ech1", "ech20", "ech40"]
+    for m in (20, 100, 200, 500):
+        prob = sf.Problem(200, 20, 50, m)
+        prob0 = sf.Problem(200, 20, 50, m, sigma=0.0)
+        Z = sf.init_state(prob, [0])[0]
+        st = sf.onestep(prob, Z, opts, N=32, seed=5 + m, gradproj=False)
+        st0 = sf.onestep(prob0, Z, opts, N=1, seed=0, gradproj=False)
+        gB = float(((prob.H * Z)[20:] ** 2).sum())
+        row = dict(m=m, bulk_signal_over_noise=gB / float(prob.kap2[20:].sum()))
+        for o in opts:
+            L = sf.pair_avg(st["per_opt"][o]["Lq"])
+            L0 = st0["per_opt"][o]["Lq"]
+            row[o] = dict(ratio_noisy=float((L[:, 0].mean() / L[:, 3].mean()) / (L[:, 1].mean() / L[:, 4].mean())),
+                          ratio_noise_free=float((L0[0, 0] / L0[0, 3]) / (L0[0, 1] / L0[0, 4])),
+                          etaB_noisy=float(2 * L[:, 1].mean() / L[:, 4].mean()), etaB_noise_free=float(2 * L0[0, 1] / L0[0, 4]),
+                          etaD_noisy=float(2 * L[:, 0].mean() / L[:, 3].mean()), etaD_noise_free=float(2 * L0[0, 0] / L0[0, 3]))
+        rows.append(row)
+        print(f"m={m} bulk signal/noise (||P^B AW||^2 / E||P^B Xi||^2) = {row['bulk_signal_over_noise']:.3g}: " +
+              "  ".join(f"{o}: {row[o]['ratio_noisy']:.3g} (noise-free {row[o]['ratio_noise_free']:.3g})" for o in opts), flush=True)
+    return rows
+
+
 if __name__ == "__main__":
     cpu = sf.CpuLog("extra_checks")
-    res = dict(underflow=part_a(), aniso_calibration=part_b())
+    res = dict(underflow=part_a(), aniso_calibration=part_b(), reversal_noise=part_c())
     sf.save_json(os.path.join(sf.RES, "extra_checks.json"), res)
     cpu.done()

@@ -24,3 +24,6 @@
 {"name": "e1_extra_stat", "cpu_s": 19.4, "wall_s": 23.2}
 {"name": "extra_checks", "cpu_s": 3.1, "wall_s": 3.1}
 {"name": "tests_sanity", "cpu_s": 4.3, "wall_s": 4.3}
+{"name": "e1_echfrob", "cpu_s": 23.9, "wall_s": 24.4, "n_runs": 12, "n_svd": 24400}
+{"name": "e2e3_onestep_echfrob", "cpu_s": 1.1, "wall_s": 1.1}
+{"name": "extra_checks", "cpu_s": 3.5, "wall_s": 3.5}

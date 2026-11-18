@@ -1,0 +1,236 @@
+{
+ "file": "/home/user/htmuon/suspicious_alignment/SuspiciousAlignment/StepSize/ThetaStarRate.lean",
+ "compiles": true,
+ "sorryFree": true,
+ "theorems": [
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate",
+   "paperItem": "Theorem 5 (tex 443-457; proof 1260-1350)",
+   "informal": "If s_min > 0 then 1 - beta/m^2 < thetaStar <= 1 - alpha_t/m^2 with explicit beta = s_min/(rho s_max) (Spec.thetaStarRateBeta) and alpha_t = 1/(1 + (rho s_max/s_min + s_t/(s_min (d-k))) (lam_1/lam_k)^2 (lam_{k+1}/lam_d)^2) (Spec.thetaStarRateAlpha); both constants positive.",
+   "status": "strengthened for beta (explicit, state-independent, strict); weakened for alpha (state- and spectrum-dependent instead of the paper's intended fixed scalar)"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_one_sub",
+   "paperItem": "Theorem 5",
+   "informal": "Same bound written as alpha_t/m^2 <= 1 - thetaStar < beta/m^2.",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_exists",
+   "paperItem": "Theorem 5, literal statement",
+   "informal": "If s_min > 0 there exist alpha, beta > 0 with 1 - beta/m^2 <= thetaStar <= 1 - alpha/m^2 (for one fixed problem and state; trivial content).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_uniform",
+   "paperItem": "Theorem 5, 'thetaStar = 1 - Theta(1/m^2)' (pointwise form)",
+   "informal": "If R1 <= rho s_max/s_min <= R2 (R1 > 0), s_t/(s_min(d-k)) <= Omega, lam_1/lam_k <= K_D, lam_{k+1}/lam_d <= K_B then (1/(1+(R2+Omega) K_D^2 K_B^2))/m^2 <= 1 - thetaStar < (1/R1)/m^2.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_isTheta",
+   "paperItem": "Theorem 5, 'thetaStar = 1 - Theta(1/m^2)' (tex 452-455), positive form",
+   "informal": "For any family of problems/states and any filter l: if EVENTUALLY along l (changed in fix round 1 from 'for all j') s_min > 0, R1 <= rho s_max/s_min <= R2, s_t/(s_min(d-k)) <= Omega, lam_1/lam_k <= K_D, lam_{k+1}/lam_d <= K_B, then (1 - thetaStar) =Theta[l] (1/m^2).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_isTheta_gapSpecNat_zero",
+   "paperItem": "Theorem 5, Theta form: non-vacuity with m -> infinity (fixed d = 3)",
+   "informal": "A_n = diag(n+2,1,1), Sigma = I, x = 0 satisfies the hypotheses of thetaStar_rate_isTheta (R1 = R2 = 1/2, Omega = 0, K_D = K_B = 1), so 1 - thetaStar = Theta(1/m^2) along it.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_isTheta_under_assumption1_zero_state",
+   "paperItem": "Theorem 5 under Assumption 1: a positive instance",
+   "informal": "A_n = diag(1,..,1,eps_n,..,eps_n) (eps_n = 1/(n+2), d = 2(n+2)), Sigma_n = I/d, x_n = 0 satisfies ThetaStarRate.Assumption1, m_n = n+2 -> infinity, and 1 - thetaStar = Theta(1/m^2).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_fails_under_assumption1",
+   "paperItem": "Theorem 5 under Assumption 1 as stated (d, k -> infinity): upper bound thetaStar <= 1 - alpha/m^2 with a dimension-free alpha",
+   "informal": "A_n = diag(2,..,2,1,..,1) on Fin (n+2) + Fin (n+2), Sigma_n = I/d, x_n = (1,..,1): Assumption1 holds (||x||^2/d = 1, rho = 1, block moments 2^p and 1, Tr Sigma = 1), m = 2 for all n, 1 - thetaStar < 1/(24(n+2)), and for every alpha > 0 there is n0 with thetaStar > 1 - alpha/m^2 for all n >= n0.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_not_isTheta_under_assumption1",
+   "paperItem": "Theorem 5 under Assumption 1: 'thetaStar = 1 - Theta(1/m^2)' with m -> infinity",
+   "informal": "A_n = diag(1,..,1,eps_n,..,eps_n), Sigma_n = I/d, x_n = (1,..,1): Assumption1 holds (bulk moment limits 0), m_n = n+2 -> infinity, and 1 - thetaStar is NOT Theta(1/m^2) (it is o(1/m^2)).",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_fails_under_assumption1_all_states",
+   "paperItem": "Theorem 5 under Assumption 1: failure for every state and every noise",
+   "informal": "A_n = diag(2,..,2,1,eps_n,..,eps_n): Assumption1 holds (with Sigma = I/d, x = 0), m = 2, and for EVERY noise with s_min > 0 and EVERY state 1 - thetaStar <= 1/(2(n+2)); so for every alpha > 0 the bound thetaStar <= 1 - alpha/m^2 fails for all large n uniformly in noise and state.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_isLittleO_of_trace_bounded",
+   "paperItem": "Theorem 5 under Assumption 1: general mechanism",
+   "informal": "For any family and filter with eventually s_min > 0, Tr Sigma <= T, m >= m0 > 1, and s_t -> infinity: (1 - thetaStar) =o (1/m^2).",
+   "status": "paper-claim-false (general form)"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_fails_of_trace_bounded",
+   "paperItem": "Theorem 5 under Assumption 1: general mechanism",
+   "informal": "Under the same hypotheses, for every alpha > 0 eventually thetaStar > 1 - alpha/m^2.",
+   "status": "paper-claim-false (general form)"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_not_isTheta_of_trace_bounded",
+   "paperItem": "Theorem 5 under Assumption 1: general mechanism",
+   "informal": "Under the same hypotheses along a non-trivial filter, 1 - thetaStar is not Theta(1/m^2).",
+   "status": "paper-claim-false (general form)"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_isLittleO_of_assumption1",
+   "paperItem": "Theorem 5 under Assumption 1: general mechanism",
+   "informal": "For every sequence satisfying ThetaStarRate.Assumption1 with eventually s_min > 0, m >= m0 > 1 and s_t -> infinity: (1 - thetaStar) =o (1/m^2).",
+   "status": "paper-claim-false (general form)"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_not_isTheta",
+   "paperItem": "Theorem 5, 'thetaStar = 1 - Theta(1/m^2)' read uniformly in m at FIXED d (outside Assumption 1)",
+   "informal": "Along A_n = diag(n+2,1,1), D={1}, Sigma = I, x = u_1 (d = 3, lam_k -> infinity; everything but m fixed), 1 - thetaStar is NOT Theta(1/m^2); it is O(1/m^4).",
+   "status": "paper-claim-false (fixed-d reading only)"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_fails_fixed_state",
+   "paperItem": "Theorem 5, upper bound with a fixed alpha at FIXED d (outside Assumption 1)",
+   "informal": "In the family diag(mu,1,1), Sigma = I, x = u_1: for every alpha > 0 there is mu0 such that thetaStar > 1 - alpha/m^2 for all mu >= mu0 (since 1 - thetaStar < 2/(m^2(m^2-1))).",
+   "status": "paper-claim-false (fixed-d reading only)"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_alpha_not_uniform_in_state",
+   "paperItem": "Theorem 5 proof, 'there exists a fixed scalar alpha' (tex 1334-1337)",
+   "informal": "For a fixed problem (A, Sigma) with s_min > 0 and every alpha > 0 there is a (large) state with thetaStar > 1 - alpha/m^2. Qualifier: over bounded sets of states of one problem a state-independent alpha_C exists (thetaStar_rate_of_bounded_state).",
+   "status": "paper-claim-false (with qualifier)"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_paper_beta_fails",
+   "paperItem": "Theorem 5 proof, constant beta := rho s_max/s_min and conclusion 1 - beta/m^2 <= thetaStar (tex 1322, 1346)",
+   "informal": "For A = diag(2,1,1), D={1}, Sigma = I, x = 0: thetaStar = 2/3 < 7/8 = 1 - (rho s_max/s_min)/m^2; the paper's named beta is the reciprocal of the correct one.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_rate_paper_psiB_bound_fails",
+   "paperItem": "Theorem 5 proof, step l_B := |B| lam_{k+1}^2 <= psi_B (tex 1312-1315, used at 1334)",
+   "informal": "For A_n = diag(2,..,2,1,eps_n,..,eps_n) and every n: psi_B < (d-k) lam_{k+1}^2.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_aux_sandwich",
+   "paperItem": "Theorem 5 (core estimate replacing tex 1302-1337)",
+   "informal": "With a = s_min psi_B, h = s_max psi_D, M = s_t(lam_1^2 - lam_d^2): a/(M+h+a) <= 1 - thetaStar < a/(M+h) and 1 - thetaStar <= a/(a+h).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_sharp",
+   "paperItem": "Theorem 5 (sharp spectral form)",
+   "informal": "1/(1 + (rho s_max/s_min + s_t/(s_min(d-k))) (lam_1/lam_d)^2) <= 1 - thetaStar < 1/(rho s_max/s_min m^2 + s_t/(s_min(d-k)) (m^2 - 1)).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_energy_bound",
+   "paperItem": "Theorem 5 (dependence on s_t)",
+   "informal": "If s_t > 0 then 1 - thetaStar < s_min (d-k)/(s_t (m^2 - 1)).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_gt_of_energy_large",
+   "paperItem": "Theorem 5 (dependence on s_t)",
+   "informal": "For alpha > 0, every state with s_t >= s_min (d-k) m^2/(alpha (m^2-1)) has thetaStar > 1 - alpha/m^2.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_quartic",
+   "paperItem": "Theorem 5 (m^-4 regime, fixed d)",
+   "informal": "If the dominant component of the state is non-zero, 1 - thetaStar < (s_min (d-k)/(lam_{k+1}^2 ||P^D x||^2))/(m^2 (m^2-1)); the constant is free of lam_k.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_cond_bound",
+   "paperItem": "Theorem 5 (dependence on lam_1/lam_k)",
+   "informal": "1 - thetaStar <= ((d-k) s_min/s_max)/((lam_1/lam_k)^2 m^2) for every state.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_psi_bound",
+   "paperItem": "Theorem 5 (dependence on the block mean squares); quantitative form of Theorem 4's remark psi_D/psi_B -> infinity",
+   "informal": "For every state: 1 - thetaStar <= s_min psi_B/(s_max psi_D) <= psi_B/psi_D.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_trace_bound",
+   "paperItem": "Theorem 5 under Assumption 1 (Tr Sigma bounded)",
+   "informal": "If s_t > 0 then 1 - thetaStar < (sum_i kappa_i^2)/((1+rho) s_t (m^2-1)).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaStar_rate_of_bounded_state",
+   "paperItem": "Theorem 5 under Assumption 1 (trajectory boundedness)",
+   "informal": "If ||x_t||^2 <= C d then (1/(1 + (rho s_max/s_min + (1+rho) C lam_1^2/s_min)(lam_1/lam_k)^2 (lam_{k+1}/lam_d)^2))/m^2 <= 1 - thetaStar.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_tendsto_one_of_gap",
+   "paperItem": "Interpretation after Theorem 5 (tex 456): thetaStar -> 1 as lam_k/lam_{k+1} -> infinity",
+   "informal": "For any family with EVENTUALLY (changed in fix round 1 from 'for all j') s_min > 0 and rho s_max/s_min >= R1 > 0, and m -> infinity along a filter, thetaStar -> 1 (no condition on the states).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_tendsto_one_of_gap_of_rho",
+   "paperItem": "Interpretation after Theorem 5 (tex 456)",
+   "informal": "Same conclusion assuming only eventually s_min > 0 and rho >= rho0 > 0 (since s_max >= s_min).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaStar_tendsto_one_of_assumption1",
+   "paperItem": "Interpretation after Theorem 5 (tex 456), under Assumption 1",
+   "informal": "If a sequence satisfies ThetaStarRate.Assumption1, eventually s_min > 0, and m -> infinity, then thetaStar -> 1.",
+   "status": "hypotheses-added (only 0 < s_min)"
+  },
+  {
+   "name": "SuspiciousAlignment.ThetaStarRate.Assumption1",
+   "paperItem": "Assumption 1 (tex 367-384), local formal predicate; instances assumption1_asp1Spec, assumption1_asp1GapSpec, assumption1_asp1SpikeSpec, assumption1_blockSpec",
+   "informal": "For a sequence (P_n, N_n, c_n): card -> infinity, |D| -> infinity; eventually ||x||^2 <= C d; rho_n = rho0 > 0 for all n; for p in {2,3,4,6,8} (1/k) sum_D lam^p -> L in (0,inf) and (1/(d-k)) sum_B lam^p -> L in [0,inf); 0 < Tr Sigma_n <= T.",
+   "status": "equivalent-reformulation (of an informal assumption)"
+  },
+  {
+   "name": "SuspiciousAlignment.ThetaStarRate.eq_r0_of_auxQuad_eq_zero",
+   "paperItem": "Theorem 4 (r_{0,t} is the positive root) - local helper",
+   "informal": "If s_min > 0, Spec.r0 is a root of auxQuad (auxQuad_r0), is positive (r0_pos), and is the unique positive root.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.ThetaStarRate.thetaStar_mem_Ioo",
+   "paperItem": "Theorem 4 (thetaStar in (0,1)) - local helper",
+   "informal": "If s_min > 0 then 0 < thetaStar < 1; also 1 - thetaStar = 1/(1 + r0) (one_sub_thetaStar).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.ThetaStarRate.one_sub_thetaStar_of_s_eq_zero",
+   "paperItem": "Theorem 4/5 - local helper",
+   "informal": "At s_t = 0 (x_t = 0): r0 = h/a and 1 - thetaStar = s_min psi_B/(s_min psi_B + s_max psi_D) exactly.",
+   "status": "extra"
+  }
+ ],
+ "paperIssues": [
+  "Theorem 5 is false in its own regime (Assumption 1, d and k -> infinity) as a statement with dimension-free constants. Formal: thetaStar_rate_fails_under_assumption1. For A_n = diag(2,..,2,1,..,1), Sigma_n = I/d, x_n = (1,..,1), all four items of Assumption 1 hold with constant moments and m = 2, yet 1 - theta* < 1/(24(n+2)) -> 0. Cause: bounded Tr Sigma forces s_min <= Tr Sigma/d, so s_t/(s_min(d-k)) >= (1+rho) s_t/Tr Sigma -> infinity when s_t grows with d. General form: thetaStar_rate_isLittleO_of_trace_bounded (bounded trace, m >= m0 > 1, s_t -> infinity imply 1 - theta* = o(1/m^2)).",
+  "Under Assumption 1 the Theta(1/m^2) claim also fails with m -> infinity, and its truth depends on the state. Formal: for A_n = diag(1,..,1,eps_n,..,eps_n), Sigma_n = I/d, m_n = n+2, it fails at x_n = (1,..,1) (thetaStar_rate_not_isTheta_under_assumption1) and holds at x_n = 0 (thetaStar_rate_isTheta_under_assumption1_zero_state).",
+  "Under Assumption 1 the upper bound fails even for every state and every noise. Formal: thetaStar_rate_fails_under_assumption1_all_states. For A_n = diag(2,..,2,1,eps_n,..,eps_n), m = 2 and 1 - theta* <= psi_B/psi_D <= 1/(2(n+2)). Cause: the block-moment item controls the bulk mean square psi_B/(d-k), which may tend to 0 (limit in [0,inf) is allowed) while lam_{k+1} stays 1; lam_{k+1}/lam_d is not controlled.",
+  "Assumption 1's block-moment item gives lam_k^2 <= psi_D/k = O(1). So along d -> infinity the gap ratio m can grow only through lam_{k+1} -> 0, and then all bulk moment limits are 0. The m^-4 regime (lam_k -> infinity at fixed state) is therefore a fixed-d phenomenon outside Assumption 1; thetaStar_rate_not_isTheta and thetaStar_rate_fails_fixed_state (d = 3) refute only the 'uniform in m at fixed d' reading.",
+  "Proof of Thm 5 (tex 1302-1309): the eigenvalue bounds are reversed. The paper writes lam_{k+1}^2 <= lam_i^2 <= lam_k^2 on D and lam_{k+1}^2 <= lam_i^2 on B; the truth is lam_k^2 <= lam_i^2 <= lam_1^2 on D and lam_d^2 <= lam_i^2 <= lam_{k+1}^2 on B.",
+  "Proof (tex 1310-1321): of the claimed bounds ell_B <= psi_B <= u_B and rho ell_B <= psi_D <= rho u_B (ell_B = (d-k) lam_{k+1}^2, u_B = (d-k) lam_k^2), the parts ell_B <= psi_B and psi_D <= rho u_B are false unless the blocks are flat. Formal counterexample for the first: thetaStar_rate_paper_psiB_bound_fails. Numeric counterexample for both: lam = (3,2,1,0.5), k = 2 gives psi_D = 13 > 8 and psi_B = 1.25 < 2. Correct: k lam_k^2 <= psi_D <= k lam_1^2 and (d-k) lam_d^2 <= psi_B <= (d-k) lam_{k+1}^2.",
+  "Proof (tex 1322-1333): the steps r0 >= beta/m^2 - 1 (beta := rho s_max/s_min) and theta* >= 1 - m^2/beta are valid (they use only the true halves of the previous step) but useless: the bound worsens as m grows. The correct bound is r0 >= h/a >= beta m^2.",
+  "Proof (tex 1344-1348): the conclusion 1 - beta/m^2 <= theta* does not follow from theta* >= 1 - m^2/beta (the only invalid step of the lower-bound chain), and is false with the paper's beta. Formal counterexample thetaStar_rate_paper_beta_fails: diag(2,1,1), Sigma = I, x = 0 gives theta* = 2/3 < 7/8. Numeric: d = 11, k = 1, lam = (2,1,...,1) gives theta* = 2/7 against a claimed 0.975. The correct constant is the reciprocal, beta = s_min/(rho s_max).",
+  "Proof (tex 1334-1337): 'there exists a fixed scalar alpha with r0 <= alpha m^2' is asserted without computing alpha, and uses the false bounds a >= s_min ell_B and h <= s_max rho u_B. The correct bound is r0 <= (rho s_max/s_min + s_t/(s_min(d-k))) (lam_1/lam_k)^2 (lam_{k+1}/lam_d)^2 m^2. So alpha depends on the state through s_t, on d-k, on s_min, and on both within-block condition numbers.",
+  "The upper bound theta* <= 1 - alpha/m^2 cannot hold with alpha independent of s_t over all states: 1 - theta* < s_min(d-k)/(s_t(m^2-1)) (thetaStar_rate_alpha_not_uniform_in_state). Over a bounded set ||x_t||^2 <= C d of states of one fixed problem a state-independent alpha_C exists, but it involves C lam_1^2/s_min, which is unbounded under Assumption 1 (s_min <= Tr Sigma/d).",
+  "Assumption 1 is not used in the paper's proof and does not give the needed bounds: it controls neither s_max/s_min, nor s_t/(s_min(d-k)), nor lam_1/lam_k, nor lam_{k+1}/lam_d. Trajectory boundedness bounds s_t only by O(d), while the rate needs s_t = O(d s_min) <= O(Tr Sigma) = O(1).",
+  "The hypothesis s_min > 0 is needed and never stated: otherwise a^aux = 0 and r_{0,t} is not the root of a quadratic.",
+  "The interpretation 'theta* -> 1 as lam_k/lam_{k+1} -> infinity' is correct; it needs rho s_max/s_min bounded below, which under Assumption 1's fixed rho is automatic because s_max >= s_min (thetaStar_tendsto_one_of_assumption1).",
+  "Minor (tex 1338-1348): from r0 <= alpha m^2 one gets theta* <= 1 - 1/(1 + alpha m^2), which gives theta* <= 1 - alpha'/m^2 only with a different constant alpha' = 1/(1+alpha), using m >= 1.",
+  "theta*_t is not scale-invariant in A (s_t and m^aux scale) whereas m is, so a correct statement needs a normalisation; the right one is omega_t = s_t/(s_min(d-k)). The natural variable is psi_D/psi_B, which m^2 only brackets: rho m^2 <= psi_D/psi_B <= rho (lam_1/lam_k)^2 (lam_{k+1}/lam_d)^2 m^2."
+ ],
+ "unproven": [],
+ "notes": "Fix round 1 for Theorem 5 is complete: the module builds, every statement is proved, and the one major review issue and all minor ones are addressed; no issue is disputed.\n\nChecks run on the final file: `scripts/leancheck SuspiciousAlignment/StepSize/ThetaStarRate.lean` gives no errors and no warnings; `scripts/leancheck --build SuspiciousAlignment.StepSize.ThetaStarRate` succeeds; `#print axioms` on 40 declarations (all main theorems, the Assumption-1 instances and both example spectra) shows only propext, Classical.choice, Quot.sound; no sorry/admit/axiom/native_decide. The file imports only Mathlib and SuspiciousAlignment.Defs; Defs.lean was not edited. The previous fixer had changed nothing (file older than the review), so all changes are from this session.\n\nSIGNATURE CHANGE (no rename): `thetaStar_rate_isTheta` and `thetaStar_tendsto_one_of_gap` keep their names but now take their side conditions as eventual hypotheses (`∀ᶠ j in l, …` instead of `∀ j, …`), as the review asked. Callers with pointwise hypotheses pass `Filter.Eventually.of_forall h`. No other project file imports this module.\n\nMajor issue (no formal refutation inside Assumption 1). Added a local predicate `ThetaStarRate.Assumption1` for a sequence of problems (d, k -> infinity; ||x||^2 <= C d; rho fixed; block moments for p in {2,3,4,6,8} convergent, limit in (0,inf) on D and [0,inf) on B; 0 < Tr Sigma <= T), a block family `ThetaStarRate.blockSpec` = diag(mu,..,mu,nu,eps,..,eps) on Fin (n+2) + Fin (n+2) with Sigma = I/d, and three in-regime results:\n- `thetaStar_rate_fails_under_assumption1` (the reviewer's family): m = 2, 1 - theta* < 1/(24(n+2)), so no dimension-free alpha.\n- `thetaStar_rate_not_isTheta_under_assumption1`: m_n = n+2 -> infinity and 1 - theta* is not Theta(1/m^2); the same problems at x = 0 do have the rate (`thetaStar_rate_isTheta_under_assumption1_zero_state`).\n- `thetaStar_rate_fails_under_assumption1_all_states`: m = 2 and 1 - theta* <= 1/(2(n+2)) for every state and every noise, via the new `Spec.thetaStar_rate_psi_bound` (1 - theta* <= psi_B/psi_D).\nGeneral forms: `thetaStar_rate_isLittleO_of_trace_bounded`, `thetaStar_rate_fails_of_trace_bounded`, `thetaStar_rate_not_isTheta_of_trace_bounded`, `thetaStar_rate_isLittleO_of_assumption1`. Docstrings and the fidelity note now say that the d = 3 family (`thetaStar_rate_not_isTheta`, `thetaStar_rate_fails_fixed_state`) and the m^-4 regime are outside Assumption 1, and the note's section 5 analyses the block-spectral-moments item.\n\nMinor issues: note reworded ('wrong at every step' removed; steps tex 1322-1333 marked valid); qualifier added to 'alpha cannot be state independent'; eventual hypotheses; `thetaStar_tendsto_one_of_gap_of_rho` and `thetaStar_tendsto_one_of_assumption1` show the interpretation needs nothing beyond s_min > 0 under Assumption 1; 'exactly what the constants hide' replaced by 'sufficient' plus a per-hypothesis account of necessity; two instances of the Theta theorem with m -> infinity (`thetaStar_rate_isTheta_gapSpecNat_zero` and the Assumption-1 one); status of `Spec.thetaStar_rate` relabelled. The optional Lean counterexample for the proof-step inequalities is half done: `thetaStar_rate_paper_psiB_bound_fails` refutes l_B <= psi_B; psi_D <= rho u_B is still refuted numerically only, because every example spectrum here has a flat dominant block.\n\nReviewer disputes: none. One clarification is recorded in the note: with bulk (1, eps, .., eps) at fixed d, (1 - theta*) m^2 does not tend to 0 as eps -> 0 (it loses at most a factor d-k), so the necessity of the bound on lam_{k+1}/lam_d is shown along d -> infinity instead.\n\nCaveats. `ThetaStarRate.Assumption1` is this file's own reading of an informal assumption (reading choices listed in the note, section 5); the three example sequences satisfy much more than it asks (constant ||x||^2/d, constant or explicitly vanishing moments, Tr Sigma = 1), and the all-states counterexample does not use the noise or the state. The file is now about 1800 lines, above the preferred 1500; I did not split it because splitting was not authorised. New numerics (python3, 2*10^4 random instances, plus tables for the three families) are in the fidelity note; scratch scripts are in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/tsr_fix.\n\nFiles:\n- /home/user/htmuon/suspicious_alignment/SuspiciousAlignment/StepSize/ThetaStarRate.lean\n- /home/user/htmuon/suspicious_alignment/notes/fidelity/ThetaStarRate.md\n- /home/user/htmuon/suspicious_alignment/notes/status/ThetaStarRate.fix1.json\n- /home/user/htmuon/suspicious_alignment/notes/status/ThetaStarRate.prove.json (overwritten with the same report)"
+}

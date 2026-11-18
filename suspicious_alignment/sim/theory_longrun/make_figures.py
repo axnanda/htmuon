@@ -227,14 +227,14 @@ if d5a and d5b:
         a.plot(d5a["curves"][key]["theta"][:400], color=BLUE, ls=ls, label=lab)
     a.set_xlabel("step t")
     a.set_ylabel("alignment theta_t (one seed)")
-    a.set_title("Muon, generic Gaussian init (d = 60, k = 6)")
+    a.set_title("Muon, generic init (d = 60, k = 6)")
     legend_below(a, 2, y=-0.17)
     a = ax[1]
     for key, ls, lab in [("p0.125_m10", "-", "p = 0.125, m = 10"), ("p0.125_m100", "--", "p = 0.125, m = 100"),
                          ("p0.5_m10", ":", "p = 0.5, m = 10"), ("p0.5_m100", "-.", "p = 0.5, m = 100")]:
         a.plot(d5b["curves"][key]["theta"][:600], color=ORANGE, ls=ls, label=lab)
     a.set_xlabel("step t")
-    a.set_title("HTMuon, generic Gaussian init (d = 40, k = 4, n = 160)")
+    a.set_title("HTMuon, generic init (d = 40, n = 160)")
     legend_below(a, 2, y=-0.17)
     a = ax[2]
     for nm, mkr, lab in [(1, "s", "measured, n = d"), (4, "D", "measured, n = 4d")]:

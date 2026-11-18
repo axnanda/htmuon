@@ -14,4 +14,8 @@ m=100 ht0.5    c_D=0.2885 c_B=0.6165 (c_B/c_D=2.14)  nu_D=10.1971 nu_B=0.2653 (n
 m=100 ech1     c_D=0.0622 c_B=0.0629 (c_B/c_D=1.01)  nu_D=0.4648 nu_B=0.0024 (nu_D/nu_B=193.62; noise var ratio 197.1)  theta(eta->0)=0.9997
 m=100 ech20    c_D=0.0855 c_B=0.3303 (c_B/c_D=3.86)  nu_D=0.9726 nu_B=0.0866 (nu_D/nu_B=11.23; noise var ratio 197.1)  theta(eta->0)=0.9988
 m=100 ech40    c_D=0.0855 c_B=0.4307 (c_B/c_D=5.04)  nu_D=0.9752 nu_B=0.1561 (nu_D/nu_B=6.25; noise var ratio 197.1)  theta(eta->0)=0.9983
-[cpu] {'name': 'extra_checks', 'cpu_s': 3.1, 'wall_s': 3.1}
+m=20 bulk signal/noise (||P^B AW||^2 / E||P^B Xi||^2) = 24.8: sgd: 0.034 (noise-free 0.033)  muon: 0.571 (noise-free 0.565)  ht0.125: 0.399 (noise-free 0.393)  ht0.5: 0.13 (noise-free 0.127)  ech1: 0.0346 (noise-free 0.0335)  ech20: 0.385 (noise-free 0.379)  ech40: 0.543 (noise-free 0.535)
+m=100 bulk signal/noise (||P^B AW||^2 / E||P^B Xi||^2) = 1: sgd: 0.0117 (noise-free 0.00662)  muon: 0.734 (noise-free 0.583)  ht0.125: 0.44 (noise-free 0.335)  ht0.5: 0.0891 (noise-free 0.0598)  ech1: 0.0118 (noise-free 0.00673)  ech20: 0.514 (noise-free 0.395)  ech40: 0.7 (noise-free 0.553)
+m=200 bulk signal/noise (||P^B AW||^2 / E||P^B Xi||^2) = 0.25: sgd: 0.0133 (noise-free 0.00331)  muon: 1.08 (noise-free 0.586)  ht0.125: 0.628 (noise-free 0.309)  ht0.5: 0.116 (noise-free 0.043)  ech1: 0.0135 (noise-free 0.00337)  ech20: 0.765 (noise-free 0.398)  ech40: 1.02 (noise-free 0.555)
+m=500 bulk signal/noise (||P^B AW||^2 / E||P^B Xi||^2) = 0.0401: sgd: 0.0264 (noise-free 0.00133)  muon: 2.35 (noise-free 0.588)  ht0.125: 1.35 (noise-free 0.277)  ht0.5: 0.243 (noise-free 0.0277)  ech1: 0.0268 (noise-free 0.00135)  ech20: 1.66 (noise-free 0.399)  ech40: 2.24 (noise-free 0.557)
+[cpu] {'name': 'extra_checks', 'cpu_s': 3.5, 'wall_s': 3.5}

@@ -1,0 +1,360 @@
+{
+ "file": "/home/user/htmuon/suspicious_alignment/SuspiciousAlignment/CSGD/Moments.lean",
+ "compiles": true,
+ "sorryFree": true,
+ "theorems": [
+  {
+   "name": "SuspiciousAlignment.Spec.betaC_nonneg",
+   "paperItem": "beta_i definition (tex 662, 2314)",
+   "informal": "For 0 < eta < 2/lam_1: beta_i = eta kap2_i/(2 lam_i - eta lam_i^2) >= 0 (denominator positive: Spec.betaC_den_pos).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.betaC_pos_iff",
+   "paperItem": "claim 'beta_i > 0' (tex 662, 750, 2314, 2413)",
+   "informal": "For 0 < eta < 2/lam_1: beta_i > 0 iff kap2_i > 0.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.betaC_pos",
+   "paperItem": "claim 'beta_i > 0' (tex 662, 750)",
+   "informal": "beta_i > 0 for every i when s_min = lam_min(Sigma) > 0 (not implied by Sigma >= 0, Tr Sigma > 0).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.betaC_fixed_point",
+   "paperItem": "stationary second moment (tex 2158-2163)",
+   "informal": "(1 - eta lam_i)^2 beta_i + eta^2 kap2_i = beta_i whenever 2 lam_i - eta lam_i^2 != 0 (uniqueness: Spec.eq_betaC_of_fixed_point).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.eq_secondMoment_of_recursion",
+   "paperItem": "Proof of Thm 16, closed form of E[c_{i,t}^2] (tex 2423-2427)",
+   "informal": "If m 0 = c0_i^2, m (t+1) = (1 - eta lam_i)^2 m t + eta^2 kap2_i and 2 lam_i - eta lam_i^2 != 0, then m t = P.secondMoment N eta c0 t i for all t.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.eq_secondMoment_of_recursion'",
+   "paperItem": "Proof of Thm 16, closed form (tex 2423-2427)",
+   "informal": "Same closed form under the paper's condition 0 < eta < 2/lam_1.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.secondMoment_ne_of_den_eq_zero",
+   "paperItem": "closed form, necessity of eta != 2/lam_i",
+   "informal": "At 2 lam_i - eta lam_i^2 = 0 with kap2_i != 0 the recursion gives m 1 != secondMoment 1 i (the true moment grows linearly).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.abs_one_sub_eta_lam_lt_one",
+   "paperItem": "Proof of Thm 16 (tex 2428)",
+   "informal": "For 0 < eta < 2/lam_1: |1 - eta lam_i| < 1 for all i.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.tendsto_secondMoment",
+   "paperItem": "Proof of Thm 16 (tex 2428-2431)",
+   "informal": "For 0 < eta < 2/lam_1: secondMoment t i -> beta_i as t -> oo (rate: Spec.abs_secondMoment_sub_betaC_le).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.tendsto_expEnergyC",
+   "paperItem": "Proof of Thm 16 (tex 2438-2442)",
+   "informal": "For every block S: sum_{i in S} lam_i^2 secondMoment t i -> sum_{i in S} lam_i^2 beta_i as t -> oo.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.tendsto_thetaBarCSGD",
+   "paperItem": "Theorem 16 (Late Phase), exact finite-d core (tex 744-749, 2444-2453)",
+   "informal": "For 0 < eta < 2/lam_1 and some kap2_i > 0 (Tr Sigma > 0): E[s_t^D]/E[s_t] -> thetaInf as t -> oo, for every initial state.",
+   "status": "weakened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDAssumption.tendsto_thetaBarCSGD",
+   "paperItem": "Theorem 16, finite-d core under Assumption 14",
+   "informal": "Under Assumption 14 and Tr Sigma > 0 the ratio of expected energies tends to thetaInf.",
+   "status": "weakened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.abs_thetaBarCSGD_sub_thetaInf_le",
+   "paperItem": "Theorem 16, quantitative form of the 'uniform convergence' step (tex 2448)",
+   "informal": "|E[s_t^D]/E[s_t] - thetaInf| <= 2 r^{2t} (sum lam_i^2 |c0_i^2 - beta_i|)/(sum lam_i^2 beta_i), r = max(eta lam_1 - 1, 1 - eta lam_d) < 1 (under Assumption 14 r = 1 - eta lam_d).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaInf_eq_equivalently",
+   "paperItem": "Theorem 16, 'Equivalently' display (tex 751-753)",
+   "informal": "thetaInf = sum_D eta lam_i^2 kap2_i/(2 lam_i - eta lam_i^2) / sum_i eta lam_i^2 kap2_i/(2 lam_i - eta lam_i^2).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.statEnergyC_le_trace",
+   "paperItem": "Theorem 16 display, well-definedness under bounded Tr Sigma",
+   "informal": "sum_S lam_i^2 beta_i <= (eta lam_1/(2 - eta lam_1)) sum_S kap2_i; lower bound (eta lam_d/2) sum_S kap2_i in Spec.trace_le_statEnergyC.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.card_mul_smin_le_statEnergyC",
+   "paperItem": "Theorem 16 display, well-definedness with s_min bounded below",
+   "informal": "d s_min <= Tr Sigma (Spec.card_mul_smin_le_trace) and (eta lam_d/2) d s_min <= sum_i lam_i^2 beta_i: bounded trace forces s_min = O(1/d); fixed s_min makes the unnormalised sums diverge.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.late_phase_interchange",
+   "paperItem": "Theorem 16, interchange of lim_t and lim_d (tex 2448-2453), corrected",
+   "informal": "For a sequence of problems with uniform contraction r < 1 and uniform domination sum lam^2|c0^2 - beta| <= C sum lam^2 beta: if L t = lim_d E[s_t^D]/E[s_t] and theta = lim_d thetaInf(d) exist then L t -> theta.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.late_phase_interchange_of_extensive_noise",
+   "paperItem": "Theorem 16, corrected asymptotic form (ratio-of-expectations level)",
+   "informal": "Interchange holds if lam_1 <= Lam with eta Lam < 2, lam_d >= lmin > 0, s_min >= s > 0 and |x_0|^2 <= M d uniformly in d.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.LatePhaseCounterexample.late_phase_interchange_fails",
+   "paperItem": "Theorem 16 as stated / 'uniform convergence' argument (tex 744-749, 2448)",
+   "informal": "Family d = 2(n+1), lam in {2,1}, Sigma = I/d, c0 = 1, eta = 1/4: Assumptions 1 and 14 hold, both unnormalised sums are constant (1/6, 5/21), thetaInf = 7/10, but lim_t lim_d E[s_t^D]/E[s_t] = 0.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.csgd_integral_step_sq",
+   "paperItem": "second-moment recursion from the SGD update (tex 2152-2163)",
+   "informal": "For independent c, zeta in L^2 with E zeta = 0: E[((1 - eta lam) c - eta zeta)^2] = (1 - eta lam)^2 E[c^2] + eta^2 E[zeta^2].",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.csgd_integral_sq_eq_secondMoment",
+   "paperItem": "E[c_{i,t}^2] closed form (tex 2423-2427)",
+   "informal": "For a CSGD trajectory with deterministic start and centred L^2 noise of variance kap2_i independent of c_{i,t}: c_{i,t} in L^2 and E[c_{i,t}^2] = secondMoment t i.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.csgd_integral_mom",
+   "paperItem": "expected block energies (tex 2433-2437)",
+   "informal": "E[sum_{i in S} lam_i^2 c_{i,t}^2] = sum_{i in S} lam_i^2 secondMoment t i (= Spec.expEnergyC).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.csgd_tendsto_ratio_expected_energies",
+   "paperItem": "Theorem 16, finite d, ratio of true expectations",
+   "informal": "On a probability space: (integral of s_t^D)/(integral of s_t) -> thetaInf as t -> oo for 0 < eta < 2/lam_1 and Tr Sigma > 0.",
+   "status": "weakened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.tendsto_thetaInf_isotropic",
+   "paperItem": "Interpretation of Thm 16, isotropic noise and small eta (tex 756-759)",
+   "informal": "If kap2_i = sigma^2 > 0 for all i then thetaInf(eta) -> (sum_D lam_i)/(sum_i lam_i) as eta -> 0+ (finite d).",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaInf_isotropic_bounds",
+   "paperItem": "Interpretation of Thm 16, explicit quantitative version",
+   "informal": "Isotropic noise, 0 < eta < 2/lam_1: 0 <= thetaInf - (sum_D lam_i)/(sum_i lam_i) <= eta (lam_1 - lam_d)/(4 (2 - eta lam_1)).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.tendsto_thetaInf_zero",
+   "paperItem": "Interpretation of Thm 16, general noise",
+   "informal": "thetaInf(eta) -> sum_D lam_i kap2_i / sum_i lam_i kap2_i as eta -> 0+ when some kap2_i > 0.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaSmallStep_le_thetaInf",
+   "paperItem": "Interpretation of Thm 16, small step size",
+   "informal": "For every admissible eta, thetaInf(eta) >= its eta -> 0 limit theta_0 = n^loss_D/(n^loss_D + n^loss_B).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaInf_sub_le",
+   "paperItem": "Interpretation of Thm 16, small step size",
+   "informal": "thetaInf - theta_0 <= theta_0 (1 - theta_0) eta (lam_1 - lam_d)/(2 - eta lam_1).",
+   "status": "strengthened"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.one_sub_thetaInf_le",
+   "paperItem": "Interpretation of Thm 16, large gap (tex 760)",
+   "informal": "If sum_D kap2 > 0: 1 - thetaInf <= (sum_B kap2/sum_D kap2)(lam_{k+1}/lam_k)(2 - eta lam_k)/(2 - eta lam_{k+1}).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.one_sub_thetaInf_le_div_mRatio",
+   "paperItem": "Interpretation of Thm 16, large gap (tex 760)",
+   "informal": "1 - thetaInf <= (sum_B kap2/sum_D kap2)/m with m = lam_k/lam_{k+1}.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.one_sub_thetaInf_le_cond",
+   "paperItem": "Interpretation of Thm 16, large gap (tex 760)",
+   "informal": "If s_min > 0: 1 - thetaInf <= (s_max/s_min)(1/rho)(1/m).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaInf_ge_gap_form",
+   "paperItem": "Interpretation of Thm 16, large gap (tex 760)",
+   "informal": "If s_min > 0: thetaInf >= 1/(1 + (s_max/s_min)(1/rho)(lam_{k+1}/lam_k)).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.thetaInf_tendsto_one_uniform",
+   "paperItem": "Interpretation of Thm 16, 'theta_inf -> 1 as lam_k/lam_{k+1} -> oo' (tex 760)",
+   "informal": "For every bound K on sum_B kap2/sum_D kap2 and eps > 0 there is M with 1 - eps <= thetaInf <= 1 for all problems (any d, spectrum, admissible eta) with m >= M.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.tendsto_thetaInf_one_of_gap",
+   "paperItem": "Interpretation of Thm 16 (tex 760), sequential form",
+   "informal": "Along any sequence of problems with m_n -> oo and bounded noise-trace ratio, thetaInf -> 1.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.thetaInf_eq_zero_of_noise_bulk_only",
+   "paperItem": "Interpretation of Thm 16 (tex 760), necessity of a noise condition",
+   "informal": "If kap2_i = 0 on D then thetaInf = 0 whatever the gap.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.csgd_tendsto_eta_zero_of_gap",
+   "paperItem": "Interpretation of Thm 16 (tex 760), interaction with eta < 2/lam_1",
+   "informal": "If lam_{k+1} >= c > 0 and m_n -> oo then admissible step sizes satisfy eta_n < 2/(m_n c) -> 0 (Spec.eta_lt_of_bulk_bounded_below).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDStep",
+   "paperItem": "Assumption 14, step-size row (tex 679, 2303)",
+   "informal": "Structure: 0 < eta and eta < min(2/lam_1, 2(lam_k - lam_{k+1})/(lam_1^2 - lam_d^2)).",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDAssumption",
+   "paperItem": "Assumption 14 (tex 668-687, 2295-2311)",
+   "informal": "Structure: CSGDStep, forall i in D beta_i < c0_i^2, and delta - sum_D beta_i < varrho_D.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.etaGapC_lt_two_div_lam1",
+   "paperItem": "Assumption 14, the min is redundant",
+   "informal": "2(lam_k - lam_{k+1})/(lam_1^2 - lam_d^2) < 2/lam_1 always (Spec.cSGDStep_iff: step row iff 0 < eta < gap bound).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDStep.one_sub_eta_lam1_mem",
+   "paperItem": "Assumption 14, consequence",
+   "informal": "-1 < 1 - eta lam_1 < 1; moreover eta (lam_1 + lam_{k+1}) < 2 (Spec.CSGDStep.eta_mul_add_lt_two).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDStep.abs_dom_lt_bulk",
+   "paperItem": "Assumption 14, consequence",
+   "informal": "|1 - eta lam_i| < 1 - eta lam_j for i in D, j in B: dominant modes contract strictly faster than bulk modes.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDStep.deltaC_pos_iff",
+   "paperItem": "delta well defined and positive (tex 665)",
+   "informal": "Under the step-size row the denominator of delta is positive and delta > 0 iff s_max > 0.",
+   "status": "exact"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDStep.betaC_le_paper",
+   "paperItem": "bound on beta_i in the concentration lemma (tex 2176)",
+   "informal": "Under Assumption 14's step-size row: beta_i <= eta s_max/(2 lam_d - eta lam_d^2) (false under eta < 2/lam_1 alone).",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDStep.two_mul_sum_betaC_le_deltaC",
+   "paperItem": "t*: sign of delta - sum_D beta_i",
+   "informal": "Under the step-size row: 2 sum_D beta_i <= delta, hence delta - sum_D beta_i > 0 when s_max > 0.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDAssumption.varrho_gt_iff",
+   "paperItem": "Assumption 14, second initialization condition",
+   "informal": "varrho_D > delta - sum_D beta_i iff |P^D x_0|^2 > delta.",
+   "status": "equivalent-reformulation"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDAssumption.one_lt_logArg",
+   "paperItem": "t*: argument of the log (tex 705)",
+   "informal": "Under Assumption 14 with s_max > 0: varrho_D/(delta - sum_D beta_i) > 1, so its log is positive.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDAssumption.le_tStar_iff",
+   "paperItem": "definition of t* (Theorem 15, tex 705, 2324)",
+   "informal": "Under Assumption 14 with s_max > 0 (log read as log|.|): t <= tStar iff delta <= (1 - eta lam_1)^{2t} varrho_D + sum_D beta_i.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDAssumption.deltaC_lt_of_lt_tStar",
+   "paperItem": "Proof of Thm 15, 'by the definition of t*' (tex 2372-2375)",
+   "informal": "For t < tStar: (1 - eta lam_1)^{2t} varrho_D + sum_D beta_i > delta.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDAssumption.one_le_tStar_iff",
+   "paperItem": "Interpretation of Thm 15 (tex 713)",
+   "informal": "tStar >= 1 iff (1 - eta lam_1)^2 varrho_D >= delta - sum_D beta_i (stronger than Assumption 14).",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDAssumption.le_sum_secondMoment_D",
+   "paperItem": "Proof of Thm 15 (tex 2369-2370)",
+   "informal": "Under Assumption 14 and eta lam_1 <= 1: sum_D E[c_{i,t}^2] >= (1 - eta lam_1)^{2t} varrho_D + sum_D beta_i.",
+   "status": "hypotheses-added"
+  },
+  {
+   "name": "SuspiciousAlignment.Spec.CSGDAssumption.sum_secondMoment_D_lt",
+   "paperItem": "Proof of Thm 15 (tex 2369-2370), failure when eta lam_1 > 1",
+   "informal": "If |1 - eta lam_i| <= |1 - eta lam_1| on D, strictly for some i, then for t >= 1 the paper's lower bound is reversed.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.CSGDMoments.ex3_lower_bound_fails",
+   "paperItem": "Proof of Thm 15 (tex 2369-2370), formal counterexample",
+   "informal": "lam = (1, 4/5, 1/100), k = 2, Sigma = I, eta = 5/4, c0 = (400, 400, 0): Assumption 14 holds and the bound is reversed for all t >= 1.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.CSGDMoments.ex_one_sub_eta_lam1_neg",
+   "paperItem": "t* well-definedness (tex 705)",
+   "informal": "lam = (1, 1/2), Sigma = I, eta = 5/4, c0 = (10, 0): Assumption 14 holds with s_max > 0 but 1 - eta lam_1 = -1/4 < 0, so log(1 - eta lam_1) is not real.",
+   "status": "paper-claim-false"
+  },
+  {
+   "name": "SuspiciousAlignment.CSGDMoments.ex_tStar_eq_zero",
+   "paperItem": "Theorem 15 can be vacuous",
+   "informal": "In the same instance tStar = 0.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.CSGDMoments.ex'_not_tendsto",
+   "paperItem": "Theorem 16 finite-d core, necessity of non-zero noise",
+   "informal": "With Sigma = 0 (Assumption 14 holds) the ratio of expected energies is constantly 1 while thetaInf = 0/0 = 0: no convergence.",
+   "status": "extra"
+  },
+  {
+   "name": "SuspiciousAlignment.CSGDMoments.ex_assumption",
+   "paperItem": "Assumption 14, non-vacuity",
+   "informal": "Assumption 14 holds for lam = (1, 1/2), Sigma = I, eta = 5/4, c0 = (10, 0).",
+   "status": "extra"
+  }
+ ],
+ "paperIssues": [
+  "G1 (tex 662, 750, 2314, 2413): 'beta_i > 0' is asserted without justification; beta_i > 0 iff kap2_i = u_i^T Sigma u_i > 0 (Spec.betaC_pos_iff). Sigma >= 0 with Tr Sigma > 0 allows kap2_i = 0; s_min > 0 suffices. Theorem 16 only needs sum_i lam_i^2 beta_i > 0, i.e. Tr Sigma > 0; with zero noise the ratio need not converge to theta_inf (CSGDMoments.ex'_not_tendsto).",
+  "G2 (Assumption 14, tex 679): the min is redundant: 2(lam_k - lam_{k+1})/(lam_1^2 - lam_d^2) < 2/lam_1 for every admissible spectrum (Spec.etaGapC_lt_two_div_lam1); the row even implies eta(lam_1 + lam_{k+1}) < 2.",
+  "G3 (t*, tex 705/2324): Assumption 14 does not make t* well defined. Numerator is fine (delta > 0, delta - sum_D beta_i > 0 because delta >= 2 sum_D beta_i -- not addressed in the paper --, varrho_D/(delta - sum_D beta_i) > 1), all needing s_max > 0. But the denominator -2 log(1 - eta lam_1) is a positive real only if eta lam_1 < 1, and Assumption 14 allows eta lam_1 in [1, 2): e.g. lam = (1, 1/2), Sigma = I, eta = 5/4 < min{2, 4/3}, x_0 = (10, 0) gives 1 - eta lam_1 = -1/4 (CSGDMoments.ex_one_sub_eta_lam1_neg). Repair: log|1 - eta lam_1| (what Real.log does in Spec.tStar); then t <= t* iff delta <= (1 - eta lam_1)^{2t} varrho_D + sum_D beta_i (Spec.CSGDAssumption.le_tStar_iff).",
+  "G4 (Theorem 15 / Interpretation tex 713): under Assumption 14 t* can be 0, so Theorem 15 can be vacuous (CSGDMoments.ex_tStar_eq_zero). t* >= 1 iff (1 - eta lam_1)^2 varrho_D >= delta - sum_D beta_i, a strictly stronger threshold than the assumption's varrho_D > delta - sum_D beta_i.",
+  "G5 (proof of Theorem 15, tex 2369-2370): the displayed equality lim E[sum_D c_{i,t}^2] = (1 - eta lam_1)^{2t} varrho_D + sum_D beta_i is false; the intended lower bound holds iff |1 - eta lam_1| <= |1 - eta lam_i| on D, e.g. when eta lam_1 <= 1 (Spec.CSGDAssumption.le_sum_secondMoment_D), and is reversed for all t >= 1 in an instance satisfying Assumption 14 with eta lam_1 = 5/4: lam = (1, 4/5, 1/100), k = 2, Sigma = I, x_0 = (400, 400, 0) (CSGDMoments.ex3_lower_bound_fails). The proof of Theorem 15 needs eta <= 1/lam_1 or a modified t*.",
+  "G6 (Theorem 16 display, tex 747-749): a ratio of two d -> oo limits of unnormalised sums is not well defined under Assumption 1. With literally bounded Tr Sigma the sums are bounded (sum lam_i^2 beta_i <= eta lam_1/(2 - eta lam_1) Tr Sigma) but s_min <= Tr Sigma/d -> 0, the limits need not exist (Assumption 1 only controls polynomial block moments of lam, not kap2_i nor lam_i/(2 - eta lam_i)), the denominator limit can be 0, and the equality is false anyway (G7). In the regime actually simulated by the authors (Sigma = sigma^2 I, sigma = 0.5, d = 500, Tr Sigma = sigma^2 d) both sums diverge like d (Spec.card_mul_smin_le_statEnergyC): the display is oo/oo and 'bounded trace' is violated. The meaningful object is lim_d theta_inf(d) (limit of the ratio / of sums normalised by d), whose existence is an extra assumption.",
+  "G7 (proof of Theorem 16, tex 2448): the interchange of lim_t and lim_d by 'uniform convergence in i' is invalid and Theorem 16 is false as stated under Assumptions 1 and 14 (at the level of the ratio of expected energies used in the paper's own proof). Counterexample (LatePhaseCounterexample.late_phase_interchange_fails): d = 2(n+1), rho = 1, lam = 2 on D and 1 on B, Sigma = I/d (Tr Sigma = 1), c_{i,0} = 1, eta = 1/4: Assumptions 1 and 14 hold, E[c_{i,t}^2] -> beta_i uniformly in i and d, the unnormalised sums are constant (1/6 and 5/21, RHS = 7/10), yet lim_d E[s_t^D]/E[s_t] = 4*4^{-t}/(4*4^{-t} + (9/16)^t) -> 0. Mechanism: bounded trace makes beta_i = O(1/d), so at fixed t the d -> oo limit is the noise-free dynamics, in which (under Assumption 14) dominant modes decay strictly faster than bulk modes. Uniformity in i would in any case need lam_d bounded below, eta lam_1 bounded away from 2 and sup_i c_{i,0}^2 bounded, none of which is in Assumption 1. Correct sufficient condition: uniform domination sum lam^2 |c0^2 - beta| <= C sum lam^2 beta (late_phase_interchange), e.g. extensive noise s_min >= s > 0 with lam_d >= lmin > 0, eta lam_1 <= eta Lam < 2, |x_0|^2 <= M d (late_phase_interchange_of_extensive_noise).",
+  "G8 (Interpretation, tex 756-759): 'eta << 1' must be read as eta lam_1 << 1; exact statement 0 <= theta_inf - theta_0 <= theta_0(1 - theta_0) eta (lam_1 - lam_d)/(2 - eta lam_1), with theta_0 = sum_D lam_i kap2_i / sum lam_i kap2_i (= sum_D lam_i / sum lam_i for isotropic noise with sigma^2 != 0). The paper's display again writes a ratio of d -> oo limits of unnormalised (divergent) sums.",
+  "G9 (Interpretation, tex 760): 'theta_inf -> 1 as lam_k/lam_{k+1} -> oo while the bulk spectrum remains bounded away from zero' needs a noise condition instead: 1 - theta_inf <= (Tr_B Sigma/Tr_D Sigma)/m <= (s_max/s_min)(1/rho)(1/m), and theta_inf = 0 for every gap if the noise lives in the bulk only (Spec.thetaInf_eq_zero_of_noise_bulk_only). The bulk lower bound is not needed; combined with eta < 2/lam_1 <= 2/(m lam_{k+1}) it forces eta -> 0 (csgd_tendsto_eta_zero_of_gap), and within one asymptotic family of Assumption 1 (lam_{D,2} finite) m -> oo forces lam_{k+1} -> 0. The order of the limits d, m, eta is unspecified in the paper.",
+  "G10 (minor): Theorem 16 uses only 0 < eta < 2/lam_1 from Assumption 14 (initialization conditions irrelevant). Tex 2176 justifies beta_i <= eta s_max/(2 lam_d - eta lam_d^2) by eta < 2/lam_1 only, which is insufficient (lam = (1, 1/2), eta = 1.9); it is true under Assumption 14 (Spec.CSGDStep.betaC_le_paper). The second initialization condition is just |P^D x_0|^2 > delta (Spec.CSGDAssumption.varrho_gt_iff)."
+ ],
+ "unproven": [
+  "Nothing in the assigned scope (a)-(e) is left unproved. Explicitly NOT formalized in this file (asymptotic/probability layer, assigned elsewhere): the step lim_d E[theta_t] = lim_d (E[s_t^D]/k)/(E[s_t]/d)-type concentration (tex 2444-2447) and hence Theorem 16 in its literal form with E[theta_t] and d -> oo. Consequently the refutation LatePhaseCounterexample.late_phase_interchange_fails is at the level of the ratio of expected energies (the paper's own deterministic equivalent); that E[theta_t] itself tends to L(t) for that family rests on the paper's concentration lemma and a Monte-Carlo check, not on Lean.",
+  "Theorem 15 (Initial Decrease Phase) itself is not in this file (next file); only Assumption 14, the characterisation of t* and the second-moment bounds it needs are provided."
+ ],
+ "notes": "RESUMED: the Lean file left by the interrupted agent was complete and compiled; I verified it, removed a redundant `end Spec`/`namespace Spec` pair, added one short lemma (Spec.CSGDStep.betaC_le_paper), re-derived the algebra, ran independent numeric/exact-rational checks, and wrote the fidelity note and this report (both were missing). State: SuspiciousAlignment/CSGD/Moments.lean, 2577 lines, imports only Mathlib and SuspiciousAlignment.Defs; `scripts/leancheck SuspiciousAlignment/CSGD/Moments.lean` gives no errors and no Lean warnings; `scripts/leancheck --build SuspiciousAlignment.CSGD.Moments` succeeds (about 20-50 s), so the module is importable. No sorry/admit/axiom/native_decide/unsafe; a scratch file importing the module checked all 366 constants (326 theorems): only propext, Classical.choice, Quot.sound; no #print lines remain in the file. Layer: exact finite-d core with thetaBarCSGD = E[s_t^D]/E[s_t] (ratio of expected energies) in place of E[theta_t]; plus a measure-theoretic derivation of the second-moment recursion (no Gaussianity needed) and the lim_t/lim_d interchange at the deterministic-equivalent level. Defs.lean was used unchanged and found faithful; note that Spec.tStar uses Real.log = log|.|, which silently repairs the paper's formula when 1 - eta lam_1 < 0. New auxiliary definitions in this file: Spec.expEnergyC, statEnergyC, thetaBarCSGD, initExcessC, contrC, wEnergyC, thetaSmallStep, etaGapC and the structures Spec.CSGDStep, Spec.CSGDAssumption; examples live in namespaces CSGDMoments and LatePhaseCounterexample. Non-vacuity: Assumption 14 has three explicit instances (CSGDMoments.ex_assumption, ex3_assumption, LatePhaseCounterexample.assumption14); the hypotheses of the Spec.* theorems (0 < eta < 2/lam_1, some kap2_i > 0, s_min > 0, isotropy) hold e.g. for CSGDMoments.exP/exN; late_phase_interchange(_of_extensive_noise) hypotheses hold for any constant family or the two-level family with Sigma = I (argued in the note, no Lean example). No theorem relies on x/0 = 0 except identities valid with the same convention on both sides and statements explicitly about the degenerate cases. For the Theorem 15 file: use Spec.CSGDAssumption, .le_tStar_iff, .deltaC_lt_of_lt_tStar (both need 0 < N.smax), .le_sum_secondMoment_D (needs eta lam_1 <= 1: the paper's step at tex 2369-2370 is false otherwise), Spec.CSGDStep.deltaC_eq/.gapDen_pos/.betaC_le_paper, csgd_integral_sq_eq_secondMoment. The file exceeds the preferred 1500 lines (it was already ~130 KB when resumed); a split into moments/Theorem-16 core, Interpretation, Assumption 14 + t*, and examples is possible if wanted. Files: /home/user/htmuon/suspicious_alignment/SuspiciousAlignment/CSGD/Moments.lean, /home/user/htmuon/suspicious_alignment/notes/fidelity/CSGDMoments.md, /home/user/htmuon/suspicious_alignment/notes/status/CSGDMoments.prove.json; scratch checks in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/csgd2/ (verify.py, verify2.py, sim.py, Axioms.lean)."
+}

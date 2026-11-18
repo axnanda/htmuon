@@ -1,0 +1,35 @@
+--- m = 20, sigma = 0.02
+sgd           theta A=0.9195 B=0.9209 (tsd 0.0042)  d_theta vs exact A=+nan B=+nan   loss A=0.0263 B=0.0263
+muon_exact    theta A=0.7432 B=0.7429 (tsd 0.0106)  d_theta vs exact A=+0.0000 B=+0.0000   loss A=0.3 B=0.301
+muon_ns5      theta A=0.7026 B=0.7031 (tsd 0.0124)  d_theta vs exact A=-0.0406 B=-0.0398   loss A=0.255 B=0.255
+ht_exact      theta A=0.6730 B=0.6748 (tsd 0.0122)  d_theta vs exact A=+0.0000 B=+0.0000   loss A=0.211 B=0.212
+ht_ns         theta A=0.6610 B=0.6639 (tsd 0.0119)  d_theta vs exact A=-0.0120 B=-0.0109   loss A=0.179 B=0.179
+ht_interval   theta A=0.6398 B=0.6405 (tsd 0.0129)  d_theta vs exact A=-0.0333 B=-0.0343   loss A=0.244 B=0.245
+ht_stream     theta A=0.6740 B=0.6759 (tsd 0.0121)  d_theta vs exact A=+0.0009 B=+0.0011   loss A=0.209 B=0.21
+ht_stream_rk  theta A=0.8115 B=0.8169 (tsd 0.0147)  d_theta vs exact A=+0.1385 B=+0.1421   loss A=0.161 B=0.161
+ht_stream_r4  theta A=0.0804 B=0.9782 (tsd 0.0348)  d_theta vs exact A=-0.5926 B=+0.3034   loss A=843 B=0.647
+ech_r1        theta A=0.6633 B=0.6659 (tsd 0.0146)  d_theta vs exact A=-0.0799 B=-0.0770   loss A=0.24 B=0.24
+ech_r4        theta A=0.6671 B=0.6713 (tsd 0.0142)  d_theta vs exact A=-0.0761 B=-0.0716   loss A=0.255 B=0.255
+ech_r16       theta A=0.7250 B=0.7246 (tsd 0.0150)  d_theta vs exact A=-0.0182 B=-0.0183   loss A=0.309 B=0.309
+ech_rk        theta A=0.7622 B=0.7598 (tsd 0.0152)  d_theta vs exact A=+0.0189 B=+0.0169   loss A=0.325 B=0.325
+ech_r4_pol    theta A=0.6993 B=0.7017 (tsd 0.0130)  d_theta vs exact A=-0.0440 B=-0.0412   loss A=0.273 B=0.274
+ech_r4_fro    theta A=0.0001 B=0.9837 (tsd 0.0020)  d_theta vs exact A=-0.7431 B=+0.2408   loss A=260 B=0.124
+ech_rk_fro    theta A=0.9863 B=0.9863 (tsd 0.0009)  d_theta vs exact A=+0.2431 B=+0.2434   loss A=0.349 B=0.349
+--- m = 100, sigma = 0.3
+sgd           theta A=0.9941 B=0.9946 (tsd 0.0004)  d_theta vs exact A=+nan B=+nan   loss A=2.83 B=2.46
+muon_exact    theta A=0.9069 B=0.9070 (tsd 0.0048)  d_theta vs exact A=+0.0000 B=+0.0000   loss A=5.09 B=5.07
+muon_ns5      theta A=0.9109 B=0.9113 (tsd 0.0047)  d_theta vs exact A=+0.0040 B=+0.0043   loss A=4.31 B=4.26
+ht_exact      theta A=0.9071 B=0.9072 (tsd 0.0048)  d_theta vs exact A=+0.0000 B=+0.0000   loss A=4.88 B=4.86
+ht_ns         theta A=0.9116 B=0.9120 (tsd 0.0047)  d_theta vs exact A=+0.0044 B=+0.0048   loss A=4.12 B=4.08
+ht_interval   theta A=0.9133 B=0.9136 (tsd 0.0045)  d_theta vs exact A=+0.0061 B=+0.0063   loss A=4.41 B=4.38
+ht_stream     theta A=0.9066 B=0.9068 (tsd 0.0047)  d_theta vs exact A=-0.0005 B=-0.0004   loss A=4.85 B=4.84
+ht_stream_rk  theta A=0.9717 B=0.9712 (tsd 0.0028)  d_theta vs exact A=+0.0645 B=+0.0640   loss A=3.92 B=3.5
+ht_stream_r4  theta A=0.4317 B=0.9859 (tsd 0.0097)  d_theta vs exact A=-0.4754 B=+0.0786   loss A=904 B=15.1
+ech_r1        theta A=0.9071 B=0.9101 (tsd 0.0050)  d_theta vs exact A=+0.0002 B=+0.0031   loss A=4.41 B=3.91
+ech_r4        theta A=0.9080 B=0.9090 (tsd 0.0050)  d_theta vs exact A=+0.0011 B=+0.0020   loss A=4.31 B=4.16
+ech_r16       theta A=0.9057 B=0.9063 (tsd 0.0048)  d_theta vs exact A=-0.0012 B=-0.0007   loss A=5 B=4.96
+ech_rk        theta A=0.9065 B=0.9066 (tsd 0.0047)  d_theta vs exact A=-0.0004 B=-0.0004   loss A=5.22 B=5.2
+ech_r4_pol    theta A=0.9076 B=0.9079 (tsd 0.0049)  d_theta vs exact A=+0.0007 B=+0.0009   loss A=4.64 B=4.57
+ech_r4_fro    theta A=0.0443 B=0.9846 (tsd 0.0022)  d_theta vs exact A=-0.8626 B=+0.0776   loss A=324 B=1.93
+ech_rk_fro    theta A=0.9810 B=0.9818 (tsd 0.0012)  d_theta vs exact A=+0.0741 B=+0.0748   loss A=4.34 B=4.06
+wall 74.87197399139404

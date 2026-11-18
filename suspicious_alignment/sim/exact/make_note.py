@@ -552,6 +552,41 @@ def t_underflow():
                    g(v["limit_cycle_loss_prediction"], 4)] for k_, v in u.items()])
 
 
+@reg("echfrob")
+def t_echfrob():
+    j = load("e1_echfrob.json")
+    base = rows_of("e1_late_a.json", "e1_twophase_a.json", "e1_signal.json")
+    os_ = {(r["m"], r["state"]): r for r in load("e23_echfrob.json")["rows"]}
+    cal = j["calibration"]
+    out = []
+    for r_ in (1, 10, 20, 40):
+        for kind, lab in (("ech", "τ = ‖T‖_2 = s_{r+1}"), ("echf", "τ = ‖T‖_F")):
+            o = f"{kind}{r_}"
+            src = j["rows"] if kind == "echf" else base
+            z = [r for r in src if r["opt"] == o and r["m"] == 20 and r["init"] == "zero" and r["sigma"] == 0.5 and r["kappa"] == 1.0][0]
+            l = [r for r in src if r["opt"] == o and r["m"] == 20 and r["init"] == "gauss" and r["sigma"] == 0.5
+                 and r["init_scale"] == 1.0 and r["kappa"] == 1.0][0]
+            n0 = [r for r in src if r["opt"] == o and r["m"] == 20 and r["sigma"] == 0.0][0]
+            c = cal[o] if o in cal else load("e1_late_a.json")["calibration"][o]
+            out.append([r_, lab, g(c["eta_rule"], 4), g(c["c"], 3), g(c["eta_eff"], 4),
+                        pm(z["theta_late"], z["theta_late_sd"]), f(z["sgd_finiteT_at_eta_eff"]),
+                        f"{l['theta_min']:.3f} @ {l['t_min']}", f(n0["theta_late"]),
+                        g(os_[(20, "init")]["per_opt"][o]["ratio_DB"], 3), g(os_[(500, "init")]["per_opt"][o]["ratio_DB"], 3),
+                        g(os_[(20, "rise")]["per_opt"][o]["ratio_DB"], 3)])
+    return table(["r", "tail scale", "η_rule", "c", "η_eff", "zero-init late θ, m = 20 (2 seeds)", "SGD formula at η_eff",
+                  "large init: θ_min @ t", "noise-free late θ", "η_D^loss/η_B^loss at 'init', m = 20", "same, m = 500",
+                  "same at 'rise', m = 20"], out)
+
+
+@reg("reversal_noise")
+def t_reversal_noise():
+    rows = load("extra_checks.json")["reversal_noise"]
+    out = [[r["m"], g(r["bulk_signal_over_noise"], 3)] +
+           [(f"**{r[o]['ratio_noisy']:.3g}**" if r[o]["ratio_noisy"] > 1 else f"{r[o]['ratio_noisy']:.3g}") +
+            f" / {r[o]['ratio_noise_free']:.3g}" for o in CORE] for r in rows]
+    return table(["m", "‖P^B AW‖² / E‖P^B Ξ‖² (bulk block)"] + [NAME[o] + ": σ = 0.5 / noise-free" for o in CORE], out)
+
+
 @reg("cpu")
 def t_cpu():
     recs = [json.loads(l) for l in open(os.path.join(sf.RES, "cpu_log.jsonl"))]

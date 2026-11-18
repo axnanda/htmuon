@@ -888,8 +888,8 @@ their necessity: the bound `Ω` on `s_t/(s_min (d-k))` cannot be dropped
 (`thetaStar_rate_fails_fixed_state` at fixed `d`; `thetaStar_rate_fails_under_assumption1` inside
 the regime of Assumption 1); neither can `K_ℬ`
 (`thetaStar_rate_fails_under_assumption1_all_states`), nor `R₂` (`Spec.thetaStar_rate`:
-`(1 - θ*) m² < s_min/(ρ s_max)`), nor — along families with bounded `d - k` — `K_𝒟`
-(`Spec.thetaStar_rate_cond_bound`).  Families with `m → ∞` satisfying all hypotheses:
+`(1 - θ*) m² < s_min/(ρ s_max)`), nor — along families with bounded `(d - k) s_min/s_max` —
+`K_𝒟` (`Spec.thetaStar_rate_cond_bound`).  Families with `m → ∞` satisfying all hypotheses:
 `thetaStar_rate_isTheta_gapSpecNat_zero`, `thetaStar_rate_isTheta_under_assumption1_zero_state`. -/
 theorem thetaStar_rate_isTheta (l : Filter J) (P : ∀ j, Spec (κ j)) (N : ∀ j, Noise (κ j))
     (c : ∀ j, κ j → ℝ) (hs : ∀ᶠ j in l, 0 < (N j).smin) {R₁ R₂ Ω KD KB : ℝ} (hR₁ : 0 < R₁)

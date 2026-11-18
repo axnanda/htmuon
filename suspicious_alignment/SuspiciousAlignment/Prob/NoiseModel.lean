@@ -572,7 +572,7 @@ theorem aemeasurable_theta_cNext (hζ : ∀ i, AEMeasurable (ζ i) μ) (η : ℝ
 /-- `θ_{t+1}` is measurable when the noise coordinates are. -/
 theorem measurable_theta_cNext (hζ : ∀ i, Measurable (ζ i)) (η : ℝ) (c : ι → ℝ) :
     Measurable fun ω => P.theta (P.cNext η c (fun j => ζ j ω)) :=
-  (NoiseModel.measurable_theta_cNext P η c).comp (measurable_pi_lambda _ hζ)
+  (NoiseModel.measurable_theta_cNext P η c).comp (Measurable.of_eval hζ)
 
 /-- `θ_{t+1} ∈ [0, 1]` for every realisation of the noise. -/
 theorem theta_cNext_mem_Icc (η : ℝ) (c z : ι → ℝ) : P.theta (P.cNext η c z) ∈ Set.Icc (0 : ℝ) 1 :=
@@ -620,7 +620,7 @@ theorem setOf_mom_two_cNext_eq_zero (S : Finset ι) {η : ℝ} (hη : η ≠ 0) 
     {ω | P.mom S 2 (P.cNext η c (fun j => ζ j ω)) = 0}
       = ⋂ i ∈ S, {ω | ζ i ω = (1 - η * P.lam i) * c i / η} := by
   ext ω
-  simp only [Set.mem_setOf_eq, Set.mem_iInter]
+  simp only [Set.mem_iInter]
   exact NoiseModel.mom_two_cNext_eq_zero_iff P S hη c _
 
 /-- `ℙ(s^S_{t+1} = 0) ≤ ℙ(ζ_i = (1 - ηλ_i) c_i / η)` for every `i ∈ S` (and `η ≠ 0`). -/
@@ -635,7 +635,7 @@ coordinate `ζ_i` has no atom at `(1 - ηλ_i) c_i / η`, then `{s^S_{t+1} = 0}`
 theorem measure_mom_two_cNext_eq_zero {S : Finset ι} {i : ι} (hi : i ∈ S) {η : ℝ} (hη : η ≠ 0)
     (c : ι → ℝ) (hatom : μ {ω | ζ i ω = (1 - η * P.lam i) * c i / η} = 0) :
     μ {ω | P.mom S 2 (P.cNext η c (fun j => ζ j ω)) = 0} = 0 :=
-  le_antisymm ((measure_mom_two_cNext_eq_zero_le P μ ζ hi hη c).trans hatom.le) (zero_le _)
+  measure_mono_null (fun _ hω => (NoiseModel.mom_two_cNext_eq_zero_iff P S hη c _).mp hω i hi) hatom
 
 /-- **Remark of A.2 for `s^𝒟_{t+1}`**: `ℙ(s^𝒟_{t+1} = 0) = 0` if some dominant noise coordinate has
 no atom at the critical value. -/
@@ -680,7 +680,7 @@ every state and every `η ≠ 0`. -/
 theorem measure_sD_cNext_eq_zero_of_gaussian {i : ι} (hi : i ∈ P.D) {m : ℝ} {v : ℝ≥0}
     (hlaw : HasLaw (ζ i) (gaussianReal m v) μ) (hv : v ≠ 0) {η : ℝ} (hη : η ≠ 0) (c : ι → ℝ) :
     μ {ω | P.sD (P.cNext η c (fun j => ζ j ω)) = 0} = 0 := by
-  haveI : NullSingletonClass (μ.map (ζ i)) := by
+  have : NullSingletonClass (μ.map (ζ i)) := by
     rw [hlaw.map_eq]; exact nullSingletonClass_gaussianReal hv
   exact measure_sD_cNext_eq_zero_of_nullSingleton P hi hlaw.aemeasurable hη c
 
@@ -689,7 +689,7 @@ theorem measure_sD_cNext_eq_zero_of_gaussian {i : ι} (hi : i ∈ P.D) {m : ℝ}
 theorem measure_s_cNext_eq_zero_of_gaussian (i : ι) {m : ℝ} {v : ℝ≥0}
     (hlaw : HasLaw (ζ i) (gaussianReal m v) μ) (hv : v ≠ 0) {η : ℝ} (hη : η ≠ 0) (c : ι → ℝ) :
     μ {ω | P.s (P.cNext η c (fun j => ζ j ω)) = 0} = 0 := by
-  haveI : NullSingletonClass (μ.map (ζ i)) := by
+  have : NullSingletonClass (μ.map (ζ i)) := by
     rw [hlaw.map_eq]; exact nullSingletonClass_gaussianReal hv
   exact measure_s_cNext_eq_zero_of_nullSingleton P i hlaw.aemeasurable hη c
 
@@ -753,7 +753,8 @@ theorem measure_sD_cNext_eq_zero_of_degenerate (h : IsNoise N μ ζ)
     μ {ω | P.sD (P.cNext η c (fun j => ζ j ω)) = 0} = 0 := by
   rw [measure_eq_zero_iff_ae_notMem]
   filter_upwards [ae_mom_cNext_eq_of_kap2_eq_zero P h hD 2 η c] with ω hω
-  rw [Set.mem_setOf_eq, Spec.sD, hω]
+  show ¬ P.mom P.D 2 (P.cNext η c fun j => ζ j ω) = 0
+  rw [hω]
   exact (Finset.sum_pos' (fun j _ => mul_nonneg (sq_nonneg _) (sq_nonneg _))
     ⟨i, hi, mul_pos (pow_pos (P.lam_pos i) 2) (by positivity)⟩).ne'
 

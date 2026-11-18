@@ -1,0 +1,161 @@
+{
+ "compiles": true,
+ "sorryFree": true,
+ "axiomsClean": true,
+ "coverage": [
+  {
+   "paperItem": "Spec §5 preamble (filter_spec.md l.149-151): loss L(W) = ½ tr(WᵀAW), pairing ⟪X,Y⟫ = tr(XᵀY), left polar pair (S sym. PSD, O Oᵀ = 1, G = S O)",
+   "leanDecl": "MatrixMuon.loss, MatrixMuon.frob, MatrixMuon.IsLeftPolar, MatrixMuon.IsOrthProj, MatrixMuon.coordProj",
+   "status": "exact",
+   "comment": "Elementary definitions (Matrix.PosSemidef, O * Oᵀ = 1, G = S * O). No clash with Defs.lean; matrixMuon_loss_eq_specLoss ties MatrixMuon.loss to Spec.loss."
+  },
+  {
+   "paperItem": "Spec §5 preamble (l.152): S = (G Gᵀ)^{1/2}",
+   "leanDecl": "MatrixMuon.IsLeftPolar.mul_self, MatrixMuon.IsLeftPolar.eq_sqrt",
+   "status": "exact",
+   "comment": "For every left polar pair, no rank assumption."
+  },
+  {
+   "paperItem": "Spec §5 preamble (l.152-153): a pair exists when G Gᵀ is invertible, which forces d ≤ n",
+   "leanDecl": "matrixMuon_posDef_iff_isUnit_det, matrixMuon_exists_leftPolar, MatrixMuon.IsLeftPolar.card_le, matrixMuon_card_le_of_posDef",
+   "status": "exact",
+   "comment": ""
+  },
+  {
+   "paperItem": "5.1 (l.155-156): tr((ΠO)ᵀ(ΠO)) = tr(ΠᵀΠ) for every Π",
+   "leanDecl": "matrixMuon_equipartition, matrixMuon_frob_mul_orth",
+   "status": "strengthened",
+   "comment": "Rectangular E allowed; only O Oᵀ = 1 used. Checked numerically (400 random instances, error 1e-14)."
+  },
+  {
+   "paperItem": "5.1 (l.156-157): orthogonal projector of rank k (tr Π = k): ‖ΠO‖_F² = k; ‖O‖_F² = d",
+   "leanDecl": "matrixMuon_energy_proj, matrixMuon_energy_proj_rank, MatrixMuon.IsOrthProj.trace_eq_rank, matrixMuon_energy_total",
+   "status": "exact",
+   "comment": "Trace form and rank form; tr E = rank E proved."
+  },
+  {
+   "paperItem": "5.1 (l.157-159): fraction of Muon's update energy in the dominant subspace is k/d whatever θ is",
+   "leanDecl": "matrixMuon_energy_fraction, matrixMuon_energy_fraction_coordProj, matrixMuon_muon_energy_fraction",
+   "status": "exact",
+   "comment": "Carries an unused [Nonempty ι] instance (documented in the note)."
+  },
+  {
+   "paperItem": "5.1 (l.159): for SGD that fraction equals θ",
+   "leanDecl": "matrixMuon_grad_energy_coordProj, matrixMuon_grad_energy, matrixMuon_sgd_energy_fraction",
+   "status": "hypotheses-added",
+   "comment": "Proved only for commuting states W = diag(c) Q with Q Qᵀ = 1 (so not even for Deng's n = 1 model with d ≥ 2). It holds for every W with c_i = ‖row i of W‖ (verified in Lean, Probe2.lean). The note labels it 'exact (coordinate model)'."
+  },
+  {
+   "paperItem": "5.2 (l.160-163): L(W − ηΠO) − L(W) = −η⟪ΠAW,O⟫ + (η²/2) tr(ΠA) for Π an orthogonal projector commuting with A; second-order term independent of W, G, noise",
+   "leanDecl": "matrixMuon_loss_step, matrixMuon_loss_projected_step, matrixMuon_loss_projected_step_noisy, matrixMuon_loss_full_step, matrixMuon_proj_grad_of_commute, matrixMuon_loss_projected_step_needs_symm",
+   "status": "strengthened",
+   "comment": "Any O with O Oᵀ = 1 (noisy polar factor included), any W, any real η; commutation of Π with A and PSD of A dropped, symmetry of A kept and shown necessary by a formal counterexample. I re-derived the identity by hand and confirmed it numerically with indefinite symmetric A and non-commuting projectors (error 7e-14). The note's claim that commutation is superfluous is correct."
+  },
+  {
+   "paperItem": "5.3 (l.164-165): if A W = S O then ⟪ΠAW,O⟫ = tr(ΠS)",
+   "leanDecl": "matrixMuon_frob_mul_mul_orth, matrixMuon_frob_proj_grad",
+   "status": "strengthened",
+   "comment": "Arbitrary square E and S."
+  },
+  {
+   "paperItem": "5.3 (l.165-166): loss decreases iff 0 < η < 2 tr(ΠS)/tr(ΠA) (when tr(ΠS) > 0, tr(ΠA) > 0)",
+   "leanDecl": "matrixMuon_loss_projected_step_noiseFree, matrixMuon_loss_decrease_iff, matrixMuon_loss_increase_iff, matrixMuon_loss_eq_iff, matrixMuon_threshold_pos, matrixMuon_traces_pos, MatrixMuon.IsOrthProj.trace_mul_nonneg, MatrixMuon.IsOrthProj.trace_mul_pos",
+   "status": "strengthened",
+   "comment": "Only tr(EA) > 0 assumed, all real η; tr(ES) ≥ 0 is automatic. The iff and the increase/equality variants were re-derived by hand and checked numerically near and away from the threshold. No division by zero is exploited (denominator hypothesised positive)."
+  },
+  {
+   "paperItem": "5.3 (l.166): with Π = 1, ⟪G,O⟫ = tr S (the nuclear norm of G)",
+   "leanDecl": "matrixMuon_frob_grad_polar, matrixMuon_frob_grad_polar_eq_nuclear, MatrixMuon.trace_sqrt, matrixMuon_frob_grad_polar_pos",
+   "status": "equivalent-reformulation",
+   "comment": "⟪G,O⟫ = tr S is exact; 'nuclear norm' is rendered as Σ_i √(eigenvalue_i(G Gᵀ)) because Mathlib has no nuclear norm."
+  },
+  {
+   "paperItem": "5.4 (l.167-169): if G Gᵀ is positive definite a left polar pair exists and is unique, S = (G Gᵀ)^{1/2}, O = S⁻¹ G",
+   "leanDecl": "MatrixMuon.isLeftPolar_of_mul_self, matrixMuon_isLeftPolar_sqrt, matrixMuon_exists_leftPolar, matrixMuon_leftPolar_unique, matrixMuon_existsUnique_leftPolar, matrixMuon_isLeftPolar_iff, matrixMuon_leftPolar_not_unique",
+   "status": "exact",
+   "comment": "Through Mathlib's CFC.sqrt (scope MatrixOrder); the conclusion IsLeftPolar is elementary, so nothing has to be trusted about CFC.sqrt. Non-vacuous: MatrixMuon.Example.ex_posDef, ex_unique."
+  },
+  {
+   "paperItem": "5.5 (l.170-171): A = diag(λ), G = diag(σ) Q, σ_i > 0, Q Qᵀ = 1 ⇒ (diag σ, Q) is a left polar pair",
+   "leanDecl": "matrixMuon_isLeftPolar_diagonal, matrixMuon_posDef_diagonal_mul, matrixMuon_leftPolar_diagonal_unique",
+   "status": "strengthened",
+   "comment": "Pair already for σ_i ≥ 0; unique for σ_i > 0."
+  },
+  {
+   "paperItem": "5.5 (l.171-172): coordinate projector: tr(ΠS)/tr(ΠA) = Σ_T σ_i / Σ_T λ_i — the Muon threshold of 2.4",
+   "leanDecl": "matrixMuon_trace_ratio_coordProj, MatrixMuon.trace_coordProj_mul_diagonal, MatrixMuon.isOrthProj_coordProj, matrixMuon_coordinate_loss_decrease_iff, matrixMuon_coordinate_projected_step, matrixMuon_loss_eq_specLoss",
+   "status": "exact",
+   "comment": "The ratio is an identity of quotients. The threshold theorem 2 Σ_T λ_i|c_i| / Σ_T λ_i matches spec 2.4 (the spec's sentence drops the factor 2). Its hypothesis ∀ i, c i ≠ 0 matches the spec's σ_i > 0 but is superfluous (Probe2.lean)."
+  },
+  {
+   "paperItem": "Task / 5.5: the Muon step moves row i of W = diag(r) Q to (r_i − η)·(row i of Q); signed form c_i⁺ = c_i − η sign(c_i)",
+   "leanDecl": "matrixMuon_step_row, matrixMuon_isLeftPolar_coordinate, matrixMuon_posDef_coordinate, matrixMuon_coordinate_step, matrixMuon_coordinate_step_row",
+   "status": "exact",
+   "comment": "For every left polar pair, under σ_i > 0 (resp. c_i ≠ 0) as in spec 5.5. The hypothesis c_i ≠ 0 is necessary (see issue 1)."
+  },
+  {
+   "paperItem": "Task (if feasible): the same for a general filter f; F(G) = U f(Σ) Vᵀ",
+   "leanDecl": "MatrixMuon.filterDir, MatrixMuon.cfc_eq_of_eq_conj_diagonal, MatrixMuon.cfc_diagonal, matrixFilter_id, matrixFilter_one, matrixFilter_svd, matrixFilter_svd_unique, matrixFilter_diagonal, matrixFilter_step_row, matrixFilter_coordinate",
+   "status": "exact",
+   "comment": "F := cfc f S * O; identified with U diag(f σ) V for any thin SVD, arbitrary f. Checked numerically against numpy's SVD for four filters (error 1e-12)."
+  },
+  {
+   "paperItem": "Spec §1 (l.21-33) 'where it comes from': UᵀW = diag(r) Q with r_i ≥ 0 ⇒ filtered step keeps the state commuting and c_i⁺ = c_i − η sign(c_i) f(λ_i|c_i|) (1.0); l.33 delegates the matrix-level justification to this file",
+   "leanDecl": "matrixFilter_coordinate_step, matrixFilter_coordinate_step_basis, matrixFilter_spec_step, matrixMuon_loss_conj",
+   "status": "hypotheses-added",
+   "comment": "Proved under ∀ i, c i ≠ 0, i.e. r_i > 0, while spec §1 says r_i ≥ 0. The extra hypothesis is necessary when f 0 ≠ 0 (Muon): at a zero coefficient the conclusion fails for every left polar pair. The note marks these rows 'exact'/'extra' and does not list the deviation (issue 1). The bridge to Spec.cNextF is indeed definitional (checked by importing Filter/Coordinate in Probe1.lean)."
+  },
+  {
+   "paperItem": "Non-vacuity example required by the task",
+   "leanDecl": "MatrixMuon.Example.ex_isLeftPolar, ex_posDef, ex_unique, ex_not_commute, ex_loss_decrease_iff, ex_energy_fraction",
+   "status": "exact",
+   "comment": "d = 2, n = 3, A = diag(3,1), S = [[2,1],[1,2]], explicit O and W = A⁻¹SO; I re-computed S·O, A·W and the threshold 4/3 by hand. The projector used commutes with A; S does not."
+  }
+ ],
+ "issues": [
+  {
+   "severity": "major",
+   "where": "matrixMuon_coordinate_step, matrixMuon_coordinate_step_row, matrixMuon_coordinate_projected_step, matrixFilter_coordinate, matrixFilter_coordinate_step, matrixFilter_coordinate_step_basis, matrixFilter_spec_step; module docstring l.45-52; fidelity note rows 'Task: Muon step…', 'general filter', 'Spec §1 where it comes from' and section 'Discrepancies with the spec'; filter_spec.md l.21-33",
+   "description": "The matrix-level justification of the coordinate rule (1.0) is proved only under `∀ i, c i ≠ 0`, whereas spec §1 states it for `r_i ≥ 0` and line 33 of the spec delegates that justification to this file. The extra hypothesis is not a convenience: for a filter with f 0 ≠ 0 (Muon, f ≡ 1) and η ≠ 0 the conclusion is false at a zero coefficient for EVERY left polar pair, because row i of f(S) O is f(0)·O_i with O_i a unit vector, while the right-hand side has row i equal to (0 − η·sign(0)·f(0))·Q_i = 0. Formal counterexample checked in Lean (/tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_MatrixMuon/Probe1.lean): d = n = 1, λ = 1, c = 0, Q = 1, η = 1; a left polar pair exists (S = 0, O = 1) and every left polar pair violates `diag(c) Q − η O = diag(c − η sign c) Q`. Numerically (/tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_MatrixMuon/zero.py): λ = (3,2,1), c = (0, 1.5, −0.7), η = 0.3, n = 4: the Muon step moves the zero row to norm 0.3 (coordinate rule: 0), and the loss change of the step projected on T = {0,1} is −0.675 in the matrix model versus −0.81 for the coordinate model with Real.sign 0 = 0. So the coordinate model of Filter/Coordinate.lean (whose statements 1.1–1.6 are stated with no hypothesis on c, and whose spec item 2.4 lets zero coordinates 'contribute 0') is NOT matrix-justified at zero coefficients for Muon. The fidelity note (a) marks the (1.0) rows 'exact' / 'extra', (b) heads its discrepancy list with 'all are weakenings of hypotheses', which is false for this one, and (c) never mentions the boundary case, although the neighbouring note notes/fidelity/FilterCoordinate.md (D7) explicitly says the zero-singular-value question 'is the business of Filter/MatrixMuon.lean'. prove.json's paperIssues omits it too. The project rule is that a spec statement needing extra hypotheses must be reported. The Lean statements themselves are correct.",
+   "suggestedFix": "1. Fidelity note: add a discrepancy 'spec §1 (1.0): r_i ≥ 0 must be r_i > 0 unless f(0) = 0', give the counterexample, change the status of the (1.0) rows to hypotheses-added (and paper-claim-false for the r_i = 0, f(0) ≠ 0 case), and correct the sentence 'all are weakenings of hypotheses'. Mention it in the module docstring (l.45-52) and in the final report. 2. Add the formal counterexample to the file (the example in Probe1.lean compiles as is; a general version is: if c i = 0, f 0 ≠ 0, η ≠ 0 then no left polar pair satisfies the conclusion). 3. Optional but cheap, both verified in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_MatrixMuon/Probe3.lean: `S = diagonal (fun i => lam i * |c i|)` for every left polar pair with no hypothesis on c, and the rule (1.0) for every left polar pair with NO hypothesis on c when `f 0 = 0` (SGD, HTMuon with p > 0). Together with the counterexample this gives the exact domain of validity: all c_i ≠ 0, or f 0 = 0."
+  },
+  {
+   "severity": "minor",
+   "where": "matrixMuon_sgd_energy_fraction, matrixMuon_grad_energy_coordProj, matrixMuon_grad_energy; fidelity note row '5.1 for SGD that fraction equals θ'",
+   "description": "Spec 5.1's remark is made in a section titled 'no commuting assumption', but the Lean statement is restricted to commuting states W = diag(c) Q with Q Qᵀ = 1. That hypothesis also excludes Deng's own model (n = 1, d ≥ 2), where no such Q exists. The statement holds for every W: ‖Π_T diag(λ) W‖_F² = Σ_{i∈T} λ_i² ‖row i of W‖², so the fraction is P.theta of the row norms. The note's status 'exact (coordinate model)' is not in the prescribed vocabulary and hides that this is hypotheses-added.",
+   "suggestedFix": "Add the general version (verified: `grad_energy_general` and `sgd_fraction_general` in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_MatrixMuon/Probe2.lean, about 25 lines) and derive the commuting case from it, or relabel the row hypotheses-added and say that the general statement is not formalized."
+  },
+  {
+   "severity": "minor",
+   "where": "matrixMuon_coordinate_loss_decrease_iff",
+   "description": "The hypothesis `hc : ∀ i, c i ≠ 0` is superfluous. The threshold only involves S, and S = diag(λ_i|c_i|) for every left polar pair without any definiteness (the note's own discrepancy 5). The theorem therefore holds for every c, zero coefficients included; verified in Lean as `coordinate_loss_decrease_iff_no_hc` in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_MatrixMuon/Probe2.lean. The hypothesis matches spec 5.5 (σ_i > 0), so this is not a fidelity error, but the note calls the row 'exact' and elsewhere advertises dropping every unnecessary hypothesis. The stronger form matters: it shows that the matrix-level Muon threshold of 2.4 stays valid at zero coefficients, where the coordinate rule does not (issue 1).",
+   "suggestedFix": "Drop `hc` (use S-uniqueness via IsLeftPolar.eq_sqrt / CFC.sqrt_unique as in Probe2.lean), or keep it and record in the note that it is not needed."
+  },
+  {
+   "severity": "minor",
+   "where": "fidelity note, table column 'Status'",
+   "description": "Statuses outside the prescribed vocabulary {exact, equivalent-reformulation, hypotheses-added, weakened, strengthened, paper-claim-false, not-formalized}: 'extra' (7 rows), 'exact (coordinate model)', 'exact / strengthened'. Two of them mask added hypotheses (issues 1 and 2).",
+   "suggestedFix": "Use the prescribed statuses; put 'beyond the spec' in the explanation column."
+  },
+  {
+   "severity": "minor",
+   "where": "fidelity note, section 'Discrepancies with the spec'; filter_spec.md l.172",
+   "description": "Spec 5.5 says 'tr(ΠS)/tr(ΠA) = Σ_S σ_i / Σ_S λ_i — the Muon threshold of 2.4'. The threshold of 2.4 is 2 Σ_S λ_i|c_i| / Σ_S λ_i, i.e. twice that ratio (and the spec uses S both for the PSD factor and for the index set). The Lean docstring of matrixMuon_trace_ratio_coordProj and matrixMuon_coordinate_loss_decrease_iff have the correct factor, but the note does not list this slip of the spec.",
+   "suggestedFix": "Add one line to the discrepancy list."
+  },
+  {
+   "severity": "minor",
+   "where": "matrixMuon_energy_fraction, matrixMuon_energy_fraction_coordProj, matrixMuon_muon_energy_fraction",
+   "description": "`[Nonempty ι]` is an unused instance argument: the proof is two rewrites and compiles without it (Probe1.lean). The note says so ('the identity also holds for d = 0'), so this is only an unnecessary obligation for downstream callers.",
+   "suggestedFix": "Remove the instance argument, or leave it and keep the remark."
+  },
+  {
+   "severity": "minor",
+   "where": "MatrixMuon.Example",
+   "description": "The example's projector coordProj {0} commutes with exA = diag(3,1). The note's headline finding (5.2 and 5.3 hold for projectors that do not commute with A) therefore has no concrete instance in Lean; it rests on the general theorem and on numerics (which I reproduced). Likewise no concrete instance exercises the coordinate/filter step theorems with a negative coefficient.",
+   "suggestedFix": "Optional: add an instance of matrixMuon_loss_decrease_iff with a non-commuting rank-one projector, e.g. E = ½[[1,1],[1,1]] on the existing example (tr(E·exA) = 2, tr(E·exS) = 3, threshold 3)."
+  }
+ ],
+ "verdict": "revise",
+ "summary": "Verdict: revise. The Lean file is sound, complete for spec §5 and mathematically correct; the one major point is a documentation and boundary-case gap, not a wrong theorem.\n\n**Soundness.** `scripts/leancheck SuspiciousAlignment/Filter/MatrixMuon.lean` gives no errors and no warnings; `scripts/leancheck --build SuspiciousAlignment.Filter.MatrixMuon` succeeds. No sorry, admit, axiom, native_decide, unsafe or implemented_by. A scratch audit over all 154 constants of the module, plus `#print axioms` on 74 named theorems, shows only propext, Classical.choice, Quot.sound.\n\n**Fidelity.** Every claim of spec §5 (preamble, 5.1–5.5) and every item of the prover's task has a Lean counterpart with the stated meaning. I re-derived 5.2 and 5.3 by hand and tested all statements with an independent numpy script on 400 random instances, including indefinite symmetric A, projectors that do not commute with A, noisy polar factors and four filters; all errors are at most 3e-9. The note's claims that commutation of Π with A, positive semidefiniteness of A and tr(ΠS) > 0 are superfluous are correct, as is the formal counterexample for non-symmetric A. No theorem is vacuous: `MatrixMuon.Example` realises the hypotheses of 5.1–5.4, and `matrixMuon_isLeftPolar_coordinate` supplies the polar pair that the 5.5 theorems quantify over. No statement exploits division by zero.\n\n**Major issue.** The matrix-level justification of the coordinate rule (1.0) is proved only for `c i ≠ 0`, while spec §1 states it for `r_i ≥ 0` and delegates the justification to this file. The hypothesis is necessary: for Muon the rule fails at a zero coefficient for every left polar pair (Lean counterexample with d = n = 1; numerically the zero row moves to norm η and the projected loss change is −0.675 instead of the coordinate model's −0.81). The fidelity note marks these rows 'exact', says all discrepancies are weakenings of hypotheses, and does not mention the case, although the Coordinate note defers it to this file. The fix is to document it and add the counterexample; I also verified the positive complement (the rule holds with no hypothesis on c when f 0 = 0).\n\n**Minor issues.** The SGD-side remark of 5.1 is proved only for commuting states although it holds for every W; `hc` is superfluous in `matrixMuon_coordinate_loss_decrease_iff`; non-standard status labels; an unlisted factor-2 slip in spec 5.5; an unused `[Nonempty ι]`; the example's projector commutes with A.\n\nVerified Lean code for the suggested fixes is in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_MatrixMuon/Probe1.lean, /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_MatrixMuon/Probe2.lean and /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_MatrixMuon/Probe3.lean; the numerics are in /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_MatrixMuon/check.py and /tmp/claude-0/-home-user/b3254748-8fab-53a7-9b3f-cd840dc725a3/scratchpad/review_MatrixMuon/zero.py."
+}

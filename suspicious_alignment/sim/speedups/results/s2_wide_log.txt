@@ -1,0 +1,25 @@
+--- sigma = 0.0  (lr muon 0.04, ht 0.02)
+muon_exact     theta_late=0.99985 1-theta=1.45e-04 upd_D early=0.100 late=0.100 loss_late=0.619 theta_min=0.711@450
+muon_ns5       theta_late=0.99980 1-theta=1.98e-04 upd_D early=0.276 late=0.555 loss_late=0.43 theta_min=0.521@468
+ech_r4         theta_late=1.00000 1-theta=3.23e-16 upd_D early=1.000 late=1.000 loss_late=0.312 theta_min=0.000@870
+ech_rk         theta_late=0.99998 1-theta=1.63e-05 upd_D early=0.347 late=0.886 loss_late=0.347 theta_min=0.000@590
+ech_rk_ideal   theta_late=1.00000 1-theta=4.25e-06 upd_D early=0.350 late=0.909 loss_late=0.3 theta_min=0.000@612
+ech_r4_ideal   theta_late=1.00000 1-theta=1.00e-16 upd_D early=1.000 late=1.000 loss_late=0.234 theta_min=0.000@888
+ht_exact       theta_late=0.99996 1-theta=3.63e-05 upd_D early=0.330 late=0.361 loss_late=0.0407 theta_min=0.049@442
+ht_ns          theta_late=1.00000 1-theta=1.18e-11 upd_D early=0.999 late=1.000 loss_late=0.04 theta_min=0.000@1075
+ht_interval    theta_late=0.99970 1-theta=3.04e-04 upd_D early=0.280 late=0.325 loss_late=0.065 theta_min=0.110@730
+ht_stream      theta_late=0.99852 1-theta=1.48e-03 upd_D early=0.329 late=0.309 loss_late=0.0523 theta_min=0.053@448
+ht_stream_rk   theta_late=0.44710 1-theta=5.53e-01 upd_D early=1.000 late=0.147 loss_late=579 theta_min=0.052@458
+--- sigma = 0.3  (lr muon 0.02, ht 0.02)
+muon_exact     theta_late=0.93245 1-theta=6.76e-02 upd_D early=0.100 late=0.100 loss_late=8.13 theta_min=0.508@808
+muon_ns5       theta_late=0.93725 1-theta=6.28e-02 upd_D early=0.279 late=0.102 loss_late=7.15 theta_min=0.446@835
+ech_r4         theta_late=0.88556 1-theta=1.14e-01 upd_D early=1.000 late=0.049 loss_late=11 theta_min=0.007@850
+ech_rk         theta_late=0.91009 1-theta=8.99e-02 upd_D early=0.348 late=0.050 loss_late=5.86 theta_min=0.144@800
+ech_rk_ideal   theta_late=0.91131 1-theta=8.87e-02 upd_D early=0.351 late=0.053 loss_late=5.79 theta_min=0.170@818
+ech_r4_ideal   theta_late=0.88498 1-theta=1.15e-01 upd_D early=1.000 late=0.050 loss_late=11.1 theta_min=0.008@865
+ht_exact       theta_late=0.92714 1-theta=7.29e-02 upd_D early=0.327 late=0.092 loss_late=7.52 theta_min=0.212@428
+ht_ns          theta_late=0.92755 1-theta=7.25e-02 upd_D early=0.999 late=0.086 loss_late=6.46 theta_min=0.020@448
+ht_interval    theta_late=0.93129 1-theta=6.87e-02 upd_D early=0.275 late=0.103 loss_late=7.18 theta_min=0.359@675
+ht_stream      theta_late=0.92800 1-theta=7.20e-02 upd_D early=0.327 late=0.099 loss_late=7.37 theta_min=0.214@428
+ht_stream_rk   theta_late=0.46291 1-theta=5.37e-01 upd_D early=1.000 late=0.147 loss_late=576 theta_min=0.061@465
+wall 133.4446666240692

@@ -227,8 +227,9 @@ theorem IsEigenbasis.pow (h : IsEigenbasis A u lam) (p : ℕ) :
   induction p with
   | zero => simp
   | succ p ih =>
-    rw [pow_succ, Matrix.toLpLin_mul_same, LinearMap.comp_apply, h i, map_smul, ih, smul_smul,
-      pow_succ, mul_comm]
+    rw [pow_succ, Matrix.toLpLin_mul_same, LinearMap.comp_apply, h i, map_smul, ih, smul_smul]
+    show (lam i * lam i ^ p) • u i = lam i ^ (p + 1) • u i
+    rw [pow_succ, mul_comm]
 
 /-- Eigenvectors of two eigenbases of the same matrix that belong to different eigenvalues are
 orthogonal. -/
@@ -326,10 +327,10 @@ theorem proj_transpose (S : Finset ι) : (proj u S)ᵀ = proj u S := by
 theorem projPow_apply (lam : ι → ℝ) (S : Finset ι) (p : ℕ) (y : EuclideanSpace ℝ n) :
     (projPow u lam S p).toEuclideanLin y = ∑ i ∈ S, (lam i ^ p * coord u y i) • u i := by
   simp only [projPow, map_sum, map_smul, LinearMap.sum_apply, LinearMap.smul_apply, toLpLin_apply,
-    vecMulVec_mulVec, op_smul_eq_smul, smul_smul]
+    vecMulVec_mulVec, op_smul_eq_smul]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [coord_apply, EuclideanSpace.inner_eq_star_dotProduct]
-  simp
+  simp [smul_smul]
 
 theorem coord_projPow (lam : ι → ℝ) (S : Finset ι) (p : ℕ) (y : EuclideanSpace ℝ n) (i : ι) :
     coord u ((projPow u lam S p).toEuclideanLin y) i =
@@ -341,9 +342,9 @@ theorem coord_projPow (lam : ι → ℝ) (S : Finset ι) (p : ℕ) (y : Euclidea
 theorem inner_projPow (lam : ι → ℝ) (S : Finset ι) (p : ℕ) (x : EuclideanSpace ℝ n) :
     ⟪x, (projPow u lam S p).toEuclideanLin x⟫_ℝ = ∑ i ∈ S, lam i ^ p * coord u x i ^ 2 := by
   rw [inner_eq_sum_coord u]
-  simp_rw [coord_projPow]
-  rw [← Finset.sum_filter_add_sum_filter_not Finset.univ (· ∈ S)]
-  simp [Finset.sum_ite_mem, Finset.filter_mem_eq_inter, mul_comm, mul_left_comm, sq]
+  simp_rw [coord_projPow, mul_ite, mul_zero]
+  rw [Finset.sum_ite_mem, Finset.univ_inter]
+  exact Finset.sum_congr rfl fun i _ => by ring
 
 @[simp] theorem projPow_zero (lam : ι → ℝ) (S : Finset ι) : projPow u lam S 0 = proj u S := by
   simp [projPow, proj]
@@ -379,13 +380,13 @@ theorem IsEigenbasis.proj_eq_proj {A : Matrix n n ℝ} {lam : ι → ℝ} {κ : 
   intro i
   rw [OrthonormalBasis.coe_toBasis, proj_basis, proj_apply]
   by_cases hi : i ∈ S
-  · simp only [hi, if_true]
+  · simp only [hi, ite_true]
     conv_lhs => rw [← sum_coord_smul v (u i)]
     symm
     apply Finset.sum_subset (Finset.subset_univ T)
     intro j _ hj
     rw [coord_apply, hu.inner_eq_zero_of_ne hv (h1 i hi j hj), zero_smul]
-  · simp only [hi, if_false]
+  · simp only [hi, ite_false]
     symm
     apply Finset.sum_eq_zero
     intro j hj
@@ -508,6 +509,18 @@ theorem kap2_le {κ : Type*} [Fintype κ] [DecidableEq κ] {Sig : Matrix n n ℝ
   have h1 := h.inner_mulVec_le hb (u i)
   rwa [u.norm_eq_one, one_pow, mul_one] at h1
 
+/-- For `Σ = I` every direction has unit variance: `u_iᵀ u_i = 1`. -/
+theorem kap2_one (i : ι) : kap2 u (1 : Matrix n n ℝ) i = 1 := by
+  rw [kap2, Matrix.toLpLin_one, LinearMap.id_apply, real_inner_self_eq_norm_sq, u.norm_eq_one,
+    one_pow]
+
+/-- `Tr(P^S_{λ^p}) = ∑_{i∈S} λ_i^p` (in particular `ψ_S = Tr(P^S_{λ²})`). -/
+theorem trace_projPow (lam : ι → ℝ) (S : Finset ι) (p : ℕ) :
+    (projPow u lam S p).trace = ∑ i ∈ S, lam i ^ p := by
+  have h := sum_pow_mul_kap2 u lam S p (1 : Matrix n n ℝ)
+  simp only [kap2_one, mul_one, Matrix.one_mul] at h
+  exact h.symm
+
 /-! ### Characteristic polynomial -/
 
 /-- If `u` is an orthonormal eigenbasis of `A` with eigenvalues `lam`, the characteristic
@@ -535,7 +548,7 @@ theorem isEigenbasis_diagonal (w : n → ℝ) :
   intro i
   rw [EuclideanSpace.basisFun_apply, toLpLin_apply]
   ext j
-  simp [Matrix.diagonal_mulVec_single, Pi.single_apply]
+  simp [Pi.single_apply]
 
 end Generic
 
@@ -673,6 +686,7 @@ namespace MatrixSetting
 
 variable {d : ℕ} (M : MatrixSetting d)
 
+include M in
 theorem d_pos : 0 < d := lt_trans M.k_pos M.k_lt
 
 theorem A_isHermitian : M.A.IsHermitian := M.A_posDef.isHermitian
@@ -739,6 +753,427 @@ def spec : Spec (Fin d) where
     M.lam_antitone (Fin.le_def.mpr (not_lt.mp fun h => hi (Finset.mem_filter.mpr ⟨Finset.mem_univ _, h⟩)))
   lamd_le := fun i _ => M.lam_antitone (Fin.le_def.mpr (Nat.le_sub_one_of_lt i.isLt))
   gap := M.gap
+
+/-! ### What `M.spec` is: the dictionary for the spectrum -/
+
+@[simp] theorem spec_lam : M.spec.lam = M.lam := rfl
+
+theorem spec_D : M.spec.D = Finset.univ.filter fun i : Fin d => (i : ℕ) < M.k := rfl
+
+/-- `𝒟 = {1, …, k}` (0-based: `{0, …, k-1}`). -/
+theorem mem_spec_D {i : Fin d} : i ∈ M.spec.D ↔ (i : ℕ) < M.k := by
+  simp [spec_D]
+
+/-- `ℬ = {k+1, …, d}` (0-based: `{k, …, d-1}`). -/
+theorem mem_spec_B {i : Fin d} : i ∈ M.spec.B ↔ M.k ≤ (i : ℕ) := by
+  rw [Spec.mem_B, mem_spec_D, not_lt]
+
+/-- `M.spec.lam1` is the paper's `λ_1`: the 1st entry of the decreasingly sorted spectrum. -/
+theorem spec_lam1 : M.spec.lam1 = sortedEigenvalues M.A_isHermitian ⟨0, M.d_pos⟩ := rfl
+
+/-- `M.spec.lamk` is the paper's `λ_k`: the `k`-th entry of the decreasingly sorted spectrum. -/
+theorem spec_lamk : M.spec.lamk =
+    sortedEigenvalues M.A_isHermitian ⟨M.k - 1, lt_of_le_of_lt (Nat.sub_le M.k 1) M.k_lt⟩ := rfl
+
+/-- `M.spec.lamk1` is the paper's `λ_{k+1}`. -/
+theorem spec_lamk1 : M.spec.lamk1 = sortedEigenvalues M.A_isHermitian ⟨M.k, M.k_lt⟩ := rfl
+
+/-- `M.spec.lamd` is the paper's `λ_d`: the last entry of the decreasingly sorted spectrum. -/
+theorem spec_lamd : M.spec.lamd =
+    sortedEigenvalues M.A_isHermitian ⟨d - 1, Nat.sub_lt M.d_pos Nat.one_pos⟩ := rfl
+
+/-- `λ_1 = λ_max(A)`. -/
+theorem spec_lam1_isGreatest : IsGreatest (spectrum ℝ M.A) M.spec.lam1 :=
+  isGreatest_sortedEigenvalues M.A_isHermitian M.d_pos
+
+/-- `λ_d = λ_min(A)`. -/
+theorem spec_lamd_isLeast : IsLeast (spectrum ℝ M.A) M.spec.lamd :=
+  isLeast_sortedEigenvalues M.A_isHermitian M.d_pos
+
+/-- The eigenvalues `λ_1, …, λ_d` are the roots of the characteristic polynomial of `A`, with
+multiplicity; together with `lam_antitone` this pins down `M.lam` as *the* decreasing enumeration
+of the spectrum, so `M.lam ⟨j-1, _⟩` is the `j`-th largest eigenvalue. -/
+theorem roots_charpoly : M.A.charpoly.roots = (List.ofFn M.lam : Multiset ℝ) :=
+  roots_charpoly_eq_sortedEigenvalues M.A_isHermitian
+
+/-- The dominant block is determined by the spectrum alone: `i ∈ 𝒟 ↔ λ_i ≥ λ_k`. -/
+theorem mem_spec_D_iff_lamk_le {i : Fin d} : i ∈ M.spec.D ↔ M.spec.lamk ≤ M.lam i := by
+  constructor
+  · exact fun hi => M.spec.lamk_le i hi
+  · intro h
+    by_contra hi
+    have h1 : M.lam i ≤ M.spec.lamk1 := M.spec.le_lamk1 i hi
+    have h2 : M.spec.lamk1 < M.spec.lamk := M.spec.gap
+    linarith
+
+/-- The bulk block is determined by the spectrum alone: `i ∈ ℬ ↔ λ_i ≤ λ_{k+1}`. -/
+theorem mem_spec_B_iff_le_lamk1 {i : Fin d} : i ∈ M.spec.B ↔ M.lam i ≤ M.spec.lamk1 := by
+  rw [Spec.mem_B]
+  constructor
+  · exact fun hi => M.spec.le_lamk1 i hi
+  · intro h hi
+    have h1 : M.spec.lamk ≤ M.lam i := M.spec.lamk_le i hi
+    have h2 : M.spec.lamk1 < M.spec.lamk := M.spec.gap
+    linarith
+
+/-- `|𝒟| = k`. -/
+theorem card_spec_D : M.spec.D.card = M.k := by
+  have h : M.spec.D = Finset.Iio (⟨M.k, M.k_lt⟩ : Fin d) := by
+    ext i
+    rw [mem_spec_D, Finset.mem_Iio, Fin.lt_def]
+  rw [h, Fin.card_Iio]
+
+/-- `|ℬ| = d - k`. -/
+theorem card_spec_B : M.spec.B.card = d - M.k := by
+  rw [Spec.B, Finset.card_compl, card_spec_D, Fintype.card_fin]
+
+theorem spec_kR : M.spec.kR = (M.k : ℝ) := by rw [Spec.kR, card_spec_D]
+
+theorem spec_dkR : M.spec.dkR = (d : ℝ) - (M.k : ℝ) := by
+  rw [Spec.dkR, card_spec_B, Nat.cast_sub M.k_lt.le]
+
+/-- The block proportion `ρ = k / (d - k)` (Assumption 1, "Block proportion"). -/
+theorem spec_rho : M.spec.rho = (M.k : ℝ) / ((d : ℝ) - (M.k : ℝ)) := by
+  rw [Spec.rho, spec_kR, spec_dkR]
+
+/-- "Which implies `k = ρ/(1+ρ) · d`" (Assumption 1, "Block proportion"). -/
+theorem k_eq_rho_mul_d : (M.k : ℝ) = M.spec.rho / (1 + M.spec.rho) * (d : ℝ) := by
+  rw [spec_rho]
+  have h : (0 : ℝ) < (d : ℝ) - (M.k : ℝ) := sub_pos.mpr (by exact_mod_cast M.k_lt)
+  have hd : (0 : ℝ) < (d : ℝ) := by exact_mod_cast M.d_pos
+  field_simp
+  ring
+
+/-! ### The noise: `κ_i² = u_iᵀ Σ u_i`, `s_min = λ_min(Σ)`, `s_max = λ_max(Σ)` -/
+
+/-- `s_min := λ_min(Σ)`, the smallest eigenvalue of the noise covariance. -/
+def smin : ℝ := sortedEigenvalues M.Sigma_isHermitian M.idxd
+
+/-- `s_max := λ_max(Σ)`, the largest eigenvalue of the noise covariance. -/
+def smax : ℝ := sortedEigenvalues M.Sigma_isHermitian M.idx1
+
+/-- `s_min` is the least element of the spectrum of `Σ`. -/
+theorem smin_isLeast : IsLeast (spectrum ℝ M.Sigma) M.smin :=
+  isLeast_sortedEigenvalues M.Sigma_isHermitian M.d_pos
+
+/-- `s_max` is the greatest element of the spectrum of `Σ`. -/
+theorem smax_isGreatest : IsGreatest (spectrum ℝ M.Sigma) M.smax :=
+  isGreatest_sortedEigenvalues M.Sigma_isHermitian M.d_pos
+
+/-- `0 ≤ λ_min(Σ)` since `Σ ⪰ 0`. -/
+theorem smin_nonneg : 0 ≤ M.smin := sortedEigenvalues_nonneg M.Sigma_posSemidef _
+
+theorem smin_le_sortedEigenvalues (j : Fin d) :
+    M.smin ≤ sortedEigenvalues M.Sigma_isHermitian j :=
+  sortedEigenvalues_antitone _ (Fin.le_def.mpr (Nat.le_sub_one_of_lt j.isLt))
+
+theorem sortedEigenvalues_le_smax (j : Fin d) :
+    sortedEigenvalues M.Sigma_isHermitian j ≤ M.smax :=
+  sortedEigenvalues_antitone _ (Fin.le_def.mpr (Nat.zero_le _))
+
+theorem smin_le_smax : M.smin ≤ M.smax := M.smin_le_sortedEigenvalues _
+
+/-- Rayleigh bounds for the noise covariance: `λ_min(Σ) ‖y‖² ≤ yᵀ Σ y ≤ λ_max(Σ) ‖y‖²`. -/
+theorem Sigma_rayleigh (y : EuclideanSpace ℝ (Fin d)) :
+    M.smin * ‖y‖ ^ 2 ≤ ⟪y, M.Sigma.toEuclideanLin y⟫_ℝ ∧
+      ⟪y, M.Sigma.toEuclideanLin y⟫_ℝ ≤ M.smax * ‖y‖ ^ 2 :=
+  ⟨(isEigenbasis_sorted M.Sigma_isHermitian).le_inner_mulVec M.smin_le_sortedEigenvalues y,
+    (isEigenbasis_sorted M.Sigma_isHermitian).inner_mulVec_le M.sortedEigenvalues_le_smax y⟩
+
+/-- `λ_min(Σ) ≤ vᵀ Σ v` for every unit vector of an orthonormal basis `v`. -/
+theorem smin_le_kap2 (v : OrthonormalBasis (Fin d) ℝ (EuclideanSpace ℝ (Fin d))) (i : Fin d) :
+    M.smin ≤ kap2 v M.Sigma i :=
+  le_kap2 v (isEigenbasis_sorted M.Sigma_isHermitian) M.smin_le_sortedEigenvalues i
+
+/-- `vᵀ Σ v ≤ λ_max(Σ)` for every unit vector of an orthonormal basis `v`. -/
+theorem kap2_le_smax (v : OrthonormalBasis (Fin d) ℝ (EuclideanSpace ℝ (Fin d))) (i : Fin d) :
+    kap2 v M.Sigma i ≤ M.smax :=
+  kap2_le v (isEigenbasis_sorted M.Sigma_isHermitian) M.sortedEigenvalues_le_smax i
+
+/-- The abstract noise data `Noise (Fin d)` obtained by reading `Σ` in an arbitrary orthonormal
+basis `v`: `κ_i² = v_iᵀ Σ v_i`, `s_min = λ_min(Σ)`, `s_max = λ_max(Σ)`. -/
+def noiseOf (v : OrthonormalBasis (Fin d) ℝ (EuclideanSpace ℝ (Fin d))) : Noise (Fin d) where
+  kap2 := kap2 v M.Sigma
+  smin := M.smin
+  smax := M.smax
+  smin_nonneg := M.smin_nonneg
+  smin_le := M.smin_le_kap2 v
+  le_smax := M.kap2_le_smax v
+
+/-- **The abstract noise `Noise (Fin d)` of the matrix setting**: `κ_i² = u_iᵀ Σ u_i` in the
+eigenbasis `u` of `A`, `s_min = λ_min(Σ)`, `s_max = λ_max(Σ)` (paper §3.2). -/
+def noise : Noise (Fin d) := M.noiseOf M.u
+
+@[simp] theorem noise_smin : M.noise.smin = M.smin := rfl
+@[simp] theorem noise_smax : M.noise.smax = M.smax := rfl
+
+/-- `κ_i² = u_iᵀ Σ u_i`. -/
+theorem noise_kap2 (i : Fin d) :
+    M.noise.kap2 i = (M.u i).ofLp ⬝ᵥ M.Sigma *ᵥ (M.u i).ofLp :=
+  kap2_eq_dotProduct M.u M.Sigma i
+
+/-- `κ_i² = (C)_{ii}` with `C = Uᵀ Σ U` (paper §3.2). -/
+theorem noise_kap2_eq_diag (i : Fin d) :
+    M.noise.kap2 i = ((eigMatrix M.u)ᵀ * M.Sigma * eigMatrix M.u) i i :=
+  kap2_eq_diag M.u M.Sigma i
+
+/-- `∑_i κ_i² = Tr Σ`. -/
+theorem sum_noise_kap2 : ∑ i, M.noise.kap2 i = M.Sigma.trace := sum_kap2 M.u M.Sigma
+
+/-- `λ_min(Σ) ≤ κ_i² ≤ λ_max(Σ)` (paper §3.2). -/
+theorem noise_kap2_bounds (i : Fin d) : M.smin ≤ M.noise.kap2 i ∧ M.noise.kap2 i ≤ M.smax :=
+  ⟨M.smin_le_kap2 M.u i, M.kap2_le_smax M.u i⟩
+
+/-- `κ_i² ≥ 0` (Appendix A.1). -/
+theorem noise_kap2_nonneg (i : Fin d) : 0 ≤ M.noise.kap2 i := kap2_nonneg M.u M.Sigma_posSemidef i
+
+/-- `d · λ_min(Σ) ≤ Tr Σ ≤ d · λ_max(Σ)`. -/
+theorem trace_Sigma_bounds :
+    (d : ℝ) * M.smin ≤ M.Sigma.trace ∧ M.Sigma.trace ≤ (d : ℝ) * M.smax := by
+  rw [← M.sum_noise_kap2]
+  constructor
+  · calc (d : ℝ) * M.smin = ∑ _i : Fin d, M.smin := by simp
+      _ ≤ ∑ i, M.noise.kap2 i := Finset.sum_le_sum fun i _ => (M.noise_kap2_bounds i).1
+  · calc ∑ i, M.noise.kap2 i ≤ ∑ _i : Fin d, M.smax :=
+        Finset.sum_le_sum fun i _ => (M.noise_kap2_bounds i).2
+      _ = (d : ℝ) * M.smax := by simp
+
+/-! ### States: eigen-coordinates, gradient, loss, projectors, alignment -/
+
+/-- The eigen-coordinates `c_i = ⟪x, u_i⟫` of a state `x` (paper §3.2).  The same map sends the
+noise `ξ` to `ζ_i = ⟪ξ, u_i⟫` (Appendix A.2). -/
+def coord (x : EuclideanSpace ℝ (Fin d)) : Fin d → ℝ := MatrixBridge.coord M.u x
+
+theorem coord_apply (x : EuclideanSpace ℝ (Fin d)) (i : Fin d) : M.coord x i = ⟪x, M.u i⟫_ℝ := rfl
+
+/-- The eigen-expansion `x = ∑_i c_i u_i` (paper §3.2). -/
+theorem sum_coord_smul (x : EuclideanSpace ℝ (Fin d)) : ∑ i, M.coord x i • M.u i = x :=
+  MatrixBridge.sum_coord_smul M.u x
+
+@[simp] theorem coord_zero : M.coord 0 = 0 := MatrixBridge.coord_zero M.u
+
+theorem coord_eq_zero_iff (x : EuclideanSpace ℝ (Fin d)) : M.coord x = 0 ↔ x = 0 :=
+  MatrixBridge.coord_eq_zero_iff M.u x
+
+/-- Every coefficient vector `c` is the coordinate vector of a (unique) state. -/
+theorem coord_surjective : Function.Surjective M.coord :=
+  fun c => ⟨∑ j, c j • M.u j, MatrixBridge.coord_sum_smul M.u c⟩
+
+theorem coord_injective : Function.Injective M.coord := MatrixBridge.coord_injective M.u
+
+/-- The gradient `∇L(x) = A x` of the quadratic loss (see `hasGradientAt_loss`). -/
+def grad (x : EuclideanSpace ℝ (Fin d)) : EuclideanSpace ℝ (Fin d) := M.A.toEuclideanLin x
+
+/-- `grad x` is the matrix–vector product `A x`. -/
+theorem grad_ofLp (x : EuclideanSpace ℝ (Fin d)) : (M.grad x).ofLp = M.A *ᵥ x.ofLp := rfl
+
+/-- The quadratic loss `L(x) = ½ xᵀ A x`. -/
+def loss (x : EuclideanSpace ℝ (Fin d)) : ℝ := 1 / 2 * ⟪x, M.A.toEuclideanLin x⟫_ℝ
+
+/-- `L(x) = ½ xᵀ A x`, written with the dot product. -/
+theorem loss_eq_dotProduct (x : EuclideanSpace ℝ (Fin d)) :
+    M.loss x = 1 / 2 * (x.ofLp ⬝ᵥ M.A *ᵥ x.ofLp) := by
+  rw [loss, EuclideanSpace.inner_eq_star_dotProduct]
+  simp [toLpLin_apply, dotProduct_comm]
+
+/-- The dominant projector `P^𝒟 = ∑_{i∈𝒟} u_i u_iᵀ` (paper §3.2). -/
+def PD : Matrix (Fin d) (Fin d) ℝ := proj M.u M.spec.D
+
+/-- The bulk projector `P^ℬ = ∑_{i∈ℬ} u_i u_iᵀ` (paper §3.2). -/
+def PB : Matrix (Fin d) (Fin d) ℝ := proj M.u M.spec.B
+
+theorem PD_eq_sum : M.PD = ∑ i ∈ M.spec.D, vecMulVec (M.u i) (M.u i) := rfl
+theorem PB_eq_sum : M.PB = ∑ i ∈ M.spec.B, vecMulVec (M.u i) (M.u i) := rfl
+
+/-- `P^𝒟 + P^ℬ = I`. -/
+theorem PD_add_PB : M.PD + M.PB = 1 := proj_add_proj_compl M.u M.spec.D
+
+theorem PD_mul_PD : M.PD * M.PD = M.PD := proj_mul_self M.u _
+theorem PB_mul_PB : M.PB * M.PB = M.PB := proj_mul_self M.u _
+theorem PD_mul_PB : M.PD * M.PB = 0 := proj_mul_proj_compl M.u M.spec.D
+theorem PD_transpose : M.PDᵀ = M.PD := proj_transpose M.u _
+theorem PB_transpose : M.PBᵀ = M.PB := proj_transpose M.u _
+theorem PD_mul_A : M.PD * M.A = M.A * M.PD := M.isEigenbasis.proj_mul_comm M.u _
+theorem PB_mul_A : M.PB * M.A = M.A * M.PB := M.isEigenbasis.proj_mul_comm M.u _
+
+open Classical in
+/-- **The paper's squared alignment** (§3.2, Appendix A.1), literally:
+`θ(x) = ‖P^𝒟 ∇L(x)‖² / ‖∇L(x)‖²` if `x ≠ 0`, and `θ(0) = 0`. -/
+def theta (x : EuclideanSpace ℝ (Fin d)) : ℝ :=
+  if x = 0 then 0 else ‖M.PD.toEuclideanLin (M.grad x)‖ ^ 2 / ‖M.grad x‖ ^ 2
+
+/-- `‖x‖² = ∑_i c_i²`. -/
+theorem norm_sq_eq (x : EuclideanSpace ℝ (Fin d)) : ‖x‖ ^ 2 = Spec.normSq (M.coord x) :=
+  norm_sq_eq_sum_coord M.u x
+
+/-- `‖P^𝒟 x‖² = ∑_{i∈𝒟} c_i²`. -/
+theorem norm_sq_PD (x : EuclideanSpace ℝ (Fin d)) :
+    ‖M.PD.toEuclideanLin x‖ ^ 2 = M.spec.normSqD (M.coord x) :=
+  norm_sq_proj M.u _ x
+
+/-- `‖P^S A x‖² = ∑_{i∈S} λ_i² c_i²` for every index set `S`. -/
+theorem norm_sq_proj_grad (S : Finset (Fin d)) (x : EuclideanSpace ℝ (Fin d)) :
+    ‖(proj M.u S).toEuclideanLin (M.grad x)‖ ^ 2 = M.spec.mom S 2 (M.coord x) :=
+  M.isEigenbasis.norm_sq_proj_mulVec M.u S x
+
+/-- `‖P^𝒟 A x‖² = ∑_{i∈𝒟} λ_i² c_i² = s^𝒟` (paper §3.2). -/
+theorem norm_sq_PD_grad (x : EuclideanSpace ℝ (Fin d)) :
+    ‖M.PD.toEuclideanLin (M.grad x)‖ ^ 2 = M.spec.sD (M.coord x) :=
+  M.norm_sq_proj_grad _ x
+
+/-- `‖P^ℬ A x‖² = ∑_{i∈ℬ} λ_i² c_i² = s^ℬ` (paper §3.2). -/
+theorem norm_sq_PB_grad (x : EuclideanSpace ℝ (Fin d)) :
+    ‖M.PB.toEuclideanLin (M.grad x)‖ ^ 2 = M.spec.sB (M.coord x) :=
+  M.norm_sq_proj_grad _ x
+
+/-- `‖A x‖² = ∑_i λ_i² c_i² = s` (paper §3.2). -/
+theorem norm_sq_grad (x : EuclideanSpace ℝ (Fin d)) : ‖M.grad x‖ ^ 2 = M.spec.s (M.coord x) := by
+  rw [Spec.s_eq_sum]
+  exact M.isEigenbasis.norm_sq_mulVec x
+
+/-- `xᵀ A x = ∑_i λ_i c_i²`. -/
+theorem inner_grad (x : EuclideanSpace ℝ (Fin d)) :
+    ⟪x, M.grad x⟫_ℝ = ∑ i, M.lam i * M.coord x i ^ 2 :=
+  M.isEigenbasis.inner_mulVec x
+
+/-- `L(x) = ½ xᵀ A x = ½ ∑_i λ_i c_i²`: the matrix loss is `Spec.loss` of the coordinates. -/
+theorem loss_eq (x : EuclideanSpace ℝ (Fin d)) : M.loss x = M.spec.loss (M.coord x) := by
+  unfold loss Spec.loss
+  rw [M.isEigenbasis.inner_mulVec x]
+  rfl
+
+/-- `∇L(x) = 0 ↔ x = 0` (`A` is positive definite), so the quotient defining `θ(x)` for `x ≠ 0`
+has a non-zero denominator. -/
+theorem grad_eq_zero_iff (x : EuclideanSpace ℝ (Fin d)) : M.grad x = 0 ↔ x = 0 := by
+  rw [← norm_eq_zero, ← sq_eq_zero_iff, M.norm_sq_grad, Spec.s_eq_zero_iff, coord_eq_zero_iff]
+
+theorem norm_sq_grad_pos {x : EuclideanSpace ℝ (Fin d)} (hx : x ≠ 0) : 0 < ‖M.grad x‖ ^ 2 :=
+  pow_pos (norm_pos_iff.mpr fun h => hx ((M.grad_eq_zero_iff x).mp h)) 2
+
+@[simp] theorem theta_zero : M.theta 0 = 0 := by simp [theta]
+
+theorem theta_of_ne_zero {x : EuclideanSpace ℝ (Fin d)} (hx : x ≠ 0) :
+    M.theta x = ‖M.PD.toEuclideanLin (M.grad x)‖ ^ 2 / ‖M.grad x‖ ^ 2 := by
+  simp [theta, hx]
+
+/-- **The paper's alignment is `Spec.theta` of the eigen-coordinates** (for every `x`, including
+`x = 0` where both sides are `0` by the paper's convention):
+`θ(x) = ∑_{i∈𝒟} λ_i² c_i² / ∑_i λ_i² c_i²`. -/
+theorem theta_eq (x : EuclideanSpace ℝ (Fin d)) : M.theta x = M.spec.theta (M.coord x) := by
+  by_cases hx : x = 0
+  · subst hx
+    simp
+  · rw [M.theta_of_ne_zero hx, Spec.theta, M.norm_sq_PD_grad, M.norm_sq_grad]
+
+/-- `θ(x) ∈ [0, 1]` (paper §3.2). -/
+theorem theta_mem_Icc (x : EuclideanSpace ℝ (Fin d)) : M.theta x ∈ Set.Icc (0 : ℝ) 1 := by
+  rw [M.theta_eq]
+  exact ⟨M.spec.theta_nonneg _, M.spec.theta_le_one _⟩
+
+/-- `1 - θ(x) = ‖P^ℬ A x‖² / ‖A x‖²` for `x ≠ 0`. -/
+theorem one_sub_theta {x : EuclideanSpace ℝ (Fin d)} (hx : x ≠ 0) :
+    1 - M.theta x = ‖M.PB.toEuclideanLin (M.grad x)‖ ^ 2 / ‖M.grad x‖ ^ 2 := by
+  have h := M.norm_sq_grad_pos hx
+  rw [M.theta_of_ne_zero hx, M.norm_sq_PD_grad, M.norm_sq_PB_grad]
+  rw [M.norm_sq_grad] at h ⊢
+  unfold Spec.s at h ⊢
+  field_simp
+  ring
+
+/-- The block moments `∑_{i∈S} λ_i^p c_i² = xᵀ P^S A^p x` (`s^S` for `p = 2`, `τ^S` for `p = 3`). -/
+theorem mom_coord (S : Finset (Fin d)) (p : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+    M.spec.mom S p (M.coord x) = ⟪x, (proj M.u S * M.A ^ p).toEuclideanLin x⟫_ℝ := by
+  rw [← M.isEigenbasis.projPow_eq M.u, inner_projPow]
+  rfl
+
+/-! ### Dynamics: SGD and projected SGD in eigen-coordinates -/
+
+/-- One SGD step `x⁺ = x - η (A x + ξ)` (paper §3.2). -/
+def sgdStep (η : ℝ) (x ξ : EuclideanSpace ℝ (Fin d)) : EuclideanSpace ℝ (Fin d) :=
+  x - η • (M.grad x + ξ)
+
+/-- One projected SGD step `x⁺ = x - η P^S (A x + ξ)`, `P^S = ∑_{i∈S} u_i u_iᵀ`
+(paper eq. (3)–(4): DSGD for `S = 𝒟`, BSGD for `S = ℬ`). -/
+def projStep (S : Finset (Fin d)) (η : ℝ) (x ξ : EuclideanSpace ℝ (Fin d)) :
+    EuclideanSpace ℝ (Fin d) :=
+  x - η • (proj M.u S).toEuclideanLin (M.grad x + ξ)
+
+/-- **SGD in eigen-coordinates** (Appendix A.2):
+`c_{i,t+1} = (1 - η λ_i) c_{i,t} - η ζ_{i,t}` with `ζ_i = ⟪ξ, u_i⟫`, i.e. the coordinates of
+`x - η (A x + ξ)` are `Spec.cNext η c ζ`. -/
+theorem coord_sgdStep (η : ℝ) (x ξ : EuclideanSpace ℝ (Fin d)) :
+    M.coord (M.sgdStep η x ξ) = M.spec.cNext η (M.coord x) (M.coord ξ) :=
+  funext fun i => M.isEigenbasis.coord_sgdStep M.u η x ξ i
+
+/-- **Projected SGD in eigen-coordinates**: the coordinates of `x - η P^S (A x + ξ)` are
+`Spec.cNextProj S η c ζ`. -/
+theorem coord_projStep (S : Finset (Fin d)) (η : ℝ) (x ξ : EuclideanSpace ℝ (Fin d)) :
+    M.coord (M.projStep S η x ξ) = M.spec.cNextProj S η (M.coord x) (M.coord ξ) :=
+  funext fun i => M.isEigenbasis.coord_projStep M.u S η x ξ i
+
+/-- DSGD (paper eq. (3)): `x⁺ = x - η P^𝒟 (A x + ξ)`. -/
+theorem coord_dsgdStep (η : ℝ) (x ξ : EuclideanSpace ℝ (Fin d)) :
+    M.coord (x - η • M.PD.toEuclideanLin (M.grad x + ξ)) =
+      M.spec.cNextProj M.spec.D η (M.coord x) (M.coord ξ) :=
+  M.coord_projStep M.spec.D η x ξ
+
+/-- BSGD (paper eq. (4)): `x⁺ = x - η P^ℬ (A x + ξ)`. -/
+theorem coord_bsgdStep (η : ℝ) (x ξ : EuclideanSpace ℝ (Fin d)) :
+    M.coord (x - η • M.PB.toEuclideanLin (M.grad x + ξ)) =
+      M.spec.cNextProj M.spec.B η (M.coord x) (M.coord ξ) :=
+  M.coord_projStep M.spec.B η x ξ
+
+/-- The next-step alignment of SGD, eq. (9) of Appendix A.2:
+`θ(x_{t+1}) = Spec.theta (Spec.cNext η c ζ)`. -/
+theorem theta_sgdStep (η : ℝ) (x ξ : EuclideanSpace ℝ (Fin d)) :
+    M.theta (M.sgdStep η x ξ) = M.spec.theta (M.spec.cNext η (M.coord x) (M.coord ξ)) := by
+  rw [M.theta_eq, M.coord_sgdStep]
+
+/-- The next-step loss of the projected update in coordinates. -/
+theorem loss_projStep (S : Finset (Fin d)) (η : ℝ) (x ξ : EuclideanSpace ℝ (Fin d)) :
+    M.loss (M.projStep S η x ξ) = M.spec.loss (M.spec.cNextProj S η (M.coord x) (M.coord ξ)) := by
+  rw [M.loss_eq, M.coord_projStep]
+
+/-! ### Trace formulas for the spectral and noise energies -/
+
+/-- `ψ_𝒟 = ∑_{i∈𝒟} λ_i² = Tr(P^𝒟 A²)`. -/
+theorem psiD_eq_trace : M.spec.psiD = (M.PD * M.A ^ 2).trace := by
+  rw [PD, ← M.isEigenbasis.projPow_eq M.u, trace_projPow]
+  rfl
+
+/-- `ψ_ℬ = ∑_{i∈ℬ} λ_i² = Tr(P^ℬ A²)`. -/
+theorem psiB_eq_trace : M.spec.psiB = (M.PB * M.A ^ 2).trace := by
+  rw [PB, ← M.isEigenbasis.projPow_eq M.u, trace_projPow]
+  rfl
+
+/-- `∑_{i∈S} λ_i^p κ_i² = Tr(Σ P^S A^p)` for every index set `S`. -/
+theorem sum_pow_mul_noise_kap2 (S : Finset (Fin d)) (p : ℕ) :
+    ∑ i ∈ S, M.lam i ^ p * M.noise.kap2 i = (M.Sigma * (proj M.u S * M.A ^ p)).trace := by
+  rw [← M.isEigenbasis.projPow_eq M.u, ← sum_pow_mul_kap2]
+  rfl
+
+/-- `e_𝒟 = ∑_{i∈𝒟} λ_i² κ_i² = Tr(Σ P^𝒟 A²)`. -/
+theorem eD_eq_trace : M.spec.eD M.noise = (M.Sigma * (M.PD * M.A ^ 2)).trace :=
+  M.sum_pow_mul_noise_kap2 _ 2
+
+/-- `e_ℬ = ∑_{i∈ℬ} λ_i² κ_i² = Tr(Σ P^ℬ A²)`. -/
+theorem eB_eq_trace : M.spec.eB M.noise = (M.Sigma * (M.PB * M.A ^ 2)).trace :=
+  M.sum_pow_mul_noise_kap2 _ 2
+
+/-- `n^loss_S = ∑_{i∈S} λ_i κ_i² = Tr(Σ P^S A)`. -/
+theorem nLoss_eq_trace (S : Finset (Fin d)) :
+    M.spec.nLoss M.noise S = (M.Sigma * (proj M.u S * M.A)).trace := by
+  have h := M.sum_pow_mul_noise_kap2 S 1
+  simp only [pow_one] at h
+  exact h
+
+/-- The bounds `s_min ψ_𝒟 ≤ e_𝒟 ≤ s_max ψ_𝒟` and `s_min ψ_ℬ ≤ e_ℬ ≤ s_max ψ_ℬ` of the paper
+(§3.2, Appendix A.1), for the actual matrices. -/
+theorem noise_energy_bounds :
+    (M.smin * M.spec.psiD ≤ M.spec.eD M.noise ∧ M.spec.eD M.noise ≤ M.smax * M.spec.psiD) ∧
+      (M.smin * M.spec.psiB ≤ M.spec.eB M.noise ∧ M.spec.eB M.noise ≤ M.smax * M.spec.psiB) :=
+  ⟨⟨M.spec.smin_psiD_le_eD M.noise, M.spec.eD_le_smax_psiD M.noise⟩,
+    ⟨M.spec.smin_psiB_le_eB M.noise, M.spec.eB_le_smax_psiB M.noise⟩⟩
 
 end MatrixSetting
 
