@@ -178,6 +178,24 @@ def part_highalign():
     sf.save_json(os.path.join(sf.RES, "e23_highalign.json"), dict(rows=rows, N_draws=48))
 
 
+def part_echfrob():
+    """Echelon with tau = ||tail||_F versus tau = ||tail||_2 at the 'init' and 'rise' states of part_mdep (m = 20, 500)."""
+    opts = ["sgd", "muon", "ech1", "echf1", "ech10", "echf10", "ech20", "echf20", "ech40", "echf40"]
+    rows = []
+    tgrid = np.unique(np.round(np.logspace(0, 5.5, 600)).astype(int))
+    for m in (20, 500):
+        prob = sf.Problem(D, K, N, m)
+        Z = sf.init_state(prob, [0])[0]
+        thb = prob.sgd_theta_bar(sf.ETA0, tgrid, 1.0)
+        imin = int(np.argmin(thb))
+        t_r = int(tgrid[imin + int(np.argmax(thb[imin:] >= 0.75 * prob.theta_inf(sf.ETA0)))])
+        Wr = np.sqrt(prob.sgd_second_moment(sf.ETA0, t_r, 1.0)) * Z
+        for name, W in (("init", Z), ("rise", Wr)):
+            info, per, _ = analyse_state(prob, W, opts, 32, seed=5 + m)
+            rows.append(dict(m=m, state=name, **info, per_opt=per))
+    sf.save_json(os.path.join(sf.RES, "e23_echfrob.json"), dict(rows=rows))
+
+
 if __name__ == "__main__":
     part = sys.argv[1] if len(sys.argv) > 1 else "states"
     cpu = sf.CpuLog("e2e3_onestep_" + part)
@@ -189,4 +207,6 @@ if __name__ == "__main__":
         part_mdep()
     if part in ("highalign", "all"):
         part_highalign()
+    if part in ("echfrob", "all"):
+        part_echfrob()
     cpu.done()

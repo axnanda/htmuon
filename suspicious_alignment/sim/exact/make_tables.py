@@ -342,7 +342,7 @@ def e1_n1():
         line = [NAME[o]]
         for kp in ks:
             r = [r for r in kr if r["opt"] == o and r["kappa"] == kp]
-            line.append(f"{r[0]['E_align']:.4f} (loss {r[0]['loss_late']:.3g}; |AW|/|G| {r[0]['gn_true_late'] / r[0]['gn_stoch_late']:.2f})"
+            line.append(f"{r[0]['E_align']:.4f} (loss {r[0]['loss_late']:.3g}; ‖AW‖/‖G‖ {r[0]['gn_true_late'] / r[0]['gn_stoch_late']:.2f})"
                         if r else "–")
         t.append(line)
     P("m=20, learning-rate sweep (eta = kappa x eta_rule): E[Align] (late loss; ratio of true to stochastic gradient norm):\n")
@@ -670,5 +670,5 @@ if __name__ == "__main__":
         except Exception as ex:           # keep going; report the problem in the output
             P(f"\n**[{fn.__name__} failed: {type(ex).__name__}: {ex}]**\n")
     with open(os.path.join(sf.RES, "tables.md"), "w") as fh:
-        fh.write("\n".join(out) + "\n")
+        fh.write("\n".join(out).replace("||", "‖") + "\n")      # no literal pipes inside table cells
     print("wrote", os.path.join(sf.RES, "tables.md"), len(out), "lines")

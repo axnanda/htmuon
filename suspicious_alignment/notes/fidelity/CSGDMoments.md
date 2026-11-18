@@ -6,9 +6,9 @@ Paper: Deng et al., *Suspicious Alignment of SGD* (arXiv:2601.11789v2), §6 "Con
 neighbouring lines used: Assumption 1 (tex 367–384), Lemma "Concentration at time t"
 (tex 2135–2189), proof of Theorem 15 (tex 2337–2404).
 
-State of the file: 2555 lines, compiles with no errors and no Lean warnings (≈ 50 s),
+State of the file: 2577 lines, compiles with no errors and no Lean warnings (20–50 s),
 `scripts/leancheck --build SuspiciousAlignment.CSGD.Moments` succeeds, no
-`sorry`/`admit`/`axiom`/`native_decide`; all 365 constants of the module (325 theorems) depend only
+`sorry`/`admit`/`axiom`/`native_decide`; all 366 constants of the module (326 theorems) depend only
 on `propext`, `Classical.choice`, `Quot.sound` (checked with a scratch file importing the module).
 
 Layer: this file is the **exact finite-`d` core** (plus the measure-theoretic derivation of the
@@ -249,5 +249,5 @@ the three large-gap bounds; the trace sandwich; the geometric rate bound; the ch
 * Asymptotic layer for Theorem 16: combine concentration of the normalised block sums with
   `late_phase_interchange(_of_extensive_noise)`; state the result for `lim_d θ_∞(d)` in the
   extensive-noise regime, not for the ratio of limits of unnormalised sums.
-* The file is long (2555 lines); if a split is wanted, natural pieces are: moments + Theorem 16 core
+* The file is long (2577 lines); if a split is wanted, natural pieces are: moments + Theorem 16 core
   (to "Interchange"), Interpretation, Assumption 14 + `t*`, examples/counterexamples.

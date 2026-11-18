@@ -23,3 +23,4 @@
 {"name": "e1_extra_limit", "cpu_s": 51.8, "wall_s": 79.3}
 {"name": "e1_extra_stat", "cpu_s": 19.4, "wall_s": 23.2}
 {"name": "extra_checks", "cpu_s": 3.1, "wall_s": 3.1}
+{"name": "tests_sanity", "cpu_s": 4.3, "wall_s": 4.3}

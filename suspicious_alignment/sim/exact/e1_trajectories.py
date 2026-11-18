@@ -2,7 +2,7 @@
 (and the vector model M1, n=1, group 'n1').
 
 Usage:  python3 e1_trajectories.py <group>
-        groups: twophase_a twophase_b sweep late_a late_b signal lownoise largeinit momentum   (n1: see e1_n1.py)
+        groups: twophase_a twophase_b sweep late_a late_b signal lownoise largeinit momentum echfrob   (n1: see e1_n1.py)
 Each group writes results/e1_<group>.json (summary rows) and results/e1_<group>_logs.npz (time series).
 
 Learning rates.  'rule' learning rate of a filter F (see specfilt.calibrate): the step that gives the same
@@ -198,6 +198,12 @@ def group_configs(group):
         # 'momentum' group are not finished at T = 6000 -> one longer run each
         for o in ("muon", "ech20"):
             cfgs.append(dict(opt=o, m=20, T=9000, seeds=[0], beta=0.95, tag="large9k"))
+    elif group == "echfrob":
+        # Echelon with tau = ||tail||_F (cheap upper estimate of the tail's spectral norm) instead of tau = s_{r+1}
+        for o in ("echf1", "echf10", "echf20", "echf40"):
+            cfgs.append(dict(opt=o, m=20, T=800, seeds=[0, 1], init="zero"))
+            cfgs.append(dict(opt=o, m=20, T=3000, seeds=[0]))
+            cfgs.append(dict(opt=o, m=20, T=1500, seeds=[0], sigma=0.0, init_scale=0.01))
     elif group == "pilot":
         for o in OPTS:
             cfgs.append(dict(opt=o, m=20, T=600, seeds=[0], init="zero"))
@@ -213,7 +219,8 @@ def main():
     for cfg in group_configs(group):
         rows.append(run_config(cfg, logs, ck))
     os.makedirs(sf.RES, exist_ok=True)
-    cals = {o: {k_: v for k_, v in cal(o).items() if not k_.endswith("_rows")} for o in OPTS}
+    cals = {o: {k_: v for k_, v in cal(o).items() if not k_.endswith("_rows")}
+            for o in sorted(set(OPTS) | set(c_["opt"] for c_ in group_configs(group)))}
     sf.save_json(os.path.join(sf.RES, f"e1_{group}.json"),
                  dict(group=group, d=D, k=K, n=N, calibration=cals, sv_names=sf.SV_NAMES,
                       noise_sv_edges=[sf.SIGMA0 * (np.sqrt(D) - np.sqrt(N)), sf.SIGMA0 * (np.sqrt(D) + np.sqrt(N))],

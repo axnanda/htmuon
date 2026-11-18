@@ -1,0 +1,6 @@
+/home/user/htmuon/suspicious_alignment/sim/exact/e1_trajectories.py:132: RuntimeWarning: Mean of empty slice
+  logs[rid + "__" + key] = f32(np.nanmean(out[key], axis=0))
+echf1_m20_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.08898 div=False loss_late=1.871 theta0=0.000 min=0.000@0 late=0.8418 updD=0.121 cpu=1.6s
+echf1_m20_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.08898 div=False loss_late=3.012 theta0=0.993 min=0.000@420 late=0.8147 updD=0.120 cpu=2.8s
+echf1_m20_s0.0_iso_gauss0.01_k1.0_b0.0_n50: eta=0.08898 div=False loss_late=0.169 theta0=0.993 min=0.805@4 late=1.0000 updD=1.000 cpu=1.1s
+echf10_m20_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.03665 div=False loss_late=1.863 theta0=0.000 min=0.000@0 late=0.8399 updD=0.119 cpu=1.5s

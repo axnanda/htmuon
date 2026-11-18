@@ -12,7 +12,8 @@ In the eigenbasis
     Deng's alignment  = sum_mask (H W)^2 / sum (H W)^2.
 
 Optimizers ("opt" strings):  'sgd' | 'muon' | 'ht<p>' (f = s^p) | 'ech<r>' (exact-frame Echelon:
-f = 1 on the top r singular directions, s / tau on the rest, tau = s_{r+1}).
+f = 1 on the top r singular directions, s / tau on the rest, tau = s_{r+1} = ||tail||_2) |
+'echf<r>' (the same with the cheap upper estimate tau = ||tail||_F).
 """
 import json
 import os
@@ -227,6 +228,8 @@ def parse_opt(opt):
         return ("muon", None)
     if opt.startswith("ht"):
         return ("ht", float(opt[2:]))
+    if opt.startswith("echf"):
+        return ("echf", int(opt[4:]))
     if opt.startswith("ech"):
         return ("ech", int(opt[3:]))
     raise ValueError(opt)
@@ -241,12 +244,15 @@ def fvals(s, opt):
         return np.ones_like(s)
     if kind == "ht":
         return s ** par
-    if kind == "ech":
+    if kind in ("ech", "echf"):
         r = par
         n = s.shape[-1]
         if r >= n:
             return np.ones_like(s)
-        tau = s[..., r:r + 1]
+        if kind == "ech":
+            tau = s[..., r:r + 1]                       # exact spectral norm of the tail, ||T||_2 = s_{r+1}
+        else:
+            tau = np.sqrt((s[..., r:] ** 2).sum(-1, keepdims=True))     # cheap upper estimate ||T||_F >= ||T||_2
         f = np.where(tau > 0, s / np.where(tau > 0, tau, 1.0), 0.0)
         f[..., :r] = 1.0
         return f
