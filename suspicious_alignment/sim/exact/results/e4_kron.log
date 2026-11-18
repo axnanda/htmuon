@@ -58,3 +58,6 @@ ht0.125_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.01632 div=False los
 ht0.5_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.008048 div=False loss_late=0.5287 theta0=0.000 min=0.000@0 late=0.8381 updD=0.051 cpu=2.9s
 ech1_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.03028 div=False loss_late=0.5334 theta0=0.000 min=0.000@0 late=0.8376 updD=0.051 cpu=3.3s
 ech20_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.02406 div=False loss_late=0.529 theta0=0.000 min=0.000@0 late=0.8379 updD=0.051 cpu=3.2s
+ech40_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50_a1.0_K500: eta=0.02114 div=False loss_late=0.5183 theta0=0.000 min=0.000@0 late=0.8385 updD=0.051 cpu=2.9s
+one-step done for {'mu_alpha': 1.0, 'Kdom': 500, 'm': 100}
+[cpu] {'name': 'e4_kron', 'cpu_s': 187.0, 'wall_s': 334.7, 'n_runs': 56, 'n_svd': 175120}

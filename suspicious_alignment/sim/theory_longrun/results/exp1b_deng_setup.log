@@ -40,3 +40,5 @@
 [M1 p=0.125 large   m= 50] pred(SC)=0.98905 meas(authors)=0.98874+-0.00007 meas(ratio)=0.98891+-0.00007 | eta_eff*lam1 pred=1.8941 meas=1.9005 | theta0=0.9988 min=4.11e-02 at t=19
 [M1 p=0.125 large   m=100] pred(SC)=0.99454 meas(authors)=0.99437+-0.00005 meas(ratio)=0.99445+-0.00005 | eta_eff*lam1 pred=1.8947 meas=1.9020 | theta0=0.9997 min=2.72e-01 at t=20
 [M1 p=0.125 large   m=200] pred(SC)=0.99727 meas(authors)=0.99719+-0.00003 meas(ratio)=0.99723+-0.00003 | eta_eff*lam1 pred=1.8951 meas=1.9024 | theta0=0.9999 min=6.97e-01 at t=19
+[M1 p=0.125 large   m=300] pred(SC)=0.99818 meas(authors)=0.99814+-0.00002 meas(ratio)=0.99817+-0.00002 | eta_eff*lam1 pred=1.8952 meas=1.9018 | theta0=1.0000 min=8.44e-01 at t=19
+[M1 p=0.125 large   m=400] pred(SC)=0.99864 meas(authors)=0.99860+-0.00001 meas(ratio)=0.99862+-0.00001 | eta_eff*lam1 pred=1.8952 meas=1.9018 | theta0=1.0000 min=8.95e-01 at t=19

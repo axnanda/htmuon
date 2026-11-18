@@ -26,3 +26,5 @@
 [B ht p=0.125 n=160 m=  2] theta_final=0.62970543 pred=0.62970543 |err|=4.4e-16 |K-K*|/|K*|=4.9e-15 offdiag=2.7e-15 | min theta=4.91e-03 at 136 (T_D ~ 105), back at 167 (T_B ~ 125)
 [B ht p=0.125 n=160 m= 10] theta_final=0.98536604 pred=0.98536604 |err|=5.6e-16 |K-K*|/|K*|=7.3e-15 offdiag=3.0e-15 | min theta=6.79e-03 at 94 (T_D ~ 86), back at 164 (T_B ~ 125)
 [B ht p=0.125 n=160 m=100] theta_final=0.99992308 pred=0.99992308 |err|=1.1e-16 |K-K*|/|K*|=6.9e-13 offdiag=6.6e-13 | min theta=2.58e-01 at 66 (T_D ~ 64), back at 147 (T_B ~ 125)
+[B ht p=0.5 n=160 m=  2] theta_final=0.92630767 pred=0.92630767 |err|=1.1e-16 |K-K*|/|K*|=2.5e-15 offdiag=6.8e-16 | min theta=8.80e-06 at 214 (T_D ~ 141), back at 301 (T_B ~ 283)
+[B ht p=0.5 n=160 m= 10] theta_final=0.99987273 pred=0.99987273 |err|=2.2e-16 |K-K*|/|K*|=2.8e-14 offdiag=9.9e-16 | min theta=1.99e-05 at 80 (T_D ~ 63), back at 302 (T_B ~ 283)

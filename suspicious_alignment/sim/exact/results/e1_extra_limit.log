@@ -15,3 +15,5 @@ m=20 n=20 muon: theta_late=1.00000 pred(top-n, q=2.00)=1.00000 ratio_q(all d)=0.
 m=20 n=20 ht0.125: theta_late=1.00000 pred(top-n, q=2.29)=1.00000 ratio_q(all d)=0.99746 energy[D, k..n, >=n]=[1. 0. 0.] updD=1.000
 m=20 n=20 ht0.5: theta_late=1.00000 pred(top-n, q=4.00)=1.00000 ratio_q(all d)=0.99999 energy[D, k..n, >=n]=[1. 0. 0.] updD=1.000
 m=20 n=50 muon: theta_late=0.99683 pred(top-n, q=2.00)=0.99747 ratio_q(all d)=0.99324 energy[D, k..n, >=n]=[0.99681 0.00319 0.     ] updD=0.400
+m=20 n=50 ht0.125: theta_late=0.99898 pred(top-n, q=2.29)=0.99898 ratio_q(all d)=0.99746 energy[D, k..n, >=n]=[0.99898 0.00102 0.     ] updD=0.624
+m=20 n=50 ht0.5: theta_late=1.00000 pred(top-n, q=4.00)=1.00000 ratio_q(all d)=0.99999 energy[D, k..n, >=n]=[1. 0. 0.] updD=0.997

@@ -276,3 +276,53 @@ def run_m2(lam, n, kind, eta, sigma, T, burn, rng, C0, p=0.125, r=0, beta=None, 
     cnt = max(cnt, 1)
     return dict(E=Eacc / cnt, theta_time=thacc / cnt, tau=tauacc / cnt, s1=s1acc / cnt, C=C,
                 theta_curve=np.array(ths))
+
+
+# --------------------------------------------------------------------------- momentum (Nesterov-EMA, muon.py)
+def mom_xcrit(beta):
+    """Linear stability edge of  c+ = c - (x/lam) u,  u = Nesterov-EMA(lam c):  x < x_c(beta).
+    x_c(0) = 2 (plain GD);  x_c(0.95) = 26.9."""
+    return 2 * (1 + beta) / ((1 - beta) * (1 + 2 * beta))
+
+
+def mom_two_cycle_const(p, beta):
+    """Energy constant of the exact period-2 orbit with momentum:  lam^2 a*^2 = C (eta lam)^q,
+    C = x_c^(2-q)/4, q = 2/(1-p).   (beta = 0: C = 2^(-q).)"""
+    q = 2 / (1 - p)
+    return mom_xcrit(beta) ** (2 - q) / 4
+
+
+def _mom_stationary(lam, eta_i, nu, beta):
+    """Stationary second moments of the frozen-step linear recursion with Nesterov-EMA momentum.
+    Returns (E|c|^2, E|u|^2) or None if the recursion is unstable."""
+    A = np.array([[1 - eta_i * (1 - beta ** 2) * lam, -eta_i * beta ** 2], [(1 - beta) * lam, beta]])
+    if np.abs(np.linalg.eigvals(A)).max() >= 1 - 1e-12:
+        return None
+    b = np.array([-eta_i * (1 - beta ** 2), 1 - beta])
+    P = np.linalg.solve(np.eye(4) - np.kron(A, A), nu ** 2 * np.outer(b, b).ravel()).reshape(2, 2)
+    w = np.array([(1 - beta ** 2) * lam, beta ** 2])
+    return P[0, 0], w @ P @ w + (1 - beta ** 2) ** 2 * nu ** 2
+
+
+def mf_momentum_energy(lam, eta, nu, p, beta):
+    """Heuristic (H4): row-decoupled mean field with momentum.  For each direction solve
+    g^2 = E|u|^2 at the frozen step eta_i = eta g^(p-1); return clean energies lam^2 E|c|^2 and g."""
+    lam = np.asarray(lam, dtype=float)
+    E = np.empty_like(lam)
+    gs = np.empty_like(lam)
+    for i, l in enumerate(lam):
+        lo = np.log((1 - beta ** 2) * nu) - 5.0
+        hi = np.log(nu + (eta * l) ** (1 / (1 - p))) + 5.0
+        for _ in range(100):
+            mid = 0.5 * (lo + hi)
+            g = np.exp(mid)
+            st = _mom_stationary(l, eta * g ** (p - 1), nu, beta)
+            if st is None or g * g - st[1] < 0:
+                lo = mid
+            else:
+                hi = mid
+        g = np.exp(0.5 * (lo + hi))
+        st = _mom_stationary(l, eta * np.exp(hi) ** (p - 1), nu, beta)
+        E[i] = l ** 2 * st[0]
+        gs[i] = g
+    return E, gs

@@ -19,3 +19,4 @@
 {"name": "e4_aniso", "cpu_s": 86.9, "wall_s": 157.2, "n_runs": 28, "n_svd": 91220}
 {"name": "e2_etastar_bounds", "cpu_s": 3.1, "wall_s": 6.0}
 {"name": "e1_largeinit", "cpu_s": 52.9, "wall_s": 97.2, "n_runs": 8, "n_svd": 52770}
+{"name": "e4_kron", "cpu_s": 187.0, "wall_s": 334.7, "n_runs": 56, "n_svd": 175120}
