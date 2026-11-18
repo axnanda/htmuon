@@ -1,0 +1,59 @@
+/home/user/htmuon/suspicious_alignment/sim/theory_longrun/exp3_m1_vector.py:32: RuntimeWarning: invalid value encountered in divide
+  return 2 * (sB * tD - sD * tB) / (sB * wD - sD * wB)
+[M1 noise-free p=0.0] m=   2 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0824 | theta0=0.5725 min=2.63e-07 at 2364 | criterion violations 0/47992, first increase at 2418
+[M1 noise-free p=0.0] m=   5 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.1642 | theta0=0.8925 min=3.88e-18 at 2502 | criterion violations 0/47992, first increase at 2563
+[M1 noise-free p=0.0] m=  10 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.4890 | theta0=0.9707 min=5.17e-36 at 2612 | criterion violations 0/47992, first increase at 2672
+[M1 noise-free p=0.0] m=  20 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.5353 | theta0=0.9925 min=1.39e-72 at 2703 | criterion violations 0/47992, first increase at 2756
+[M1 noise-free p=0.0] m=  50 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.9248 | theta0=0.9988 min=6.02e-192 at 2783 | criterion violations 0/47992, first increase at 2810
+[M1 noise-free p=0.0] m= 100 theta_inf=1.0000000000 top1=0.000000 <|g|>/pred=0.8529 <eta_eff lam1>=4.4170 | theta0=0.9997 min=0.00e+00 at 2726 | criterion violations 0/47992, first increase at 2657
+[M1 noise-free p=0.0] m= 200 theta_inf=0.0000000000 top1=0.000000 <|g|>/pred=0.0033 <eta_eff lam1>=670.0821 | theta0=0.9999 min=0.00e+00 at 2301 | criterion violations 0/47992, first increase at 2242
+[M1 noise-free p=0.0] m= 500 theta_inf=0.0000000000 top1=0.000000 <|g|>/pred=0.0013 <eta_eff lam1>=1912.3539 | theta0=1.0000 min=0.00e+00 at 1578 | criterion violations 0/47992, first increase at 1525
+[M1 noise-free p=0.125] m=   2 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.5725 min=9.05e-09 at 1888 | criterion violations 0/47992, first increase at 1923
+[M1 noise-free p=0.125] m=   5 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.8925 min=6.01e-23 at 1966 | criterion violations 0/47992, first increase at 2000
+[M1 noise-free p=0.125] m=  10 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9707 min=3.88e-47 at 2020 | criterion violations 0/47992, first increase at 2050
+[M1 noise-free p=0.125] m=  20 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9925 min=2.75e-99 at 2056 | criterion violations 0/47992, first increase at 2076
+[M1 noise-free p=0.125] m=  50 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9988 min=8.94e-287 at 2060 | criterion violations 0/47992, first increase at 2032
+[M1 noise-free p=0.125] m= 100 theta_inf=1.0000000000 top1=0.000000 <|g|>/pred=0.7751 <eta_eff lam1>=2.5002 | theta0=0.9997 min=0.00e+00 at 1872 | criterion violations 0/47992, first increase at 1838
+[M1 noise-free p=0.125] m= 200 theta_inf=0.0000000000 top1=0.000000 <|g|>/pred=0.0015 <eta_eff lam1>=600.0000 | theta0=0.9999 min=0.00e+00 at 1449 | criterion violations 0/47992, first increase at 1426
+[M1 noise-free p=0.125] m= 500 theta_inf=0.0000000000 top1=0.000000 <|g|>/pred=0.0005 <eta_eff lam1>=1500.0000 | theta0=1.0000 min=0.00e+00 at 823 | criterion violations 0/47992, first increase at 806
+[M1 noise-free p=0.5] m=   2 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.5725 min=1.61e-18 at 1169 | criterion violations 0/47992, first increase at 1175
+[M1 noise-free p=0.5] m=   5 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.8925 min=1.56e-55 at 1179 | criterion violations 0/47992, first increase at 1180
+[M1 noise-free p=0.5] m=  10 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9707 min=8.02e-125 at 1177 | criterion violations 0/47992, first increase at 1175
+[M1 noise-free p=0.5] m=  20 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9925 min=5.34e-245 at 1156 | criterion violations 0/47992, first increase at 1156
+[M1 noise-free p=0.5] m=  50 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9988 min=0.00e+00 at 1006 | criterion violations 0/47992, first increase at 991
+[M1 noise-free p=0.5] m= 100 theta_inf=0.0000000000 top1=0.000000 <|g|>/pred=0.0000 <eta_eff lam1>=300.0000 | theta0=0.9997 min=0.00e+00 at 734 | criterion violations 0/47992, first increase at 726
+[M1 noise-free p=0.5] m= 200 theta_inf=0.0000000000 top1=0.000000 <|g|>/pred=0.0000 <eta_eff lam1>=600.0000 | theta0=0.9999 min=0.00e+00 at 413 | criterion violations 0/47992, first increase at 407
+[M1 noise-free p=0.5] m= 500 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=1.0000 min=7.34e-09 at 83 | criterion violations 0/47992, first increase at 94
+[M1 noise p=0.0 m=10] nu/g*= 0.03: theta pred(SC)=0.99996 meas(ratio)=0.99996+-0.00000 meas(time)=0.99996 Deng-small=0.64935 | eta_eff*lam1 pred=2.0000 meas=2.0000 | top1 pred=0.9989 meas=0.9988 | E_B meas/pred=0.999 E_D meas/pred=1.000
+[M1 noise p=0.0 m=10] nu/g*= 0.10: theta pred(SC)=0.99952 meas(ratio)=0.99952+-0.00000 meas(time)=0.99952 Deng-small=0.64935 | eta_eff*lam1 pred=2.0000 meas=2.0001 | top1 pred=0.9872 meas=0.9872 | E_B meas/pred=1.000 E_D meas/pred=1.000
+[M1 noise p=0.0 m=10] nu/g*= 0.30: theta pred(SC)=0.99531 meas(ratio)=0.99530+-0.00001 meas(time)=0.99530 Deng-small=0.64935 | eta_eff*lam1 pred=1.9995 meas=2.0008 | top1 pred=0.8763 meas=0.8739 | E_B meas/pred=1.001 E_D meas/pred=1.000
+[M1 noise p=0.0 m=10] nu/g*= 1.00: theta pred(SC)=0.87955 meas(ratio)=0.87842+-0.00014 meas(time)=0.87558 Deng-small=0.64935 | eta_eff*lam1 pred=1.7289 meas=1.7339 | top1 pred=0.0377 meas=0.0370 | E_B meas/pred=1.002 E_D meas/pred=0.992
+[M1 noise p=0.0 m=10] nu/g*= 3.00: theta pred(SC)=0.71546 meas(ratio)=0.71531+-0.00052 meas(time)=0.70964 Deng-small=0.64935 | eta_eff*lam1 pred=0.6499 meas=0.6509 | top1 pred=0.0184 meas=0.0184 | E_B meas/pred=1.001 E_D meas/pred=1.000
+[M1 noise p=0.0 m=10] nu/g*=10.00: theta pred(SC)=0.66792 meas(ratio)=0.66846+-0.00160 meas(time)=0.66280 Deng-small=0.64935 | eta_eff*lam1 pred=0.1987 meas=0.1990 | top1 pred=0.0163 meas=0.0162 | E_B meas/pred=0.999 E_D meas/pred=1.002
+[M1 noise p=0.0 m=10] nu/g*=30.00: theta pred(SC)=0.65543 meas(ratio)=0.65534+-0.00150 meas(time)=0.64976 Deng-small=0.64935 | eta_eff*lam1 pred=0.0665 meas=0.0666 | top1 pred=0.0158 meas=0.0158 | E_B meas/pred=1.003 E_D meas/pred=1.003
+[M1 noise p=0.0 m=100] nu/g*= 0.03: theta pred(SC)=1.00000 meas(ratio)=1.00000+-0.00000 meas(time)=1.00000 Deng-small=0.94877 | eta_eff*lam1 pred=2.0000 meas=2.0000 | top1 pred=0.9989 meas=0.9989 | E_B meas/pred=1.003 E_D meas/pred=1.000
+[M1 noise p=0.0 m=100] nu/g*= 0.10: theta pred(SC)=0.99995 meas(ratio)=0.99995+-0.00000 meas(time)=0.99995 Deng-small=0.94877 | eta_eff*lam1 pred=2.0000 meas=2.0001 | top1 pred=0.9877 meas=0.9876 | E_B meas/pred=0.998 E_D meas/pred=1.000
+[M1 noise p=0.0 m=100] nu/g*= 0.30: theta pred(SC)=0.99955 meas(ratio)=0.99955+-0.00000 meas(time)=0.99955 Deng-small=0.94877 | eta_eff*lam1 pred=1.9996 meas=2.0007 | top1 pred=0.8806 meas=0.8764 | E_B meas/pred=0.997 E_D meas/pred=1.000
+[M1 noise p=0.0 m=100] nu/g*= 1.00: theta pred(SC)=0.98745 meas(ratio)=0.98729+-0.00005 meas(time)=0.98692 Deng-small=0.94877 | eta_eff*lam1 pred=1.7446 meas=1.7504 | top1 pred=0.0435 meas=0.0416 | E_B meas/pred=1.003 E_D meas/pred=0.990
+[M1 noise p=0.0 m=100] nu/g*= 3.00: theta pred(SC)=0.96240 meas(ratio)=0.96235+-0.00029 meas(time)=0.96090 Deng-small=0.94877 | eta_eff*lam1 pred=0.6540 meas=0.6549 | top1 pred=0.0248 meas=0.0249 | E_B meas/pred=1.002 E_D meas/pred=1.000
+[M1 noise p=0.0 m=100] nu/g*=10.00: theta pred(SC)=0.95285 meas(ratio)=0.95286+-0.00064 meas(time)=0.95107 Deng-small=0.94877 | eta_eff*lam1 pred=0.1991 meas=0.1994 | top1 pred=0.0233 meas=0.0232 | E_B meas/pred=1.000 E_D meas/pred=1.000
+[M1 noise p=0.0 m=100] nu/g*=30.00: theta pred(SC)=0.95013 meas(ratio)=0.95055+-0.00123 meas(time)=0.94866 Deng-small=0.94877 | eta_eff*lam1 pred=0.0666 meas=0.0667 | top1 pred=0.0229 meas=0.0229 | E_B meas/pred=0.991 E_D meas/pred=1.000
+[M1 noise p=0.125 m=10] nu/g*= 0.03: theta pred(SC)=0.99996 meas(ratio)=0.99996+-0.00000 meas(time)=0.99996 Deng-small=0.64935 | eta_eff*lam1 pred=2.0000 meas=2.0000 | top1 pred=0.9989 meas=0.9989 | E_B meas/pred=1.000 E_D meas/pred=1.000
+[M1 noise p=0.125 m=10] nu/g*= 0.10: theta pred(SC)=0.99952 meas(ratio)=0.99952+-0.00000 meas(time)=0.99952 Deng-small=0.64935 | eta_eff*lam1 pred=2.0000 meas=2.0000 | top1 pred=0.9872 meas=0.9872 | E_B meas/pred=1.000 E_D meas/pred=1.000
+[M1 noise p=0.125 m=10] nu/g*= 0.30: theta pred(SC)=0.99531 meas(ratio)=0.99530+-0.00001 meas(time)=0.99530 Deng-small=0.64935 | eta_eff*lam1 pred=1.9995 meas=2.0005 | top1 pred=0.8763 meas=0.8738 | E_B meas/pred=1.002 E_D meas/pred=1.000
+[M1 noise p=0.125 m=10] nu/g*= 1.00: theta pred(SC)=0.88427 meas(ratio)=0.88315+-0.00032 meas(time)=0.88037 Deng-small=0.64935 | eta_eff*lam1 pred=1.7503 meas=1.7548 | top1 pred=0.0393 meas=0.0385 | E_B meas/pred=1.001 E_D meas/pred=0.991
+[M1 noise p=0.125 m=10] nu/g*= 3.00: theta pred(SC)=0.72657 meas(ratio)=0.72624+-0.00068 meas(time)=0.72062 Deng-small=0.64935 | eta_eff*lam1 pred=0.7448 meas=0.7457 | top1 pred=0.0190 meas=0.0189 | E_B meas/pred=1.001 E_D meas/pred=0.999
+[M1 noise p=0.125 m=10] nu/g*=10.00: theta pred(SC)=0.67437 meas(ratio)=0.67443+-0.00109 meas(time)=0.66877 Deng-small=0.64935 | eta_eff*lam1 pred=0.2646 meas=0.2649 | top1 pred=0.0166 meas=0.0167 | E_B meas/pred=1.000 E_D meas/pred=1.000
+[M1 noise p=0.125 m=10] nu/g*=30.00: theta pred(SC)=0.65869 meas(ratio)=0.65888+-0.00222 meas(time)=0.65328 Deng-small=0.64935 | eta_eff*lam1 pred=0.1017 meas=0.1018 | top1 pred=0.0159 meas=0.0159 | E_B meas/pred=0.999 E_D meas/pred=1.000
+[M1 noise p=0.125 m=100] nu/g*= 0.03: theta pred(SC)=1.00000 meas(ratio)=1.00000+-0.00000 meas(time)=1.00000 Deng-small=0.94877 | eta_eff*lam1 pred=2.0000 meas=2.0000 | top1 pred=0.9989 meas=0.9989 | E_B meas/pred=0.999 E_D meas/pred=1.000
+[M1 noise p=0.125 m=100] nu/g*= 0.10: theta pred(SC)=0.99995 meas(ratio)=0.99995+-0.00000 meas(time)=0.99995 Deng-small=0.94877 | eta_eff*lam1 pred=2.0000 meas=2.0001 | top1 pred=0.9877 meas=0.9875 | E_B meas/pred=1.001 E_D meas/pred=1.000
+[M1 noise p=0.125 m=100] nu/g*= 0.30: theta pred(SC)=0.99955 meas(ratio)=0.99955+-0.00000 meas(time)=0.99955 Deng-small=0.94877 | eta_eff*lam1 pred=1.9996 meas=2.0004 | top1 pred=0.8806 meas=0.8796 | E_B meas/pred=1.003 E_D meas/pred=1.000
+[M1 noise p=0.125 m=100] nu/g*= 1.00: theta pred(SC)=0.98799 meas(ratio)=0.98785+-0.00005 meas(time)=0.98750 Deng-small=0.94877 | eta_eff*lam1 pred=1.7643 meas=1.7691 | top1 pred=0.0451 meas=0.0440 | E_B meas/pred=1.002 E_D meas/pred=0.990
+[M1 noise p=0.125 m=100] nu/g*= 3.00: theta pred(SC)=0.96444 meas(ratio)=0.96426+-0.00025 meas(time)=0.96288 Deng-small=0.94877 | eta_eff*lam1 pred=0.7494 meas=0.7505 | top1 pred=0.0252 meas=0.0251 | E_B meas/pred=1.005 E_D meas/pred=0.999
+[M1 noise p=0.125 m=100] nu/g*=10.00: theta pred(SC)=0.95422 meas(ratio)=0.95440+-0.00039 meas(time)=0.95267 Deng-small=0.94877 | eta_eff*lam1 pred=0.2652 meas=0.2655 | top1 pred=0.0234 meas=0.0237 | E_B meas/pred=0.996 E_D meas/pred=1.000
+[M1 noise p=0.125 m=100] nu/g*=30.00: theta pred(SC)=0.95085 meas(ratio)=0.95095+-0.00103 meas(time)=0.94910 Deng-small=0.94877 | eta_eff*lam1 pred=0.1018 meas=0.1019 | top1 pred=0.0230 meas=0.0231 | E_B meas/pred=0.999 E_D meas/pred=1.001
+elapsed 166.00196051597595
+
+real	2m46.321s
+user	2m12.171s
+sys	0m0.226s

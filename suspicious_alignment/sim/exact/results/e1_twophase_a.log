@@ -1,0 +1,21 @@
+/home/user/htmuon/suspicious_alignment/sim/exact/e1_trajectories.py:101: RuntimeWarning: Mean of empty slice
+  logs[rid + "__" + key] = f32(np.nanmean(out[key], axis=0))
+sgd_m5_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.003 div=False loss_late=1.935 theta0=0.903 min=0.000@24 late=0.5588 updD=0.112 cpu=3.5s
+muon_m5_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.02051 div=False loss_late=1.907 theta0=0.903 min=0.001@720 late=0.5538 updD=0.109 cpu=9.0s
+ht0.125_m5_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.01632 div=False loss_late=1.91 theta0=0.903 min=0.001@450 late=0.5544 updD=0.109 cpu=8.7s
+ht0.25_m5_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.01294 div=False loss_late=1.914 theta0=0.903 min=0.000@289 late=0.5551 updD=0.110 cpu=8.9s
+ht0.5_m5_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.008048 div=False loss_late=1.921 theta0=0.903 min=0.000@124 late=0.5563 updD=0.111 cpu=8.8s
+ech1_m5_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.03028 div=False loss_late=1.907 theta0=0.903 min=0.000@560 late=0.5582 updD=0.112 cpu=8.9s
+ech10_m5_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.02645 div=False loss_late=1.908 theta0=0.903 min=0.000@580 late=0.5575 updD=0.112 cpu=8.8s
+ech20_m5_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.02406 div=False loss_late=1.908 theta0=0.903 min=0.001@620 late=0.5564 updD=0.111 cpu=8.9s
+ech40_m5_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.02114 div=False loss_late=1.907 theta0=0.903 min=0.001@700 late=0.5545 updD=0.109 cpu=8.9s
+sgd_m20_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.003 div=False loss_late=1.927 theta0=0.993 min=0.001@29 late=0.8345 updD=0.113 cpu=3.3s
+muon_m20_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.02051 div=False loss_late=2 theta0=0.993 min=0.004@610 late=0.8293 updD=0.109 cpu=8.7s
+ht0.125_m20_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.01632 div=False loss_late=1.952 theta0=0.993 min=0.002@380 late=0.8309 updD=0.110 cpu=8.5s
+ht0.25_m20_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.01294 div=False loss_late=1.935 theta0=0.993 min=0.001@236 late=0.8318 updD=0.110 cpu=8.7s
+ht0.5_m20_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.008048 div=False loss_late=1.925 theta0=0.993 min=0.001@103 late=0.8329 updD=0.111 cpu=9.0s
+ech1_m20_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.03028 div=False loss_late=1.988 theta0=0.993 min=0.000@430 late=0.8322 updD=0.113 cpu=8.9s
+ech10_m20_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.02645 div=False loss_late=1.972 theta0=0.993 min=0.001@480 late=0.8322 updD=0.113 cpu=8.8s
+ech20_m20_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.02406 div=False loss_late=1.957 theta0=0.993 min=0.003@520 late=0.8319 updD=0.112 cpu=8.8s
+ech40_m20_s0.5_iso_gauss1.0_k1.0_b0.0_n50: eta=0.02114 div=False loss_late=1.984 theta0=0.993 min=0.004@590 late=0.8301 updD=0.110 cpu=8.7s
+[cpu] {'name': 'e1_twophase_a', 'cpu_s': 151.1, 'wall_s': 379.0, 'n_runs': 18, 'n_svd': 147420}

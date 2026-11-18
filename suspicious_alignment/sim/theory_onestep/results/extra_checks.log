@@ -1,0 +1,31 @@
+E1 8.6586740697633e-15
+E2 {'low_tests': 74, 'low_violations': 0, 'high_tests': 36, 'high_violations': 0, 'q_tests': 120, 'q_violations': 0}
+E3/4 muon:kappa_eff_formula_relerr                                          3.32e-16
+E3/4 muon:snr_max=0.1:relerr_vs_renormalised_Deng                           3.58e-03
+E3/4 muon:snr_max=0.1:ratio_etaD_over_etaB_relerr_vs_trace_formula          1.17e-03
+E3/4 muon:snr_max=0.01:relerr_vs_renormalised_Deng                          3.59e-05
+E3/4 muon:snr_max=0.01:ratio_etaD_over_etaB_relerr_vs_trace_formula         1.17e-05
+E3/4 muon:snr_max=0.001:relerr_vs_renormalised_Deng                         3.59e-07
+E3/4 muon:snr_max=0.001:ratio_etaD_over_etaB_relerr_vs_trace_formula        1.17e-07
+E3/4 ht0.125:kappa_eff_formula_relerr                                       1.92e-16
+E3/4 ht0.125:snr_max=0.1:relerr_vs_renormalised_Deng                        3.43e-03
+E3/4 ht0.125:snr_max=0.1:ratio_etaD_over_etaB_relerr_vs_trace_formula       1.73e-03
+E3/4 ht0.125:snr_max=0.01:relerr_vs_renormalised_Deng                       3.45e-05
+E3/4 ht0.125:snr_max=0.01:ratio_etaD_over_etaB_relerr_vs_trace_formula      1.73e-05
+E3/4 ht0.125:snr_max=0.001:relerr_vs_renormalised_Deng                      3.45e-07
+E3/4 ht0.125:snr_max=0.001:ratio_etaD_over_etaB_relerr_vs_trace_formula     1.73e-07
+E3/4 ht0.5:kappa_eff_formula_relerr                                         3.62e-16
+E3/4 ht0.5:snr_max=0.1:relerr_vs_renormalised_Deng                          2.40e-03
+E3/4 ht0.5:snr_max=0.1:ratio_etaD_over_etaB_relerr_vs_trace_formula         3.40e-03
+E3/4 ht0.5:snr_max=0.01:relerr_vs_renormalised_Deng                         2.41e-05
+E3/4 ht0.5:snr_max=0.01:ratio_etaD_over_etaB_relerr_vs_trace_formula        3.42e-05
+E3/4 ht0.5:snr_max=0.001:relerr_vs_renormalised_Deng                        2.41e-07
+E3/4 ht0.5:snr_max=0.001:ratio_etaD_over_etaB_relerr_vs_trace_formula       3.42e-07
+E5 {'kappa_over_sigmaB': 0.01, 'theta': 0.91743, 'theta_iso': 0.73529, 'p': -10800.0, 'q_formula': 14400.0, 'q_mc': 14400.0, 'z': 0.0, 'regime': 'q>0: increases for small eta'}
+E5 {'kappa_over_sigmaB': 0.3, 'theta': 0.91743, 'theta_iso': 0.73529, 'p': -10800.0, 'q_formula': 14375.28612, 'q_mc': 14376.53333, 'z': 0.25105, 'regime': 'q>0: increases for small eta'}
+E5 {'kappa_over_sigmaB': 1.0, 'theta': 0.91743, 'theta_iso': 0.73529, 'p': -10800.0, 'q_formula': 5261.45737, 'q_mc': 5328.0, 'z': 0.73518, 'regime': 'q>0: increases for small eta'}
+E5 {'kappa_over_sigmaB': 3.0, 'theta': 0.91743, 'theta_iso': 0.73529, 'p': -10800.0, 'q_formula': -6867.46426, 'q_mc': -6693.33333, 'z': 1.45996, 'regime': 'q<0: decreases for every eta (p<0)'}
+E5 {'kappa_over_sigmaB': 10.0, 'theta': 0.91743, 'theta_iso': 0.73529, 'p': -10800.0, 'q_formula': -7536.64526, 'q_mc': -7392.0, 'z': 0.76045, 'regime': 'q<0: decreases for every eta (p<0)'}
+E5 {'kappa_over_sigmaB': 100.0, 'theta': 0.91743, 'theta_iso': 0.73529, 'p': -10800.0, 'q_formula': -917.25479, 'q_mc': -660.26667, 'z': 1.15929, 'regime': 'q<0: decreases for every eta (p<0)'}
+E6 3.109750816869798e-16
+runtime 6.7s

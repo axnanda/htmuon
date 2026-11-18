@@ -1,0 +1,24 @@
+N2 {'muon_erf_abs_err': '2.2e-16', 'muon_second_moment_abs_err': '2.2e-16', 'ht_fbar_abs_err': '1.8e-15', 'ht_f2_abs_err': '2.7e-15', 'linear_response_slope_relerr': '9.9e-10'}
+N1 {'echelon_k:offdiag_gram_rel': '5.3e-15', 'echelon_k:sB_next_relerr': '9.8e-16', 'echelon_k:sD_next_relerr': '4.3e-15', 'echelon_k:signed_coordinate_relerr': '9.0e-16', 'ht0.125:offdiag_gram_rel': '9.5e-16', 'ht0.125:sB_next_relerr': '3.4e-16', 'ht0.125:sD_next_relerr': '2.3e-15', 'ht0.125:signed_coordinate_relerr': '2.8e-15', 'ht0.5:offdiag_gram_rel': '1.9e-15', 'ht0.5:sB_next_relerr': '5.1e-16', 'ht0.5:sD_next_relerr': '8.0e-15', 'ht0.5:signed_coordinate_relerr': '7.3e-16', 'muon:offdiag_gram_rel': '9.3e-16', 'muon:sB_next_relerr': '2.2e-16', 'muon:sD_next_relerr': '9.9e-16', 'muon:signed_coordinate_relerr': '5.3e-16', 'ns5:offdiag_gram_rel': '1.3e-15', 'ns5:sB_next_relerr': '4.5e-16', 'ns5:sD_next_relerr': '4.6e-15', 'ns5:signed_coordinate_relerr': '1.3e-15', 'sgd:offdiag_gram_rel': '2.0e-15', 'sgd:sB_next_relerr': '1.5e-15', 'sgd:sD_next_relerr': '4.7e-15', 'sgd:signed_coordinate_relerr': '7.2e-15'}
+N3 max|z| 1.49
+    muon 0.3 z [ 0.   -0.4   0.   -1.03] relerr sD 3.2e-14 sB 1.3e-04 etaL D 1.6 B 2.23
+    ht0.125 0.3 z [ 1.49 -0.36  0.3  -1.18] relerr sD 8.3e-05 sB 7.2e-05 etaL D 1.3 B 2.41
+    ht0.5 0.3 z [ 1.48 -0.05 -0.72 -0.28] relerr sD 3.4e-04 sB 5.9e-06 etaL D 0.633 B 2.64
+    muon 3.0 z [-0.77 -0.06 -1.15 -0.15] relerr sD 1.1e-03 sB 1.4e-04 etaL D 1.57 B 0.842
+    ht0.125 3.0 z [-0.49 -0.05 -0.78 -0.16] relerr sD 6.8e-04 sB 1.0e-04 etaL D 1.29 B 0.877
+    ht0.5 3.0 z [ 0.76 -0.01 -1.26  0.03] relerr sD 1.6e-03 sB 1.3e-05 etaL D 0.621 B 0.781
+N4 {'filter': 'muon', 'noise_std_over_median_sigma': 0.1, 'max_abs_z_offdiag_mean': 3.234114402924478, 'n_offdiag': 580, 'max_abs_offdiag_mean': 0.0035400119713238903, 'min_diag_mean': 0.2908498989606287, 'max_diag_mean': 0.9998866328973951, 'max_abs_offdiag_second_moment': 3.629834373969143e-16, 'max_abs_z_offdiag_second_moment': None, 'muon_max_abs_rownorm2_minus_1': np.float64(6.439293542825908e-15)}
+N4 {'filter': 'ht0.125', 'noise_std_over_median_sigma': 0.1, 'max_abs_z_offdiag_mean': 3.2856492162890207, 'n_offdiag': 580, 'max_abs_offdiag_mean': 0.0028275528009589317, 'min_diag_mean': 0.2343870998344065, 'max_diag_mean': 1.4522594916772482, 'max_abs_offdiag_second_moment': 0.0002666051605145917, 'max_abs_z_offdiag_second_moment': 2.8052778904160856, 'muon_max_abs_rownorm2_minus_1': None}
+N4 {'filter': 'muon', 'noise_std_over_median_sigma': 0.5, 'max_abs_z_offdiag_mean': 3.6108617878491844, 'n_offdiag': 580, 'max_abs_offdiag_mean': 0.0034993295146214273, 'min_diag_mean': 0.04660793901546103, 'max_diag_mean': 0.997213956033105, 'max_abs_offdiag_second_moment': 3.615460873893233e-16, 'max_abs_z_offdiag_second_moment': None, 'muon_max_abs_rownorm2_minus_1': np.float64(5.551115123125783e-15)}
+N4 {'filter': 'ht0.125', 'noise_std_over_median_sigma': 0.5, 'max_abs_z_offdiag_mean': 3.5837981766920115, 'n_offdiag': 580, 'max_abs_offdiag_mean': 0.0034505834772708085, 'min_diag_mean': 0.04734551151889707, 'max_diag_mean': 1.4488076574223654, 'max_abs_offdiag_second_moment': 0.00038906301518652005, 'max_abs_z_offdiag_second_moment': 2.596919732180048, 'muon_max_abs_rownorm2_minus_1': None}
+N5 {'n': 10, 'd': 10, 'filter': 'muon', 'max_relerr_m': 0.31779072870122715, 'max_relerr_v': 0.0, 'NMC': 3000}
+N5 {'n': 10, 'd': 10, 'filter': 'ht0.125', 'max_relerr_m': 0.25434526407096497, 'max_relerr_v': 0.16115804507240608, 'NMC': 3000}
+N5 {'n': 40, 'd': 10, 'filter': 'muon', 'max_relerr_m': 0.06028424849806472, 'max_relerr_v': 0.0, 'NMC': 3000}
+N5 {'n': 40, 'd': 10, 'filter': 'ht0.125', 'max_relerr_m': 0.05102425863007637, 'max_relerr_v': 0.022240707724474198, 'NMC': 3000}
+N5 {'n': 160, 'd': 10, 'filter': 'muon', 'max_relerr_m': 0.015385542569754659, 'max_relerr_v': 2.220446049250313e-16, 'NMC': 3000}
+N5 {'n': 160, 'd': 10, 'filter': 'ht0.125', 'max_relerr_m': 0.013303440725492258, 'max_relerr_v': 0.005262620107712056, 'NMC': 3000}
+N5 {'n': 640, 'd': 10, 'filter': 'muon', 'max_relerr_m': 0.005556313734358906, 'max_relerr_v': 0.0, 'NMC': 3000}
+N5 {'n': 640, 'd': 10, 'filter': 'ht0.125', 'max_relerr_m': 0.005047782342057056, 'max_relerr_v': 0.0013183408631620246, 'NMC': 3000}
+N5 {'n': 2560, 'd': 10, 'filter': 'muon', 'max_relerr_m': 0.0008883642437928807, 'max_relerr_v': 0.0, 'NMC': 1200}
+N5 {'n': 2560, 'd': 10, 'filter': 'ht0.125', 'max_relerr_m': 0.0010338219804812985, 'max_relerr_v': 0.00035201369007030757, 'NMC': 1200}
+runtime 47.1s

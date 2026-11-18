@@ -1,0 +1,43 @@
+{
+ "gram_vs_svd_maxerr": 5.129230373768223e-14,
+ "echelon_def_err": 7.771561172376096e-16,
+ "scalar_reduction": {
+  "sgd{}": {
+   "max_one_step_err": 4.440892098500626e-16,
+   "max_free_running_err": 7.771561172376096e-16,
+   "max_offdiag_CCt": 1.2277014651512037e-20
+  },
+  "muon{}": {
+   "max_one_step_err": 4.440892098500626e-16,
+   "max_free_running_err": 2.5673907444456745e-15,
+   "max_offdiag_CCt": 7.366361239360645e-17
+  },
+  "ht{'p': 0.125}": {
+   "max_one_step_err": 3.3306690738754696e-16,
+   "max_free_running_err": 8.881784197001252e-16,
+   "max_offdiag_CCt": 8.23725125753902e-19
+  },
+  "ht{'p': 0.5}": {
+   "max_one_step_err": 4.440892098500626e-16,
+   "max_free_running_err": 8.881784197001252e-16,
+   "max_offdiag_CCt": 9.928212253610058e-21
+  },
+  "ech{'r': 2}": {
+   "max_one_step_err": 2.0631335944445994e-05,
+   "max_free_running_err": 0.0004739773745009168,
+   "max_offdiag_CCt": 1.7451260678304306e-12
+  },
+  "ech{'r': 5}": {
+   "max_one_step_err": 4.440892098500626e-16,
+   "max_free_running_err": 5.3219581519492465e-14,
+   "max_offdiag_CCt": 9.069593884874211e-18
+  }
+ },
+ "K_iteration": {
+  "max_err_K_recursion": 2.7977620220553945e-14,
+  "max_err_two_step_identity": 2.220446049250313e-15,
+  "first_t_with_tr_pos_part_below_1e-13": 48,
+  "two_step_mean_loss_over_eta2_trA": 0.13154915945015444,
+  "max_two_step_increase": 1.214306433183765e-17
+ }
+}

@@ -1,0 +1,11 @@
+{"name": "tests_sanity", "cpu_s": 5.2, "wall_s": 5.5}
+{"name": "e1_pilot", "cpu_s": 7.0, "wall_s": 11.1, "n_runs": 9, "n_svd": 5130}
+{"name": "e0_baseline", "cpu_s": 66.9, "wall_s": 102.0}
+{"name": "e1_pilot", "cpu_s": 8.6, "wall_s": 16.6, "n_runs": 9, "n_svd": 5130}
+{"name": "e1_twophase_a", "cpu_s": 151.1, "wall_s": 379.0, "n_runs": 18, "n_svd": 147420}
+{"name": "e1_twophase_b", "cpu_s": 150.0, "wall_s": 380.3, "n_runs": 18, "n_svd": 147420}
+{"name": "e1_late_a", "cpu_s": 110.9, "wall_s": 184.9, "n_runs": 36, "n_svd": 106515}
+{"name": "e1_sweep", "cpu_s": 197.8, "wall_s": 328.4, "n_runs": 54, "n_svd": 195960}
+{"name": "e1_late_b", "cpu_s": 142.8, "wall_s": 233.9, "n_runs": 18, "n_svd": 141210}
+{"name": "e2e3_onestep_states", "cpu_s": 48.7, "wall_s": 58.9}
+{"name": "e1_signal", "cpu_s": 132.9, "wall_s": 190.4, "n_runs": 51, "n_svd": 146520}

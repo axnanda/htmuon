@@ -1,0 +1,370 @@
+{
+ "200x40 (this study, k=20)": {
+  "muon_ns5": {
+   "flops": 7040000.0,
+   "speedup_vs_ns5": 1.0,
+   "speedup_vs_svd": 0.34545454545454546
+  },
+  "muon_exact / ht_exact (SVD, repo count)": {
+   "flops": 2432000.0,
+   "speedup_vs_ns5": 2.8947368421052633,
+   "speedup_vs_svd": 1.0
+  },
+  "muon_exact / ht_exact (SVD, GVL thin count)": {
+   "flops": 3840000.0,
+   "speedup_vs_ns5": 1.8333333333333333,
+   "speedup_vs_svd": 0.6333333333333333
+  },
+  "ht_ns": {
+   "flops": 16000000.0,
+   "speedup_vs_ns5": 0.44,
+   "speedup_vs_svd": 0.152
+  },
+  "ht_interval(5) (repo SVD count)": {
+   "flops": 6118400.0,
+   "speedup_vs_ns5": 1.1506276150627615,
+   "speedup_vs_svd": 0.39748953974895396
+  },
+  "ht_interval(5) (GVL SVD count)": {
+   "flops": 6400000.0,
+   "speedup_vs_ns5": 1.1,
+   "speedup_vs_svd": 0.38
+  },
+  "ht_stream (full)": {
+   "flops": 2730666.6666666665,
+   "speedup_vs_ns5": 2.578125,
+   "speedup_vs_svd": 0.890625
+  },
+  "ht_stream (rank 20)": {
+   "flops": 1333333.3333333333,
+   "speedup_vs_ns5": 5.28,
+   "speedup_vs_svd": 1.824
+  },
+  "ht_stream (rank 16)": {
+   "flops": 1059498.6666666667,
+   "speedup_vs_ns5": 6.64465206185567,
+   "speedup_vs_svd": 2.2954252577319587
+  },
+  "ht_stream (rank 4)": {
+   "flops": 258474.66666666666,
+   "speedup_vs_ns5": 27.23671178606801,
+   "speedup_vs_svd": 9.409045889732585
+  },
+  "echelon(r=1)": {
+   "flops": 129460.0,
+   "speedup_vs_ns5": 54.3797311911015,
+   "speedup_vs_svd": 18.785725320562335
+  },
+  "echelon(r=1) + polish": {
+   "flops": 1409460.0,
+   "speedup_vs_ns5": 4.994820711478154,
+   "speedup_vs_svd": 1.7254835185106352
+  },
+  "echelon(r=4)": {
+   "flops": 296320.0,
+   "speedup_vs_ns5": 23.758099352051836,
+   "speedup_vs_svd": 8.207343412526997
+  },
+  "echelon(r=4) + polish": {
+   "flops": 1576320.0,
+   "speedup_vs_ns5": 4.466098254161592,
+   "speedup_vs_svd": 1.5428339423467317
+  },
+  "echelon(r=16)": {
+   "flops": 1298560.0,
+   "speedup_vs_ns5": 5.421389847215377,
+   "speedup_vs_svd": 1.8728437654016756
+  },
+  "echelon(r=16) + polish": {
+   "flops": 2578560.0,
+   "speedup_vs_ns5": 2.7302060064532143,
+   "speedup_vs_svd": 0.9431620749565649
+  },
+  "echelon(r=20)": {
+   "flops": 1776000.0,
+   "speedup_vs_ns5": 3.963963963963964,
+   "speedup_vs_svd": 1.3693693693693694
+  },
+  "echelon(r=20) + polish": {
+   "flops": 3056000.0,
+   "speedup_vs_ns5": 2.303664921465969,
+   "speedup_vs_svd": 0.7958115183246073
+  }
+ },
+ "4096x4096 (k=410)": {
+  "muon_ns5": {
+   "flops": 2061584302080.0,
+   "speedup_vs_ns5": 1.0,
+   "speedup_vs_svd": 0.4666666666666667
+  },
+  "muon_exact / ht_exact (SVD, repo count)": {
+   "flops": 962072674304.0,
+   "speedup_vs_ns5": 2.142857142857143,
+   "speedup_vs_svd": 1.0
+  },
+  "muon_exact / ht_exact (SVD, GVL thin count)": {
+   "flops": 1649267441664.0,
+   "speedup_vs_ns5": 1.25,
+   "speedup_vs_svd": 0.5833333333333334
+  },
+  "ht_ns": {
+   "flops": 10582799417344.0,
+   "speedup_vs_ns5": 0.19480519480519481,
+   "speedup_vs_svd": 0.09090909090909091
+  },
+  "ht_interval(5) (repo SVD count)": {
+   "flops": 1841681976524.8,
+   "speedup_vs_ns5": 1.1194029850746268,
+   "speedup_vs_svd": 0.5223880597014925
+  },
+  "ht_interval(5) (GVL SVD count)": {
+   "flops": 1979120929996.8,
+   "speedup_vs_ns5": 1.0416666666666667,
+   "speedup_vs_svd": 0.4861111111111111
+  },
+  "ht_stream (full)": {
+   "flops": 733007751850.6666,
+   "speedup_vs_ns5": 2.8125,
+   "speedup_vs_svd": 1.3125
+  },
+  "ht_stream (rank 410)": {
+   "flops": 57691524213.333336,
+   "speedup_vs_ns5": 35.73461318956691,
+   "speedup_vs_svd": 16.67615282179789
+  },
+  "ht_stream (rank 16)": {
+   "flops": 2151672490.6666665,
+   "speedup_vs_ns5": 958.1310868743068,
+   "speedup_vs_svd": 447.1278405413432
+  },
+  "ht_stream (rank 4)": {
+   "flops": 537132970.6666666,
+   "speedup_vs_ns5": 3838.1265248365767,
+   "speedup_vs_svd": 1791.1257115904025
+  },
+  "echelon(r=1)": {
+   "flops": 268484628.0,
+   "speedup_vs_ns5": 7678.593435449869,
+   "speedup_vs_svd": 3583.343603209939
+  },
+  "echelon(r=1) + polish": {
+   "flops": 275146391572.0,
+   "speedup_vs_ns5": 7.492681587795881,
+   "speedup_vs_svd": 3.496584740971411
+  },
+  "echelon(r=4)": {
+   "flops": 571213056.0,
+   "speedup_vs_ns5": 3609.133720641007,
+   "speedup_vs_svd": 1684.2624029658034
+  },
+  "echelon(r=4) + polish": {
+   "flops": 275449120000.0,
+   "speedup_vs_ns5": 7.48444686292699,
+   "speedup_vs_svd": 3.4927418693659287
+  },
+  "echelon(r=16)": {
+   "flops": 1791049728.0,
+   "speedup_vs_ns5": 1151.0480529103434,
+   "speedup_vs_svd": 537.1557580248269
+  },
+  "echelon(r=16) + polish": {
+   "flops": 276668956672.0,
+   "speedup_vs_ns5": 7.451447849004884,
+   "speedup_vs_svd": 3.4773423295356127
+  },
+  "echelon(r=410)": {
+   "flops": 51080594720.0,
+   "speedup_vs_ns5": 40.3594420421423,
+   "speedup_vs_svd": 18.834406286333074
+  },
+  "echelon(r=410) + polish": {
+   "flops": 325958501664.0,
+   "speedup_vs_ns5": 6.324683331024431,
+   "speedup_vs_svd": 2.951518887811401
+  }
+ },
+ "4096x16384 (wide MLP, k=410)": {
+  "muon_ns5": {
+   "flops": 6184752906240.0,
+   "speedup_vs_ns5": 1.0,
+   "speedup_vs_svd": 0.35555555555555557
+  },
+  "muon_exact / ht_exact (SVD, repo count)": {
+   "flops": 2199023255552.0,
+   "speedup_vs_ns5": 2.8125,
+   "speedup_vs_svd": 1.0
+  },
+  "muon_exact / ht_exact (SVD, GVL thin count)": {
+   "flops": 3573412790272.0,
+   "speedup_vs_ns5": 1.7307692307692308,
+   "speedup_vs_svd": 0.6153846153846154
+  },
+  "ht_ns": {
+   "flops": 538348380749824.0,
+   "speedup_vs_ns5": 0.01148838396732193,
+   "speedup_vs_svd": 0.0040847587439366865
+  },
+  "ht_interval(5) (repo SVD count)": {
+   "flops": 5387606976102.4,
+   "speedup_vs_ns5": 1.1479591836734693,
+   "speedup_vs_svd": 0.4081632653061224
+  },
+  "ht_interval(5) (GVL SVD count)": {
+   "flops": 5662484883046.4,
+   "speedup_vs_ns5": 1.0922330097087378,
+   "speedup_vs_svd": 0.3883495145631068
+  },
+  "ht_stream (full)": {
+   "flops": 3206908914346.6665,
+   "speedup_vs_ns5": 1.9285714285714286,
+   "speedup_vs_svd": 0.6857142857142857
+  },
+  "ht_stream (rank 410)": {
+   "flops": 231041780853.33334,
+   "speedup_vs_ns5": 26.76898041296746,
+   "speedup_vs_svd": 9.51785970238843
+  },
+  "ht_stream (rank 16)": {
+   "flops": 8606706346.666666,
+   "speedup_vs_ns5": 718.5969472091172,
+   "speedup_vs_svd": 255.5011367854639
+  },
+  "ht_stream (rank 4)": {
+   "flops": 2148532138.6666665,
+   "speedup_vs_ns5": 2878.594550639641,
+   "speedup_vs_svd": 1023.5002846718724
+  },
+  "echelon(r=1)": {
+   "flops": 1073864724.0,
+   "speedup_vs_ns5": 5759.34078847719,
+   "speedup_vs_svd": 2047.7656136807786
+  },
+  "echelon(r=1) + polish": {
+   "flops": 1100585492500.0,
+   "speedup_vs_ns5": 5.619511567603187,
+   "speedup_vs_svd": 1.9980485573700217
+  },
+  "echelon(r=4)": {
+   "flops": 2283668736.0,
+   "speedup_vs_ns5": 2708.2530879995375,
+   "speedup_vs_svd": 962.9344312887243
+  },
+  "echelon(r=4) + polish": {
+   "flops": 1101795296512.0,
+   "speedup_vs_ns5": 5.613341176731589,
+   "speedup_vs_svd": 1.995854640615676
+  },
+  "echelon(r=16)": {
+   "flops": 7145078784.0,
+   "speedup_vs_ns5": 865.5961807012595,
+   "speedup_vs_svd": 307.7675309160034
+  },
+  "echelon(r=16) + polish": {
+   "flops": 1106656706560.0,
+   "speedup_vs_ns5": 5.588682442873425,
+   "speedup_vs_svd": 1.98708709079944
+  },
+  "echelon(r=410)": {
+   "flops": 187793442080.0,
+   "speedup_vs_ns5": 32.93380662145431,
+   "speedup_vs_svd": 11.70979790985042
+  },
+  "echelon(r=410) + polish": {
+   "flops": 1287305069856.0,
+   "speedup_vs_ns5": 4.804418976561505,
+   "speedup_vs_svd": 1.7082378583329796
+  }
+ },
+ "16384x4096 (tall MLP, k=410)": {
+  "muon_ns5": {
+   "flops": 6184752906240.0,
+   "speedup_vs_ns5": 1.0,
+   "speedup_vs_svd": 0.35555555555555557
+  },
+  "muon_exact / ht_exact (SVD, repo count)": {
+   "flops": 2199023255552.0,
+   "speedup_vs_ns5": 2.8125,
+   "speedup_vs_svd": 1.0
+  },
+  "muon_exact / ht_exact (SVD, GVL thin count)": {
+   "flops": 3573412790272.0,
+   "speedup_vs_ns5": 1.7307692307692308,
+   "speedup_vs_svd": 0.6153846153846154
+  },
+  "ht_ns": {
+   "flops": 15530601742336.0,
+   "speedup_vs_ns5": 0.39823008849557523,
+   "speedup_vs_svd": 0.1415929203539823
+  },
+  "ht_interval(5) (repo SVD count)": {
+   "flops": 5387606976102.4,
+   "speedup_vs_ns5": 1.1479591836734693,
+   "speedup_vs_svd": 0.4081632653061224
+  },
+  "ht_interval(5) (GVL SVD count)": {
+   "flops": 5662484883046.4,
+   "speedup_vs_ns5": 1.0922330097087378,
+   "speedup_vs_svd": 0.3883495145631068
+  },
+  "ht_stream (full)": {
+   "flops": 2382275193514.6665,
+   "speedup_vs_ns5": 2.5961538461538463,
+   "speedup_vs_svd": 0.9230769230769231
+  },
+  "ht_stream (rank 410)": {
+   "flops": 222779329653.33334,
+   "speedup_vs_ns5": 27.76178973095972,
+   "speedup_vs_svd": 9.8708585710079
+  },
+  "ht_stream (rank 16)": {
+   "flops": 8594123434.666666,
+   "speedup_vs_ns5": 719.6490663948538,
+   "speedup_vs_svd": 255.8752236070591
+  },
+  "ht_stream (rank 4)": {
+   "flops": 2147745706.6666665,
+   "speedup_vs_ns5": 2879.6485948230943,
+   "speedup_vs_svd": 1023.8750559371002
+  },
+  "echelon(r=1)": {
+   "flops": 1073864724.0,
+   "speedup_vs_ns5": 5759.34078847719,
+   "speedup_vs_svd": 2047.7656136807786
+  },
+  "echelon(r=1) + polish": {
+   "flops": 1100585492500.0,
+   "speedup_vs_ns5": 5.619511567603187,
+   "speedup_vs_svd": 1.9980485573700217
+  },
+  "echelon(r=4)": {
+   "flops": 2283668736.0,
+   "speedup_vs_ns5": 2708.2530879995375,
+   "speedup_vs_svd": 962.9344312887243
+  },
+  "echelon(r=4) + polish": {
+   "flops": 1101795296512.0,
+   "speedup_vs_ns5": 5.613341176731589,
+   "speedup_vs_svd": 1.995854640615676
+  },
+  "echelon(r=16)": {
+   "flops": 7145078784.0,
+   "speedup_vs_ns5": 865.5961807012595,
+   "speedup_vs_svd": 307.7675309160034
+  },
+  "echelon(r=16) + polish": {
+   "flops": 1106656706560.0,
+   "speedup_vs_ns5": 5.588682442873425,
+   "speedup_vs_svd": 1.98708709079944
+  },
+  "echelon(r=410)": {
+   "flops": 187793442080.0,
+   "speedup_vs_ns5": 32.93380662145431,
+   "speedup_vs_svd": 11.70979790985042
+  },
+  "echelon(r=410) + polish": {
+   "flops": 1287305069856.0,
+   "speedup_vs_ns5": 4.804418976561505,
+   "speedup_vs_svd": 1.7082378583329796
+  }
+ }
+}

@@ -1,0 +1,21 @@
+/home/user/htmuon/suspicious_alignment/sim/exact/e1_trajectories.py:111: RuntimeWarning: Mean of empty slice
+  logs[rid + "__" + key] = f32(np.nanmean(out[key], axis=0))
+sgd_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.003 div=False loss_late=1.876 theta0=0.000 min=0.000@0 late=0.9623 updD=0.113 cpu=2.7s
+muon_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.02051 div=False loss_late=1.852 theta0=0.000 min=0.000@0 late=0.9616 updD=0.109 cpu=7.1s
+ht0.125_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.01632 div=False loss_late=1.855 theta0=0.000 min=0.000@0 late=0.9617 updD=0.110 cpu=7.0s
+ht0.25_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.01294 div=False loss_late=1.858 theta0=0.000 min=0.000@0 late=0.9618 updD=0.110 cpu=7.1s
+ht0.5_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.008048 div=False loss_late=1.864 theta0=0.000 min=0.000@0 late=0.9619 updD=0.111 cpu=7.1s
+ech1_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.03028 div=False loss_late=1.858 theta0=0.000 min=0.000@0 late=0.9622 updD=0.113 cpu=7.0s
+ech10_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.02645 div=False loss_late=1.858 theta0=0.000 min=0.000@0 late=0.9621 updD=0.112 cpu=7.1s
+ech20_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.02406 div=False loss_late=1.856 theta0=0.000 min=0.000@0 late=0.9620 updD=0.111 cpu=7.1s
+ech40_m100_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.02114 div=False loss_late=1.853 theta0=0.000 min=0.000@0 late=0.9617 updD=0.109 cpu=7.2s
+sgd_m200_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.003 div=False loss_late=1.861 theta0=0.000 min=0.000@0 late=0.9807 updD=0.114 cpu=3.3s
+muon_m200_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.02051 div=False loss_late=1.833 theta0=0.000 min=0.000@0 late=0.9804 updD=0.110 cpu=9.5s
+ht0.125_m200_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.01632 div=False loss_late=1.837 theta0=0.000 min=0.000@0 late=0.9804 updD=0.110 cpu=9.6s
+ht0.25_m200_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.01294 div=False loss_late=1.841 theta0=0.000 min=0.000@0 late=0.9804 updD=0.111 cpu=9.5s
+ht0.5_m200_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.008048 div=False loss_late=1.849 theta0=0.000 min=0.000@0 late=0.9805 updD=0.112 cpu=9.4s
+ech1_m200_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.03028 div=False loss_late=1.844 theta0=0.000 min=0.000@0 late=0.9806 updD=0.114 cpu=9.8s
+ech10_m200_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.02645 div=False loss_late=1.843 theta0=0.000 min=0.000@0 late=0.9806 updD=0.113 cpu=9.9s
+ech20_m200_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.02406 div=False loss_late=1.841 theta0=0.000 min=0.000@0 late=0.9805 updD=0.112 cpu=9.8s
+ech40_m200_s0.5_iso_zero1.0_k1.0_b0.0_n50: eta=0.02114 div=False loss_late=1.836 theta0=0.000 min=0.000@0 late=0.9804 updD=0.110 cpu=9.8s
+[cpu] {'name': 'e1_late_b', 'cpu_s': 142.8, 'wall_s': 233.9, 'n_runs': 18, 'n_svd': 141210}

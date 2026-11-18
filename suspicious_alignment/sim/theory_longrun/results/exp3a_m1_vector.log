@@ -1,0 +1,29 @@
+[M1 noise-free p=0.0] m=   2 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0824 | theta0=0.5725 min=2.63e-07 at 2364 | criterion violations 0/47992, first increase at 2418
+[M1 noise-free p=0.0] m=   5 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.1642 | theta0=0.8925 min=3.88e-18 at 2502 | criterion violations 0/47992, first increase at 2563
+[M1 noise-free p=0.0] m=  10 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.4890 | theta0=0.9707 min=5.17e-36 at 2612 | criterion violations 0/47992, first increase at 2672
+[M1 noise-free p=0.0] m=  20 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.5353 | theta0=0.9925 min=1.39e-72 at 2703 | criterion violations 0/47992, first increase at 2756
+[M1 noise-free p=0.0] m=  50 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.9248 | theta0=0.9988 min=6.02e-192 at 2783 | criterion violations 0/47992, first increase at 2810
+[M1 noise-free p=0.0] m= 100 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=3.1424 | theta0=0.9997 min=0.00e+00 at 2726 | criterion violations 0/47992, first increase at 2657
+[M1 noise-free p=0.0] m= 200 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=3.1016 | theta0=0.9999 min=0.00e+00 at 2301 | criterion violations 0/47992, first increase at 2242
+[M1 noise-free p=0.0] m= 500 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0308 | theta0=1.0000 min=0.00e+00 at 1578 | criterion violations 0/47992, first increase at 1525
+[M1 noise-free p=0.125] m=   2 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.5725 min=9.05e-09 at 1888 | criterion violations 0/47992, first increase at 1923
+[M1 noise-free p=0.125] m=   5 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.8925 min=6.01e-23 at 1966 | criterion violations 0/47992, first increase at 2000
+[M1 noise-free p=0.125] m=  10 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9707 min=3.88e-47 at 2020 | criterion violations 0/47992, first increase at 2050
+[M1 noise-free p=0.125] m=  20 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9925 min=2.75e-99 at 2056 | criterion violations 0/47992, first increase at 2076
+[M1 noise-free p=0.125] m=  50 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9988 min=8.94e-287 at 2060 | criterion violations 0/47992, first increase at 2032
+[M1 noise-free p=0.125] m= 100 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9997 min=0.00e+00 at 1872 | criterion violations 0/47992, first increase at 1838
+[M1 noise-free p=0.125] m= 200 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9999 min=0.00e+00 at 1449 | criterion violations 0/47992, first increase at 1426
+[M1 noise-free p=0.125] m= 500 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=1.0000 min=0.00e+00 at 823 | criterion violations 0/47992, first increase at 806
+[M1 noise-free p=0.5] m=   2 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.5725 min=1.61e-18 at 1169 | criterion violations 0/47992, first increase at 1175
+[M1 noise-free p=0.5] m=   5 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.8925 min=1.56e-55 at 1179 | criterion violations 0/47992, first increase at 1180
+[M1 noise-free p=0.5] m=  10 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9707 min=8.02e-125 at 1177 | criterion violations 0/47992, first increase at 1175
+[M1 noise-free p=0.5] m=  20 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9925 min=5.34e-245 at 1156 | criterion violations 0/47992, first increase at 1156
+[M1 noise-free p=0.5] m=  50 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9988 min=0.00e+00 at 1006 | criterion violations 0/47992, first increase at 991
+[M1 noise-free p=0.5] m= 100 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9997 min=0.00e+00 at 734 | criterion violations 0/47992, first increase at 726
+[M1 noise-free p=0.5] m= 200 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=0.9999 min=0.00e+00 at 413 | criterion violations 0/47992, first increase at 407
+[M1 noise-free p=0.5] m= 500 theta_inf=1.0000000000 top1=1.000000 <|g|>/pred=1.0000 <eta_eff lam1>=2.0000 | theta0=1.0000 min=7.34e-09 at 83 | criterion violations 0/47992, first increase at 94
+elapsed 28.494555711746216
+
+real	0m28.607s
+user	0m27.672s
+sys	0m0.076s

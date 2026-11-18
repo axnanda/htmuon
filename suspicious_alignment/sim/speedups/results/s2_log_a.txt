@@ -1,0 +1,20 @@
+done m=5 sigma=0.0 seed=1 in 41.7s
+done m=5 sigma=0.0 seed=0 in 45.9s
+done m=5 sigma=0.0 seed=2 in 94.6s
+done m=5 sigma=0.02 seed=0 in 112.9s
+done m=5 sigma=0.02 seed=1 in 92.4s
+done m=5 sigma=0.02 seed=2 in 99.6s
+done m=5 sigma=0.3 seed=0 in 101.1s
+11 jobs to run
+done m=5 sigma=0.3 seed=2 in 117.6s
+done m=5 sigma=0.3 seed=1 in 122.9s
+done m=20 sigma=0.0 seed=0 in 57.0s
+done m=20 sigma=0.0 seed=1 in 58.2s
+done m=20 sigma=0.0 seed=2 in 67.8s
+done m=20 sigma=0.02 seed=0 in 84.8s
+done m=20 sigma=0.02 seed=1 in 68.0s
+done m=20 sigma=0.02 seed=2 in 73.5s
+done m=20 sigma=0.3 seed=0 in 79.4s
+done m=20 sigma=0.3 seed=1 in 61.9s
+done m=20 sigma=0.3 seed=2 in 38.2s
+wall 428.0404987335205

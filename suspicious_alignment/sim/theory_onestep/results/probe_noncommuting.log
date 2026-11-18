@@ -1,0 +1,56 @@
+Q1  (d=100)   n   filter      offdiag  T med/max        V med/max        eta* med/max (#)   etaL_D med  etaL_B med  dth abs med/max   sign  qsign order
+     100 muon       0.223   0.092/0.170   0.000/0.000   0.066/0.350 (21)   0.018  0.138   5.7e-03/6.5e-02   0.97  0.96  1.00
+     100 ht0.125    0.223   0.084/0.167   0.060/0.087   0.033/0.287 (23)   0.006  0.055   5.5e-03/4.6e-02   0.98  0.96  1.00
+     100 ht0.5      0.223   0.047/0.139   0.082/0.162   0.025/0.098 (24)   0.006  0.035   1.2e-03/4.2e-02   1.00  1.00  1.00
+     100 echelon_k  0.223   0.061/0.192   0.096/0.323   0.046/0.126 (23)   0.017  0.065   2.9e-03/7.8e-02   1.00  1.00  1.00
+     100 sgd        0.223   0.000/0.000   0.000/0.000   0.000/0.000 (24)   0.000  0.000   0.0e+00/2.3e-15   1.00  1.00  1.00
+     200 muon       0.154   0.041/0.103   0.000/0.000   0.071/0.738 (24)   0.011  0.059   2.6e-03/3.8e-02   0.97  1.00  0.92
+     200 ht0.125    0.154   0.038/0.101   0.023/0.048   0.038/0.339 (24)   0.003  0.029   2.0e-03/3.9e-02   0.99  1.00  1.00
+     200 ht0.5      0.154   0.025/0.076   0.038/0.102   0.013/0.034 (24)   0.004  0.014   1.0e-03/3.1e-02   1.00  1.00  1.00
+     200 echelon_k  0.154   0.034/0.145   0.044/0.235   0.044/0.090 (24)   0.011  0.031   1.8e-03/7.8e-02   1.00  1.00  1.00
+     200 sgd        0.154   0.000/0.000   0.000/0.000   0.000/0.000 (24)   0.000  0.000   4.9e-17/3.4e-15   1.00  1.00  1.00
+     500 muon       0.110   0.016/0.032   0.000/0.000   0.016/0.181 (24)   0.006  0.023   1.0e-03/1.6e-02   1.00  1.00  1.00
+     500 ht0.125    0.110   0.015/0.031   0.009/0.015   0.010/0.106 (24)   0.002  0.011   7.5e-04/1.1e-02   1.00  1.00  1.00
+     500 ht0.5      0.110   0.009/0.024   0.014/0.031   0.004/0.011 (24)   0.002  0.005   3.1e-04/1.1e-02   1.00  1.00  1.00
+     500 echelon_k  0.110   0.008/0.061   0.013/0.108   0.008/0.040 (24)   0.002  0.008   6.8e-04/4.2e-02   1.00  1.00  1.00
+     500 sgd        0.110   0.000/0.000   0.000/0.000   0.000/0.000 (24)   0.000  0.000   1.1e-16/3.7e-15   1.00  1.00  1.00
+    2000 muon       0.061   0.004/0.008   0.000/0.000   0.007/0.073 (24)   0.001  0.006   2.0e-04/4.2e-03   1.00  1.00  1.00
+    2000 ht0.125    0.061   0.004/0.008   0.002/0.003   0.004/0.033 (24)   0.000  0.003   1.6e-04/3.3e-03   1.00  1.00  1.00
+    2000 ht0.5      0.061   0.002/0.007   0.004/0.007   0.001/0.007 (24)   0.000  0.001   5.5e-05/1.8e-03   1.00  1.00  1.00
+    2000 echelon_k  0.061   0.002/0.036   0.003/0.069   0.003/0.032 (24)   0.001  0.003   8.1e-05/2.4e-02   1.00  1.00  1.00
+    2000 sgd        0.061   0.000/0.000   0.000/0.000   0.000/0.000 (24)   0.000  0.000   8.3e-17/1.3e-15   1.00  1.00  1.00
+    8000 muon       0.025   0.001/0.002   0.000/0.000   0.002/0.022 (24)   0.000  0.002   3.5e-05/7.6e-04   1.00  1.00  1.00
+    8000 ht0.125    0.025   0.001/0.002   0.001/0.001   0.002/0.009 (22)   0.000  0.001   2.1e-05/7.6e-04   0.98  0.96  1.00
+    8000 ht0.5      0.025   0.001/0.002   0.001/0.002   0.000/0.002 (24)   0.000  0.000   1.5e-05/5.2e-04   1.00  1.00  1.00
+    8000 echelon_k  0.025   0.001/0.005   0.001/0.011   0.001/0.058 (22)   0.000  0.001   1.2e-05/3.0e-03   1.00  1.00  1.00
+    8000 sgd        0.025   0.000/0.000   0.000/0.000   0.000/0.000 (24)   0.000  0.000   0.0e+00/2.1e-15   1.00  1.00  1.00
+Q2a {'ht0.125:dL_relerr': '1.9e-15', 'ht0.125:s_next_relerr': '1.1e-14', 'ht0.5:dL_relerr': '1.2e-14', 'ht0.5:s_next_relerr': '2.6e-14', 'muon:dL_relerr': '5.0e-16', 'muon:s_next_relerr': '1.4e-14', 'sgd:dL_relerr': '1.4e-14', 'sgd:s_next_relerr': '2.3e-14'}
+Q2b {'ht0.125:coefficient_relerr': '1.1e-15', 'ht0.125:dtheta_abserr': '4.2e-16', 'ht0.125:mass_leaving_support': '3.1e-14', 'ht0.5:coefficient_relerr': '7.0e-16', 'ht0.5:dtheta_abserr': '1.0e-15', 'ht0.5:mass_leaving_support': '6.9e-15', 'muon:coefficient_relerr': '8.2e-16', 'muon:dtheta_abserr': '4.5e-16', 'muon:mass_leaving_support': '3.0e-14', 'sgd:coefficient_relerr': '9.0e-16', 'sgd:dtheta_abserr': '1.4e-15', 'sgd:mass_leaving_support': '6.2e-15'}
+Q2c n=  60 condB=   1 muon     T med 0.097 max 0.165 | V med 0.000 max 0.000 | dth abs med 5.3e-03 max 1.1e-01 | sign 0.94
+Q2c n=  60 condB=   1 ht0.125  T med 0.092 max 0.164 | V med 0.059 max 0.083 | dth abs med 4.4e-03 max 8.6e-02 | sign 1.00
+Q2c n=  60 condB=   1 sgd      T med 0.000 max 0.000 | V med 0.000 max 0.000 | dth abs med 1.1e-16 max 1.8e-15 | sign 1.00
+Q2c n=  60 condB=   3 muon     T med 0.122 max 0.272 | V med 0.171 max 0.317 | dth abs med 3.4e-03 max 1.1e-01 | sign 0.83
+Q2c n=  60 condB=   3 ht0.125  T med 0.110 max 0.266 | V med 0.179 max 0.342 | dth abs med 3.1e-03 max 1.2e-01 | sign 0.89
+Q2c n=  60 condB=   3 sgd      T med 0.000 max 0.000 | V med 0.000 max 0.000 | dth abs med 0.0e+00 max 8.9e-16 | sign 1.00
+Q2c n=  60 condB=  30 muon     T med 0.320 max 0.494 | V med 0.563 max 0.712 | dth abs med 9.3e-03 max 3.0e-01 | sign 0.69
+Q2c n=  60 condB=  30 ht0.125  T med 0.292 max 0.471 | V med 0.525 max 0.685 | dth abs med 6.9e-03 max 3.3e-01 | sign 0.72
+Q2c n=  60 condB=  30 sgd      T med 0.000 max 0.000 | V med 0.000 max 0.000 | dth abs med 6.9e-17 max 1.5e-15 | sign 1.00
+Q2c n= 240 condB=   1 muon     T med 0.020 max 0.036 | V med 0.000 max 0.000 | dth abs med 1.0e-03 max 3.6e-02 | sign 0.97
+Q2c n= 240 condB=   1 ht0.125  T med 0.018 max 0.037 | V med 0.011 max 0.014 | dth abs med 1.0e-03 max 3.1e-02 | sign 1.00
+Q2c n= 240 condB=   1 sgd      T med 0.000 max 0.000 | V med 0.000 max 0.000 | dth abs med 2.4e-17 max 1.0e-15 | sign 1.00
+Q2c n= 240 condB=   3 muon     T med 0.047 max 0.082 | V med 0.061 max 0.085 | dth abs med 7.7e-04 max 3.2e-02 | sign 0.97
+Q2c n= 240 condB=   3 ht0.125  T med 0.043 max 0.083 | V med 0.065 max 0.097 | dth abs med 7.0e-04 max 3.7e-02 | sign 1.00
+Q2c n= 240 condB=   3 sgd      T med 0.000 max 0.000 | V med 0.000 max 0.000 | dth abs med 0.0e+00 max 6.7e-16 | sign 1.00
+Q2c n= 240 condB=  30 muon     T med 0.110 max 0.187 | V med 0.189 max 0.282 | dth abs med 2.7e-03 max 9.3e-02 | sign 0.89
+Q2c n= 240 condB=  30 ht0.125  T med 0.099 max 0.182 | V med 0.183 max 0.281 | dth abs med 2.8e-03 max 9.1e-02 | sign 0.94
+Q2c n= 240 condB=  30 sgd      T med 0.000 max 0.000 | V med 0.000 max 0.000 | dth abs med 0.0e+00 max 4.4e-16 | sign 1.00
+Q2c n= 960 condB=   1 muon     T med 0.005 max 0.011 | V med 0.000 max 0.000 | dth abs med 1.6e-04 max 1.3e-02 | sign 1.00
+Q2c n= 960 condB=   1 ht0.125  T med 0.004 max 0.012 | V med 0.002 max 0.004 | dth abs med 1.1e-04 max 1.0e-02 | sign 1.00
+Q2c n= 960 condB=   1 sgd      T med 0.000 max 0.000 | V med 0.000 max 0.000 | dth abs med 1.1e-16 max 1.2e-15 | sign 1.00
+Q2c n= 960 condB=   3 muon     T med 0.012 max 0.019 | V med 0.016 max 0.022 | dth abs med 2.8e-04 max 9.7e-03 | sign 1.00
+Q2c n= 960 condB=   3 ht0.125  T med 0.011 max 0.019 | V med 0.017 max 0.024 | dth abs med 2.1e-04 max 1.0e-02 | sign 1.00
+Q2c n= 960 condB=   3 sgd      T med 0.000 max 0.000 | V med 0.000 max 0.000 | dth abs med 2.4e-17 max 1.2e-15 | sign 1.00
+Q2c n= 960 condB=  30 muon     T med 0.033 max 0.054 | V med 0.059 max 0.080 | dth abs med 4.5e-04 max 3.4e-02 | sign 0.97
+Q2c n= 960 condB=  30 ht0.125  T med 0.029 max 0.052 | V med 0.058 max 0.083 | dth abs med 4.6e-04 max 3.3e-02 | sign 0.94
+Q2c n= 960 condB=  30 sgd      T med 0.000 max 0.000 | V med 0.000 max 0.000 | dth abs med 7.6e-17 max 8.9e-16 | sign 1.00
+runtime 38.4s

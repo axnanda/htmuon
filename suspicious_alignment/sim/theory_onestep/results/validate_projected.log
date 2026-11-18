@@ -1,0 +1,28 @@
+P1 {'block_commuting:ht0.125:relF_diff': '3.5e-13', 'block_commuting:ht0.25:relF_diff': '2.0e-13', 'block_commuting:ht0.5:relF_diff': '7.6e-14', 'block_commuting:muon:relF_diff': '5.8e-13', 'block_commuting:sgd:relF_diff': '9.8e-14', 'commuting:echelon(r=2k):relF_diff': '3.8e-01', 'commuting:echelon(r=k):relF_diff': '3.1e+00', 'commuting:ht0.125:relF_diff': '1.8e-13', 'commuting:ht0.25:relF_diff': '1.7e-13', 'commuting:ht0.5:relF_diff': '1.5e-13', 'commuting:muon:relF_diff': '2.6e-13', 'commuting:sgd:relF_diff': '1.4e-13', 'generic:ht0.125:relF_diff': '5.7e-01', 'generic:ht0.25:relF_diff': '5.4e-01', 'generic:ht0.5:relF_diff': '4.9e-01', 'generic:muon:relF_diff': '6.1e-01', 'generic:sgd:relF_diff': '1.4e-13'}
+P2 {'echelon_2k:dL_at_threshold_rel': '7.7e-16', 'echelon_2k:dL_identity_relerr': '7.9e-15', 'echelon_k:dL_at_threshold_rel': '7.7e-16', 'echelon_k:dL_identity_relerr': '4.2e-15', 'ht0.125:dL_at_threshold_rel': '7.7e-16', 'ht0.125:dL_identity_relerr': '6.3e-15', 'ht0.25:dL_at_threshold_rel': '9.1e-16', 'ht0.25:dL_identity_relerr': '5.1e-15', 'ht0.5:dL_at_threshold_rel': '6.6e-16', 'ht0.5:dL_identity_relerr': '5.1e-15', 'muon:dL_at_threshold_rel': '7.7e-16', 'muon:dL_identity_relerr': '4.2e-15', 'ns5:dL_at_threshold_rel': '6.5e-16', 'ns5:dL_identity_relerr': '4.9e-15', 'sgd:dL_at_threshold_rel': '8.5e-16', 'sgd:dL_identity_relerr': '6.8e-15'}
+P3 {'Splus_tests': 42, 'Splus_violations': 0, 'echelon_2k:etaLoss_formula_relerr': '6.4e-15', 'echelon_k:etaLoss_formula_relerr': '6.8e-15', 'ht0.125:etaLoss_formula_relerr': '3.5e-15', 'ht0.25:etaLoss_formula_relerr': '7.1e-15', 'ht0.5:etaLoss_formula_relerr': '3.9e-14', 'muon:etaLoss_formula_relerr': '4.4e-15', 'ns5:etaLoss_formula_relerr': '2.7e-15', 'sgd:etaLoss_formula_relerr': '5.3e-13', 'window_tests': 799, 'window_violations': 0}
+P4 {'echelon_2k:additivity_relerr': '5.2e-16', 'echelon_k:additivity_relerr': '7.9e-16', 'ht0.125:additivity_relerr': '1.0e-15', 'ht0.25:additivity_relerr': '1.8e-15', 'ht0.5:additivity_relerr': '4.0e-14', 'muon:additivity_relerr': '6.2e-16', 'ns5:additivity_relerr': '5.2e-16', 'sgd:additivity_relerr': '1.1e-11'}
+P6 {'echelon_FP_etaLoss_relerr': '5.9e-13', 'echelon_PF_etaLoss_relerr': '2.8e-14'}
+P5 max_relerr 2.85e-12 ordering_violations 0 ties 2
+   m=10 p=0.000 theta=0.50000 etaD=0.6 etaB=2 ratio=3.333 theta_flip=0.917431
+   m=10 p=0.000 theta=0.90000 etaD=1.8 etaB=2 ratio=1.111 theta_flip=0.917431
+   m=10 p=0.000 theta=0.99000 etaD=5.97 etaB=2 ratio=0.335 theta_flip=0.917431
+   m=10 p=0.000 theta=0.99900 etaD=18.96 etaB=2 ratio=0.1055 theta_flip=0.917431
+   m=10 p=0.000 theta=0.99999 etaD=189.7 etaB=2 ratio=0.01054 theta_flip=0.917431
+   m=10 p=0.125 theta=0.50000 etaD=0.523 etaB=2 ratio=3.824 theta_flip=0.955461
+   m=10 p=0.125 theta=0.90000 etaD=1.368 etaB=2 ratio=1.462 theta_flip=0.955461
+   m=10 p=0.125 theta=0.99000 etaD=3.905 etaB=2 ratio=0.5122 theta_flip=0.955461
+   m=10 p=0.125 theta=0.99900 etaD=10.74 etaB=2 ratio=0.1863 theta_flip=0.955461
+   m=10 p=0.125 theta=0.99999 etaD=80.54 etaB=2 ratio=0.02483 theta_flip=0.955461
+   m=10 p=0.500 theta=0.50000 etaD=0.3464 etaB=2 ratio=5.774 theta_flip=0.999101
+   m=10 p=0.500 theta=0.90000 etaD=0.6 etaB=2 ratio=3.333 theta_flip=0.999101
+   m=10 p=0.500 theta=0.99000 etaD=1.093 etaB=2 ratio=1.83 theta_flip=0.999101
+   m=10 p=0.500 theta=0.99900 etaD=1.948 etaB=2 ratio=1.027 theta_flip=0.999101
+   m=10 p=0.500 theta=0.99999 etaD=6.16 etaB=2 ratio=0.3247 theta_flip=0.999101
+   m=10 p=1.000 theta=0.50000 etaD=0.2 etaB=2 ratio=10 theta_flip=1.000000
+   m=10 p=1.000 theta=0.90000 etaD=0.2 etaB=2 ratio=10 theta_flip=1.000000
+   m=10 p=1.000 theta=0.99000 etaD=0.2 etaB=2 ratio=10 theta_flip=1.000000
+   m=10 p=1.000 theta=0.99900 etaD=0.2 etaB=2 ratio=10 theta_flip=1.000000
+   m=10 p=1.000 theta=0.99999 etaD=0.2 etaB=2 ratio=10 theta_flip=1.000000
+P7 {'crit_violations': 0, 'ht0.125:FP_ratio_relerr': '5.7e-14', 'ht0.125:FP_threshold_relerr': '5.7e-14', 'ht0.125:F_is_radial_rescaling': '9.3e-16', 'ht0.125:PF_threshold_relerr': '4.4e-14', 'ht0.5:FP_ratio_relerr': '6.6e-14', 'ht0.5:FP_threshold_relerr': '6.6e-14', 'ht0.5:F_is_radial_rescaling': '9.7e-16', 'ht0.5:PF_threshold_relerr': '4.3e-14', 'muon:FP_ratio_relerr': '5.6e-14', 'muon:FP_threshold_relerr': '5.6e-14', 'muon:F_is_radial_rescaling': '9.3e-16', 'muon:PF_threshold_relerr': '4.4e-14', 'sgd:FP_ratio_relerr': '4.5e-14', 'sgd:FP_threshold_relerr': '4.5e-14', 'sgd:F_is_radial_rescaling': '8.1e-16', 'sgd:PF_threshold_relerr': '4.4e-14', 'tests': 126}
+runtime 10.1s

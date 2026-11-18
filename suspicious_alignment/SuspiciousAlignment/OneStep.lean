@@ -1,0 +1,1326 @@
+import Mathlib
+import SuspiciousAlignment.Defs
+
+/-!
+# One SGD step: the comparison functional and its expectation (Appendix A.2 and A.5)
+
+This file formalizes, at the exact finite-`d` (purely algebraic) level, the one-step analysis of
+
+> Deng et al., *Suspicious Alignment of SGD: A Fine-Grained Step Size Condition Analysis*
+> (arXiv:2601.11789v2), Appendix A.2 ("Next step alignment function") and
+> Appendix A.5 ("Comparison Lemma").
+
+Contents (paper item → section of this file):
+
+* **A.2, eq. (10)** `θ_{t+1} = 1 / (1 + s^ℬ_{t+1} / s^𝒟_{t+1})` and the pathwise equivalences
+  `θ_{t+1} > θ_t ↔ f_t(η) > 0`, `θ_{t+1} < θ_t ↔ f_t(η) < 0` — section *Pathwise facts*.
+* **Lemma "Elementwise expectation"** (eqs. (Eat), (Ebt)) — section *Elementwise expectation*.
+  The conditional expectation `𝔼[s^S_{t+1} | x_t]` is the finite sum `Spec.EsNext`; we prove its
+  expansion in powers of `η`, the pathwise decomposition `s^S_{t+1} = χ + gᵀζ + ζᵀDζ` behind it,
+  and (section *Abstract expectation*) that any normalised linear functional under which the noise
+  has mean `0` and second moments `κ_i²` maps `s^S_{t+1}` to `EsNext` and `f_t(η)` to `expF`.
+* **Lemma "Quadratic form for step size condition"** — section *Quadratic form*:
+  `𝔼[f_t(η) | x_t] = p_t η² + q_t η` (`Spec.expF_eq`), the bound
+  `q_t ≤ 2 s^ℬ s^𝒟 (λ_{k+1} - λ_k)` (`Spec.qCoef_le`), and the *exact* condition for `q_t < 0`
+  (`Spec.qCoef_neg_iff`): the paper's unconditional claim `q_t < 0` fails precisely when
+  `θ_t ∈ {0, 1}` (`Spec.exists_theta_eq_one_qCoef_eq_zero`,
+  `Spec.exists_theta_eq_zero_qCoef_eq_zero`).
+* **Remark after the lemma** (sign of the parabola) — section *Sign of the parabola*.
+* **Bridge to the deterministic equivalent** `thetaBarNext` — section *Deterministic equivalent*:
+  `thetaBarNext - θ_t = 𝔼[f_t(η) | x_t] / (s_t 𝔼[s_{t+1} | x_t])` (`Spec.thetaBarNext_sub_theta`).
+* **Non-vacuity** — the last section exhibits a concrete two-dimensional instance for each regime
+  (`p_t > 0` with `η < η*_t`, `p_t > 0` with `η > η*_t`, `p_t ≤ 0`) and a two-point noise realising
+  the hypotheses of the abstract-expectation lemmas.
+
+Positivity hypotheses (`s_t > 0`, `s_{t+1} > 0`, `𝔼[s_{t+1} | x_t] > 0`, `s^𝒟_{t+1} ≠ 0`,
+`p_t ≠ 0`) are always explicit, so that no equivalence or identity below gets its content from
+Lean's `x / 0 = 0`; for each positivity hypothesis a companion lemma (`exists_…_and_…_eq_zero`,
+`theta_zero_lt_thetaBarNext_and_expF_eq_zero`, `OneStep.theta_eq_zero_and_one_div_eq_one`) shows
+that it cannot be dropped. (The only statements that also cover a vanishing denominator are the
+trivial bounds `0 ≤ thetaBarNext ≤ 1`, `thetaBarNext_zero` and the rewriting `etaStar_eq`, which
+hold for the totalised functions.)
+
+Generic helper lemmas (real-variable facts, facts about `mom` and `theta` of an arbitrary state)
+live in `SuspiciousAlignment.OneStep` and take the spectrum `P` as an explicit first argument; the
+statements that are specific to the one-step analysis are in `SuspiciousAlignment.Spec` (dot
+notation on `P`).
+-/
+
+set_option linter.unusedSectionVars false
+
+open Finset
+
+namespace SuspiciousAlignment
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+
+namespace OneStep
+
+/-! ### Real-variable helper lemmas -/
+
+/-- If a product of two nonnegative reals is positive, both factors are positive. -/
+theorem pos_and_pos_of_mul_pos {a b : ℝ} (h : 0 < a * b) (ha : 0 ≤ a) (hb : 0 ≤ b) :
+    0 < a ∧ 0 < b :=
+  ⟨pos_of_mul_pos_left h hb, pos_of_mul_pos_right h ha⟩
+
+/-- `p η² + q η = η (p η + q)`. -/
+theorem quad_eq_mul (p q η : ℝ) : p * η ^ 2 + q * η = η * (p * η + q) := by ring
+
+/-- For `p > 0` and `η > 0`: `p η² + q η < 0 ↔ η < -q / p`. -/
+theorem quad_neg_iff {p q η : ℝ} (hp : 0 < p) (hη : 0 < η) :
+    p * η ^ 2 + q * η < 0 ↔ η < -q / p := by
+  rw [quad_eq_mul, lt_div_iff₀ hp]
+  constructor
+  · intro h
+    by_contra hh
+    have h2 : 0 ≤ p * η + q := by linarith [not_lt.mp hh]
+    have := mul_nonneg hη.le h2
+    linarith
+  · intro h
+    have h2 : p * η + q < 0 := by linarith
+    exact mul_neg_of_pos_of_neg hη h2
+
+/-- For `p > 0` and `η > 0`: `0 < p η² + q η ↔ -q / p < η`. -/
+theorem quad_pos_iff {p q η : ℝ} (hp : 0 < p) (hη : 0 < η) :
+    0 < p * η ^ 2 + q * η ↔ -q / p < η := by
+  rw [quad_eq_mul, div_lt_iff₀ hp]
+  constructor
+  · intro h
+    by_contra hh
+    have h2 : p * η + q ≤ 0 := by linarith [not_lt.mp hh]
+    have := mul_nonpos_of_nonneg_of_nonpos hη.le h2
+    linarith
+  · intro h
+    have h2 : 0 < p * η + q := by linarith
+    exact mul_pos hη h2
+
+/-- For `p > 0` and `η > 0`: `p η² + q η = 0 ↔ η = -q / p`. -/
+theorem quad_eq_zero_iff {p q η : ℝ} (hp : 0 < p) (hη : 0 < η) :
+    p * η ^ 2 + q * η = 0 ↔ η = -q / p := by
+  rw [quad_eq_mul, eq_div_iff hp.ne', mul_eq_zero]
+  constructor
+  · rintro (h | h)
+    · exact absurd h hη.ne'
+    · linarith
+  · intro h
+    right
+    linarith
+
+variable (P : Spec ι)
+
+/-! ### Elementary facts about moments -/
+
+/-- A weighted moment vanishes iff the state vanishes on the block (as `λ_i > 0`). -/
+theorem mom_eq_zero_iff (S : Finset ι) (p : ℕ) (c : ι → ℝ) :
+    P.mom S p c = 0 ↔ ∀ i ∈ S, c i = 0 := by
+  unfold Spec.mom
+  rw [Finset.sum_eq_zero_iff_of_nonneg
+    (fun i _ => mul_nonneg (pow_nonneg (P.lam_pos i).le _) (sq_nonneg _))]
+  refine forall₂_congr fun i _ => ?_
+  have hl : P.lam i ^ p ≠ 0 := pow_ne_zero p (P.lam_pos i).ne'
+  simp [hl]
+
+/-- A weighted moment is positive iff the state is non-zero somewhere on the block. -/
+theorem mom_pos_iff (S : Finset ι) (p : ℕ) (c : ι → ℝ) :
+    0 < P.mom S p c ↔ ∃ i ∈ S, c i ≠ 0 := by
+  rw [(P.mom_nonneg S p c).lt_iff_ne, ne_comm, Ne, mom_eq_zero_iff]
+  push Not
+  rfl
+
+/-- If the `p`-th moment on a block vanishes, so does the `q`-th. -/
+theorem mom_eq_zero_of_mom_eq_zero {S : Finset ι} {p : ℕ} {c : ι → ℝ} (h : P.mom S p c = 0)
+    (q : ℕ) : P.mom S q c = 0 :=
+  (mom_eq_zero_iff P S q c).mpr ((mom_eq_zero_iff P S p c).mp h)
+
+/-- If `λ_i ≤ b` on the block `S` then `∑_S λ^{p+j} c² ≤ b^j ∑_S λ^p c²`. -/
+theorem mom_add_le {S : Finset ι} {b : ℝ} (hb : ∀ i ∈ S, P.lam i ≤ b) (p j : ℕ) (c : ι → ℝ) :
+    P.mom S (p + j) c ≤ b ^ j * P.mom S p c := by
+  unfold Spec.mom
+  rw [Finset.mul_sum]
+  refine Finset.sum_le_sum fun i hi => ?_
+  have h1 : P.lam i ^ j ≤ b ^ j := pow_le_pow_left₀ (P.lam_pos i).le (hb i hi) j
+  have h2 : 0 ≤ P.lam i ^ p * c i ^ 2 :=
+    mul_nonneg (pow_nonneg (P.lam_pos i).le _) (sq_nonneg _)
+  calc P.lam i ^ (p + j) * c i ^ 2 = P.lam i ^ j * (P.lam i ^ p * c i ^ 2) := by ring
+    _ ≤ b ^ j * (P.lam i ^ p * c i ^ 2) := mul_le_mul_of_nonneg_right h1 h2
+
+/-- If `0 ≤ a ≤ λ_i` on the block `S` then `a^j ∑_S λ^p c² ≤ ∑_S λ^{p+j} c²`. -/
+theorem le_mom_add {S : Finset ι} {a : ℝ} (ha : 0 ≤ a) (h : ∀ i ∈ S, a ≤ P.lam i) (p j : ℕ)
+    (c : ι → ℝ) : a ^ j * P.mom S p c ≤ P.mom S (p + j) c := by
+  unfold Spec.mom
+  rw [Finset.mul_sum]
+  refine Finset.sum_le_sum fun i hi => ?_
+  have h1 : a ^ j ≤ P.lam i ^ j := pow_le_pow_left₀ ha (h i hi) j
+  have h2 : 0 ≤ P.lam i ^ p * c i ^ 2 :=
+    mul_nonneg (pow_nonneg (P.lam_pos i).le _) (sq_nonneg _)
+  calc a ^ j * (P.lam i ^ p * c i ^ 2) ≤ P.lam i ^ j * (P.lam i ^ p * c i ^ 2) :=
+        mul_le_mul_of_nonneg_right h1 h2
+    _ = P.lam i ^ (p + j) * c i ^ 2 := by ring
+
+/-- `τ^ℬ = ∑_ℬ λ³ c² ≤ λ_{k+1} s^ℬ` (used for the bound on `q_t`). -/
+theorem tauB_le (c : ι → ℝ) : P.tauB c ≤ P.lamk1 * P.sB c := by
+  have h := mom_add_le P (fun i hi => P.le_lamk1_of_mem_B hi) 2 1 c
+  rw [pow_one] at h
+  exact h
+
+/-- `λ_d s^ℬ ≤ τ^ℬ`. -/
+theorem le_tauB (c : ι → ℝ) : P.lamd * P.sB c ≤ P.tauB c := by
+  have h := le_mom_add P P.lamd_pos.le (fun i hi => P.lamd_le_of_mem_B hi) 2 1 c
+  rw [pow_one] at h
+  exact h
+
+/-- `λ_k s^𝒟 ≤ τ^𝒟 = ∑_𝒟 λ³ c²` (used for the bound on `q_t`). -/
+theorem le_tauD (c : ι → ℝ) : P.lamk * P.sD c ≤ P.tauD c := by
+  have h := le_mom_add P P.lamk_pos.le (fun i hi => P.lamk_le_of_mem hi) 2 1 c
+  rw [pow_one] at h
+  exact h
+
+/-- `τ^𝒟 ≤ λ_1 s^𝒟`. -/
+theorem tauD_le (c : ι → ℝ) : P.tauD c ≤ P.lam1 * P.sD c := by
+  have h := mom_add_le P (fun i hi => P.le_lam1_of_mem hi) 2 1 c
+  rw [pow_one] at h
+  exact h
+
+/-- `∑_ℬ λ⁴ c² ≤ λ_{k+1}² s^ℬ`. -/
+theorem mom_four_B_le (c : ι → ℝ) : P.mom P.B 4 c ≤ P.lamk1 ^ 2 * P.sB c :=
+  mom_add_le P (fun _ hi => P.le_lamk1_of_mem_B hi) 2 2 c
+
+/-- `λ_d² s^ℬ ≤ ∑_ℬ λ⁴ c²`. -/
+theorem le_mom_four_B (c : ι → ℝ) : P.lamd ^ 2 * P.sB c ≤ P.mom P.B 4 c :=
+  le_mom_add P P.lamd_pos.le (fun _ hi => P.lamd_le_of_mem_B hi) 2 2 c
+
+/-- `∑_𝒟 λ⁴ c² ≤ λ_1² s^𝒟`. -/
+theorem mom_four_D_le (c : ι → ℝ) : P.mom P.D 4 c ≤ P.lam1 ^ 2 * P.sD c :=
+  mom_add_le P (fun _ hi => P.le_lam1_of_mem hi) 2 2 c
+
+/-- `λ_k² s^𝒟 ≤ ∑_𝒟 λ⁴ c²`. -/
+theorem le_mom_four_D (c : ι → ℝ) : P.lamk ^ 2 * P.sD c ≤ P.mom P.D 4 c :=
+  le_mom_add P P.lamk_pos.le (fun _ hi => P.lamk_le_of_mem hi) 2 2 c
+
+/-! ### Elementary facts about the alignment `θ` of an arbitrary state -/
+
+/-- `θ(c) > 0` iff `s^𝒟(c) > 0`. -/
+theorem theta_pos_iff (c : ι → ℝ) : 0 < P.theta c ↔ 0 < P.sD c := by
+  constructor
+  · intro h
+    rcases (P.sD_nonneg c).eq_or_lt with h0 | h0
+    · unfold Spec.theta at h
+      rw [← h0, zero_div] at h
+      exact absurd h (lt_irrefl _)
+    · exact h0
+  · intro h
+    exact div_pos h (by unfold Spec.s; linarith [P.sB_nonneg c])
+
+/-- `θ(c) = 0` iff `s^𝒟(c) = 0`. -/
+theorem theta_eq_zero_iff (c : ι → ℝ) : P.theta c = 0 ↔ P.sD c = 0 := by
+  constructor
+  · intro h
+    by_contra h0
+    have : 0 < P.theta c :=
+      (theta_pos_iff P c).mpr (lt_of_le_of_ne (P.sD_nonneg c) (Ne.symm h0))
+    linarith
+  · intro h
+    unfold Spec.theta
+    rw [h, zero_div]
+
+/-- `θ(c) = 1` iff the state is non-zero and lies entirely in the dominant block. -/
+theorem theta_eq_one_iff (c : ι → ℝ) : P.theta c = 1 ↔ 0 < P.sD c ∧ P.sB c = 0 := by
+  constructor
+  · intro h
+    have hD : 0 < P.sD c := (theta_pos_iff P c).mp (by rw [h]; exact one_pos)
+    have hs : 0 < P.s c := by unfold Spec.s; linarith [P.sB_nonneg c]
+    refine ⟨hD, ?_⟩
+    unfold Spec.theta at h
+    rw [div_eq_one_iff_eq hs.ne'] at h
+    unfold Spec.s at h
+    linarith
+  · rintro ⟨hD, hB⟩
+    unfold Spec.theta Spec.s
+    rw [hB, add_zero, div_self hD.ne']
+
+/-- `0 < θ(c) < 1` iff both block energies are positive. -/
+theorem theta_mem_Ioo_iff (c : ι → ℝ) :
+    (0 < P.theta c ∧ P.theta c < 1) ↔ (0 < P.sD c ∧ 0 < P.sB c) := by
+  constructor
+  · rintro ⟨h0, h1⟩
+    have hD := (theta_pos_iff P c).mp h0
+    refine ⟨hD, ?_⟩
+    rcases (P.sB_nonneg c).eq_or_lt with hB | hB
+    · exact absurd ((theta_eq_one_iff P c).mpr ⟨hD, hB.symm⟩) h1.ne
+    · exact hB
+  · rintro ⟨hD, hB⟩
+    refine ⟨(theta_pos_iff P c).mpr hD, ?_⟩
+    unfold Spec.theta
+    rw [div_lt_one (by unfold Spec.s; linarith)]
+    unfold Spec.s
+    linarith
+
+/-- `θ(c) ∈ {0, 1}` iff one of the two block energies vanishes. -/
+theorem theta_eq_zero_or_eq_one_iff (c : ι → ℝ) :
+    (P.theta c = 0 ∨ P.theta c = 1) ↔ (P.sD c = 0 ∨ P.sB c = 0) := by
+  constructor
+  · rintro (h | h)
+    · exact Or.inl ((theta_eq_zero_iff P c).mp h)
+    · exact Or.inr ((theta_eq_one_iff P c).mp h).2
+  · rintro (h | h)
+    · exact Or.inl ((theta_eq_zero_iff P c).mpr h)
+    · rcases (P.sD_nonneg c).eq_or_lt with hD | hD
+      · exact Or.inl ((theta_eq_zero_iff P c).mpr hD.symm)
+      · exact Or.inr ((theta_eq_one_iff P c).mpr ⟨hD, h⟩)
+
+/-- Second equality of paper eq. (10) for an arbitrary state: if `s^𝒟(c) ≠ 0` then
+`θ(c) = 1 / (1 + s^ℬ(c) / s^𝒟(c))`. -/
+theorem theta_eq_one_div (c : ι → ℝ) (h : P.sD c ≠ 0) :
+    P.theta c = 1 / (1 + P.sB c / P.sD c) := by
+  have hD : 0 < P.sD c := lt_of_le_of_ne (P.sD_nonneg c) (Ne.symm h)
+  have hB := P.sB_nonneg c
+  have hs : P.sD c + P.sB c ≠ 0 := by positivity
+  unfold Spec.theta Spec.s
+  field_simp
+
+/-- The hypothesis `s^𝒟(c) ≠ 0` in `theta_eq_one_div` cannot be dropped: if `s^𝒟(c) = 0` then
+`θ(c) = 0`, whereas Lean's `x / 0 = 0` evaluates `1 / (1 + s^ℬ(c) / s^𝒟(c))` to `1`. -/
+theorem theta_eq_zero_and_one_div_eq_one (c : ι → ℝ) (h : P.sD c = 0) :
+    P.theta c = 0 ∧ 1 / (1 + P.sB c / P.sD c) = 1 := by
+  refine ⟨(theta_eq_zero_iff P c).mpr h, ?_⟩
+  rw [h, div_zero, add_zero, div_one]
+
+/-- The difference of the alignments of two non-zero states:
+`θ(c') - θ(c) = (s^ℬ(c) s^𝒟(c') - s^ℬ(c') s^𝒟(c)) / (s(c) s(c'))`. -/
+theorem theta_sub_theta (c c' : ι → ℝ) (hs : P.s c ≠ 0) (hs' : P.s c' ≠ 0) :
+    P.theta c' - P.theta c = (P.sB c * P.sD c' - P.sB c' * P.sD c) / (P.s c * P.s c') := by
+  unfold Spec.theta
+  rw [div_sub_div _ _ hs' hs, mul_comm (P.s c') (P.s c)]
+  congr 1
+  unfold Spec.s
+  ring
+
+/-- For non-zero states, `θ(c) < θ(c')` iff the cross-difference
+`s^ℬ(c) s^𝒟(c') - s^ℬ(c') s^𝒟(c)` is positive. -/
+theorem theta_lt_theta_iff (c c' : ι → ℝ) (hs : 0 < P.s c) (hs' : 0 < P.s c') :
+    P.theta c < P.theta c' ↔ 0 < P.sB c * P.sD c' - P.sB c' * P.sD c := by
+  rw [← sub_pos, theta_sub_theta P c c' hs.ne' hs'.ne',
+    div_pos_iff_of_pos_right (mul_pos hs hs')]
+
+/-- For non-zero states, `θ(c') < θ(c)` iff the cross-difference
+`s^ℬ(c) s^𝒟(c') - s^ℬ(c') s^𝒟(c)` is negative. -/
+theorem theta_gt_theta_iff (c c' : ι → ℝ) (hs : 0 < P.s c) (hs' : 0 < P.s c') :
+    P.theta c' < P.theta c ↔ P.sB c * P.sD c' - P.sB c' * P.sD c < 0 := by
+  rw [← sub_neg, theta_sub_theta P c c' hs.ne' hs'.ne', div_lt_iff₀ (mul_pos hs hs'), zero_mul]
+
+/-- For non-zero states, `θ(c') = θ(c)` iff the cross-difference vanishes. -/
+theorem theta_eq_theta_iff (c c' : ι → ℝ) (hs : 0 < P.s c) (hs' : 0 < P.s c') :
+    P.theta c' = P.theta c ↔ P.sB c * P.sD c' - P.sB c' * P.sD c = 0 := by
+  rw [← sub_eq_zero, theta_sub_theta P c c' hs.ne' hs'.ne', div_eq_zero_iff]
+  constructor
+  · rintro (h | h)
+    · exact h
+    · exact absurd h (mul_pos hs hs').ne'
+  · exact Or.inl
+
+/-- A positive cross-difference forces both states to be non-zero, hence `θ(c) < θ(c')`
+(no positivity hypothesis needed). -/
+theorem theta_lt_theta_of_pos (c c' : ι → ℝ)
+    (h : 0 < P.sB c * P.sD c' - P.sB c' * P.sD c) : P.theta c < P.theta c' := by
+  have h1 : 0 < P.sB c * P.sD c' := by
+    have := mul_nonneg (P.sB_nonneg c') (P.sD_nonneg c)
+    linarith
+  obtain ⟨hB, hD'⟩ := pos_and_pos_of_mul_pos h1 (P.sB_nonneg _) (P.sD_nonneg _)
+  have hs : 0 < P.s c := by unfold Spec.s; linarith [P.sD_nonneg c]
+  have hs' : 0 < P.s c' := by unfold Spec.s; linarith [P.sB_nonneg c']
+  exact (theta_lt_theta_iff P c c' hs hs').mpr h
+
+/-- A negative cross-difference forces both states to be non-zero, hence `θ(c') < θ(c)`
+(no positivity hypothesis needed). -/
+theorem theta_gt_theta_of_neg (c c' : ι → ℝ)
+    (h : P.sB c * P.sD c' - P.sB c' * P.sD c < 0) : P.theta c' < P.theta c := by
+  have h1 : 0 < P.sB c' * P.sD c := by
+    have := mul_nonneg (P.sB_nonneg c) (P.sD_nonneg c')
+    linarith
+  obtain ⟨hB', hD⟩ := pos_and_pos_of_mul_pos h1 (P.sB_nonneg _) (P.sD_nonneg _)
+  have hs : 0 < P.s c := by unfold Spec.s; linarith [P.sB_nonneg c]
+  have hs' : 0 < P.s c' := by unfold Spec.s; linarith [P.sD_nonneg c']
+  exact (theta_gt_theta_iff P c c' hs hs').mpr h
+
+end OneStep
+
+namespace Spec
+
+open OneStep
+
+variable (P : Spec ι) (N : Noise ι)
+
+/-! ### Pathwise facts (Appendix A.2)
+
+Throughout, `c` is the current state `x_t` (in eigen-coordinates), `ζ` the realised noise, and
+`P.cNext η c ζ` the next state `x_{t+1}`. -/
+
+/-- The coordinate update of A.2 in its first form:
+`c_{i,t+1} = c_{i,t} - η (λ_i c_{i,t} + ζ_{i,t})` (`= (1 - ηλ_i) c_{i,t} - η ζ_{i,t}`, which is the
+definition of `cNext`). -/
+theorem cNext_eq (η : ℝ) (c ζ : ι → ℝ) (i : ι) :
+    P.cNext η c ζ i = c i - η * (P.lam i * c i + ζ i) := by
+  unfold cNext
+  ring
+
+/-- **Paper eq. (10), first equality**: `θ_{t+1}` written out,
+`θ_{t+1} = ∑_{i∈𝒟} λ_i² ((1-ηλ_i)c_i - ηζ_i)² / ∑_{i} λ_i² ((1-ηλ_i)c_i - ηζ_i)²`. -/
+theorem theta_cNext_eq_sum_div_sum (η : ℝ) (c ζ : ι → ℝ) :
+    P.theta (P.cNext η c ζ) =
+      (∑ i ∈ P.D, P.lam i ^ 2 * ((1 - η * P.lam i) * c i - η * ζ i) ^ 2) /
+        (∑ i, P.lam i ^ 2 * ((1 - η * P.lam i) * c i - η * ζ i) ^ 2) := by
+  unfold theta
+  rw [P.s_eq_sum]
+  rfl
+
+/-- **Paper eq. (10), second equality**: if `s^𝒟_{t+1} ≠ 0` then
+`θ_{t+1} = 1 / (1 + s^ℬ_{t+1} / s^𝒟_{t+1})`. -/
+theorem theta_cNext_eq_one_div (η : ℝ) (c ζ : ι → ℝ) (h : P.sD (P.cNext η c ζ) ≠ 0) :
+    P.theta (P.cNext η c ζ) = 1 / (1 + P.sB (P.cNext η c ζ) / P.sD (P.cNext η c ζ)) :=
+  theta_eq_one_div P _ h
+
+/-- The exceptional set of the Remark in A.2: the next-step block energy `s^S_{t+1}` vanishes iff
+the noise satisfies `η ζ_i = (1 - η λ_i) c_i` for every `i ∈ S`
+(for `η ≠ 0`: `ζ_i = (1 - η λ_i) c_i / η`, the paper's affine subspace `𝒱`). -/
+theorem mom_cNext_eq_zero_iff (S : Finset ι) (p : ℕ) (η : ℝ) (c ζ : ι → ℝ) :
+    P.mom S p (P.cNext η c ζ) = 0 ↔ ∀ i ∈ S, η * ζ i = (1 - η * P.lam i) * c i := by
+  rw [mom_eq_zero_iff]
+  refine forall₂_congr fun i _ => ?_
+  unfold cNext
+  constructor <;> intro h <;> linarith
+
+/-- `s^𝒟_{t+1} = 0` iff `η ζ_i = (1 - η λ_i) c_i` for every `i ∈ 𝒟` (Remark in A.2). -/
+theorem sD_cNext_eq_zero_iff (η : ℝ) (c ζ : ι → ℝ) :
+    P.sD (P.cNext η c ζ) = 0 ↔ ∀ i ∈ P.D, η * ζ i = (1 - η * P.lam i) * c i :=
+  P.mom_cNext_eq_zero_iff P.D 2 η c ζ
+
+/-- Pathwise one-step change of the alignment:
+`θ_{t+1} - θ_t = f_t(η) / (s_t s_{t+1})` whenever `s_t ≠ 0` and `s_{t+1} ≠ 0`. -/
+theorem theta_cNext_sub_theta (η : ℝ) (c ζ : ι → ℝ) (hs : P.s c ≠ 0)
+    (hs' : P.s (P.cNext η c ζ) ≠ 0) :
+    P.theta (P.cNext η c ζ) - P.theta c =
+      P.fCompare η c ζ / (P.s c * P.s (P.cNext η c ζ)) :=
+  theta_sub_theta P c _ hs hs'
+
+/-- **Paper A.2 (after eq. (12))**: `θ_{t+1} > θ_t ↔ f_t(η) > 0`, for `x_t ≠ 0`, `x_{t+1} ≠ 0`
+(i.e. `s_t > 0`, `s_{t+1} > 0`). -/
+theorem theta_lt_theta_cNext_iff (η : ℝ) (c ζ : ι → ℝ) (hs : 0 < P.s c)
+    (hs' : 0 < P.s (P.cNext η c ζ)) :
+    P.theta c < P.theta (P.cNext η c ζ) ↔ 0 < P.fCompare η c ζ :=
+  theta_lt_theta_iff P c _ hs hs'
+
+/-- **Paper A.2 (after eq. (12))**: `θ_{t+1} < θ_t ↔ f_t(η) < 0`, for `x_t ≠ 0`, `x_{t+1} ≠ 0`
+(i.e. `s_t > 0`, `s_{t+1} > 0`). -/
+theorem theta_cNext_lt_theta_iff (η : ℝ) (c ζ : ι → ℝ) (hs : 0 < P.s c)
+    (hs' : 0 < P.s (P.cNext η c ζ)) :
+    P.theta (P.cNext η c ζ) < P.theta c ↔ P.fCompare η c ζ < 0 :=
+  theta_gt_theta_iff P c _ hs hs'
+
+/-- `θ_{t+1} = θ_t ↔ f_t(η) = 0`, for `s_t > 0`, `s_{t+1} > 0`. -/
+theorem theta_cNext_eq_theta_iff (η : ℝ) (c ζ : ι → ℝ) (hs : 0 < P.s c)
+    (hs' : 0 < P.s (P.cNext η c ζ)) :
+    P.theta (P.cNext η c ζ) = P.theta c ↔ P.fCompare η c ζ = 0 :=
+  theta_eq_theta_iff P c _ hs hs'
+
+/-- `f_t(η) > 0 → θ_{t+1} > θ_t` holds with no positivity hypothesis. -/
+theorem theta_lt_theta_cNext_of_fCompare_pos (η : ℝ) (c ζ : ι → ℝ) (h : 0 < P.fCompare η c ζ) :
+    P.theta c < P.theta (P.cNext η c ζ) :=
+  theta_lt_theta_of_pos P c _ h
+
+/-- `f_t(η) < 0 → θ_{t+1} < θ_t` holds with no positivity hypothesis. -/
+theorem theta_cNext_lt_theta_of_fCompare_neg (η : ℝ) (c ζ : ι → ℝ) (h : P.fCompare η c ζ < 0) :
+    P.theta (P.cNext η c ζ) < P.theta c :=
+  theta_gt_theta_of_neg P c _ h
+
+/-- The hypothesis `s_t > 0` in `theta_lt_theta_cNext_iff` cannot be dropped: from `x_t = 0`
+(where `θ_t = 0` by convention) the alignment can increase although `f_t(η) = 0`. -/
+theorem exists_theta_lt_theta_cNext_and_fCompare_eq_zero :
+    ∃ (η : ℝ) (c ζ : ι → ℝ), P.theta c < P.theta (P.cNext η c ζ) ∧ P.fCompare η c ζ = 0 := by
+  refine ⟨1, 0, Pi.single P.i1 1, ?_, ?_⟩
+  · rw [P.theta_zero, theta_pos_iff]
+    unfold sD
+    rw [mom_pos_iff]
+    exact ⟨P.i1, P.i1_mem, by simp [cNext]⟩
+  · simp [fCompare, sB, sD, mom]
+
+/-- The hypothesis `s_{t+1} > 0` in `theta_cNext_lt_theta_iff` cannot be dropped: the step
+`η = 1/λ_1` from a state on the `λ_1`-eigendirection with zero noise lands on `x_{t+1} = 0`, so
+`θ_{t+1} = 0 < 1 = θ_t` although `f_t(η) = 0`. -/
+theorem exists_theta_cNext_lt_theta_and_fCompare_eq_zero :
+    ∃ (η : ℝ) (c ζ : ι → ℝ), P.theta (P.cNext η c ζ) < P.theta c ∧ P.fCompare η c ζ = 0 := by
+  have hc' : P.cNext (1 / P.lam P.i1) (Pi.single P.i1 1) 0 = 0 := by
+    funext i
+    by_cases hi : i = P.i1
+    · subst hi
+      simp [cNext, (P.lam_pos _).ne']
+    · simp [cNext, hi]
+  refine ⟨1 / P.lam P.i1, Pi.single P.i1 1, 0, ?_, ?_⟩
+  · rw [hc', P.theta_zero, theta_pos_iff]
+    unfold sD
+    rw [mom_pos_iff]
+    exact ⟨P.i1, P.i1_mem, by simp⟩
+  · rw [fCompare, hc']
+    simp [sB, sD, mom]
+
+/-! ### Elementwise expectation (Lemma "Elementwise expectation of `x_{t+1}`") -/
+
+/-- Per-coordinate pathwise expansion used in the proof of the lemma:
+`λ_i² c_{i,t+1}² = λ_i² (1-ηλ_i)² c_i² - 2η λ_i² (1-ηλ_i) c_i ζ_i + η² λ_i² ζ_i²`. -/
+theorem lam_sq_mul_cNext_sq (η : ℝ) (c ζ : ι → ℝ) (i : ι) :
+    P.lam i ^ 2 * P.cNext η c ζ i ^ 2 =
+      P.lam i ^ 2 * (1 - η * P.lam i) ^ 2 * c i ^ 2
+        - 2 * η * (P.lam i ^ 2 * (1 - η * P.lam i) * c i * ζ i)
+        + η ^ 2 * (P.lam i ^ 2 * ζ i ^ 2) := by
+  unfold cNext
+  ring
+
+/-- Per-coordinate regrouping in powers of `η` (last display in the proof of the lemma):
+`λ_i²(1-ηλ_i)²c_i² + η²λ_i²κ_i² = λ_i²c_i² - 2ηλ_i³c_i² + η²(λ_i⁴c_i² + λ_i²κ_i²)`. -/
+theorem EsNext_term_eq (η : ℝ) (c : ι → ℝ) (i : ι) :
+    P.lam i ^ 2 * (1 - η * P.lam i) ^ 2 * c i ^ 2 + η ^ 2 * P.lam i ^ 2 * N.kap2 i =
+      P.lam i ^ 2 * c i ^ 2 - 2 * η * (P.lam i ^ 3 * c i ^ 2)
+        + η ^ 2 * (P.lam i ^ 4 * c i ^ 2 + P.lam i ^ 2 * N.kap2 i) := by
+  ring
+
+/-- **Lemma "Elementwise expectation", per-coordinate statement**, in algebraic form:
+`𝔼[λ_i² c_{i,t+1}² | x_t] = (1-ηλ_i)² λ_i² c_i² + η² λ_i² κ_i²`, where the left-hand side is
+`EsNext` of the one-point block `{i}`. -/
+theorem EsNext_singleton (η : ℝ) (c : ι → ℝ) (i : ι) :
+    P.EsNext N {i} η c =
+      (1 - η * P.lam i) ^ 2 * P.lam i ^ 2 * c i ^ 2 + η ^ 2 * P.lam i ^ 2 * N.kap2 i := by
+  unfold EsNext
+  rw [Finset.sum_singleton]
+  ring
+
+/-- `EsNext` of a block is the sum of the per-coordinate expectations. -/
+theorem EsNext_eq_sum_singleton (S : Finset ι) (η : ℝ) (c : ι → ℝ) :
+    P.EsNext N S η c = ∑ i ∈ S, P.EsNext N {i} η c := by
+  unfold EsNext
+  exact Finset.sum_congr rfl fun i _ => by rw [Finset.sum_singleton]
+
+/-- Pathwise decomposition of the next-step block energy into its constant, linear and quadratic
+parts in the noise (`s^S_{t+1} = χ_S + g_Sᵀ ζ + ζᵀ D_S ζ`, proof of Lemma "Asymptotic ratio of
+expectations"). -/
+theorem mom_two_cNext (S : Finset ι) (η : ℝ) (c ζ : ι → ℝ) :
+    P.mom S 2 (P.cNext η c ζ) =
+      ∑ i ∈ S, P.lam i ^ 2 * (1 - η * P.lam i) ^ 2 * c i ^ 2
+        - 2 * η * ∑ i ∈ S, P.lam i ^ 2 * (1 - η * P.lam i) * c i * ζ i
+        + η ^ 2 * ∑ i ∈ S, P.lam i ^ 2 * ζ i ^ 2 := by
+  unfold mom
+  rw [Finset.mul_sum, Finset.mul_sum, ← Finset.sum_sub_distrib, ← Finset.sum_add_distrib]
+  exact Finset.sum_congr rfl fun i _ => P.lam_sq_mul_cNext_sq η c ζ i
+
+/-- **Lemma "Elementwise expectation", block form** (last display of its proof): for every block
+`S`, `𝔼[s^S_{t+1} | x_t] = ∑_S λ²c² - 2η ∑_S λ³c² + η² (∑_S λ⁴c² + ∑_S λ²κ²)`. -/
+theorem EsNext_eq (S : Finset ι) (η : ℝ) (c : ι → ℝ) :
+    P.EsNext N S η c =
+      P.mom S 2 c - 2 * η * P.mom S 3 c
+        + η ^ 2 * (P.mom S 4 c + ∑ i ∈ S, P.lam i ^ 2 * N.kap2 i) := by
+  unfold EsNext mom
+  rw [← Finset.sum_add_distrib, Finset.mul_sum, Finset.mul_sum, ← Finset.sum_sub_distrib,
+    ← Finset.sum_add_distrib]
+  exact Finset.sum_congr rfl fun i _ => P.EsNext_term_eq N η c i
+
+/-- **Paper eq. (Eat)**:
+`𝔼[s^𝒟_{t+1} | x_t] = s^𝒟 - 2η ∑_𝒟 λ³c² + η² (∑_𝒟 λ⁴c² + e_𝒟)`. -/
+theorem EsNext_D (η : ℝ) (c : ι → ℝ) :
+    P.EsNext N P.D η c = P.sD c - 2 * η * P.tauD c + η ^ 2 * (P.mom P.D 4 c + P.eD N) :=
+  P.EsNext_eq N P.D η c
+
+/-- **Paper eq. (Ebt)**:
+`𝔼[s^ℬ_{t+1} | x_t] = s^ℬ - 2η ∑_ℬ λ³c² + η² (∑_ℬ λ⁴c² + e_ℬ)`. -/
+theorem EsNext_B (η : ℝ) (c : ι → ℝ) :
+    P.EsNext N P.B η c = P.sB c - 2 * η * P.tauB c + η ^ 2 * (P.mom P.B 4 c + P.eB N) :=
+  P.EsNext_eq N P.B η c
+
+/-- At `η = 0` nothing moves: `𝔼[s^S_{t+1} | x_t] = s^S_t`. -/
+theorem EsNext_zero (S : Finset ι) (c : ι → ℝ) : P.EsNext N S 0 c = P.mom S 2 c := by
+  rw [P.EsNext_eq]
+  ring
+
+/-- Pathwise deviation of the next-step block energy from its conditional expectation:
+`s^S_{t+1} - 𝔼[s^S_{t+1} | x_t] = -2η ∑_S λ²(1-ηλ) c ζ + η² ∑_S λ² (ζ² - κ²)`.
+Taking expectations with `𝔼 ζ_i = 0`, `𝔼 ζ_i² = κ_i²` kills the right-hand side. -/
+theorem mom_two_cNext_sub_EsNext (S : Finset ι) (η : ℝ) (c ζ : ι → ℝ) :
+    P.mom S 2 (P.cNext η c ζ) - P.EsNext N S η c =
+      -(2 * η) * ∑ i ∈ S, P.lam i ^ 2 * (1 - η * P.lam i) * c i * ζ i
+        + η ^ 2 * ∑ i ∈ S, P.lam i ^ 2 * (ζ i ^ 2 - N.kap2 i) := by
+  rw [P.mom_two_cNext]
+  unfold EsNext
+  rw [Finset.mul_sum, Finset.mul_sum, Finset.mul_sum, Finset.mul_sum, ← Finset.sum_sub_distrib,
+    ← Finset.sum_add_distrib, ← Finset.sum_sub_distrib, ← Finset.sum_add_distrib]
+  exact Finset.sum_congr rfl fun i _ => by ring
+
+/-- `𝔼[s^S_{t+1} | x_t] ≥ 0` for every block. -/
+theorem EsNext_nonneg (S : Finset ι) (η : ℝ) (c : ι → ℝ) : 0 ≤ P.EsNext N S η c :=
+  Finset.sum_nonneg fun i _ =>
+    add_nonneg (mul_nonneg (mul_nonneg (sq_nonneg _) (sq_nonneg _)) (sq_nonneg _))
+      (mul_nonneg (mul_nonneg (sq_nonneg _) (sq_nonneg _)) (kap2_nonneg N i))
+
+/-- `𝔼[s^S_{t+1} | x_t] = 0` iff, for every `i ∈ S`, the deterministic part `(1-ηλ_i) c_i` and the
+noise part `η κ_i²` both vanish. -/
+theorem EsNext_eq_zero_iff (S : Finset ι) (η : ℝ) (c : ι → ℝ) :
+    P.EsNext N S η c = 0 ↔ ∀ i ∈ S, (1 - η * P.lam i) * c i = 0 ∧ η * N.kap2 i = 0 := by
+  unfold EsNext
+  rw [Finset.sum_eq_zero_iff_of_nonneg (fun i _ =>
+    add_nonneg (mul_nonneg (mul_nonneg (sq_nonneg _) (sq_nonneg _)) (sq_nonneg _))
+      (mul_nonneg (mul_nonneg (sq_nonneg _) (sq_nonneg _)) (kap2_nonneg N i)))]
+  refine forall₂_congr fun i _ => ?_
+  have hl : P.lam i ≠ 0 := (P.lam_pos i).ne'
+  have h1 : 0 ≤ P.lam i ^ 2 * (1 - η * P.lam i) ^ 2 * c i ^ 2 :=
+    mul_nonneg (mul_nonneg (sq_nonneg _) (sq_nonneg _)) (sq_nonneg _)
+  have h2 : 0 ≤ η ^ 2 * P.lam i ^ 2 * N.kap2 i :=
+    mul_nonneg (mul_nonneg (sq_nonneg _) (sq_nonneg _)) (kap2_nonneg N i)
+  rw [add_eq_zero_iff_of_nonneg h1 h2]
+  simp [hl, mul_eq_zero]
+
+/-- `𝔼[s^S_{t+1} | x_t] > 0` iff some coordinate of `S` has a non-zero deterministic part
+`(1-ηλ_i) c_i` or a non-zero noise part `η κ_i²`. -/
+theorem EsNext_pos_iff (S : Finset ι) (η : ℝ) (c : ι → ℝ) :
+    0 < P.EsNext N S η c ↔ ∃ i ∈ S, (1 - η * P.lam i) * c i ≠ 0 ∨ η * N.kap2 i ≠ 0 := by
+  rw [(P.EsNext_nonneg N S η c).lt_iff_ne, ne_comm, Ne, P.EsNext_eq_zero_iff]
+  push Not
+  refine exists_congr fun i => and_congr_right fun _ => ?_
+  tauto
+
+/-- Noise in one direction of `S` makes `𝔼[s^S_{t+1} | x_t]` positive (for `η ≠ 0`). -/
+theorem EsNext_pos_of_kap2_pos {S : Finset ι} {i : ι} (hi : i ∈ S) {η : ℝ} (hη : η ≠ 0)
+    (hk : 0 < N.kap2 i) (c : ι → ℝ) : 0 < P.EsNext N S η c :=
+  (P.EsNext_pos_iff N S η c).mpr ⟨i, hi, Or.inr (mul_ne_zero hη hk.ne')⟩
+
+/-- Non-degenerate noise (`s_min > 0`) makes `𝔼[s^S_{t+1} | x_t]` positive on every non-empty
+block (for `η ≠ 0`). -/
+theorem EsNext_pos_of_smin_pos {S : Finset ι} (hS : S.Nonempty) {η : ℝ} (hη : η ≠ 0)
+    (hs : 0 < N.smin) (c : ι → ℝ) : 0 < P.EsNext N S η c := by
+  obtain ⟨i, hi⟩ := hS
+  exact P.EsNext_pos_of_kap2_pos N hi hη (lt_of_lt_of_le hs (N.smin_le i)) c
+
+/-- A non-zero coordinate `c_i`, `i ∈ S`, with `η λ_i ≠ 1` makes `𝔼[s^S_{t+1} | x_t]` positive. -/
+theorem EsNext_pos_of_state {S : Finset ι} {i : ι} (hi : i ∈ S) {η : ℝ} {c : ι → ℝ}
+    (hc : c i ≠ 0) (hη : η * P.lam i ≠ 1) : 0 < P.EsNext N S η c :=
+  (P.EsNext_pos_iff N S η c).mpr
+    ⟨i, hi, Or.inl (mul_ne_zero (sub_ne_zero.mpr (Ne.symm hη)) hc)⟩
+
+/-- `𝔼[s_{t+1} | x_t] = 𝔼[s^𝒟_{t+1} | x_t] + 𝔼[s^ℬ_{t+1} | x_t]` is `EsNext` of the full index
+set. -/
+theorem EsNext_D_add_EsNext_B (η : ℝ) (c : ι → ℝ) :
+    P.EsNext N P.D η c + P.EsNext N P.B η c = P.EsNext N Finset.univ η c :=
+  P.sum_D_add_sum_B _
+
+/-- Exact condition for `𝔼[s_{t+1} | x_t] > 0` (the denominator of `thetaBarNext`). -/
+theorem EsNext_D_add_EsNext_B_pos_iff (η : ℝ) (c : ι → ℝ) :
+    0 < P.EsNext N P.D η c + P.EsNext N P.B η c ↔
+      ∃ i, (1 - η * P.lam i) * c i ≠ 0 ∨ η * N.kap2 i ≠ 0 := by
+  rw [P.EsNext_D_add_EsNext_B, P.EsNext_pos_iff]
+  simp
+
+/-- `𝔼[s_{t+1} | x_t] > 0` for `η ≠ 0` under non-degenerate noise (`s_min > 0`). -/
+theorem EsNext_D_add_EsNext_B_pos_of_smin_pos {η : ℝ} (hη : η ≠ 0) (hs : 0 < N.smin)
+    (c : ι → ℝ) : 0 < P.EsNext N P.D η c + P.EsNext N P.B η c :=
+  add_pos (P.EsNext_pos_of_smin_pos N P.D_nonempty hη hs c)
+    (P.EsNext_pos_of_smin_pos N P.B_nonempty hη hs c)
+
+/-! ### Quadratic form (Lemma "Quadratic form for step size condition") -/
+
+/-- `𝔼[f_t(η) | x_t] = s^ℬ_t 𝔼[s^𝒟_{t+1} | x_t] - 𝔼[s^ℬ_{t+1} | x_t] s^𝒟_t`: the conditional
+expectation of the comparison functional `fCompare` (first line of the proof of the lemma;
+`expect_fCompare` below justifies the name for any abstract expectation). -/
+def expF (η : ℝ) (c : ι → ℝ) : ℝ :=
+  P.sB c * P.EsNext N P.D η c - P.EsNext N P.B η c * P.sD c
+
+/-- Pathwise deviation of the comparison functional from its conditional expectation, in terms of
+the deviations of the two block energies. -/
+theorem fCompare_sub_expF (η : ℝ) (c ζ : ι → ℝ) :
+    P.fCompare η c ζ - P.expF N η c =
+      P.sB c * (P.sD (P.cNext η c ζ) - P.EsNext N P.D η c)
+        - (P.sB (P.cNext η c ζ) - P.EsNext N P.B η c) * P.sD c := by
+  unfold fCompare expF
+  ring
+
+/-- **Lemma "Quadratic form", eq. (quad-form)**: `𝔼[f_t(η) | x_t] = p_t η² + q_t η`. -/
+theorem expF_eq (η : ℝ) (c : ι → ℝ) :
+    P.expF N η c = P.pCoef N c * η ^ 2 + P.qCoef c * η := by
+  unfold expF pCoef qCoef
+  rw [P.EsNext_D, P.EsNext_B]
+  ring
+
+/-- `𝔼[f_t(η) | x_t] = η (p_t η + q_t)`. -/
+theorem expF_eq_mul (η : ℝ) (c : ι → ℝ) :
+    P.expF N η c = η * (P.pCoef N c * η + P.qCoef c) := by
+  rw [P.expF_eq, quad_eq_mul]
+
+/-- The parabola passes through the origin: `𝔼[f_t(0) | x_t] = 0` (Remark after the lemma). -/
+@[simp] theorem expF_zero (c : ι → ℝ) : P.expF N 0 c = 0 := by
+  rw [P.expF_eq]
+  ring
+
+/-- **Lemma "Quadratic form", eq. (q-sign), first inequality**:
+`q_t ≤ 2 s^ℬ s^𝒟 (λ_{k+1} - λ_k)`. -/
+theorem qCoef_le (c : ι → ℝ) : P.qCoef c ≤ 2 * P.sB c * P.sD c * (P.lamk1 - P.lamk) := by
+  have h1 := mul_le_mul_of_nonneg_left (tauB_le P c) (P.sD_nonneg c)
+  have h2 := mul_le_mul_of_nonneg_left (le_tauD P c) (P.sB_nonneg c)
+  unfold qCoef
+  linarith
+
+/-- `q_t ≤ 0` always. -/
+theorem qCoef_nonpos (c : ι → ℝ) : P.qCoef c ≤ 0 :=
+  le_trans (P.qCoef_le c)
+    (mul_nonpos_of_nonneg_of_nonpos
+      (mul_nonneg (mul_nonneg (by norm_num) (P.sB_nonneg c)) (P.sD_nonneg c))
+      (sub_nonpos.mpr P.lamk1_lt_lamk.le))
+
+/-- **Lemma "Quadratic form", eq. (q-sign), strict inequality**: `q_t < 0` when both block
+energies are positive. -/
+theorem qCoef_neg {c : ι → ℝ} (hD : 0 < P.sD c) (hB : 0 < P.sB c) : P.qCoef c < 0 :=
+  lt_of_le_of_lt (P.qCoef_le c)
+    (mul_neg_of_pos_of_neg (mul_pos (mul_pos (by norm_num) hB) hD)
+      (sub_neg.mpr P.lamk1_lt_lamk))
+
+/-- If `s^𝒟 = 0` (i.e. `θ_t = 0`) then `q_t = 0`. -/
+theorem qCoef_eq_zero_of_sD_eq_zero {c : ι → ℝ} (h : P.sD c = 0) : P.qCoef c = 0 := by
+  have hτ : P.tauD c = 0 := mom_eq_zero_of_mom_eq_zero P h 3
+  unfold qCoef
+  rw [h, hτ]
+  ring
+
+/-- If `s^ℬ = 0` (e.g. `θ_t = 1`) then `q_t = 0`. -/
+theorem qCoef_eq_zero_of_sB_eq_zero {c : ι → ℝ} (h : P.sB c = 0) : P.qCoef c = 0 := by
+  have hτ : P.tauB c = 0 := mom_eq_zero_of_mom_eq_zero P h 3
+  unfold qCoef
+  rw [h, hτ]
+  ring
+
+/-- **Exact strictness condition for eq. (q-sign)**: `q_t < 0` iff both block energies are
+positive. -/
+theorem qCoef_neg_iff (c : ι → ℝ) : P.qCoef c < 0 ↔ 0 < P.sD c ∧ 0 < P.sB c := by
+  constructor
+  · intro h
+    constructor
+    · rcases (P.sD_nonneg c).eq_or_lt with h0 | h0
+      · exact absurd (P.qCoef_eq_zero_of_sD_eq_zero h0.symm) h.ne
+      · exact h0
+    · rcases (P.sB_nonneg c).eq_or_lt with h0 | h0
+      · exact absurd (P.qCoef_eq_zero_of_sB_eq_zero h0.symm) h.ne
+      · exact h0
+  · rintro ⟨hD, hB⟩
+    exact P.qCoef_neg hD hB
+
+/-- **Exact strictness condition for eq. (q-sign)** in terms of the alignment:
+`q_t < 0` iff `0 < θ_t < 1`. -/
+theorem qCoef_neg_iff_theta (c : ι → ℝ) : P.qCoef c < 0 ↔ 0 < P.theta c ∧ P.theta c < 1 :=
+  (P.qCoef_neg_iff c).trans (theta_mem_Ioo_iff P c).symm
+
+/-- `q_t = 0` iff one of the block energies vanishes. -/
+theorem qCoef_eq_zero_iff (c : ι → ℝ) : P.qCoef c = 0 ↔ P.sD c = 0 ∨ P.sB c = 0 := by
+  constructor
+  · intro h
+    by_contra hne
+    rw [not_or] at hne
+    have hD : 0 < P.sD c := lt_of_le_of_ne (P.sD_nonneg c) (Ne.symm hne.1)
+    have hB : 0 < P.sB c := lt_of_le_of_ne (P.sB_nonneg c) (Ne.symm hne.2)
+    exact absurd h (P.qCoef_neg hD hB).ne
+  · rintro (h | h)
+    · exact P.qCoef_eq_zero_of_sD_eq_zero h
+    · exact P.qCoef_eq_zero_of_sB_eq_zero h
+
+/-- `q_t = 0` iff `θ_t ∈ {0, 1}` (this includes `x_t = 0`, where `θ_t = 0` by convention). -/
+theorem qCoef_eq_zero_iff_theta (c : ι → ℝ) :
+    P.qCoef c = 0 ↔ P.theta c = 0 ∨ P.theta c = 1 :=
+  (P.qCoef_eq_zero_iff c).trans (theta_eq_zero_or_eq_one_iff P c).symm
+
+/-- **Counterexample to the unconditional claim `q_t < 0` of eq. (q-sign)**: for every spectrum
+there is a non-zero state with `θ_t = 1` and `q_t = 0` (the unit vector along `u_1`). -/
+theorem exists_theta_eq_one_qCoef_eq_zero :
+    ∃ c : ι → ℝ, c ≠ 0 ∧ P.theta c = 1 ∧ P.qCoef c = 0 := by
+  have hB : P.sB (Pi.single P.i1 1) = 0 := by
+    unfold sB
+    rw [mom_eq_zero_iff]
+    intro i hi
+    have hne : i ≠ P.i1 := fun h => (P.mem_B.mp hi) (h ▸ P.i1_mem)
+    simp [hne]
+  have hD : 0 < P.sD (Pi.single P.i1 1) := by
+    unfold sD
+    rw [mom_pos_iff]
+    exact ⟨P.i1, P.i1_mem, by simp⟩
+  refine ⟨Pi.single P.i1 1, ?_, (theta_eq_one_iff P _).mpr ⟨hD, hB⟩,
+    P.qCoef_eq_zero_of_sB_eq_zero hB⟩
+  intro h
+  have := congrFun h P.i1
+  simp at this
+
+/-- **Counterexample to the unconditional claim `q_t < 0` of eq. (q-sign)**: for every spectrum
+there is a non-zero state with `θ_t = 0` and `q_t = 0` (the unit vector along `u_{k+1}`). -/
+theorem exists_theta_eq_zero_qCoef_eq_zero :
+    ∃ c : ι → ℝ, c ≠ 0 ∧ P.theta c = 0 ∧ P.qCoef c = 0 := by
+  have hD : P.sD (Pi.single P.ik1 1) = 0 := by
+    unfold sD
+    rw [mom_eq_zero_iff]
+    intro i hi
+    have hne : i ≠ P.ik1 := fun h => P.ik1_not_mem (h ▸ hi)
+    simp [hne]
+  refine ⟨Pi.single P.ik1 1, ?_, (theta_eq_zero_iff P _).mpr hD,
+    P.qCoef_eq_zero_of_sD_eq_zero hD⟩
+  intro h
+  have := congrFun h P.ik1
+  simp at this
+
+/-- If `s^𝒟 = 0` (`θ_t = 0`) then `p_t = s^ℬ e_𝒟 ≥ 0`. -/
+theorem pCoef_of_sD_eq_zero {c : ι → ℝ} (h : P.sD c = 0) : P.pCoef N c = P.sB c * P.eD N := by
+  have h4 : P.mom P.D 4 c = 0 := mom_eq_zero_of_mom_eq_zero P h 4
+  unfold pCoef
+  rw [h, h4]
+  ring
+
+/-- If `s^ℬ = 0` (e.g. `θ_t = 1`) then `p_t = -s^𝒟 e_ℬ ≤ 0`. -/
+theorem pCoef_of_sB_eq_zero {c : ι → ℝ} (h : P.sB c = 0) :
+    P.pCoef N c = -(P.sD c * P.eB N) := by
+  have h4 : P.mom P.B 4 c = 0 := mom_eq_zero_of_mom_eq_zero P h 4
+  unfold pCoef
+  rw [h, h4]
+  ring
+
+/-! ### Sign of the parabola (Remark after Lemma "Quadratic form")
+
+`η ↦ 𝔼[f_t(η) | x_t] = p_t η² + q_t η` for `η > 0`, with `η*_t = -q_t / p_t = P.etaStar N c`. -/
+
+/-- For `η > 0` the sign of `𝔼[f_t(η) | x_t]` is the sign of the linear factor `p_t η + q_t`
+(negative case; division-free form of the Remark). -/
+theorem expF_neg_iff_linear (η : ℝ) (c : ι → ℝ) (hη : 0 < η) :
+    P.expF N η c < 0 ↔ P.pCoef N c * η + P.qCoef c < 0 := by
+  rw [P.expF_eq_mul]
+  constructor
+  · intro h
+    by_contra hh
+    exact absurd (mul_nonneg hη.le (not_lt.mp hh)) (not_le.mpr h)
+  · exact mul_neg_of_pos_of_neg hη
+
+/-- For `η > 0` the sign of `𝔼[f_t(η) | x_t]` is the sign of the linear factor `p_t η + q_t`
+(positive case; division-free form of the Remark). -/
+theorem expF_pos_iff_linear (η : ℝ) (c : ι → ℝ) (hη : 0 < η) :
+    0 < P.expF N η c ↔ 0 < P.pCoef N c * η + P.qCoef c := by
+  rw [P.expF_eq_mul]
+  exact mul_pos_iff_of_pos_left hη
+
+/-- The critical step size written out as in the main text, eq. (2):
+`η*_t = 2 (s^ℬ τ^𝒟 - s^𝒟 τ^ℬ) / (s^ℬ (∑_𝒟 λ⁴c² + e_𝒟) - s^𝒟 (∑_ℬ λ⁴c² + e_ℬ))`. -/
+theorem etaStar_eq (c : ι → ℝ) :
+    P.etaStar N c =
+      2 * (P.sB c * P.tauD c - P.sD c * P.tauB c) /
+        (P.sB c * (P.mom P.D 4 c + P.eD N) - P.sD c * (P.mom P.B 4 c + P.eB N)) := by
+  unfold etaStar qCoef pCoef
+  congr 1
+  ring
+
+/-- `η*_t` is a root of the parabola when `p_t ≠ 0`. -/
+theorem expF_etaStar (c : ι → ℝ) (hp : P.pCoef N c ≠ 0) : P.expF N (P.etaStar N c) c = 0 := by
+  rw [P.expF_eq_mul]
+  unfold etaStar
+  field_simp
+  ring
+
+/-- For `p_t ≠ 0` the roots of the parabola are exactly `0` and `η*_t`. -/
+theorem expF_eq_zero_iff (η : ℝ) (c : ι → ℝ) (hp : P.pCoef N c ≠ 0) :
+    P.expF N η c = 0 ↔ η = 0 ∨ η = P.etaStar N c := by
+  rw [P.expF_eq_mul, mul_eq_zero]
+  unfold etaStar
+  rw [eq_div_iff hp]
+  constructor
+  · rintro (h | h)
+    · exact Or.inl h
+    · right; linarith
+  · rintro (h | h)
+    · exact Or.inl h
+    · right; linarith
+
+/-- The paper calls `η*_t` "the non-zero root" of the parabola. For `p_t ≠ 0` it is non-zero
+exactly when `q_t ≠ 0`, i.e. when `0 < θ_t < 1`; for `θ_t ∈ {0, 1}` it coincides with the root
+`0`. -/
+theorem etaStar_eq_zero_iff (c : ι → ℝ) (hp : P.pCoef N c ≠ 0) :
+    P.etaStar N c = 0 ↔ P.qCoef c = 0 := by
+  unfold etaStar
+  rw [div_eq_zero_iff, neg_eq_zero]
+  constructor
+  · rintro (h | h)
+    · exact h
+    · exact absurd h hp
+  · exact Or.inl
+
+/-- `η*_t ≥ 0` when `p_t > 0` (because `q_t ≤ 0`). -/
+theorem etaStar_nonneg (c : ι → ℝ) (hp : 0 < P.pCoef N c) : 0 ≤ P.etaStar N c :=
+  div_nonneg (neg_nonneg.mpr (P.qCoef_nonpos c)) hp.le
+
+/-- **Remark, case `p_t > 0`**: "since `q_t < 0`, there exists a positive critical step size
+`η*_t = -q_t / p_t > 0`". -/
+theorem etaStar_pos (c : ι → ℝ) (hp : 0 < P.pCoef N c) (hq : P.qCoef c < 0) :
+    0 < P.etaStar N c :=
+  div_pos (neg_pos.mpr hq) hp
+
+/-- For `p_t > 0`, the critical step size is positive iff `q_t < 0`, i.e. iff both block energies
+are positive (`0 < θ_t < 1`). -/
+theorem etaStar_pos_iff (c : ι → ℝ) (hp : 0 < P.pCoef N c) :
+    0 < P.etaStar N c ↔ 0 < P.sD c ∧ 0 < P.sB c := by
+  rw [← P.qCoef_neg_iff]
+  unfold etaStar
+  rw [div_pos_iff_of_pos_right hp, neg_pos]
+
+/-- **Remark, case `p_t > 0`, small steps**: for `η > 0`,
+`𝔼[f_t(η) | x_t] < 0 ↔ η < η*_t`. -/
+theorem expF_neg_iff_lt_etaStar (η : ℝ) (c : ι → ℝ) (hp : 0 < P.pCoef N c) (hη : 0 < η) :
+    P.expF N η c < 0 ↔ η < P.etaStar N c := by
+  rw [P.expF_eq]
+  exact quad_neg_iff hp hη
+
+/-- **Remark, case `p_t > 0`, critical step**: for `η > 0`,
+`𝔼[f_t(η) | x_t] = 0 ↔ η = η*_t`. -/
+theorem expF_eq_zero_iff_eq_etaStar (η : ℝ) (c : ι → ℝ) (hp : 0 < P.pCoef N c) (hη : 0 < η) :
+    P.expF N η c = 0 ↔ η = P.etaStar N c := by
+  rw [P.expF_eq]
+  exact quad_eq_zero_iff hp hη
+
+/-- **Remark, case `p_t > 0`, large steps**: for `η > 0`,
+`𝔼[f_t(η) | x_t] > 0 ↔ η > η*_t`. -/
+theorem expF_pos_iff_etaStar_lt (η : ℝ) (c : ι → ℝ) (hp : 0 < P.pCoef N c) (hη : 0 < η) :
+    0 < P.expF N η c ↔ P.etaStar N c < η := by
+  rw [P.expF_eq]
+  exact quad_pos_iff hp hη
+
+/-- **Remark, case `p_t ≤ 0`** (the paper's Figure (b) is `p_t < 0`): if `q_t < 0` then
+`𝔼[f_t(η) | x_t] < 0` for every `η > 0`. -/
+theorem expF_neg_of_pCoef_nonpos (η : ℝ) (c : ι → ℝ) (hp : P.pCoef N c ≤ 0)
+    (hq : P.qCoef c < 0) (hη : 0 < η) : P.expF N η c < 0 := by
+  rw [P.expF_eq_mul]
+  have h1 : P.pCoef N c * η ≤ 0 := mul_nonpos_of_nonpos_of_nonneg hp hη.le
+  exact mul_neg_of_pos_of_neg hη (by linarith)
+
+/-- **Remark, case `p_t < 0`**: `𝔼[f_t(η) | x_t] < 0` for every `η > 0`. Only `q_t ≤ 0` (which
+always holds) is needed, so this case of the Remark is correct even when `θ_t ∈ {0, 1}`. -/
+theorem expF_neg_of_pCoef_neg (η : ℝ) (c : ι → ℝ) (hp : P.pCoef N c < 0) (hη : 0 < η) :
+    P.expF N η c < 0 := by
+  rw [P.expF_eq_mul]
+  have h1 : P.pCoef N c * η < 0 := mul_neg_of_neg_of_pos hp hη
+  have h2 := P.qCoef_nonpos c
+  exact mul_neg_of_pos_of_neg hη (by linarith)
+
+/-- If `p_t ≤ 0` then `𝔼[f_t(η) | x_t] ≤ 0` for every `η ≥ 0`. -/
+theorem expF_nonpos_of_pCoef_nonpos (η : ℝ) (c : ι → ℝ) (hp : P.pCoef N c ≤ 0) (hη : 0 ≤ η) :
+    P.expF N η c ≤ 0 := by
+  rw [P.expF_eq_mul]
+  have h1 : P.pCoef N c * η ≤ 0 := mul_nonpos_of_nonpos_of_nonneg hp hη
+  have h2 := P.qCoef_nonpos c
+  exact mul_nonpos_of_nonneg_of_nonpos hη (by linarith)
+
+/-- Complete description of the increase regime: for `η > 0`,
+`𝔼[f_t(η) | x_t] > 0` iff `p_t > 0` and `η > η*_t`. -/
+theorem expF_pos_iff (η : ℝ) (c : ι → ℝ) (hη : 0 < η) :
+    0 < P.expF N η c ↔ 0 < P.pCoef N c ∧ P.etaStar N c < η := by
+  constructor
+  · intro h
+    have hp : 0 < P.pCoef N c := by
+      by_contra hp
+      have := P.expF_nonpos_of_pCoef_nonpos N η c (not_lt.mp hp) hη.le
+      linarith
+    exact ⟨hp, (P.expF_pos_iff_etaStar_lt N η c hp hη).mp h⟩
+  · rintro ⟨hp, h⟩
+    exact (P.expF_pos_iff_etaStar_lt N η c hp hη).mpr h
+
+/-- Complete description of the decrease regime: for `η > 0`, `𝔼[f_t(η) | x_t] < 0` iff either
+`p_t > 0` and `η < η*_t`, or `p_t ≤ 0` and one of `p_t`, `q_t` is strictly negative. -/
+theorem expF_neg_iff (η : ℝ) (c : ι → ℝ) (hη : 0 < η) :
+    P.expF N η c < 0 ↔
+      (0 < P.pCoef N c ∧ η < P.etaStar N c) ∨
+        (P.pCoef N c ≤ 0 ∧ (P.pCoef N c < 0 ∨ P.qCoef c < 0)) := by
+  constructor
+  · intro h
+    rcases lt_or_ge 0 (P.pCoef N c) with hp | hp
+    · exact Or.inl ⟨hp, (P.expF_neg_iff_lt_etaStar N η c hp hη).mp h⟩
+    · refine Or.inr ⟨hp, ?_⟩
+      by_contra hne
+      rw [not_or] at hne
+      have hp0 : P.pCoef N c = 0 := le_antisymm hp (not_lt.mp hne.1)
+      have hq0 : P.qCoef c = 0 := le_antisymm (P.qCoef_nonpos c) (not_lt.mp hne.2)
+      rw [P.expF_eq, hp0, hq0] at h
+      simp at h
+  · rintro (⟨hp, h⟩ | ⟨hp, hp' | hq⟩)
+    · exact (P.expF_neg_iff_lt_etaStar N η c hp hη).mpr h
+    · exact P.expF_neg_of_pCoef_neg N η c hp' hη
+    · exact P.expF_neg_of_pCoef_nonpos N η c hp hq hη
+
+/-- **Counterexample to the Remark's "since `q_t < 0`, there exists a positive critical step size
+`η*_t > 0`"**: whenever the dominant block carries noise (`e_𝒟 > 0`) there is a non-zero state
+(with `θ_t = 0`) such that `p_t > 0` but `η*_t = 0`; there `𝔼[f_t(η) | x_t] > 0` for *every*
+`η ≠ 0`, so there is no decrease regime at all. -/
+theorem exists_pCoef_pos_and_etaStar_eq_zero (he : 0 < P.eD N) :
+    ∃ c : ι → ℝ, c ≠ 0 ∧ 0 < P.pCoef N c ∧ P.etaStar N c = 0 ∧
+      ∀ η : ℝ, η ≠ 0 → 0 < P.expF N η c := by
+  have hD : P.sD (Pi.single P.ik1 1) = 0 := by
+    unfold sD
+    rw [mom_eq_zero_iff]
+    intro i hi
+    have hne : i ≠ P.ik1 := fun h => P.ik1_not_mem (h ▸ hi)
+    simp [hne]
+  have hB : 0 < P.sB (Pi.single P.ik1 1) := by
+    unfold sB
+    rw [mom_pos_iff]
+    exact ⟨P.ik1, P.mem_B.mpr P.ik1_not_mem, by simp⟩
+  have hq := P.qCoef_eq_zero_of_sD_eq_zero hD
+  have hp : 0 < P.pCoef N (Pi.single P.ik1 1) := by
+    rw [P.pCoef_of_sD_eq_zero N hD]
+    exact mul_pos hB he
+  refine ⟨Pi.single P.ik1 1, ?_, hp, ?_, ?_⟩
+  · intro h
+    have := congrFun h P.ik1
+    simp at this
+  · unfold etaStar
+    rw [hq, neg_zero, zero_div]
+  · intro η hη
+    rw [P.expF_eq, hq, zero_mul, add_zero]
+    exact mul_pos hp (by positivity)
+
+/-! ### Deterministic equivalent (`thetaBarNext`) and the bridge to `expF` -/
+
+/-- `0 ≤ thetaBarNext`. -/
+theorem thetaBarNext_nonneg (η : ℝ) (c : ι → ℝ) : 0 ≤ P.thetaBarNext N η c :=
+  div_nonneg (P.EsNext_nonneg N _ η c)
+    (add_nonneg (P.EsNext_nonneg N _ η c) (P.EsNext_nonneg N _ η c))
+
+/-- `thetaBarNext ≤ 1`. -/
+theorem thetaBarNext_le_one (η : ℝ) (c : ι → ℝ) : P.thetaBarNext N η c ≤ 1 := by
+  have hD := P.EsNext_nonneg N P.D η c
+  have hB := P.EsNext_nonneg N P.B η c
+  unfold thetaBarNext
+  rcases (add_nonneg hD hB).eq_or_lt with h | h
+  · rw [← h, div_zero]
+    exact zero_le_one
+  · rw [div_le_one h]
+    linarith
+
+/-- At `η = 0` the deterministic equivalent is the current alignment. -/
+theorem thetaBarNext_zero (c : ι → ℝ) : P.thetaBarNext N 0 c = P.theta c := by
+  unfold thetaBarNext theta s sD sB
+  rw [P.EsNext_zero, P.EsNext_zero]
+
+/-- The deterministic equivalent in the form of eq. (10) / eq. (ratio-asymp):
+`thetaBarNext = 1 / (1 + 𝔼[s^ℬ_{t+1} | x_t] / 𝔼[s^𝒟_{t+1} | x_t])` when
+`𝔼[s^𝒟_{t+1} | x_t] ≠ 0`. -/
+theorem thetaBarNext_eq_one_div (η : ℝ) (c : ι → ℝ) (h : P.EsNext N P.D η c ≠ 0) :
+    P.thetaBarNext N η c = 1 / (1 + P.EsNext N P.B η c / P.EsNext N P.D η c) := by
+  have hD : 0 < P.EsNext N P.D η c := lt_of_le_of_ne (P.EsNext_nonneg N _ η c) (Ne.symm h)
+  have hB := P.EsNext_nonneg N P.B η c
+  have hs : P.EsNext N P.D η c + P.EsNext N P.B η c ≠ 0 := by positivity
+  unfold thetaBarNext
+  field_simp
+
+/-- **Bridge**: `thetaBarNext - θ_t = 𝔼[f_t(η) | x_t] / (s_t · 𝔼[s_{t+1} | x_t])` whenever
+`s_t ≠ 0` and `𝔼[s_{t+1} | x_t] ≠ 0`. -/
+theorem thetaBarNext_sub_theta (η : ℝ) (c : ι → ℝ) (hs : P.s c ≠ 0)
+    (hE : P.EsNext N P.D η c + P.EsNext N P.B η c ≠ 0) :
+    P.thetaBarNext N η c - P.theta c =
+      P.expF N η c / (P.s c * (P.EsNext N P.D η c + P.EsNext N P.B η c)) := by
+  unfold thetaBarNext theta expF
+  rw [div_sub_div _ _ hE hs, mul_comm (P.EsNext N P.D η c + P.EsNext N P.B η c) (P.s c)]
+  congr 1
+  unfold s
+  ring
+
+/-- **Bridge (decrease)**: for `s_t > 0` and `𝔼[s_{t+1} | x_t] > 0`,
+`thetaBarNext < θ_t ↔ 𝔼[f_t(η) | x_t] < 0`. -/
+theorem thetaBarNext_lt_theta_iff (η : ℝ) (c : ι → ℝ) (hs : 0 < P.s c)
+    (hE : 0 < P.EsNext N P.D η c + P.EsNext N P.B η c) :
+    P.thetaBarNext N η c < P.theta c ↔ P.expF N η c < 0 := by
+  rw [← sub_neg, P.thetaBarNext_sub_theta N η c hs.ne' hE.ne', div_lt_iff₀ (mul_pos hs hE),
+    zero_mul]
+
+/-- **Bridge (increase)**: for `s_t > 0` and `𝔼[s_{t+1} | x_t] > 0`,
+`θ_t < thetaBarNext ↔ 𝔼[f_t(η) | x_t] > 0`. -/
+theorem theta_lt_thetaBarNext_iff (η : ℝ) (c : ι → ℝ) (hs : 0 < P.s c)
+    (hE : 0 < P.EsNext N P.D η c + P.EsNext N P.B η c) :
+    P.theta c < P.thetaBarNext N η c ↔ 0 < P.expF N η c := by
+  rw [← sub_pos, P.thetaBarNext_sub_theta N η c hs.ne' hE.ne',
+    div_pos_iff_of_pos_right (mul_pos hs hE)]
+
+/-- **Bridge (equality)**: for `s_t > 0` and `𝔼[s_{t+1} | x_t] > 0`,
+`thetaBarNext = θ_t ↔ 𝔼[f_t(η) | x_t] = 0`. -/
+theorem thetaBarNext_eq_theta_iff (η : ℝ) (c : ι → ℝ) (hs : 0 < P.s c)
+    (hE : 0 < P.EsNext N P.D η c + P.EsNext N P.B η c) :
+    P.thetaBarNext N η c = P.theta c ↔ P.expF N η c = 0 := by
+  rw [← sub_eq_zero, P.thetaBarNext_sub_theta N η c hs.ne' hE.ne', div_eq_zero_iff]
+  constructor
+  · rintro (h | h)
+    · exact h
+    · exact absurd h (mul_pos hs hE).ne'
+  · exact Or.inl
+
+/-- `𝔼[f_t(η) | x_t] < 0 → thetaBarNext < θ_t`, with no positivity hypothesis (negativity of
+`expF` already forces `s_t > 0` and `𝔼[s_{t+1} | x_t] > 0`). -/
+theorem thetaBarNext_lt_theta_of_expF_neg (η : ℝ) (c : ι → ℝ) (h : P.expF N η c < 0) :
+    P.thetaBarNext N η c < P.theta c := by
+  have h1 : 0 < P.EsNext N P.B η c * P.sD c := by
+    have := mul_nonneg (P.sB_nonneg c) (P.EsNext_nonneg N P.D η c)
+    unfold expF at h
+    linarith
+  obtain ⟨hEB, hD⟩ := pos_and_pos_of_mul_pos h1 (P.EsNext_nonneg N _ η c) (P.sD_nonneg c)
+  have hs : 0 < P.s c := by unfold s; linarith [P.sB_nonneg c]
+  have hE : 0 < P.EsNext N P.D η c + P.EsNext N P.B η c := by
+    linarith [P.EsNext_nonneg N P.D η c]
+  exact (P.thetaBarNext_lt_theta_iff N η c hs hE).mpr h
+
+/-- `𝔼[f_t(η) | x_t] > 0 → θ_t < thetaBarNext`, with no positivity hypothesis. -/
+theorem theta_lt_thetaBarNext_of_expF_pos (η : ℝ) (c : ι → ℝ) (h : 0 < P.expF N η c) :
+    P.theta c < P.thetaBarNext N η c := by
+  have h1 : 0 < P.sB c * P.EsNext N P.D η c := by
+    have := mul_nonneg (P.EsNext_nonneg N P.B η c) (P.sD_nonneg c)
+    unfold expF at h
+    linarith
+  obtain ⟨hB, hED⟩ := pos_and_pos_of_mul_pos h1 (P.sB_nonneg c) (P.EsNext_nonneg N _ η c)
+  have hs : 0 < P.s c := by unfold s; linarith [P.sD_nonneg c]
+  have hE : 0 < P.EsNext N P.D η c + P.EsNext N P.B η c := by
+    linarith [P.EsNext_nonneg N P.B η c]
+  exact (P.theta_lt_thetaBarNext_iff N η c hs hE).mpr h
+
+/-- The hypothesis `s_t > 0` in `theta_lt_thetaBarNext_iff` cannot be dropped: at `x_t = 0`
+(where `θ_t = 0` by convention) with noise in the dominant block (`e_𝒟 > 0`) and `η ≠ 0`, the
+deterministic equivalent is positive although `𝔼[f_t(η) | x_t] = 0`. -/
+theorem theta_zero_lt_thetaBarNext_and_expF_eq_zero {η : ℝ} (hη : η ≠ 0) (he : 0 < P.eD N) :
+    P.theta 0 < P.thetaBarNext N η 0 ∧ P.expF N η 0 = 0 := by
+  have hD : P.EsNext N P.D η 0 = η ^ 2 * P.eD N := by
+    rw [P.EsNext_D]
+    simp [sD, tauD, mom]
+  have hB := P.EsNext_nonneg N P.B η 0
+  have hDpos : 0 < P.EsNext N P.D η 0 := by
+    rw [hD]
+    positivity
+  constructor
+  · rw [P.theta_zero]
+    unfold thetaBarNext
+    positivity
+  · simp [expF, sB, sD, mom]
+
+/-- The hypothesis `𝔼[s_{t+1} | x_t] > 0` in `thetaBarNext_lt_theta_iff` cannot be dropped: with
+no noise (`κ_i² = 0`), the step `η = 1/λ_1` from the unit vector along `u_1` gives
+`𝔼[s_{t+1} | x_t] = 0`, so `thetaBarNext = 0 < 1 = θ_t` (Lean's `0 / 0 = 0`) although
+`𝔼[f_t(η) | x_t] = 0`. -/
+theorem exists_thetaBarNext_lt_theta_and_expF_eq_zero (hN : ∀ i, N.kap2 i = 0) :
+    ∃ (η : ℝ) (c : ι → ℝ), P.thetaBarNext N η c < P.theta c ∧ P.expF N η c = 0 := by
+  have hE : ∀ S, P.EsNext N S (1 / P.lam P.i1) (Pi.single P.i1 1) = 0 := by
+    intro S
+    rw [P.EsNext_eq_zero_iff]
+    intro i _
+    refine ⟨?_, by rw [hN i, mul_zero]⟩
+    by_cases hi : i = P.i1
+    · subst hi
+      simp [(P.lam_pos _).ne']
+    · simp [hi]
+  refine ⟨1 / P.lam P.i1, Pi.single P.i1 1, ?_, ?_⟩
+  · unfold thetaBarNext
+    rw [hE, hE, add_zero, div_zero, theta_pos_iff]
+    unfold sD
+    rw [mom_pos_iff]
+    exact ⟨P.i1, P.i1_mem, by simp⟩
+  · unfold expF
+    rw [hE, hE]
+    ring
+
+/-- **Finite-`d` core of the decrease condition (Theorem 2, deterministic equivalent)**:
+if `p_t > 0` and `0 < η < η*_t` then `thetaBarNext < θ_t`. -/
+theorem thetaBarNext_lt_theta_of_lt_etaStar (η : ℝ) (c : ι → ℝ) (hp : 0 < P.pCoef N c)
+    (hη : 0 < η) (h : η < P.etaStar N c) : P.thetaBarNext N η c < P.theta c :=
+  P.thetaBarNext_lt_theta_of_expF_neg N η c ((P.expF_neg_iff_lt_etaStar N η c hp hη).mpr h)
+
+/-- **Finite-`d` core of the increase condition (deterministic equivalent)**:
+if `p_t > 0` and `η > η*_t` then `θ_t < thetaBarNext`. -/
+theorem theta_lt_thetaBarNext_of_etaStar_lt (η : ℝ) (c : ι → ℝ) (hp : 0 < P.pCoef N c)
+    (h : P.etaStar N c < η) : P.theta c < P.thetaBarNext N η c := by
+  have hη : 0 < η := lt_of_le_of_lt (P.etaStar_nonneg N c hp) h
+  exact P.theta_lt_thetaBarNext_of_expF_pos N η c
+    ((P.expF_pos_iff_etaStar_lt N η c hp hη).mpr h)
+
+/-- **Finite-`d` core of the case `p_t ≤ 0` (deterministic equivalent)**: if `p_t ≤ 0` and both
+block energies are positive (`0 < θ_t < 1`), then `thetaBarNext < θ_t` for every `η > 0`. -/
+theorem thetaBarNext_lt_theta_of_pCoef_nonpos (η : ℝ) (c : ι → ℝ) (hp : P.pCoef N c ≤ 0)
+    (hD : 0 < P.sD c) (hB : 0 < P.sB c) (hη : 0 < η) : P.thetaBarNext N η c < P.theta c :=
+  P.thetaBarNext_lt_theta_of_expF_neg N η c
+    (P.expF_neg_of_pCoef_nonpos N η c hp (P.qCoef_neg hD hB) hη)
+
+/-! ### Abstract expectation
+
+The two lemmas of A.5 only use `𝔼 ζ_i = 0` and `𝔼 ζ_i² = κ_i²`. We record this for an arbitrary
+normalised linear functional `E` on functions of the sample point (finite averages are instances;
+the measure-theoretic version, with integrability side conditions, lives in the probability
+layer and can be derived from `mom_two_cNext_sub_EsNext` and `fCompare_sub_expF`). -/
+
+section AbstractExpectation
+
+variable {Ω : Type*}
+
+/-- **Lemma "Elementwise expectation"** for an abstract expectation `E`: if `E 1 = 1`,
+`E ζ_i = 0` and `E ζ_i² = κ_i²`, then `E[s^S_{t+1}] = EsNext`. -/
+theorem expect_mom_two_cNext (E : (Ω → ℝ) →ₗ[ℝ] ℝ) (hE : E (fun _ => 1) = 1)
+    (ζ : Ω → ι → ℝ) (hmean : ∀ i, E (fun ω => ζ ω i) = 0)
+    (hvar : ∀ i, E (fun ω => ζ ω i ^ 2) = N.kap2 i) (S : Finset ι) (η : ℝ) (c : ι → ℝ) :
+    E (fun ω => P.mom S 2 (P.cNext η c (ζ ω))) = P.EsNext N S η c := by
+  have hfun : (fun ω => P.mom S 2 (P.cNext η c (ζ ω))) =
+      ∑ i ∈ S, ((P.lam i ^ 2 * (1 - η * P.lam i) ^ 2 * c i ^ 2) • (fun _ : Ω => (1 : ℝ))
+        + (-(2 * η) * (P.lam i ^ 2 * (1 - η * P.lam i) * c i)) • (fun ω => ζ ω i)
+        + (η ^ 2 * P.lam i ^ 2) • (fun ω => ζ ω i ^ 2)) := by
+    funext ω
+    simp only [Finset.sum_apply, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+    unfold mom
+    exact Finset.sum_congr rfl fun i _ => by rw [P.lam_sq_mul_cNext_sq]; ring
+  rw [hfun, map_sum]
+  unfold EsNext
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [map_add, map_add, map_smul, map_smul, map_smul, hE, hmean, hvar]
+  simp only [smul_eq_mul]
+  ring
+
+/-- **Lemma "Quadratic form"**, first line of the proof, for an abstract expectation `E`:
+`E[f_t(η)] = expF`, hence `= p_t η² + q_t η` by `expF_eq`. -/
+theorem expect_fCompare (E : (Ω → ℝ) →ₗ[ℝ] ℝ) (hE : E (fun _ => 1) = 1)
+    (ζ : Ω → ι → ℝ) (hmean : ∀ i, E (fun ω => ζ ω i) = 0)
+    (hvar : ∀ i, E (fun ω => ζ ω i ^ 2) = N.kap2 i) (η : ℝ) (c : ι → ℝ) :
+    E (fun ω => P.fCompare η c (ζ ω)) = P.expF N η c := by
+  have hfun : (fun ω => P.fCompare η c (ζ ω)) =
+      P.sB c • (fun ω => P.mom P.D 2 (P.cNext η c (ζ ω)))
+        - P.sD c • (fun ω => P.mom P.B 2 (P.cNext η c (ζ ω))) := by
+    funext ω
+    simp only [Pi.sub_apply, Pi.smul_apply, smul_eq_mul]
+    unfold fCompare sD sB
+    ring
+  rw [hfun, map_sub, map_smul, map_smul, P.expect_mom_two_cNext N E hE ζ hmean hvar,
+    P.expect_mom_two_cNext N E hE ζ hmean hvar]
+  unfold expF
+  simp only [smul_eq_mul]
+  ring
+
+end AbstractExpectation
+
+end Spec
+
+/-! ### Non-vacuity: concrete instances
+
+The hypotheses of the main statements are jointly satisfiable. We exhibit the two-dimensional
+problem `λ = (2, 1)`, `𝒟 = {0}`, `x_t = (1, 1)` (so `θ_t = 4/5`), for which, with isotropic unit
+noise, `p_t = 12 > 0`, `q_t = -8 < 0` and `η*_t = 2/3`; and with noise only in the bulk direction
+(`κ² = (0, 10)`) `p_t = -28 < 0`. -/
+
+namespace OneStep
+
+/-- The spectrum `λ = (2, 1)` on `Fin 2` with dominant block `𝒟 = {0}`. -/
+def exSpec : Spec (Fin 2) where
+  lam := ![2, 1]
+  D := {0}
+  i1 := 0
+  ik := 0
+  ik1 := 1
+  id := 1
+  i1_mem := by simp
+  ik_mem := by simp
+  ik1_not_mem := by simp
+  id_not_mem := by simp
+  lam_pos := by intro i; fin_cases i <;> simp
+  le_lam1 := by intro i hi; fin_cases i <;> simp at hi ⊢
+  lamk_le := by intro i hi; fin_cases i <;> simp at hi ⊢
+  le_lamk1 := by intro i hi; fin_cases i <;> simp at hi ⊢
+  lamd_le := by intro i hi; fin_cases i <;> simp at hi ⊢
+  gap := by simp
+
+/-- Isotropic unit noise `κ_i² = 1` on `Fin 2`. -/
+def exNoise : Noise (Fin 2) where
+  kap2 := fun _ => 1
+  smin := 1
+  smax := 1
+  smin_nonneg := zero_le_one
+  smin_le := fun _ => le_refl _
+  le_smax := fun _ => le_refl _
+
+/-- Noise only in the bulk direction: `κ² = (0, 10)` on `Fin 2`. -/
+def exNoiseB : Noise (Fin 2) where
+  kap2 := ![0, 10]
+  smin := 0
+  smax := 10
+  smin_nonneg := le_refl _
+  smin_le := by intro i; fin_cases i <;> simp
+  le_smax := by intro i; fin_cases i <;> simp
+
+theorem exSpec_B : exSpec.B = {1} := by decide
+
+theorem exSpec_mom_D (p : ℕ) (c : Fin 2 → ℝ) : exSpec.mom exSpec.D p c = 2 ^ p * c 0 ^ 2 := by
+  change ∑ i ∈ ({0} : Finset (Fin 2)), exSpec.lam i ^ p * c i ^ 2 = _
+  rw [Finset.sum_singleton]
+  rfl
+
+theorem exSpec_mom_B (p : ℕ) (c : Fin 2 → ℝ) : exSpec.mom exSpec.B p c = c 1 ^ 2 := by
+  unfold Spec.mom
+  rw [exSpec_B, Finset.sum_singleton]
+  simp [exSpec]
+
+theorem exSpec_eD (N : Noise (Fin 2)) : exSpec.eD N = 4 * N.kap2 0 := by
+  change ∑ i ∈ ({0} : Finset (Fin 2)), exSpec.lam i ^ 2 * N.kap2 i = _
+  rw [Finset.sum_singleton]
+  simp [exSpec]
+  norm_num
+
+theorem exSpec_eB (N : Noise (Fin 2)) : exSpec.eB N = N.kap2 1 := by
+  unfold Spec.eB
+  rw [exSpec_B, Finset.sum_singleton]
+  simp [exSpec]
+
+theorem exSpec_sD : exSpec.sD ![1, 1] = 4 := by
+  simp [Spec.sD, exSpec_mom_D]
+  norm_num
+
+theorem exSpec_sB : exSpec.sB ![1, 1] = 1 := by
+  simp [Spec.sB, exSpec_mom_B]
+
+theorem exSpec_qCoef : exSpec.qCoef ![1, 1] = -8 := by
+  simp [Spec.qCoef, Spec.sD, Spec.sB, Spec.tauD, Spec.tauB, exSpec_mom_D, exSpec_mom_B]
+  norm_num
+
+theorem exSpec_pCoef : exSpec.pCoef exNoise ![1, 1] = 12 := by
+  simp [Spec.pCoef, Spec.sD, Spec.sB, exSpec_eD, exSpec_eB, exSpec_mom_D, exSpec_mom_B, exNoise]
+  norm_num
+
+theorem exSpec_pCoef_B : exSpec.pCoef exNoiseB ![1, 1] = -28 := by
+  simp [Spec.pCoef, Spec.sD, Spec.sB, exSpec_eD, exSpec_eB, exSpec_mom_D, exSpec_mom_B, exNoiseB]
+  norm_num
+
+theorem exSpec_etaStar : exSpec.etaStar exNoise ![1, 1] = 2 / 3 := by
+  unfold Spec.etaStar
+  rw [exSpec_qCoef, exSpec_pCoef]
+  norm_num
+
+/-- Decrease regime (`p_t > 0`, `0 < η = 1/2 < η*_t = 2/3`): the hypotheses of
+`Spec.thetaBarNext_lt_theta_of_lt_etaStar` are satisfiable. -/
+example : exSpec.thetaBarNext exNoise (1 / 2) ![1, 1] < exSpec.theta ![1, 1] :=
+  exSpec.thetaBarNext_lt_theta_of_lt_etaStar exNoise _ _ (by rw [exSpec_pCoef]; norm_num)
+    (by norm_num) (by rw [exSpec_etaStar]; norm_num)
+
+/-- Increase regime (`p_t > 0`, `η = 1 > η*_t = 2/3`): the hypotheses of
+`Spec.theta_lt_thetaBarNext_of_etaStar_lt` are satisfiable. -/
+example : exSpec.theta ![1, 1] < exSpec.thetaBarNext exNoise 1 ![1, 1] :=
+  exSpec.theta_lt_thetaBarNext_of_etaStar_lt exNoise _ _ (by rw [exSpec_pCoef]; norm_num)
+    (by rw [exSpec_etaStar]; norm_num)
+
+/-- The regime `p_t ≤ 0` with `0 < θ_t < 1`: the hypotheses of
+`Spec.thetaBarNext_lt_theta_of_pCoef_nonpos` are satisfiable. -/
+example : exSpec.thetaBarNext exNoiseB 1 ![1, 1] < exSpec.theta ![1, 1] :=
+  exSpec.thetaBarNext_lt_theta_of_pCoef_nonpos exNoiseB _ _ (by rw [exSpec_pCoef_B]; norm_num)
+    (by rw [exSpec_sD]; norm_num) (by rw [exSpec_sB]; norm_num) one_pos
+
+/-- The Rademacher average on `Bool`, a normalised linear functional. -/
+noncomputable def boolE : (Bool → ℝ) →ₗ[ℝ] ℝ where
+  toFun f := (f true + f false) / 2
+  map_add' f g := by simp only [Pi.add_apply]; ring
+  map_smul' a f := by simp only [Pi.smul_apply, smul_eq_mul, RingHom.id_apply]; ring
+
+/-- The hypotheses of `Spec.expect_fCompare` are satisfiable for every spectrum and every noise
+profile: the symmetric two-point noise `ζ_i = ± κ_i` has mean `0` and second moments `κ_i²`. -/
+example (P : Spec ι) (N : Noise ι) (η : ℝ) (c : ι → ℝ) :
+    boolE (fun b => P.fCompare η c
+      (fun i => if b then Real.sqrt (N.kap2 i) else -Real.sqrt (N.kap2 i))) = P.expF N η c :=
+  P.expect_fCompare N boolE (by simp [boolE]) _ (fun i => by simp [boolE])
+    (fun i => by simp [boolE, Real.sq_sqrt (Spec.kap2_nonneg N i)]) η c
+
+end OneStep
+
+end SuspiciousAlignment

@@ -1,0 +1,38 @@
+18 jobs to run
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/multiprocessing/pool.py", line 125, in worker
+    result = (True, func(*args, **kwds))
+                    ~~~~^^^^^^^^^^^^^^^
+  File "/home/user/htmuon/suspicious_alignment/sim/speedups/exp_s2_alignment.py", line 44, in job
+    r = sp.run(model, opt, lr, cfg.T_EVAL, sigma, W0, noise_seed=seed, rec_every=cfg.REC_EVERY)
+  File "/home/user/htmuon/suspicious_alignment/sim/speedups/spfilters.py", line 537, in run
+    O = opt.direction(g)
+  File "/home/user/htmuon/suspicious_alignment/sim/speedups/spfilters.py", line 406, in direction
+    O = self.filter(M)
+  File "/home/user/htmuon/suspicious_alignment/sim/speedups/spfilters.py", line 397, in filter
+    return self.ech(M)
+           ~~~~~~~~^^^
+  File "/home/user/htmuon/suspicious_alignment/sim/speedups/spfilters.py", line 299, in __call__
+    parts = self.parts(X)
+  File "/home/user/htmuon/suspicious_alignment/sim/speedups/spfilters.py", line 243, in parts
+    Uf, _, _ = np.linalg.svd(X, full_matrices=False)
+               ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/numpy/linalg/_linalg.py", line 1840, in svd
+    u, s, vh = gufunc(a, signature=signature)
+               ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/numpy/linalg/_linalg.py", line 153, in _raise_linalgerror_svd_nonconvergence
+    raise LinAlgError("SVD did not converge")
+numpy.linalg.LinAlgError: SVD did not converge
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/user/htmuon/suspicious_alignment/sim/speedups/exp_s2_alignment.py", line 73, in <module>
+    for m, s, seed, dt in pool.imap_unordered(job, jobs, chunksize=1):
+                          ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/multiprocessing/pool.py", line 873, in next
+    raise value
+numpy.linalg.LinAlgError: SVD did not converge
